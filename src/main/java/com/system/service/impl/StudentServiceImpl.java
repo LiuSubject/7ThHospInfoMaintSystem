@@ -109,7 +109,6 @@ public class StudentServiceImpl implements StudentService {
         return studentCustomList;
     }
 
-    @Override
     public StudentCustom findStudentAndSelectCourseListByName(String name) throws Exception {
 
         StudentCustom studentCustom = studentMapperCustom.findStudentAndSelectCourseListById(Integer.parseInt(name));

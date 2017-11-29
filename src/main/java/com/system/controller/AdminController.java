@@ -36,6 +36,10 @@ public class AdminController {
     @Resource(name = "userloginServiceImpl")
     private UserloginService userloginService;
 
+    @Resource(name = "computerProblemsServiceImpl")
+    private ComputerProblemsService computerProblemsService;
+
+
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<学生操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
     //  学生信息显示
@@ -398,5 +402,112 @@ public class AdminController {
         return "admin/passwordRest";
     }
 
+    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+
+    // 电脑故障显示
+    @RequestMapping("/showComputerProblems")
+    public String showComputerProblems(Model model, Integer page) throws Exception {
+
+        List<ComputerProblemsCustom> list = null;
+        //页码对象
+        PagingVO pagingVO = new PagingVO();
+        //设置总页数
+        pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
+        if (page == null || page == 0) {
+            pagingVO.setToPageNo(1);
+            list = computerProblemsService.findByPaging(1);
+        } else {
+            pagingVO.setToPageNo(page);
+            list = computerProblemsService.findByPaging(page);
+        }
+
+        model.addAttribute("computerProblemsList", list);
+        model.addAttribute("pagingVO", pagingVO);
+
+        return "admin/showComputerProblems";
+
+    }
+
+    //添加电脑故障
+    @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.GET})
+    public String addComputerProblemsUI(Model model) throws Exception {
+
+        List<TeacherCustom> list = teacherService.findAll();
+        List<College> collegeList = collegeService.finAll();
+
+        model.addAttribute("collegeList", collegeList);
+        model.addAttribute("teacherList", list);
+
+        return "admin/addComputerProblems";
+    }
+
+    // 添加电脑故障处理
+    @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.POST})
+    public String addComputerProblems(CourseCustom courseCustom, Model model) throws Exception {
+
+        Boolean result = courseService.save(courseCustom);
+
+        if (!result) {
+            model.addAttribute("message", "课程号重复");
+            return "error";
+        }
+
+
+        //重定向
+        return "redirect:/admin/addComputerProblems";
+    }
+
+    // 修改电脑故障页面显示
+    @RequestMapping(value = "/editComputerProblems", method = {RequestMethod.GET})
+    public String editComputerProblemsUI(Integer id, Model model) throws Exception {
+        if (id == null) {
+            return "redirect:/admin/showComputerProblems";
+        }
+        CourseCustom courseCustom = courseService.findById(id);
+        if (courseCustom == null) {
+            throw new CustomException("未找到该课程");
+        }
+        List<TeacherCustom> list = teacherService.findAll();
+        List<College> collegeList = collegeService.finAll();
+
+        model.addAttribute("teacherList", list);
+        model.addAttribute("collegeList", collegeList);
+        model.addAttribute("course", courseCustom);
+
+
+        return "admin/editComputerProblems";
+    }
+
+    // 修改电脑故障页面处理
+    @RequestMapping(value = "/editComputerProblems", method = {RequestMethod.POST})
+    public String editComputerProblems(CourseCustom courseCustom) throws Exception {
+
+        courseService.upadteById(courseCustom.getCourseid(), courseCustom);
+
+        //重定向
+        return "redirect:/admin/showComputerProblems";
+    }
+
+    // 删除电脑故障
+    @RequestMapping("/removeComputerProblems")
+    public String removeComputerProblems(Integer id) throws Exception {
+        if (id == null) {
+            //加入没有带教师id就进来的话就返回教师显示页面
+            return "admin/showComputerProblems";
+        }
+        courseService.removeById(id);
+
+        return "redirect:/admin/showComputerProblems";
+    }
+
+    //搜索电脑故障
+    @RequestMapping(value = "selectComputerProblems", method = {RequestMethod.POST})
+    private String selectComputerProblems(String findByName, Model model) throws Exception {
+
+        List<CourseCustom> list = courseService.findByName(findByName);
+
+        model.addAttribute("courseList", list);
+        return "admin/showComputerProblems";
+    }
 
 }

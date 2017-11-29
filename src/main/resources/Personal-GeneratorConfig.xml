@@ -5,12 +5,13 @@
 
 <generatorConfiguration>
 
+
     <!-- 配置mysql 驱动jar包路径.用了绝对路径 -->
-    <classPathEntry location="H:\IDE\apache-tomcat-8.5.23\webapps\sys\WEB-INF\lib" />
+    <classPathEntry location="E:\code\java\lib\myadd\mysql-connector-java-5.0.8-bin.jar" />
 
-    <context id="liuxueke" targetRuntime="MyBatis3">
+    <context id="ShaoXing7thHosp" targetRuntime="MyBatis3">
 
-        <!-- 为了防止生成的代码中有很多注释，比较难看，加入下面的配置控制 -->
+        <!-- 不生成注释 -->
         <commentGenerator>
             <property name="suppressAllComments" value="true" />
             <property name="suppressDate" value="true" />
@@ -19,7 +20,7 @@
 
         <!-- 数据库连接 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="dbc:mysql://localhost:3306/examination_system"
+                        connectionURL="jdbc:mysql://localhost:3306/examination_system"
                         userId="root"
                         password="admin">
         </jdbcConnection>
@@ -30,36 +31,36 @@
         </javaTypeResolver>
 
         <!-- 数据表对应的model 层  -->
-        <javaModelGenerator targetPackage="com.system.po" targetProject="src">
-            <!-- 是否对model添加 构造函数 -->
-            <property name="constructorBased" value="true"/>
+        <javaModelGenerator targetPackage="com.system.po" targetProject="src/main/java">
 
             <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
             <property name="enableSubPackages" value="false"/>
-
-            <!-- 建立的Model对象是否 不可改变  即生成的Model对象不会有 setter方法，只有构造方法 -->
-            <property name="immutable" value="true"/>
 
             <!-- 是否对类CHAR类型的列的数据进行trim操作 -->
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <!-- sql mapper 隐射配置文件 -->
-        <sqlMapGenerator targetPackage="com.system.mapper"  targetProject="src">
-            <property name="enableSubPackages" value="true" />
+        <sqlMapGenerator targetPackage="com.system.mapper"  targetProject="src/main/java">
+            <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
+            <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
         <!-- 在ibatis2 中是dao层，但在mybatis3中，其实就是mapper接口 -->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.system.inter"  targetProject="src">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.system.mapper"  targetProject="src/main/java">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <!-- 要对那些数据表进行生成操作，必须要有一个. -->
-        <table schema="mybatis" tableName="category" domainObjectName="Category"
-               enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false">
+        <!-- 配置表
+            schema：不用填写
+            tableName: 表名
+            enableCountByExample、enableSelectByExample、enableDeleteByExample、enableUpdateByExample、selectByExampleQueryId：
+            去除自动生成的例子
+        -->
+
+        <table schema="" tableName="computer_problems">
         </table>
+
 
     </context>
 </generatorConfiguration>

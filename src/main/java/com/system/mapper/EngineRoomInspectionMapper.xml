@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.system.mapper.EngineRoomInspectionMapper">
+  <resultMap id="BaseResultMap" type="com.system.po.EngineRoomInspection">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+    <result column="emr" jdbcType="INTEGER" property="emr" />
+    <result column="his" jdbcType="INTEGER" property="his" />
+    <result column="lis" jdbcType="INTEGER" property="lis" />
+    <result column="pacs" jdbcType="INTEGER" property="pacs" />
+    <result column="xny" jdbcType="INTEGER" property="xny" />
+    <result column="oa" jdbcType="INTEGER" property="oa" />
+    <result column="yb" jdbcType="INTEGER" property="yb" />
+    <result column="qyw" jdbcType="INTEGER" property="qyw" />
+    <result column="yy" jdbcType="INTEGER" property="yy" />
+    <result column="hiscc" jdbcType="INTEGER" property="hiscc" />
+    <result column="jk" jdbcType="INTEGER" property="jk" />
+    <result column="hx" jdbcType="INTEGER" property="hx" />
+    <result column="hj" jdbcType="INTEGER" property="hj" />
+    <result column="aqsb" jdbcType="INTEGER" property="aqsb" />
+    <result column="ups" jdbcType="INTEGER" property="ups" />
+    <result column="qtmh" jdbcType="INTEGER" property="qtmh" />
+    <result column="kt" jdbcType="INTEGER" property="kt" />
+    <result column="ycyy" jdbcType="VARCHAR" property="ycyy" />
+    <result column="examiner" jdbcType="VARCHAR" property="examiner" />
+    <result column="userId" jdbcType="VARCHAR" property="userid" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, date, emr, his, lis, pacs, xny, oa, yb, qyw, yy, hiscc, jk, hx, hj, aqsb, ups, 
+    qtmh, kt, ycyy, examiner, userId, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from engine_room_inspection
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from engine_room_inspection
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.system.po.EngineRoomInspection">
+    insert into engine_room_inspection (id, date, emr, 
+      his, lis, pacs, xny, 
+      oa, yb, qyw, yy, 
+      hiscc, jk, hx, hj, 
+      aqsb, ups, qtmh, kt, 
+      ycyy, examiner, userId, 
+      create_time)
+    values (#{id,jdbcType=INTEGER}, #{date,jdbcType=VARCHAR}, #{emr,jdbcType=INTEGER}, 
+      #{his,jdbcType=INTEGER}, #{lis,jdbcType=INTEGER}, #{pacs,jdbcType=INTEGER}, #{xny,jdbcType=INTEGER}, 
+      #{oa,jdbcType=INTEGER}, #{yb,jdbcType=INTEGER}, #{qyw,jdbcType=INTEGER}, #{yy,jdbcType=INTEGER}, 
+      #{hiscc,jdbcType=INTEGER}, #{jk,jdbcType=INTEGER}, #{hx,jdbcType=INTEGER}, #{hj,jdbcType=INTEGER}, 
+      #{aqsb,jdbcType=INTEGER}, #{ups,jdbcType=INTEGER}, #{qtmh,jdbcType=INTEGER}, #{kt,jdbcType=INTEGER}, 
+      #{ycyy,jdbcType=VARCHAR}, #{examiner,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.po.EngineRoomInspection">
+    insert into engine_room_inspection
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="emr != null">
+        emr,
+      </if>
+      <if test="his != null">
+        his,
+      </if>
+      <if test="lis != null">
+        lis,
+      </if>
+      <if test="pacs != null">
+        pacs,
+      </if>
+      <if test="xny != null">
+        xny,
+      </if>
+      <if test="oa != null">
+        oa,
+      </if>
+      <if test="yb != null">
+        yb,
+      </if>
+      <if test="qyw != null">
+        qyw,
+      </if>
+      <if test="yy != null">
+        yy,
+      </if>
+      <if test="hiscc != null">
+        hiscc,
+      </if>
+      <if test="jk != null">
+        jk,
+      </if>
+      <if test="hx != null">
+        hx,
+      </if>
+      <if test="hj != null">
+        hj,
+      </if>
+      <if test="aqsb != null">
+        aqsb,
+      </if>
+      <if test="ups != null">
+        ups,
+      </if>
+      <if test="qtmh != null">
+        qtmh,
+      </if>
+      <if test="kt != null">
+        kt,
+      </if>
+      <if test="ycyy != null">
+        ycyy,
+      </if>
+      <if test="examiner != null">
+        examiner,
+      </if>
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="emr != null">
+        #{emr,jdbcType=INTEGER},
+      </if>
+      <if test="his != null">
+        #{his,jdbcType=INTEGER},
+      </if>
+      <if test="lis != null">
+        #{lis,jdbcType=INTEGER},
+      </if>
+      <if test="pacs != null">
+        #{pacs,jdbcType=INTEGER},
+      </if>
+      <if test="xny != null">
+        #{xny,jdbcType=INTEGER},
+      </if>
+      <if test="oa != null">
+        #{oa,jdbcType=INTEGER},
+      </if>
+      <if test="yb != null">
+        #{yb,jdbcType=INTEGER},
+      </if>
+      <if test="qyw != null">
+        #{qyw,jdbcType=INTEGER},
+      </if>
+      <if test="yy != null">
+        #{yy,jdbcType=INTEGER},
+      </if>
+      <if test="hiscc != null">
+        #{hiscc,jdbcType=INTEGER},
+      </if>
+      <if test="jk != null">
+        #{jk,jdbcType=INTEGER},
+      </if>
+      <if test="hx != null">
+        #{hx,jdbcType=INTEGER},
+      </if>
+      <if test="hj != null">
+        #{hj,jdbcType=INTEGER},
+      </if>
+      <if test="aqsb != null">
+        #{aqsb,jdbcType=INTEGER},
+      </if>
+      <if test="ups != null">
+        #{ups,jdbcType=INTEGER},
+      </if>
+      <if test="qtmh != null">
+        #{qtmh,jdbcType=INTEGER},
+      </if>
+      <if test="kt != null">
+        #{kt,jdbcType=INTEGER},
+      </if>
+      <if test="ycyy != null">
+        #{ycyy,jdbcType=VARCHAR},
+      </if>
+      <if test="examiner != null">
+        #{examiner,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.po.EngineRoomInspection">
+    update engine_room_inspection
+    <set>
+      <if test="date != null">
+        date = #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="emr != null">
+        emr = #{emr,jdbcType=INTEGER},
+      </if>
+      <if test="his != null">
+        his = #{his,jdbcType=INTEGER},
+      </if>
+      <if test="lis != null">
+        lis = #{lis,jdbcType=INTEGER},
+      </if>
+      <if test="pacs != null">
+        pacs = #{pacs,jdbcType=INTEGER},
+      </if>
+      <if test="xny != null">
+        xny = #{xny,jdbcType=INTEGER},
+      </if>
+      <if test="oa != null">
+        oa = #{oa,jdbcType=INTEGER},
+      </if>
+      <if test="yb != null">
+        yb = #{yb,jdbcType=INTEGER},
+      </if>
+      <if test="qyw != null">
+        qyw = #{qyw,jdbcType=INTEGER},
+      </if>
+      <if test="yy != null">
+        yy = #{yy,jdbcType=INTEGER},
+      </if>
+      <if test="hiscc != null">
+        hiscc = #{hiscc,jdbcType=INTEGER},
+      </if>
+      <if test="jk != null">
+        jk = #{jk,jdbcType=INTEGER},
+      </if>
+      <if test="hx != null">
+        hx = #{hx,jdbcType=INTEGER},
+      </if>
+      <if test="hj != null">
+        hj = #{hj,jdbcType=INTEGER},
+      </if>
+      <if test="aqsb != null">
+        aqsb = #{aqsb,jdbcType=INTEGER},
+      </if>
+      <if test="ups != null">
+        ups = #{ups,jdbcType=INTEGER},
+      </if>
+      <if test="qtmh != null">
+        qtmh = #{qtmh,jdbcType=INTEGER},
+      </if>
+      <if test="kt != null">
+        kt = #{kt,jdbcType=INTEGER},
+      </if>
+      <if test="ycyy != null">
+        ycyy = #{ycyy,jdbcType=VARCHAR},
+      </if>
+      <if test="examiner != null">
+        examiner = #{examiner,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        userId = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.po.EngineRoomInspection">
+    update engine_room_inspection
+    set date = #{date,jdbcType=VARCHAR},
+      emr = #{emr,jdbcType=INTEGER},
+      his = #{his,jdbcType=INTEGER},
+      lis = #{lis,jdbcType=INTEGER},
+      pacs = #{pacs,jdbcType=INTEGER},
+      xny = #{xny,jdbcType=INTEGER},
+      oa = #{oa,jdbcType=INTEGER},
+      yb = #{yb,jdbcType=INTEGER},
+      qyw = #{qyw,jdbcType=INTEGER},
+      yy = #{yy,jdbcType=INTEGER},
+      hiscc = #{hiscc,jdbcType=INTEGER},
+      jk = #{jk,jdbcType=INTEGER},
+      hx = #{hx,jdbcType=INTEGER},
+      hj = #{hj,jdbcType=INTEGER},
+      aqsb = #{aqsb,jdbcType=INTEGER},
+      ups = #{ups,jdbcType=INTEGER},
+      qtmh = #{qtmh,jdbcType=INTEGER},
+      kt = #{kt,jdbcType=INTEGER},
+      ycyy = #{ycyy,jdbcType=VARCHAR},
+      examiner = #{examiner,jdbcType=VARCHAR},
+      userId = #{userid,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
