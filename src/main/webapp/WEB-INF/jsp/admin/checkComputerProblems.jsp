@@ -31,37 +31,39 @@
 					<form class="form-horizontal" role="form" action="/admin/editComputerProblems" id="editfrom"
 						  method="post">
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">标题：</label>
+							<label  class="col-sm-2 control-label">标题</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="title" name="title" placeholder="请输入标题"
-									   value="${computerProblems.title}">
+									   value="${computerProblems.title}" readonly="readonly">
 							</div>
 						</div>
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">科室：</label>
+							<label  class="col-sm-2 control-label">科室</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="dept" name="dept" placeholder="请输入科室"
-								value="${computerProblems.dept}">
+									   value="${computerProblems.dept}" readonly="readonly">
 							</div>
 						</div>
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">申报人：</label>
+							<label  class="col-sm-2 control-label">申报人</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="name" name="name" placeholder="请输入姓名"
-								value="${computerProblems.name}">
+									   value="${computerProblems.name}" readonly="readonly">
 							</div>
 						</div>
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">联系方式：</label>
+							<label  class="col-sm-2 control-label">联系方式</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="tel" name="tel" placeholder="请输入联系方式"
-								value="${computerProblems.tel}">
+									   value="${computerProblems.tel}" readonly="readonly">
 							</div>
 						</div>
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">故障类型：</label>
+							<label  class="col-sm-2 control-label">故障类型</label>
 							<div class="col-sm-10">
-								<select class="form-control" name="type" id="type">
+								<select class="form-control" name="type" id="type"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
 									<option value="1">电脑问题</option>
 									<option value="2">打印机问题</option>
 									<option value="3">监控问题</option>
@@ -73,27 +75,18 @@
 							</div>
 						</div>
 						<div id="textareadetail" class="form-group">
-							<label  class="col-sm-2 control-label">详情描述：</label>
+							<label  class="col-sm-2 control-label">详情描述</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" name="detail" placeholder="请输入描述"
-								 value="${computerProblems.detail}">
+									   value="${computerProblems.detail}" readonly="readonly">
 							</div>
 						</div>
-						<div id="textareareback" class="form-group">
-							<label  class="col-sm-2 control-label">反馈：</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="reback" placeholder="请输入反馈"
-									   value="${computerProblems.reback}">
-							</div>
+						<div class="mui-input-row">
+							<label>上传图片</label>
+							<input type="file" name="photo" id="photo">
 						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">上传图片：</label>
-							<input type="file" name="photo" id="photo" >
-						</div>
-
 						<div class="form-group" style="text-align: center">
-							<button class="btn btn-default" type="submit">处理</button>
-							<button class="btn btn-default" type="reset">完成</button>
+							<button class="btn btn-default" onclick="javascript:history.back(-1);" type="submit">返回</button>
 						</div>
 					</form>
 				</div>

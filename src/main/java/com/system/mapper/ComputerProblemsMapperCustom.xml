@@ -3,7 +3,23 @@
 
 <mapper namespace="com.system.mapper.ComputerProblemsMapperCustom" >
 
-  <select id="findByPaging" parameterType="PagingVO" resultType="ComputerProblemsCustom">
+  <resultMap id="BaseResultMap" type="com.system.po.ComputerProblems" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="userId" property="userid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="dept" property="dept" jdbcType="VARCHAR" />
+    <result column="departCode" property="departcode" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="detail" property="detail" jdbcType="VARCHAR" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="leader" property="leader" jdbcType="VARCHAR" />
+    <result column="reback" property="reback" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select computer_problems.*
     from computer_problems
     limit #{toPageNo}, #{pageSize}

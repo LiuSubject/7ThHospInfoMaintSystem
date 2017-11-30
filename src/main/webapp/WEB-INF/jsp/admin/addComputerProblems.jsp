@@ -24,37 +24,37 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<div class="row">
-						<h1 style="text-align: center;">添加电脑故障</h1>
+						<h2 style="text-align: center;">故障申报</h2>
 					</div>
 				</div>
 				<div class="panel-body">
 					<form class="form-horizontal" role="form" action="/admin/addComputerProblems" id="editfrom" method="post">
 						<div class="form-group">
-							<label for="inputEmail3" class="col-sm-2 control-label">标题</label>
+							<label  class="col-sm-2 control-label">标题</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="title" name="title" placeholder="请输入标题">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputPassword3" class="col-sm-2 control-label">科室</label>
+							<label  class="col-sm-2 control-label">科室</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="dept" name="dept" placeholder="请输入科室">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputPassword3" class="col-sm-2 control-label">申报人</label>
+							<label  class="col-sm-2 control-label">申报人</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="name" name="name" placeholder="请输入姓名">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputPassword3" class="col-sm-2 control-label">联系方式</label>
+							<label  class="col-sm-2 control-label">联系方式</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="tel" name="tel" placeholder="请输入联系方式">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputPassword3" class="col-sm-2 control-label">故障类型</label>
+							<label  class="col-sm-2 control-label">故障类型</label>
 							<div class="col-sm-10">
 								<select class="form-control" name="type" id="type">
 									<option value="1">电脑问题</option>
@@ -68,7 +68,7 @@
 							</div>
 						</div>
 						<div id="textareadetail" class="form-group">
-							<label for="inputPassword3" class="col-sm-2 control-label">详情描述</label>
+							<label  class="col-sm-2 control-label">详情描述</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" name="detail" placeholder="请输入描述">
 							</div>

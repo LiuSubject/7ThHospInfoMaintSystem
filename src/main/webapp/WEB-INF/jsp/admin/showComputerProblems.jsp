@@ -68,8 +68,8 @@
 									<td>${item.leader}</td>
 									<td>${item.createTime}</td>
 									<td>
-										<button class="btn btn-default btn-xs btn-info" onClick="location.href='/admin/editCourse?id=${item.id}'">修改</button>
-										<button class="btn btn-default btn-xs btn-danger btn-primary" onClick="location.href='/admin/removeCourse?id=${item.id}'">删除</button>
+										<button class="btn btn-default btn-xs btn-info" onClick="location.href='/admin/editComputerProblems?id=${item.id}'">处理问题</button>
+										<button class="btn btn-default btn-xs btn-danger btn-primary" onClick="location.href='/admin/checkComputerProblems?id=${item.id}'">查看详情</button>
 										<!--弹出框-->
 									</td>
 								</tr>

@@ -23,21 +23,27 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")//忽略警告，下同
     @Resource(name = "studentServiceImpl")
     private StudentService studentService;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "teacherServiceImpl")
     private TeacherService teacherService;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "courseServiceImpl")
     private CourseService courseService;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "collegeServiceImpl")
     private CollegeService collegeService;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "userloginServiceImpl")
     private UserloginService userloginService;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "computerProblemsServiceImpl")
     private ComputerProblemsService computerProblemsService;
 
@@ -450,7 +456,11 @@ public class AdminController {
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(currentTime);
-        computerProblemsCustom.setCreateTime(dateString);
+        //无初始时间时赋值
+        if(computerProblemsCustom.getCreateTime() == null || computerProblemsCustom.getCreateTime().length() == 0)
+        {
+            computerProblemsCustom.setCreateTime(dateString);
+        }
 
         //设置问题初始化状态
         computerProblemsCustom.setFlag(0);
@@ -467,13 +477,13 @@ public class AdminController {
         Boolean result = computerProblemsService.save(computerProblemsCustom);
 
         if (!result) {
-            model.addAttribute("message", "抱歉，保存失败");
+            model.addAttribute("message", "抱歉，故障信息保存失败");
             return "error";
         }
 
 
         //重定向
-        return "redirect:/admin/addComputerProblems";
+        return "redirect:/admin/showComputerProblems";
     }
 
     // 修改电脑故障页面显示
@@ -482,16 +492,12 @@ public class AdminController {
         if (id == null) {
             return "redirect:/admin/showComputerProblems";
         }
-        CourseCustom courseCustom = courseService.findById(id);
-        if (courseCustom == null) {
-            throw new CustomException("未找到该课程");
+        ComputerProblems computerProblems = computerProblemsService.findById(id);
+        if (computerProblems == null) {
+            throw new CustomException("抱歉，未找到该故障相关信息");
         }
-        List<TeacherCustom> list = teacherService.findAll();
-        List<College> collegeList = collegeService.finAll();
 
-        model.addAttribute("teacherList", list);
-        model.addAttribute("collegeList", collegeList);
-        model.addAttribute("course", courseCustom);
+        model.addAttribute("computerProblems", computerProblems);
 
 
         return "admin/editComputerProblems";
@@ -499,23 +505,44 @@ public class AdminController {
 
     // 修改电脑故障页面处理
     @RequestMapping(value = "/editComputerProblems", method = {RequestMethod.POST})
-    public String editComputerProblems(CourseCustom courseCustom) throws Exception {
+    public String editComputerProblems(ComputerProblemsCustom computerProblemsCustom) throws Exception {
 
-        courseService.upadteById(courseCustom.getCourseid(), courseCustom);
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+
+        computerProblemsCustom.setLeader(userlogin.getName());
+
+        computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
 
         //重定向
         return "redirect:/admin/showComputerProblems";
     }
 
-    // 删除电脑故障
-    @RequestMapping("/removeComputerProblems")
-    public String removeComputerProblems(Integer id) throws Exception {
+    // 查看电脑故障详情
+    @RequestMapping(value = "/checkComputerProblems", method = {RequestMethod.GET})
+    public String checkComputerProblems(Integer id, Model model) throws Exception {
         if (id == null) {
-            //加入没有带教师id就进来的话就返回教师显示页面
-            return "admin/showComputerProblems";
+            return "redirect:/admin/showComputerProblems";
         }
-        courseService.removeById(id);
+        ComputerProblems computerProblems = computerProblemsService.findById(id);
+        if (computerProblems == null) {
+            throw new CustomException("抱歉，未找到该故障相关信息");
+        }
 
+        model.addAttribute("computerProblems", computerProblems);
+
+
+        return "admin/checkComputerProblems";
+    }
+
+    // 查看电脑故障详情
+    @RequestMapping(value = "/checkComputerProblems", method = {RequestMethod.POST})
+    public String checkComputerProblems(ComputerProblemsCustom computerProblemsCustom) throws Exception {
+
+        computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+
+        //重定向
         return "redirect:/admin/showComputerProblems";
     }
 

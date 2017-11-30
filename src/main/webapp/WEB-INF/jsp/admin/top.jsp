@@ -15,7 +15,7 @@
             <!--加入导航条标题-->
             <div class="navbar navbar-default" role="navigation">
                 　<div class="navbar-header">
-                　    <a href="##" class="navbar-brand">绍兴市第七人民医院信息维护平台</a>
+                　    <a href="##" class="navbar-brand">信息维护平台</a>
                 　</div>
                 <form action="##" class="navbar-form navbar-right" rol="search">
                     <div class="dropdown">
