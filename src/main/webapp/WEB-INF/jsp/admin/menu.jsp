@@ -2,7 +2,7 @@
 
 <div class="col-md-2">
     <ul class="nav nav-pills nav-stacked" id="nav">
-        <li><a href="/admin/errorReport">故障申报</a></li>
+        <li><a href="/admin/addComputerProblems">故障申报</a></li>
         <li><a href="/admin/showComputerProblems">故障列表<span class="badge pull-right">8</span></a></li>
         <li><a href="/admin/materialPurchase">物资申购<span class="badge pull-right">8</span></a></li>
         <li><a href="/admin/purchaseList">申购列表<span class="badge pull-right">8</span></a></li>

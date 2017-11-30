@@ -9,6 +9,12 @@ public class Userlogin {
 
     private Integer role;
 
+    private String depart;
+
+    private String departcode;
+
+    private String name;
+
     public Integer getUserid() {
         return userid;
     }
@@ -39,5 +45,29 @@ public class Userlogin {
 
     public void setRole(Integer role) {
         this.role = role;
+    }
+
+    public String getDepart() {
+        return depart;
+    }
+
+    public void setDepart(String depart) {
+        this.depart = depart == null ? null : depart.trim();
+    }
+
+    public String getDepartcode() {
+        return departcode;
+    }
+
+    public void setDepartcode(String departcode) {
+        this.departcode = departcode == null ? null : departcode.trim();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 }

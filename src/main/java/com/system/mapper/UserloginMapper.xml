@@ -6,6 +6,9 @@
     <result column="userName" property="username" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="role" property="role" jdbcType="INTEGER" />
+    <result column="depart" property="depart" jdbcType="VARCHAR" />
+    <result column="departcode" property="departcode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -66,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    userID, userName, password, role
+    userID, userName, password, role, depart, departcode, name
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.po.UserloginExample" >
     select
@@ -100,9 +103,11 @@
   </delete>
   <insert id="insert" parameterType="com.system.po.Userlogin" >
     insert into userlogin (userID, userName, password, 
-      role)
+      role, depart, departcode, 
+      name)
     values (#{userid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{role,jdbcType=INTEGER})
+      #{role,jdbcType=INTEGER}, #{depart,jdbcType=VARCHAR}, #{departcode,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.system.po.Userlogin" >
     insert into userlogin
@@ -119,6 +124,15 @@
       <if test="role != null" >
         role,
       </if>
+      <if test="depart != null" >
+        depart,
+      </if>
+      <if test="departcode != null" >
+        departcode,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userid != null" >
@@ -132,6 +146,15 @@
       </if>
       <if test="role != null" >
         #{role,jdbcType=INTEGER},
+      </if>
+      <if test="depart != null" >
+        #{depart,jdbcType=VARCHAR},
+      </if>
+      <if test="departcode != null" >
+        #{departcode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -156,6 +179,15 @@
       <if test="record.role != null" >
         role = #{record.role,jdbcType=INTEGER},
       </if>
+      <if test="record.depart != null" >
+        depart = #{record.depart,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departcode != null" >
+        departcode = #{record.departcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -166,7 +198,10 @@
     set userID = #{record.userid,jdbcType=INTEGER},
       userName = #{record.username,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
-      role = #{record.role,jdbcType=INTEGER}
+      role = #{record.role,jdbcType=INTEGER},
+      depart = #{record.depart,jdbcType=VARCHAR},
+      departcode = #{record.departcode,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -183,6 +218,15 @@
       <if test="role != null" >
         role = #{role,jdbcType=INTEGER},
       </if>
+      <if test="depart != null" >
+        depart = #{depart,jdbcType=VARCHAR},
+      </if>
+      <if test="departcode != null" >
+        departcode = #{departcode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
     </set>
     where userID = #{userid,jdbcType=INTEGER}
   </update>
@@ -190,7 +234,10 @@
     update userlogin
     set userName = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
-      role = #{role,jdbcType=INTEGER}
+      role = #{role,jdbcType=INTEGER},
+      depart = #{depart,jdbcType=VARCHAR},
+      departcode = #{departcode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR}
     where userID = #{userid,jdbcType=INTEGER}
   </update>
 </mapper>

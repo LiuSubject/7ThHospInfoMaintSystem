@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -66,7 +68,7 @@ public class AdminController {
 
     }
 
-    //  添加学生信息页面显示
+    //  跳转至添加学生信息页面（跳转页面）
     @RequestMapping(value = "/addStudent", method = {RequestMethod.GET})
     public String addStudentUI(Model model) throws Exception {
 
@@ -77,7 +79,7 @@ public class AdminController {
         return "admin/addStudent";
     }
 
-     // 添加学生信息操作
+     // 完成添加学生信息操作（保存数据）
     @RequestMapping(value = "/addStudent", method = {RequestMethod.POST})
     public String addStudent(StudentCustom studentCustom, Model model) throws Exception {
 
@@ -217,7 +219,7 @@ public class AdminController {
         }
         TeacherCustom teacherCustom = teacherService.findById(id);
         if (teacherCustom == null) {
-            throw new CustomException("未找到该名学生");
+            throw new CustomException("未找到该名教师");
         }
         List<College> list = collegeService.finAll();
 
@@ -432,23 +434,40 @@ public class AdminController {
     @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.GET})
     public String addComputerProblemsUI(Model model) throws Exception {
 
-        List<TeacherCustom> list = teacherService.findAll();
-        List<College> collegeList = collegeService.finAll();
-
-        model.addAttribute("collegeList", collegeList);
-        model.addAttribute("teacherList", list);
-
         return "admin/addComputerProblems";
     }
 
     // 添加电脑故障处理
     @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.POST})
-    public String addComputerProblems(CourseCustom courseCustom, Model model) throws Exception {
+    public String addComputerProblemsCustom(ComputerProblemsCustom computerProblemsCustom, Model model) throws Exception {
 
-        Boolean result = courseService.save(courseCustom);
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+
+
+        //设置问题初始化时间
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+        computerProblemsCustom.setCreateTime(dateString);
+
+        //设置问题初始化状态
+        computerProblemsCustom.setFlag(0);
+
+        //设置问题所属部门
+        computerProblemsCustom.setDept(userlogin.getDepart());
+
+        //设置问题所属部门编码
+        computerProblemsCustom.setDepartcode(userlogin.getDepartcode());
+
+        //设置问题所属人员ID
+        computerProblemsCustom.setUserid(userlogin.getUsername());
+
+        Boolean result = computerProblemsService.save(computerProblemsCustom);
 
         if (!result) {
-            model.addAttribute("message", "课程号重复");
+            model.addAttribute("message", "抱歉，保存失败");
             return "error";
         }
 

@@ -28,11 +28,11 @@
 					</div>
 				</div>
 				<div class="panel-body">
-					<form class="form-horizontal" role="form" action="/admin/addCourse" id="editfrom" method="post">
+					<form class="form-horizontal" role="form" action="/admin/addComputerProblems" id="editfrom" method="post">
 						<div class="form-group">
 							<label for="inputEmail3" class="col-sm-2 control-label">标题</label>
 							<div class="col-sm-10">
-								<input type="number" class="form-control" id="title" name="title" placeholder="请输入标题">
+								<input type="text" class="form-control" id="title" name="title" placeholder="请输入标题">
 							</div>
 						</div>
 						<div class="form-group">

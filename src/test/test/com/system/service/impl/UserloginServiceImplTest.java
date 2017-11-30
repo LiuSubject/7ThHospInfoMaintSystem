@@ -1,6 +1,5 @@
 package com.system.service.impl;
 
-import com.system.po.Userlogin;
 import com.system.service.TeacherService;
 import com.system.service.UserloginService;
 import org.junit.Before;
