@@ -28,6 +28,12 @@ public interface ComputerProblemsService {
     //根据id获取电脑故障信息
     ComputerProblemsCustom findById(Integer id) throws Exception;
 
+    //根据部门模糊查询
+    List<ComputerProblemsCustom> findByDept(String dept) throws Exception;
+
     //根据名字模糊查询
     List<ComputerProblemsCustom> findByName(String name) throws Exception;
+
+    //根据状态模糊查询
+    List<ComputerProblemsCustom> findByFlag(Integer flag) throws Exception;
 }

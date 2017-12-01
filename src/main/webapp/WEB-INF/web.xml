@@ -13,6 +13,12 @@
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 
+  <!--在默认情况下允许访问jpg静态资源,必须加在springmvc的servlet之前-->
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.jpg</url-pattern>
+  </servlet-mapping>
+
   <!--springMVC前端控制器加载-->
   <servlet>
     <servlet-name>springmvc</servlet-name>
@@ -30,6 +36,7 @@
     <servlet-name>springmvc</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+
 
 
   <!--spring为我们提供的乱码过滤器-->
@@ -66,5 +73,6 @@
   <welcome-file-list>
     <welcome-file>login.jsp</welcome-file>
   </welcome-file-list>
+
 
 </web-app>

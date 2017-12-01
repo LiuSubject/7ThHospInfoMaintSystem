@@ -28,7 +28,7 @@
 					</div>
 				</div>
 				<div class="panel-body">
-					<form class="form-horizontal" role="form" action="/admin/addComputerProblems" id="editfrom" method="post">
+					<form class="form-horizontal" role="form" action="/admin/addComputerProblems" id="editfrom" method="post" enctype="multipart/form-data">
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">标题</label>
 							<div class="col-sm-10">
@@ -75,7 +75,7 @@
 						</div>
 						<div class="mui-input-row">
 							<label>上传图片</label>
-							<input type="file" name="photo" id="photo">
+							<input type="file" name="photo" id="photo" accept="photo/*">
 						</div>
 						<div class="form-group" style="text-align: center">
 							<button class="btn btn-default" type="submit">提交</button>

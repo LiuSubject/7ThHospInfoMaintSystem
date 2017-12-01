@@ -29,10 +29,13 @@
 				    <div class="panel-heading">
 						<div class="row">
 					    	<h1 class="col-md-5">故障列表</h1>
-							<form class="bs-example bs-example-form col-md-5" role="form" style="margin: 20px 0 10px 0;" action="/admin/selectCourse" id="form1" method="post">
+							<form class="bs-example bs-example-form col-md-5" role="form" style="margin: 20px 0 10px 0;"
+								  action="/admin/searchComputerProblems" id="searchFunction" method="post">
 								<div class="input-group">
-									<input type="text" class="form-control" placeholder="请输入标题" name="findByName">
-									<span class="input-group-addon btn" onclick="document.getElementById('form1').submit" id="sub">搜索</span>
+									<input type="text" class="form-control" placeholder="请输入科室" id="findByDept" name="findByDept">
+									<input type="text" class="form-control" placeholder="请输入申报人" id="findByName" name="findByName">
+									<input type="text" class="form-control" placeholder="请输入状态" id="findByFlag" name="findByFlag">
+									<span class="input-group-addon btn" id="searchBtn">搜索</span>
 								</div>
 							</form>
 							<button class="btn btn-default col-md-2" style="margin-top: 20px" onClick="location.href='/admin/addComputerProblems'">
@@ -112,15 +115,14 @@
 </body>
 	<script type="text/javascript">
 		<%--设置菜单中--%>
-		$("#nav li:nth-child(1)").addClass("active")
+		$("#nav li:nth-child(1)").addClass("active");
         <c:if test="${pagingVO != null}">
         if (${pagingVO.curentPageNo} == ${pagingVO.totalCount}) {
             $(".pagination li:last-child").addClass("disabled")
-        };
-
+        }
         if (${pagingVO.curentPageNo} == ${1}) {
             $(".pagination li:nth-child(1)").addClass("disabled")
-        };
+        }
         </c:if>
 
         function confirmd() {
@@ -132,8 +134,8 @@
             }
         }
 
-        $("#sub").click(function () {
-            $("#form1").submit();
+        $("#searchBtn").click(function () {
+            $("#searchFunction").submit();
         });
 	</script>
 </html>

@@ -96,7 +96,7 @@
 					<div class="form-group" style="text-align: center">
 						<button class="btn btn-default" id="dealBtn">处理</button>
 						<button class="btn btn-default" id="completeBtn">完成</button>
-						<button class="btn btn-default" onclick="history.back(-1);">返回</button>
+						<button class="btn btn-default" id="returnListBtn">返回</button>
 					</div>
 				</div>
 
@@ -130,7 +130,13 @@
 
     //完成按钮点击
     $('#completeBtn').on('click', function() {
-        location.href='/admin/completeComputerProblems?id=${computerProblems.id}';
+        var feedback=document.getElementById("feedback").value;
+        window.location.href = "/admin/completeComputerProblems?id=${computerProblems.id}&feedback="+feedback;
+    });
+
+    //返回按钮点击
+    $('#returnListBtn').on('click', function() {
+        window.location.href = "/admin/showComputerProblems";
     });
 
 

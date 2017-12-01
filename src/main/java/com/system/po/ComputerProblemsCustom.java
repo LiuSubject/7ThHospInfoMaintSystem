@@ -11,4 +11,5 @@ package com.system.po;
  * 修改备注：
  **/
 public class ComputerProblemsCustom extends ComputerProblems{
+
 }

@@ -3,17 +3,20 @@ package com.system.controller;
 import com.system.exception.CustomException;
 import com.system.po.*;
 import com.system.service.*;
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -447,12 +450,18 @@ public class AdminController {
 
     // 添加电脑故障处理
     @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.POST})
-    public String addComputerProblemsCustom(ComputerProblemsCustom computerProblemsCustom, Model model) throws Exception {
+    public String addComputerProblemsCustom(ComputerProblemsCustom computerProblemsCustom, Model model,HttpServletRequest request,UploadedImageFile file) throws Exception {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
         Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
 
+        //文件上传至服务器并保存图片路径
+        String name = RandomStringUtils.randomAlphanumeric(10);
+        String newFileName = name + ".jpg";
+        File newFile = new File(request.getServletContext().getRealPath("/image"), newFileName);
+        newFile.getParentFile().mkdirs();
+        file.getPhoto().transferTo(newFile);//.getImage().transferTo(newFile);
 
         //设置问题初始化时间
         Date currentTime = new Date();
@@ -521,7 +530,7 @@ public class AdminController {
         return "redirect:/admin/showComputerProblems";
     }
 
-    // 处理电脑故障
+    // 开始处理电脑故障
     @RequestMapping(value = "/dealComputerProblems")
     public String dealComputerProblems(HttpServletRequest request) throws Exception {
 
@@ -553,21 +562,36 @@ public class AdminController {
        return "redirect:editComputerProblems?id=" + computerProblemsCustom.getId();
     }
 
-    // 处理电脑故障
-    @RequestMapping(value = "/completeComputerProblems", method = {RequestMethod.GET})
-    public String completeComputerProblems(Integer id, Model model) throws Exception {
+    // 电脑故障处理完成
+    @RequestMapping(value = "/completeComputerProblems")
+    public String completeComputerProblems(HttpServletRequest request) throws Exception {
+
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        String feedback = request.getParameter("feedback");
+
+
         if (id == null) {
             return "redirect:/admin/showComputerProblems";
         }
+
+        //获取当前故障问题
         ComputerProblemsCustom computerProblemsCustom = computerProblemsService.findById(id);
         if (computerProblemsCustom == null) {
             throw new CustomException("抱歉，未找到该故障相关信息");
         }
 
-        computerProblemsCustom.setFlag(2);
-        computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        if(computerProblemsCustom.getFlag() == 0){
+            //更新该故障问题数据
+            computerProblemsCustom.setFlag(2);
+            computerProblemsCustom.setLeader(userlogin.getName());
+            computerProblemsCustom.setReback(feedback);
+            computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+        }
 
-        return "admin/showComputerProblems";
+        return "redirect:editComputerProblems?id=" + computerProblemsCustom.getId();
     }
 
     // 查看电脑故障详情
@@ -598,12 +622,41 @@ public class AdminController {
     }
 
     //搜索电脑故障
-    @RequestMapping(value = "selectComputerProblems", method = {RequestMethod.POST})
-    private String selectComputerProblems(String findByName, Model model) throws Exception {
+    @RequestMapping(value = "/searchComputerProblems")
+    private String searchComputerProblems(String findByDept,String findByName,String findByFlag, Model model) throws Exception {
 
-        List<CourseCustom> list = courseService.findByName(findByName);
 
-        model.addAttribute("courseList", list);
+        List<ComputerProblemsCustom> listByDept = new ArrayList<ComputerProblemsCustom>();
+        List<ComputerProblemsCustom> listByName = new ArrayList<ComputerProblemsCustom>();
+        List<ComputerProblemsCustom> listByFlag = new ArrayList<ComputerProblemsCustom>();
+        List<ComputerProblemsCustom> listResult = new ArrayList<ComputerProblemsCustom>();
+
+        if(!findByDept.equals(""))
+        {
+            listByDept = computerProblemsService.findByDept(findByDept);
+        }
+
+        if(!findByName.equals(""))
+        {
+            listByName = computerProblemsService.findByName(findByName);
+        }
+
+        if(!findByFlag.equals(""))
+        {
+            Integer flag = Integer.parseInt(findByFlag);
+            listByFlag = computerProblemsService.findByFlag(flag);
+        }
+
+
+
+        //合并去重
+        listResult.addAll(listByDept);
+        listResult.removeAll(listByFlag);
+        listResult.addAll(listByFlag);
+        listResult.removeAll(listByName);
+        listResult.addAll(listByName);
+
+        model.addAttribute("computerProblemsList", listResult);
         return "admin/showComputerProblems";
     }
 
