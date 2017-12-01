@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -517,6 +519,55 @@ public class AdminController {
 
         //重定向
         return "redirect:/admin/showComputerProblems";
+    }
+
+    // 处理电脑故障
+    @RequestMapping(value = "/dealComputerProblems")
+    public String dealComputerProblems(HttpServletRequest request) throws Exception {
+
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        String feedback = request.getParameter("feedback");
+
+
+        if (id == null) {
+            return "redirect:/admin/showComputerProblems";
+        }
+
+        //获取当前故障问题
+        ComputerProblemsCustom computerProblemsCustom = computerProblemsService.findById(id);
+        if (computerProblemsCustom == null) {
+            throw new CustomException("抱歉，未找到该故障相关信息");
+        }
+
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        if(computerProblemsCustom.getFlag() == 0){
+            //更新该故障问题数据
+            computerProblemsCustom.setFlag(1);
+            computerProblemsCustom.setLeader(userlogin.getName());
+            computerProblemsCustom.setReback(feedback);
+            computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+        }
+
+       return "redirect:editComputerProblems?id=" + computerProblemsCustom.getId();
+    }
+
+    // 处理电脑故障
+    @RequestMapping(value = "/completeComputerProblems", method = {RequestMethod.GET})
+    public String completeComputerProblems(Integer id, Model model) throws Exception {
+        if (id == null) {
+            return "redirect:/admin/showComputerProblems";
+        }
+        ComputerProblemsCustom computerProblemsCustom = computerProblemsService.findById(id);
+        if (computerProblemsCustom == null) {
+            throw new CustomException("抱歉，未找到该故障相关信息");
+        }
+
+        computerProblemsCustom.setFlag(2);
+        computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+
+        return "admin/showComputerProblems";
     }
 
     // 查看电脑故障详情

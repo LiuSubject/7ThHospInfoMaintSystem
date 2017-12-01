@@ -86,7 +86,7 @@
 							<input type="file" name="photo" id="photo">
 						</div>
 						<div class="form-group" style="text-align: center">
-							<button class="btn btn-default" onclick="javascript:history.back(-1);" type="submit">返回</button>
+							<button class="btn btn-default" onclick="history.back(-1);">返回</button>
 						</div>
 					</form>
 				</div>

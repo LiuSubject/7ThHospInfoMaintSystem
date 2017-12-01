@@ -82,7 +82,7 @@
 						<div id="textareareback" class="form-group">
 							<label  class="col-sm-2 control-label">反馈：</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" name="reback" placeholder="请输入反馈"
+								<input type="text" class="form-control" id="feedback" name="feedback" placeholder="请输入反馈"
 									   value="${computerProblems.reback}">
 							</div>
 						</div>
@@ -91,11 +91,13 @@
 							<input type="file" name="photo" id="photo" >
 						</div>
 
-						<div class="form-group" style="text-align: center">
-							<button class="btn btn-default" type="submit">处理</button>
-							<button class="btn btn-default" type="reset">完成</button>
-						</div>
+
 					</form>
+					<div class="form-group" style="text-align: center">
+						<button class="btn btn-default" id="dealBtn">处理</button>
+						<button class="btn btn-default" id="completeBtn">完成</button>
+						<button class="btn btn-default" onclick="history.back(-1);">返回</button>
+					</div>
 				</div>
 
 			</div>
@@ -119,6 +121,18 @@
             typeSelect[i].selected = true;
         }
     }
+
+    //处理按钮点击
+    $('#dealBtn').on('click', function() {
+        var feedback=document.getElementById("feedback").value;
+        window.location.href = "/admin/dealComputerProblems?id=${computerProblems.id}&feedback="+feedback;
+    });
+
+    //完成按钮点击
+    $('#completeBtn').on('click', function() {
+        location.href='/admin/completeComputerProblems?id=${computerProblems.id}';
+    });
+
 
 </script>
 </html>
