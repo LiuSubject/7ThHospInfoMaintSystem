@@ -52,6 +52,10 @@ public class AdminController {
     @Resource(name = "computerProblemsServiceImpl")
     private ComputerProblemsService computerProblemsService;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "materialApplicationServiceImpl")
+    private MaterialApplicationService materialApplicationService;
+
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<学生操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
@@ -669,7 +673,8 @@ public class AdminController {
     }
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-
+    // 物资申购显示
+    @RequestMapping("/showMaterialApplication")
     public String showMaterialApplication(Model model, Integer page) throws Exception {
         List<MaterialApplicationCustom> list = null;
         //页码对象
@@ -698,9 +703,9 @@ public class AdminController {
         return "admin/addMaterialApplication";
     }
 
-    // 添加物资申购处理
+    // 添加物资申购
     @RequestMapping(value = "/addMaterialApplication", method = {RequestMethod.POST})
-    public String addMaterialApplicationCustom(MaterialApplicationCustom materialApplicationCustom, Model model,HttpServletRequest request,UploadedImageFile file) throws Exception {
+    public String addMaterialApplicationCustom(MaterialApplicationCustom materialApplicationCustom, Model model) throws Exception {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
@@ -719,18 +724,6 @@ public class AdminController {
             materialApplicationCustom.setCreateTime(dateString);
         }
 
-        //文件上传至服务器并保存图片路径
-        if(!file.getPhoto().isEmpty())
-        {
-            String name = RandomStringUtils.randomAlphanumeric(10);
-            String newFileName = name + ".jpg";
-            File newFile = new File(request.getServletContext().getRealPath("/upload"), newFileName);
-            newFile.getParentFile().mkdirs();
-            file.getPhoto().transferTo(newFile);
-            //保存路径
-            materialApplicationCustom.setImg(newFileName);
-        }
-
         //设置问题初始化状态
         materialApplicationCustom.setFlag(0);
 
@@ -746,7 +739,7 @@ public class AdminController {
         Boolean result = materialApplicationService.save(materialApplicationCustom);
 
         if (!result) {
-            model.addAttribute("message", "抱歉，故障信息保存失败");
+            model.addAttribute("message", "抱歉，物资申购信息保存失败");
             return "error";
         }
 
@@ -763,7 +756,7 @@ public class AdminController {
         }
         MaterialApplication materialApplication = materialApplicationService.findById(id);
         if (materialApplication == null) {
-            throw new CustomException("抱歉，未找到该故障相关信息");
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
         }
 
         model.addAttribute("materialApplication", materialApplication);
@@ -800,17 +793,17 @@ public class AdminController {
             return "redirect:/admin/showMaterialApplication";
         }
 
-        //获取当前故障问题
+        //获取当前物资申购问题
         MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
         if (materialApplicationCustom == null) {
-            throw new CustomException("抱歉，未找到该故障相关信息");
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
         }
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
         Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
         if(materialApplicationCustom.getFlag() == 0){
-            //更新该故障问题数据
+            //更新该物资申购问题数据
             materialApplicationCustom.setFlag(1);
             materialApplicationCustom.setLeader(userlogin.getName());
             materialApplicationCustom.setReback(feedback);
@@ -832,17 +825,17 @@ public class AdminController {
             return "redirect:/admin/showMaterialApplication";
         }
 
-        //获取当前故障问题
+        //获取当前物资申购信息
         MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
         if (materialApplicationCustom == null) {
-            throw new CustomException("抱歉，未找到该故障相关信息");
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
         }
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
         Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
         if(materialApplicationCustom.getFlag() == 0){
-            //更新该故障问题数据
+            //更新该物资申购问题数据
             materialApplicationCustom.setFlag(2);
             materialApplicationCustom.setLeader(userlogin.getName());
             materialApplicationCustom.setReback(feedback);
@@ -860,7 +853,7 @@ public class AdminController {
         }
         MaterialApplication materialApplication = materialApplicationService.findById(id);
         if (materialApplication == null) {
-            throw new CustomException("抱歉，未找到该故障相关信息");
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
         }
 
         model.addAttribute("materialApplication", materialApplication);

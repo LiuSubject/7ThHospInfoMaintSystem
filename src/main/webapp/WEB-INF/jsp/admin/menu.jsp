@@ -3,9 +3,9 @@
 <div class="col-md-2">
     <ul class="nav nav-pills nav-stacked" id="nav">
         <li><a href="/admin/addComputerProblems">故障申报</a></li>
-        <li><a href="/admin/showComputerProblems">故障列表<span class="badge pull-right">8</span></a></li>
-        <li><a href="/admin/materialPurchase">物资申购<span class="badge pull-right">8</span></a></li>
-        <li><a href="/admin/purchaseList">申购列表<span class="badge pull-right">8</span></a></li>
+        <li><a href="/admin/showComputerProblems">故障列表</a></li>
+        <li><a href="/admin/addMaterialApplication">物资申购</a></li>
+        <li><a href="/admin/showMaterialApplication">申购列表</a></li>
         <li><a href="/admin/engineRoomInspection">机房巡检<span class="badge pull-right">8</span></a></li>
         <li><a href="/admin/inspectionList">巡检信息<span class="badge pull-right">8</span></a></li>
         <li><a href="/admin/showCourse">课程管理<span class="badge pull-right">8</span></a></li>
