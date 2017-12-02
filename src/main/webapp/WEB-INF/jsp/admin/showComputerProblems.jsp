@@ -27,36 +27,36 @@
 			<div class="col-md-10">
 				<div class="panel panel-default">
 				    <div class="panel-heading">
-						<div class="row">
-					    	<h1 class="col-md-5">故障列表</h1>
-							<form class="bs-example bs-example-form col-md-5" role="form" style="margin: 20px 0 10px 0;"
+						<h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">故障列表</h2>
+						<div class="row" style="text-align: right">
+							<form class="form-horizontal form-inline" role="form" style="margin: 20px 0 10px 0;"
 								  action="/admin/searchComputerProblems" id="searchFunction" method="post">
-								<div class="input-group">
-									<input type="text" class="form-control" placeholder="请输入科室" id="findByDept" name="findByDept">
-									<input type="text" class="form-control" placeholder="请输入申报人" id="findByName" name="findByName">
-									<input type="text" class="form-control" placeholder="请输入状态" id="findByFlag" name="findByFlag">
-									<span class="input-group-addon btn" id="searchBtn">搜索</span>
+								<div class="form-group col-sm-12">
+										<input type="text" class="form-control" placeholder="请输入科室" id="findByDept"
+											   name="findByDept" style="margin-left: 5px">
+										<input type="text" class="form-control" placeholder="请输入申报人" id="findByName"
+											   name="findByName" style="margin-left: 10px">
+										<input type="text" class="form-control" placeholder="请输入状态" id="findByFlag"
+											   name="findByFlag" style="margin-left: 10px">
+										<input type="button" class="btn btn-primary" id="searchBtn" value="搜索"
+												style="margin-left: 10px;margin-right:20px">
 								</div>
 							</form>
-							<button class="btn btn-default col-md-2" style="margin-top: 20px" onClick="location.href='/admin/addComputerProblems'">
-								故障申报
-								<sapn class="glyphicon glyphicon-plus"/>
-							</button>
 
 						</div>
 				    </div>
 				    <table class="table table-bordered">
 					        <thead>
 					            <tr>
-									<th>标题</th>
-									<th>科室</th>
-									<th>申报人</th>
-									<th>电话</th>
-									<th>故障类型</th>
-									<th>状态</th>
-									<th>负责人</th>
-									<th>创建时间</th>
-									<th>操作</th>
+									<th style="text-align: center">标题</th>
+									<th style="text-align: center">科室</th>
+									<th style="text-align: center">申报人</th>
+									<th style="text-align: center">电话</th>
+									<th style="text-align: center">故障类型</th>
+									<th style="text-align: center">状态</th>
+									<th style="text-align: center">负责人</th>
+									<th style="text-align: center">创建时间</th>
+									<th style="text-align: center">操作</th>
 					            </tr>
 					        </thead>
 					        <tbody>

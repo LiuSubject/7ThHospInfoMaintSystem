@@ -30,32 +30,32 @@
 				<div class="panel-body">
 					<form class="form-horizontal" role="form" action="/admin/addComputerProblems" id="editfrom" method="post" enctype="multipart/form-data">
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">标题</label>
-							<div class="col-sm-10">
+							<label  class="col-sm-2 control-label">标题：</label>
+							<div class="col-sm-8">
 								<input type="text" class="form-control" id="title" name="title" placeholder="请输入标题">
 							</div>
 						</div>
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">科室</label>
-							<div class="col-sm-10">
+							<label  class="col-sm-2 control-label">科室：</label>
+							<div class="col-sm-8">
 								<input type="text" class="form-control" id="dept" name="dept" placeholder="请输入科室">
 							</div>
 						</div>
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">申报人</label>
-							<div class="col-sm-10">
+							<label  class="col-sm-2 control-label">申报人：</label>
+							<div class="col-sm-8">
 								<input type="text" class="form-control" id="name" name="name" placeholder="请输入姓名">
 							</div>
 						</div>
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">联系方式</label>
-							<div class="col-sm-10">
+							<label  class="col-sm-2 control-label">联系方式：</label>
+							<div class="col-sm-8">
 								<input type="text" class="form-control" id="tel" name="tel" placeholder="请输入联系方式">
 							</div>
 						</div>
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">故障类型</label>
-							<div class="col-sm-10">
+							<label  class="col-sm-2 control-label">故障类型：</label>
+							<div class="col-sm-8">
 								<select class="form-control" name="type" id="type">
 									<option value="1">电脑问题</option>
 									<option value="2">打印机问题</option>
@@ -68,14 +68,14 @@
 							</div>
 						</div>
 						<div id="textareadetail" class="form-group">
-							<label  class="col-sm-2 control-label">详情描述</label>
-							<div class="col-sm-10">
+							<label  class="col-sm-2 control-label">详情描述：</label>
+							<div class="col-sm-8">
 								<input type="text" class="form-control" name="detail" placeholder="请输入描述">
 							</div>
 						</div>
-						<div class="mui-input-row">
-							<label>上传图片</label>
-							<input type="file" name="photo" id="photo" accept="photo/*">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">上传图片：</label>
+							<input class="col-sm-3 control-label" type="file" name="photo" id="photo">
 						</div>
 						<div class="form-group" style="text-align: center">
 							<button class="btn btn-default" type="submit">提交</button>

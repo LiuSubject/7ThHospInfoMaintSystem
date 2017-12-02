@@ -31,36 +31,36 @@
 					<form class="form-horizontal" role="form" action="/admin/editComputerProblems" id="editfrom"
 						  method="post">
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">标题</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="title" name="title" placeholder="请输入标题"
+							<label  class="col-sm-2 control-label">标题：</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="title" name="title"
 									   value="${computerProblems.title}" readonly="readonly">
 							</div>
 						</div>
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">科室</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="dept" name="dept" placeholder="请输入科室"
+							<label  class="col-sm-2 control-label">科室：</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="dept" name="dept"
 									   value="${computerProblems.dept}" readonly="readonly">
 							</div>
 						</div>
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">申报人</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="name" name="name" placeholder="请输入姓名"
+							<label  class="col-sm-2 control-label">申报人：</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="name" name="name"
 									   value="${computerProblems.name}" readonly="readonly">
 							</div>
 						</div>
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">联系方式</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="tel" name="tel" placeholder="请输入联系方式"
+							<label  class="col-sm-2 control-label">联系方式：</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="tel" name="tel"
 									   value="${computerProblems.tel}" readonly="readonly">
 							</div>
 						</div>
 						<div class="form-group">
-							<label  class="col-sm-2 control-label">故障类型</label>
-							<div class="col-sm-10">
+							<label  class="col-sm-2 control-label">故障类型：</label>
+							<div class="col-sm-8">
 								<select class="form-control" name="type" id="type"
 										onfocus="this.defaultIndex=this.selectedIndex;"
 										onchange="this.selectedIndex=this.defaultIndex;">
@@ -75,18 +75,28 @@
 							</div>
 						</div>
 						<div id="textareadetail" class="form-group">
-							<label  class="col-sm-2 control-label">详情描述</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="detail" placeholder="请输入描述"
+							<label  class="col-sm-2 control-label">详情描述：</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="detail"
 									   value="${computerProblems.detail}" readonly="readonly">
 							</div>
 						</div>
-						<div class="mui-input-row">
-							<label>上传图片</label>
-							<img src="${pageContext.request.contextPath}/upload/${computerProblems.img}"/>
+						<div id="textareareback" class="form-group">
+							<label  class="col-sm-2 control-label">反馈：</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="feedback" name="feedback"
+									   value="${computerProblems.reback}" readonly="readonly">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">上传图片：</label>
+							<div class="col-sm-6">
+								<img src="${pageContext.request.contextPath}/upload/${computerProblems.img}"
+									 id="uploadImg"/>
+							</div>
 						</div>
 						<div class="form-group" style="text-align: center">
-							<button class="btn btn-default" onclick="history.back(-1);">返回</button>
+							<button class="btn btn-default" id="returnListBtn">返回</button>
 						</div>
 					</form>
 				</div>
@@ -112,6 +122,22 @@
             typeSelect[i].selected = true;
         }
     }
+
+    //返回按钮点击
+    $('#returnListBtn').on('click', function() {
+        window.location.href = "/admin/showComputerProblems";
+    });
+
+
+    //设置图片最大尺寸
+    function setImgMaxSize(){
+        var uploadImg = document.getElementById('uploadImg');
+        if(uploadImg.width > 600){
+            uploadImg.height = uploadImg.height * 600 / uploadImg.width;
+            uploadImg.width = 600;
+        }
+    }
+    setImgMaxSize();
 
 </script>
 </html>

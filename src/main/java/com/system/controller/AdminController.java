@@ -462,7 +462,8 @@ public class AdminController {
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(currentTime);
-        //无初始时间时赋值
+
+        //无初始时间时设置初始时间
         if(computerProblemsCustom.getCreateTime() == null || computerProblemsCustom.getCreateTime().length() == 0)
         {
             computerProblemsCustom.setCreateTime(dateString);
@@ -667,4 +668,253 @@ public class AdminController {
         return "admin/showComputerProblems";
     }
 
+    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+
+    public String showMaterialApplication(Model model, Integer page) throws Exception {
+        List<MaterialApplicationCustom> list = null;
+        //页码对象
+        PagingVO pagingVO = new PagingVO();
+        //设置总页数
+        pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
+        if (page == null || page == 0) {
+            pagingVO.setToPageNo(1);
+            list = materialApplicationService.findByPaging(1);
+        } else {
+            pagingVO.setToPageNo(page);
+            list = materialApplicationService.findByPaging(page);
+        }
+
+        model.addAttribute("materialApplicationList", list);
+        model.addAttribute("pagingVO", pagingVO);
+
+        return "admin/showMaterialApplication";
+
+    }
+
+    //添加物资申购
+    @RequestMapping(value = "/addMaterialApplication", method = {RequestMethod.GET})
+    public String addMaterialApplicationUI(Model model) throws Exception {
+
+        return "admin/addMaterialApplication";
+    }
+
+    // 添加物资申购处理
+    @RequestMapping(value = "/addMaterialApplication", method = {RequestMethod.POST})
+    public String addMaterialApplicationCustom(MaterialApplicationCustom materialApplicationCustom, Model model,HttpServletRequest request,UploadedImageFile file) throws Exception {
+
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+
+
+
+        //设置问题初始化时间
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+
+        //无初始时间时设置初始时间
+        if(materialApplicationCustom.getCreateTime() == null || materialApplicationCustom.getCreateTime().length() == 0)
+        {
+            materialApplicationCustom.setCreateTime(dateString);
+        }
+
+        //文件上传至服务器并保存图片路径
+        if(!file.getPhoto().isEmpty())
+        {
+            String name = RandomStringUtils.randomAlphanumeric(10);
+            String newFileName = name + ".jpg";
+            File newFile = new File(request.getServletContext().getRealPath("/upload"), newFileName);
+            newFile.getParentFile().mkdirs();
+            file.getPhoto().transferTo(newFile);
+            //保存路径
+            materialApplicationCustom.setImg(newFileName);
+        }
+
+        //设置问题初始化状态
+        materialApplicationCustom.setFlag(0);
+
+        //设置问题所属部门
+        materialApplicationCustom.setDept(userlogin.getDepart());
+
+        //设置问题所属部门编码
+        materialApplicationCustom.setDepartcode(userlogin.getDepartcode());
+
+        //设置问题所属人员ID
+        materialApplicationCustom.setUserid(userlogin.getUsername());
+
+        Boolean result = materialApplicationService.save(materialApplicationCustom);
+
+        if (!result) {
+            model.addAttribute("message", "抱歉，故障信息保存失败");
+            return "error";
+        }
+
+
+        //重定向
+        return "redirect:/admin/showMaterialApplication";
+    }
+
+    // 修改物资申购页面显示
+    @RequestMapping(value = "/editMaterialApplication", method = {RequestMethod.GET})
+    public String editMaterialApplicationUI(Integer id, Model model) throws Exception {
+        if (id == null) {
+            return "redirect:/admin/showMaterialApplication";
+        }
+        MaterialApplication materialApplication = materialApplicationService.findById(id);
+        if (materialApplication == null) {
+            throw new CustomException("抱歉，未找到该故障相关信息");
+        }
+
+        model.addAttribute("materialApplication", materialApplication);
+
+
+        return "admin/editMaterialApplication";
+    }
+
+    // 修改物资申购页面处理
+    @RequestMapping(value = "/editMaterialApplication", method = {RequestMethod.POST})
+    public String editMaterialApplication(MaterialApplicationCustom materialApplicationCustom) throws Exception {
+
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+
+        materialApplicationCustom.setLeader(userlogin.getName());
+
+        materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+
+        //重定向
+        return "redirect:/admin/showMaterialApplication";
+    }
+
+    // 开始处理物资申购
+    @RequestMapping(value = "/dealMaterialApplication")
+    public String dealMaterialApplication(HttpServletRequest request) throws Exception {
+
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        String feedback = request.getParameter("feedback");
+
+
+        if (id == null) {
+            return "redirect:/admin/showMaterialApplication";
+        }
+
+        //获取当前故障问题
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
+        if (materialApplicationCustom == null) {
+            throw new CustomException("抱歉，未找到该故障相关信息");
+        }
+
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        if(materialApplicationCustom.getFlag() == 0){
+            //更新该故障问题数据
+            materialApplicationCustom.setFlag(1);
+            materialApplicationCustom.setLeader(userlogin.getName());
+            materialApplicationCustom.setReback(feedback);
+            materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+        }
+
+        return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+    }
+
+    // 物资申购处理完成
+    @RequestMapping(value = "/completeMaterialApplication")
+    public String completeMaterialApplication(HttpServletRequest request) throws Exception {
+
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        String feedback = request.getParameter("feedback");
+
+
+        if (id == null) {
+            return "redirect:/admin/showMaterialApplication";
+        }
+
+        //获取当前故障问题
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
+        if (materialApplicationCustom == null) {
+            throw new CustomException("抱歉，未找到该故障相关信息");
+        }
+
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        if(materialApplicationCustom.getFlag() == 0){
+            //更新该故障问题数据
+            materialApplicationCustom.setFlag(2);
+            materialApplicationCustom.setLeader(userlogin.getName());
+            materialApplicationCustom.setReback(feedback);
+            materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+        }
+
+        return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+    }
+
+    // 查看物资申购详情
+    @RequestMapping(value = "/checkMaterialApplication", method = {RequestMethod.GET})
+    public String checkMaterialApplication(Integer id, Model model) throws Exception {
+        if (id == null) {
+            return "redirect:/admin/showMaterialApplication";
+        }
+        MaterialApplication materialApplication = materialApplicationService.findById(id);
+        if (materialApplication == null) {
+            throw new CustomException("抱歉，未找到该故障相关信息");
+        }
+
+        model.addAttribute("materialApplication", materialApplication);
+
+
+        return "admin/checkMaterialApplication";
+    }
+
+    // 查看物资申购详情
+    @RequestMapping(value = "/checkMaterialApplication", method = {RequestMethod.POST})
+    public String checkMaterialApplication(MaterialApplicationCustom materialApplicationCustom) throws Exception {
+
+        materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+
+        //重定向
+        return "redirect:/admin/showMaterialApplication";
+    }
+
+    //搜索物资申购
+    @RequestMapping(value = "/searchMaterialApplication")
+    private String searchMaterialApplication(String findByDept,String findByName,String findByFlag, Model model) throws Exception {
+
+
+        List<MaterialApplicationCustom> listByDept = new ArrayList<MaterialApplicationCustom>();
+        List<MaterialApplicationCustom> listByName = new ArrayList<MaterialApplicationCustom>();
+        List<MaterialApplicationCustom> listByFlag = new ArrayList<MaterialApplicationCustom>();
+        List<MaterialApplicationCustom> listResult = new ArrayList<MaterialApplicationCustom>();
+
+        if(!findByDept.equals(""))
+        {
+            listByDept = materialApplicationService.findByDept(findByDept);
+        }
+
+        if(!findByName.equals(""))
+        {
+            listByName = materialApplicationService.findByName(findByName);
+        }
+
+        if(!findByFlag.equals(""))
+        {
+            Integer flag = Integer.parseInt(findByFlag);
+            listByFlag = materialApplicationService.findByFlag(flag);
+        }
+
+
+
+        //合并去重
+        listResult.addAll(listByDept);
+        listResult.removeAll(listByFlag);
+        listResult.addAll(listByFlag);
+        listResult.removeAll(listByName);
+        listResult.addAll(listByName);
+
+        model.addAttribute("materialApplicationList", listResult);
+        return "admin/showMaterialApplication";
+    }
 }

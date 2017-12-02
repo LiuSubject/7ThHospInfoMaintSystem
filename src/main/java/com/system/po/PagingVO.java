@@ -10,7 +10,7 @@ public class PagingVO {
     //总页数
     private int totalCount;
     //页面容量
-    private int pageSize=5;
+    private int pageSize=10;
     //上一页
     private int upPageNo;
     //下一页
