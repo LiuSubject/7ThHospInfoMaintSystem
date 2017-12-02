@@ -83,7 +83,7 @@
 						</div>
 						<div class="mui-input-row">
 							<label>上传图片</label>
-							<input type="file" name="photo" id="photo">
+							<img src="${pageContext.request.contextPath}/upload/${computerProblems.img}"/>
 						</div>
 						<div class="form-group" style="text-align: center">
 							<button class="btn btn-default" onclick="history.back(-1);">返回</button>

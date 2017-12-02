@@ -456,12 +456,7 @@ public class AdminController {
         Subject subject = SecurityUtils.getSubject();
         Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
 
-        //文件上传至服务器并保存图片路径
-        String name = RandomStringUtils.randomAlphanumeric(10);
-        String newFileName = name + ".jpg";
-        File newFile = new File(request.getServletContext().getRealPath("/image"), newFileName);
-        newFile.getParentFile().mkdirs();
-        file.getPhoto().transferTo(newFile);//.getImage().transferTo(newFile);
+
 
         //设置问题初始化时间
         Date currentTime = new Date();
@@ -471,6 +466,18 @@ public class AdminController {
         if(computerProblemsCustom.getCreateTime() == null || computerProblemsCustom.getCreateTime().length() == 0)
         {
             computerProblemsCustom.setCreateTime(dateString);
+        }
+
+        //文件上传至服务器并保存图片路径
+        if(!file.getPhoto().isEmpty())
+        {
+            String name = RandomStringUtils.randomAlphanumeric(10);
+            String newFileName = name + ".jpg";
+            File newFile = new File(request.getServletContext().getRealPath("/upload"), newFileName);
+            newFile.getParentFile().mkdirs();
+            file.getPhoto().transferTo(newFile);
+            //保存路径
+            computerProblemsCustom.setImg(newFileName);
         }
 
         //设置问题初始化状态

@@ -88,7 +88,7 @@
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">上传图片：</label>
-							<input type="file" name="photo" id="photo" >
+							<img src="${pageContext.request.contextPath}/upload/${computerProblems.img}"/>
 						</div>
 
 
