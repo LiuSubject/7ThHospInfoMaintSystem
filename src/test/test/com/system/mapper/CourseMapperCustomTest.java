@@ -1,6 +1,5 @@
 package com.system.mapper;
 
-import com.system.po.CourseCustom;
 import com.system.po.PagingVO;
 import com.system.po.TeacherCustom;
 import org.junit.Before;

@@ -1,46 +1,124 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.system.mapper.EngineRoomInspectionMapper">
-  <resultMap id="BaseResultMap" type="com.system.po.EngineRoomInspection">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="date" jdbcType="VARCHAR" property="date" />
-    <result column="emr" jdbcType="INTEGER" property="emr" />
-    <result column="his" jdbcType="INTEGER" property="his" />
-    <result column="lis" jdbcType="INTEGER" property="lis" />
-    <result column="pacs" jdbcType="INTEGER" property="pacs" />
-    <result column="xny" jdbcType="INTEGER" property="xny" />
-    <result column="oa" jdbcType="INTEGER" property="oa" />
-    <result column="yb" jdbcType="INTEGER" property="yb" />
-    <result column="qyw" jdbcType="INTEGER" property="qyw" />
-    <result column="yy" jdbcType="INTEGER" property="yy" />
-    <result column="hiscc" jdbcType="INTEGER" property="hiscc" />
-    <result column="jk" jdbcType="INTEGER" property="jk" />
-    <result column="hx" jdbcType="INTEGER" property="hx" />
-    <result column="hj" jdbcType="INTEGER" property="hj" />
-    <result column="aqsb" jdbcType="INTEGER" property="aqsb" />
-    <result column="ups" jdbcType="INTEGER" property="ups" />
-    <result column="qtmh" jdbcType="INTEGER" property="qtmh" />
-    <result column="kt" jdbcType="INTEGER" property="kt" />
-    <result column="ycyy" jdbcType="VARCHAR" property="ycyy" />
-    <result column="examiner" jdbcType="VARCHAR" property="examiner" />
-    <result column="userId" jdbcType="VARCHAR" property="userid" />
-    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.EngineRoomInspectionMapper" >
+  <resultMap id="BaseResultMap" type="com.system.po.EngineRoomInspection" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="date" property="date" jdbcType="VARCHAR" />
+    <result column="emr" property="emr" jdbcType="INTEGER" />
+    <result column="his" property="his" jdbcType="INTEGER" />
+    <result column="lis" property="lis" jdbcType="INTEGER" />
+    <result column="pacs" property="pacs" jdbcType="INTEGER" />
+    <result column="xny" property="xny" jdbcType="INTEGER" />
+    <result column="oa" property="oa" jdbcType="INTEGER" />
+    <result column="yb" property="yb" jdbcType="INTEGER" />
+    <result column="qyw" property="qyw" jdbcType="INTEGER" />
+    <result column="yy" property="yy" jdbcType="INTEGER" />
+    <result column="hiscc" property="hiscc" jdbcType="INTEGER" />
+    <result column="jk" property="jk" jdbcType="INTEGER" />
+    <result column="hx" property="hx" jdbcType="INTEGER" />
+    <result column="hj" property="hj" jdbcType="INTEGER" />
+    <result column="aqsb" property="aqsb" jdbcType="INTEGER" />
+    <result column="ups" property="ups" jdbcType="INTEGER" />
+    <result column="qtmh" property="qtmh" jdbcType="INTEGER" />
+    <result column="kt" property="kt" jdbcType="INTEGER" />
+    <result column="ycyy" property="ycyy" jdbcType="VARCHAR" />
+    <result column="examiner" property="examiner" jdbcType="VARCHAR" />
+    <result column="userId" property="userid" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List">
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
     id, date, emr, his, lis, pacs, xny, oa, yb, qyw, yy, hiscc, jk, hx, hj, aqsb, ups, 
     qtmh, kt, ycyy, examiner, userId, create_time
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.po.EngineRoomInspectionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from engine_room_inspection
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from engine_room_inspection
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from engine_room_inspection
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.system.po.EngineRoomInspection">
+  <delete id="deleteByExample" parameterType="com.system.po.EngineRoomInspectionExample" >
+    delete from engine_room_inspection
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.system.po.EngineRoomInspection" >
     insert into engine_room_inspection (id, date, emr, 
       his, lis, pacs, xny, 
       oa, yb, qyw, yy, 
@@ -56,224 +134,336 @@
       #{ycyy,jdbcType=VARCHAR}, #{examiner,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.system.po.EngineRoomInspection">
+  <insert id="insertSelective" parameterType="com.system.po.EngineRoomInspection" >
     insert into engine_room_inspection
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         id,
       </if>
-      <if test="date != null">
+      <if test="date != null" >
         date,
       </if>
-      <if test="emr != null">
+      <if test="emr != null" >
         emr,
       </if>
-      <if test="his != null">
+      <if test="his != null" >
         his,
       </if>
-      <if test="lis != null">
+      <if test="lis != null" >
         lis,
       </if>
-      <if test="pacs != null">
+      <if test="pacs != null" >
         pacs,
       </if>
-      <if test="xny != null">
+      <if test="xny != null" >
         xny,
       </if>
-      <if test="oa != null">
+      <if test="oa != null" >
         oa,
       </if>
-      <if test="yb != null">
+      <if test="yb != null" >
         yb,
       </if>
-      <if test="qyw != null">
+      <if test="qyw != null" >
         qyw,
       </if>
-      <if test="yy != null">
+      <if test="yy != null" >
         yy,
       </if>
-      <if test="hiscc != null">
+      <if test="hiscc != null" >
         hiscc,
       </if>
-      <if test="jk != null">
+      <if test="jk != null" >
         jk,
       </if>
-      <if test="hx != null">
+      <if test="hx != null" >
         hx,
       </if>
-      <if test="hj != null">
+      <if test="hj != null" >
         hj,
       </if>
-      <if test="aqsb != null">
+      <if test="aqsb != null" >
         aqsb,
       </if>
-      <if test="ups != null">
+      <if test="ups != null" >
         ups,
       </if>
-      <if test="qtmh != null">
+      <if test="qtmh != null" >
         qtmh,
       </if>
-      <if test="kt != null">
+      <if test="kt != null" >
         kt,
       </if>
-      <if test="ycyy != null">
+      <if test="ycyy != null" >
         ycyy,
       </if>
-      <if test="examiner != null">
+      <if test="examiner != null" >
         examiner,
       </if>
-      <if test="userid != null">
+      <if test="userid != null" >
         userId,
       </if>
-      <if test="createTime != null">
+      <if test="createTime != null" >
         create_time,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="date != null">
+      <if test="date != null" >
         #{date,jdbcType=VARCHAR},
       </if>
-      <if test="emr != null">
+      <if test="emr != null" >
         #{emr,jdbcType=INTEGER},
       </if>
-      <if test="his != null">
+      <if test="his != null" >
         #{his,jdbcType=INTEGER},
       </if>
-      <if test="lis != null">
+      <if test="lis != null" >
         #{lis,jdbcType=INTEGER},
       </if>
-      <if test="pacs != null">
+      <if test="pacs != null" >
         #{pacs,jdbcType=INTEGER},
       </if>
-      <if test="xny != null">
+      <if test="xny != null" >
         #{xny,jdbcType=INTEGER},
       </if>
-      <if test="oa != null">
+      <if test="oa != null" >
         #{oa,jdbcType=INTEGER},
       </if>
-      <if test="yb != null">
+      <if test="yb != null" >
         #{yb,jdbcType=INTEGER},
       </if>
-      <if test="qyw != null">
+      <if test="qyw != null" >
         #{qyw,jdbcType=INTEGER},
       </if>
-      <if test="yy != null">
+      <if test="yy != null" >
         #{yy,jdbcType=INTEGER},
       </if>
-      <if test="hiscc != null">
+      <if test="hiscc != null" >
         #{hiscc,jdbcType=INTEGER},
       </if>
-      <if test="jk != null">
+      <if test="jk != null" >
         #{jk,jdbcType=INTEGER},
       </if>
-      <if test="hx != null">
+      <if test="hx != null" >
         #{hx,jdbcType=INTEGER},
       </if>
-      <if test="hj != null">
+      <if test="hj != null" >
         #{hj,jdbcType=INTEGER},
       </if>
-      <if test="aqsb != null">
+      <if test="aqsb != null" >
         #{aqsb,jdbcType=INTEGER},
       </if>
-      <if test="ups != null">
+      <if test="ups != null" >
         #{ups,jdbcType=INTEGER},
       </if>
-      <if test="qtmh != null">
+      <if test="qtmh != null" >
         #{qtmh,jdbcType=INTEGER},
       </if>
-      <if test="kt != null">
+      <if test="kt != null" >
         #{kt,jdbcType=INTEGER},
       </if>
-      <if test="ycyy != null">
+      <if test="ycyy != null" >
         #{ycyy,jdbcType=VARCHAR},
       </if>
-      <if test="examiner != null">
+      <if test="examiner != null" >
         #{examiner,jdbcType=VARCHAR},
       </if>
-      <if test="userid != null">
+      <if test="userid != null" >
         #{userid,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
+      <if test="createTime != null" >
         #{createTime,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.system.po.EngineRoomInspection">
+  <select id="countByExample" parameterType="com.system.po.EngineRoomInspectionExample" resultType="java.lang.Integer" >
+    select count(*) from engine_room_inspection
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
     update engine_room_inspection
-    <set>
-      <if test="date != null">
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.date != null" >
+        date = #{record.date,jdbcType=VARCHAR},
+      </if>
+      <if test="record.emr != null" >
+        emr = #{record.emr,jdbcType=INTEGER},
+      </if>
+      <if test="record.his != null" >
+        his = #{record.his,jdbcType=INTEGER},
+      </if>
+      <if test="record.lis != null" >
+        lis = #{record.lis,jdbcType=INTEGER},
+      </if>
+      <if test="record.pacs != null" >
+        pacs = #{record.pacs,jdbcType=INTEGER},
+      </if>
+      <if test="record.xny != null" >
+        xny = #{record.xny,jdbcType=INTEGER},
+      </if>
+      <if test="record.oa != null" >
+        oa = #{record.oa,jdbcType=INTEGER},
+      </if>
+      <if test="record.yb != null" >
+        yb = #{record.yb,jdbcType=INTEGER},
+      </if>
+      <if test="record.qyw != null" >
+        qyw = #{record.qyw,jdbcType=INTEGER},
+      </if>
+      <if test="record.yy != null" >
+        yy = #{record.yy,jdbcType=INTEGER},
+      </if>
+      <if test="record.hiscc != null" >
+        hiscc = #{record.hiscc,jdbcType=INTEGER},
+      </if>
+      <if test="record.jk != null" >
+        jk = #{record.jk,jdbcType=INTEGER},
+      </if>
+      <if test="record.hx != null" >
+        hx = #{record.hx,jdbcType=INTEGER},
+      </if>
+      <if test="record.hj != null" >
+        hj = #{record.hj,jdbcType=INTEGER},
+      </if>
+      <if test="record.aqsb != null" >
+        aqsb = #{record.aqsb,jdbcType=INTEGER},
+      </if>
+      <if test="record.ups != null" >
+        ups = #{record.ups,jdbcType=INTEGER},
+      </if>
+      <if test="record.qtmh != null" >
+        qtmh = #{record.qtmh,jdbcType=INTEGER},
+      </if>
+      <if test="record.kt != null" >
+        kt = #{record.kt,jdbcType=INTEGER},
+      </if>
+      <if test="record.ycyy != null" >
+        ycyy = #{record.ycyy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.examiner != null" >
+        examiner = #{record.examiner,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userid != null" >
+        userId = #{record.userid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update engine_room_inspection
+    set id = #{record.id,jdbcType=INTEGER},
+      date = #{record.date,jdbcType=VARCHAR},
+      emr = #{record.emr,jdbcType=INTEGER},
+      his = #{record.his,jdbcType=INTEGER},
+      lis = #{record.lis,jdbcType=INTEGER},
+      pacs = #{record.pacs,jdbcType=INTEGER},
+      xny = #{record.xny,jdbcType=INTEGER},
+      oa = #{record.oa,jdbcType=INTEGER},
+      yb = #{record.yb,jdbcType=INTEGER},
+      qyw = #{record.qyw,jdbcType=INTEGER},
+      yy = #{record.yy,jdbcType=INTEGER},
+      hiscc = #{record.hiscc,jdbcType=INTEGER},
+      jk = #{record.jk,jdbcType=INTEGER},
+      hx = #{record.hx,jdbcType=INTEGER},
+      hj = #{record.hj,jdbcType=INTEGER},
+      aqsb = #{record.aqsb,jdbcType=INTEGER},
+      ups = #{record.ups,jdbcType=INTEGER},
+      qtmh = #{record.qtmh,jdbcType=INTEGER},
+      kt = #{record.kt,jdbcType=INTEGER},
+      ycyy = #{record.ycyy,jdbcType=VARCHAR},
+      examiner = #{record.examiner,jdbcType=VARCHAR},
+      userId = #{record.userid,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.po.EngineRoomInspection" >
+    update engine_room_inspection
+    <set >
+      <if test="date != null" >
         date = #{date,jdbcType=VARCHAR},
       </if>
-      <if test="emr != null">
+      <if test="emr != null" >
         emr = #{emr,jdbcType=INTEGER},
       </if>
-      <if test="his != null">
+      <if test="his != null" >
         his = #{his,jdbcType=INTEGER},
       </if>
-      <if test="lis != null">
+      <if test="lis != null" >
         lis = #{lis,jdbcType=INTEGER},
       </if>
-      <if test="pacs != null">
+      <if test="pacs != null" >
         pacs = #{pacs,jdbcType=INTEGER},
       </if>
-      <if test="xny != null">
+      <if test="xny != null" >
         xny = #{xny,jdbcType=INTEGER},
       </if>
-      <if test="oa != null">
+      <if test="oa != null" >
         oa = #{oa,jdbcType=INTEGER},
       </if>
-      <if test="yb != null">
+      <if test="yb != null" >
         yb = #{yb,jdbcType=INTEGER},
       </if>
-      <if test="qyw != null">
+      <if test="qyw != null" >
         qyw = #{qyw,jdbcType=INTEGER},
       </if>
-      <if test="yy != null">
+      <if test="yy != null" >
         yy = #{yy,jdbcType=INTEGER},
       </if>
-      <if test="hiscc != null">
+      <if test="hiscc != null" >
         hiscc = #{hiscc,jdbcType=INTEGER},
       </if>
-      <if test="jk != null">
+      <if test="jk != null" >
         jk = #{jk,jdbcType=INTEGER},
       </if>
-      <if test="hx != null">
+      <if test="hx != null" >
         hx = #{hx,jdbcType=INTEGER},
       </if>
-      <if test="hj != null">
+      <if test="hj != null" >
         hj = #{hj,jdbcType=INTEGER},
       </if>
-      <if test="aqsb != null">
+      <if test="aqsb != null" >
         aqsb = #{aqsb,jdbcType=INTEGER},
       </if>
-      <if test="ups != null">
+      <if test="ups != null" >
         ups = #{ups,jdbcType=INTEGER},
       </if>
-      <if test="qtmh != null">
+      <if test="qtmh != null" >
         qtmh = #{qtmh,jdbcType=INTEGER},
       </if>
-      <if test="kt != null">
+      <if test="kt != null" >
         kt = #{kt,jdbcType=INTEGER},
       </if>
-      <if test="ycyy != null">
+      <if test="ycyy != null" >
         ycyy = #{ycyy,jdbcType=VARCHAR},
       </if>
-      <if test="examiner != null">
+      <if test="examiner != null" >
         examiner = #{examiner,jdbcType=VARCHAR},
       </if>
-      <if test="userid != null">
+      <if test="userid != null" >
         userId = #{userid,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
+      <if test="createTime != null" >
         create_time = #{createTime,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.system.po.EngineRoomInspection">
+  <update id="updateByPrimaryKey" parameterType="com.system.po.EngineRoomInspection" >
     update engine_room_inspection
     set date = #{date,jdbcType=VARCHAR},
       emr = #{emr,jdbcType=INTEGER},

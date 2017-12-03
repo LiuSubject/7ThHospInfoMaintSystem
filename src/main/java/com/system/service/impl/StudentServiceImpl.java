@@ -1,6 +1,5 @@
 package com.system.service.impl;
 
-import com.system.mapper.CollegeMapper;
 import com.system.mapper.StudentMapper;
 import com.system.mapper.StudentMapperCustom;
 import com.system.po.*;
@@ -25,8 +24,6 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
 
-    @Autowired
-    private CollegeMapper collegeMapper;
 
     public void updataById(Integer id, StudentCustom studentCustom) throws Exception {
         studentMapper.updateByPrimaryKey(studentCustom);
@@ -98,9 +95,6 @@ public class StudentServiceImpl implements StudentService {
                 StudentCustom studentCustom = new StudentCustom();
                 //类拷贝
                 BeanUtils.copyProperties(s, studentCustom);
-                //获取课程名
-                College college = collegeMapper.selectByPrimaryKey(s.getCollegeid());
-                studentCustom.setcollegeName(college.getCollegename());
 
                 studentCustomList.add(studentCustom);
             }
@@ -113,14 +107,6 @@ public class StudentServiceImpl implements StudentService {
 
         StudentCustom studentCustom = studentMapperCustom.findStudentAndSelectCourseListById(Integer.parseInt(name));
 
-        List<SelectedCourseCustom> list = studentCustom.getSelectedCourseList();
-
-        // 判断该课程是否修完
-        for (SelectedCourseCustom s : list) {
-            if (s.getMark() != null) {
-                s.setOver(true);
-            }
-        }
         return studentCustom;
     }
 }

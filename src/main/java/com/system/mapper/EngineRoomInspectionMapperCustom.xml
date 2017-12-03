@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.system.mapper.EngineRoomInspectionMapperCustom" >
+
+  <resultMap id="BaseResultMap" type="com.system.po.EngineRoomInspection" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="date" property="date" jdbcType="VARCHAR" />
+    <result column="emr" property="emr" jdbcType="INTEGER" />
+    <result column="his" property="his" jdbcType="INTEGER" />
+    <result column="lis" property="lis" jdbcType="INTEGER" />
+    <result column="pacs" property="pacs" jdbcType="INTEGER" />
+    <result column="xny" property="xny" jdbcType="INTEGER" />
+    <result column="oa" property="oa" jdbcType="INTEGER" />
+    <result column="yb" property="yb" jdbcType="INTEGER" />
+    <result column="qyw" property="qyw" jdbcType="INTEGER" />
+    <result column="yy" property="yy" jdbcType="INTEGER" />
+    <result column="hiscc" property="hiscc" jdbcType="INTEGER" />
+    <result column="jk" property="jk" jdbcType="INTEGER" />
+    <result column="hx" property="hx" jdbcType="INTEGER" />
+    <result column="hj" property="hj" jdbcType="INTEGER" />
+    <result column="aqsb" property="aqsb" jdbcType="INTEGER" />
+    <result column="ups" property="ups" jdbcType="INTEGER" />
+    <result column="qtmh" property="qtmh" jdbcType="INTEGER" />
+    <result column="kt" property="kt" jdbcType="INTEGER" />
+    <result column="ycyy" property="ycyy" jdbcType="VARCHAR" />
+    <result column="examiner" property="examiner" jdbcType="VARCHAR" />
+    <result column="userId" property="userid" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
+    select engine_room_inspection.*
+    from engine_room_inspection
+    limit #{toPageNo}, #{pageSize}
+  </select>
+
+</mapper>

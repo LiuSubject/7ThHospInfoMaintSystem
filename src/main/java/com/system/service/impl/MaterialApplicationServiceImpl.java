@@ -1,6 +1,5 @@
 package com.system.service.impl;
 
-import com.system.mapper.CollegeMapper;
 import com.system.mapper.MaterialApplicationMapper;
 import com.system.mapper.MaterialApplicationMapperCustom;
 import com.system.po.MaterialApplication;
@@ -26,9 +25,6 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
 
     @Autowired
     private MaterialApplicationMapper MaterialApplicationMapper;
-
-    @Autowired
-    private CollegeMapper collegeMapper;
 
     public void updataById(Integer id, MaterialApplicationCustom MaterialApplicationCustom) throws Exception {
         MaterialApplicationMapper.updateByPrimaryKey(MaterialApplicationCustom);

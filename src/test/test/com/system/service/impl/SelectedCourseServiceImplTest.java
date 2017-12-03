@@ -1,8 +1,5 @@
 package com.system.service.impl;
 
-import com.system.po.SelectedCourseCustom;
-import com.system.service.CourseService;
-import com.system.service.SelectedCourseService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -30,8 +27,6 @@ public class SelectedCourseServiceImplTest {
     public void findByCourseID() throws Exception {
 
         SelectedCourseService service = (SelectedCourseService) applicationContext.getBean("selectedCourseServiceImpl");
-
-        List<SelectedCourseCustom> list = service.findByCourseID(1);
 
         System.out.println();
 

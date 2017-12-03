@@ -20,23 +20,6 @@
             property： 将关联查询到的多条信息映射到 vo 哪个属性
             ofType：映射到集合属性中 pojo 的类型
         -->
-        <collection property="selectedCourseList" ofType="SelectedCourseCustom">
-            <result column="courseID" property="courseid"/>
-            <result column="studentID" property="studentid"/>
-            <result column="mark" property="mark"/>
-            <!--配置映射的关系的课程信息-->
-            <association property="courseCustom" javaType="CourseCustom">
-                <id column="courseID" property="courseid"/>
-                <result column="courseName" property="coursename"/>
-                <result column="teacherID" property="teacherid"/>
-                <result column="courseTime" property="coursetime"/>
-                <result column="classRoom" property="classroom"/>
-                <result column="courseWeek" property="courseweek"/>
-                <result column="courseType" property="coursetype"/>
-                <result column="collegeID" property="collegeid"/>
-                <result column="score" property="score"/>
-            </association>
-        </collection>
     </resultMap>
 
     <select id="findByPaging" parameterType="PagingVO" resultType="StudentCustom">

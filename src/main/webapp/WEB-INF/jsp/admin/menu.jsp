@@ -6,13 +6,8 @@
         <li><a href="/admin/showComputerProblems">故障列表</a></li>
         <li><a href="/admin/addMaterialApplication">物资申购</a></li>
         <li><a href="/admin/showMaterialApplication">申购列表</a></li>
-        <li><a href="/admin/engineRoomInspection">机房巡检<span class="badge pull-right">8</span></a></li>
-        <li><a href="/admin/inspectionList">巡检信息<span class="badge pull-right">8</span></a></li>
-        <li><a href="/admin/showCourse">课程管理<span class="badge pull-right">8</span></a></li>
-        <li><a href="/admin/showStudent">学生管理<span class="badge pull-right">59</span></a></li>
-        <li><a href="/admin/showTeacher">教师管理<span class="badge pull-right">10</span></a></li>
-        <li><a href="/admin/userPasswordRest">账号密码重置<sapn class="glyphicon glyphicon-repeat pull-right" /></a></li>
-        <li><a href="/admin/passwordRest">修改密码<sapn class="glyphicon glyphicon-pencil pull-right" /></a></li>
+        <li><a href="/admin/addEngineRoomInspection">机房巡检</a></li>
+        <li><a href="/admin/showEngineRoomInspection">巡检信息</a></li>
         <li><a href="/logout">退出系统<sapn class="glyphicon glyphicon-log-out pull-right" /></a></li>
     </ul>
 </div>

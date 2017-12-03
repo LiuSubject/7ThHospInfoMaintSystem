@@ -9,8 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * Created by Jacey on 2017/6/30.
- */
+ * 项目名称：Test
+ * 类名称：LoginController
+ * 类描述：登录请求拦截器
+ * 创建人：lxk
+ * 创建时间：2017-12-3 14:06:16
+ * 修改人：
+ * 修改时间：
+ * 修改备注：
+ **/
 @Controller
 public class LoginController {
 
@@ -33,9 +40,9 @@ public class LoginController {
         subject.login(token);
 
         if (subject.hasRole("admin")) {
-            return "redirect:/admin/showStudent";
+            return "redirect:/admin/showComputerProblems";
         } else if (subject.hasRole("teacher")) {
-            return "redirect:/teacher/showCourse";
+            return "redirect:/normal/showComputerProblems";
         } else if (subject.hasRole("student")) {
             return "redirect:/student/showCourse";
         }

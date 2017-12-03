@@ -1,8 +1,6 @@
 package com.system.service.impl;
 
 import com.system.exception.CustomException;
-import com.system.mapper.CollegeMapper;
-import com.system.mapper.CourseMapper;
 import com.system.mapper.TeacherMapper;
 import com.system.mapper.TeacherMapperCustom;
 import com.system.po.*;
@@ -26,26 +24,13 @@ public class TeacherServiceImpl implements TeacherService {
     @Autowired
     private TeacherMapperCustom teacherMapperCustom;
 
-    @Autowired
-    private CollegeMapper collegeMapper;
-
-    @Autowired
-    private CourseMapper courseMapper;
 
     public void updateById(Integer id, TeacherCustom teacherCustom) throws Exception {
         teacherMapper.updateByPrimaryKey(teacherCustom);
     }
 
     public void removeById(Integer id) throws Exception {
-        CourseExample courseExample = new CourseExample();
 
-        CourseExample.Criteria criteria = courseExample.createCriteria();
-        criteria.andTeacheridEqualTo(id);
-        List<Course> list = courseMapper.selectByExample(courseExample);
-
-        if (list.size() != 0) {
-            throw new CustomException("请先删除该名老师所教授的课程");
-        }
 
         teacherMapper.deleteByPrimaryKey(id);
     }
@@ -107,10 +92,6 @@ public class TeacherServiceImpl implements TeacherService {
                 TeacherCustom teacherCustom = new TeacherCustom();
                 //类拷贝
                 BeanUtils.copyProperties(t, teacherCustom);
-                //获取课程名
-                College college = collegeMapper.selectByPrimaryKey(t.getCollegeid());
-                teacherCustom.setcollegeName(college.getCollegename());
-
                 teacherCustomList.add(teacherCustom);
             }
         }

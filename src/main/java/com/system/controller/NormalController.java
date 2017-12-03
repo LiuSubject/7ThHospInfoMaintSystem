@@ -2,7 +2,10 @@ package com.system.controller;
 
 import com.system.exception.CustomException;
 import com.system.po.*;
-import com.system.service.*;
+import com.system.service.ComputerProblemsService;
+import com.system.service.EngineRoomInspectionService;
+import com.system.service.MaterialApplicationService;
+import com.system.service.UserloginService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -10,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -20,20 +22,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 /**
+ /**
  * 项目名称：Test
- * 类名称：AdminController
- * 类描述：管理员请求拦截器
+ * 类名称：NormalController
+ * 类描述：操作员请求拦截器
  * 创建人：lxk
- * 创建时间：2017-12-3 14:01:53
+ * 创建时间：2017-12-3 14:07:07
  * 修改人：
  * 修改时间：
  * 修改备注：
  **/
 
 @Controller
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/normal")
+public class NormalController {
 
     @SuppressWarnings("SpringJavaAutowiringInspection")//忽略警告，下同
     @Resource(name = "userloginServiceImpl")
@@ -75,7 +79,7 @@ public class AdminController {
         model.addAttribute("computerProblemsList", list);
         model.addAttribute("pagingVO", pagingVO);
 
-        return "admin/showComputerProblems";
+        return "normal/showComputerProblems";
 
     }
 
@@ -83,7 +87,7 @@ public class AdminController {
     @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.GET})
     public String addComputerProblemsUI(Model model) throws Exception {
 
-        return "admin/addComputerProblems";
+        return "normal/addComputerProblems";
     }
 
     // 添加电脑故障处理
@@ -140,14 +144,14 @@ public class AdminController {
 
 
         //重定向
-        return "redirect:/admin/showComputerProblems";
+        return "redirect:/normal/showComputerProblems";
     }
 
     // 修改电脑故障页面显示
     @RequestMapping(value = "/editComputerProblems", method = {RequestMethod.GET})
     public String editComputerProblemsUI(Integer id, Model model) throws Exception {
         if (id == null) {
-            return "redirect:/admin/showComputerProblems";
+            return "redirect:/normal/showComputerProblems";
         }
         ComputerProblems computerProblems = computerProblemsService.findById(id);
         if (computerProblems == null) {
@@ -157,7 +161,7 @@ public class AdminController {
         model.addAttribute("computerProblems", computerProblems);
 
 
-        return "admin/editComputerProblems";
+        return "normal/editComputerProblems";
     }
 
     // 修改电脑故障页面处理
@@ -173,7 +177,7 @@ public class AdminController {
         computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
 
         //重定向
-        return "redirect:/admin/showComputerProblems";
+        return "redirect:/normal/showComputerProblems";
     }
 
     // 开始处理电脑故障
@@ -185,7 +189,7 @@ public class AdminController {
 
 
         if (id == null) {
-            return "redirect:/admin/showComputerProblems";
+            return "redirect:/normal/showComputerProblems";
         }
 
         //获取当前故障问题
@@ -217,7 +221,7 @@ public class AdminController {
 
 
         if (id == null) {
-            return "redirect:/admin/showComputerProblems";
+            return "redirect:/normal/showComputerProblems";
         }
 
         //获取当前故障问题
@@ -244,7 +248,7 @@ public class AdminController {
     @RequestMapping(value = "/checkComputerProblems", method = {RequestMethod.GET})
     public String checkComputerProblems(Integer id, Model model) throws Exception {
         if (id == null) {
-            return "redirect:/admin/showComputerProblems";
+            return "redirect:/normal/showComputerProblems";
         }
         ComputerProblems computerProblems = computerProblemsService.findById(id);
         if (computerProblems == null) {
@@ -254,7 +258,7 @@ public class AdminController {
         model.addAttribute("computerProblems", computerProblems);
 
 
-        return "admin/checkComputerProblems";
+        return "normal/checkComputerProblems";
     }
 
     // 查看电脑故障详情
@@ -264,7 +268,7 @@ public class AdminController {
         computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
 
         //重定向
-        return "redirect:/admin/showComputerProblems";
+        return "redirect:/normal/showComputerProblems";
     }
 
     //搜索电脑故障
@@ -303,7 +307,7 @@ public class AdminController {
         listResult.addAll(listByName);
 
         model.addAttribute("computerProblemsList", listResult);
-        return "admin/showComputerProblems";
+        return "normal/showComputerProblems";
     }
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
@@ -326,7 +330,7 @@ public class AdminController {
         model.addAttribute("materialApplicationList", list);
         model.addAttribute("pagingVO", pagingVO);
 
-        return "admin/showMaterialApplication";
+        return "normal/showMaterialApplication";
 
     }
 
@@ -334,7 +338,7 @@ public class AdminController {
     @RequestMapping(value = "/addMaterialApplication", method = {RequestMethod.GET})
     public String addMaterialApplicationUI(Model model) throws Exception {
 
-        return "admin/addMaterialApplication";
+        return "normal/addMaterialApplication";
     }
 
     // 添加物资申购
@@ -379,14 +383,14 @@ public class AdminController {
 
 
         //重定向
-        return "redirect:/admin/showMaterialApplication";
+        return "redirect:/normal/showMaterialApplication";
     }
 
     // 修改物资申购页面显示
     @RequestMapping(value = "/editMaterialApplication", method = {RequestMethod.GET})
     public String editMaterialApplicationUI(Integer id, Model model) throws Exception {
         if (id == null) {
-            return "redirect:/admin/showMaterialApplication";
+            return "redirect:/normal/showMaterialApplication";
         }
         MaterialApplication materialApplication = materialApplicationService.findById(id);
         if (materialApplication == null) {
@@ -396,7 +400,7 @@ public class AdminController {
         model.addAttribute("materialApplication", materialApplication);
 
 
-        return "admin/editMaterialApplication";
+        return "normal/editMaterialApplication";
     }
 
     // 修改物资申购页面处理
@@ -412,7 +416,7 @@ public class AdminController {
         materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
 
         //重定向
-        return "redirect:/admin/showMaterialApplication";
+        return "redirect:/normal/showMaterialApplication";
     }
 
     // 开始处理物资申购
@@ -424,7 +428,7 @@ public class AdminController {
 
 
         if (id == null) {
-            return "redirect:/admin/showMaterialApplication";
+            return "redirect:/normal/showMaterialApplication";
         }
 
         //获取当前物资申购问题
@@ -456,7 +460,7 @@ public class AdminController {
 
 
         if (id == null) {
-            return "redirect:/admin/showMaterialApplication";
+            return "redirect:/normal/showMaterialApplication";
         }
 
         //获取当前物资申购信息
@@ -483,7 +487,7 @@ public class AdminController {
     @RequestMapping(value = "/checkMaterialApplication", method = {RequestMethod.GET})
     public String checkMaterialApplication(Integer id, Model model) throws Exception {
         if (id == null) {
-            return "redirect:/admin/showMaterialApplication";
+            return "redirect:/normal/showMaterialApplication";
         }
         MaterialApplication materialApplication = materialApplicationService.findById(id);
         if (materialApplication == null) {
@@ -493,7 +497,7 @@ public class AdminController {
         model.addAttribute("materialApplication", materialApplication);
 
 
-        return "admin/checkMaterialApplication";
+        return "normal/checkMaterialApplication";
     }
 
     // 查看物资申购详情
@@ -503,7 +507,7 @@ public class AdminController {
         materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
 
         //重定向
-        return "redirect:/admin/showMaterialApplication";
+        return "redirect:/normal/showMaterialApplication";
     }
 
     //搜索物资申购
@@ -542,7 +546,7 @@ public class AdminController {
         listResult.addAll(listByName);
 
         model.addAttribute("materialApplicationList", listResult);
-        return "admin/showMaterialApplication";
+        return "normal/showMaterialApplication";
     }
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<机房巡检>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
@@ -565,7 +569,7 @@ public class AdminController {
         model.addAttribute("engineRoomInspectionList", list);
         model.addAttribute("pagingVO", pagingVO);
 
-        return "admin/showEngineRoomInspection";
+        return "normal/showEngineRoomInspection";
 
     }
 
@@ -573,7 +577,7 @@ public class AdminController {
     @RequestMapping(value = "/addEngineRoomInspection", method = {RequestMethod.GET})
     public String addEngineRoomInspectionUI(Model model) throws Exception {
 
-        return "admin/addEngineRoomInspection";
+        return "normal/addEngineRoomInspection";
     }
 
     // 添加机房巡检
@@ -609,14 +613,14 @@ public class AdminController {
 
 
         //重定向
-        return "redirect:/admin/showEngineRoomInspection";
+        return "redirect:/normal/showEngineRoomInspection";
     }
 
 /*    // 修改机房巡检页面显示
     @RequestMapping(value = "/editEngineRoomInspection", method = {RequestMethod.GET})
     public String editEngineRoomInspectionUI(Integer id, Model model) throws Exception {
         if (id == null) {
-            return "redirect:/admin/showEngineRoomInspection";
+            return "redirect:/normal/showEngineRoomInspection";
         }
         EngineRoomInspection engineRoomInspection = engineRoomInspectionService.findById(id);
         if (engineRoomInspection == null) {
@@ -626,7 +630,7 @@ public class AdminController {
         model.addAttribute("engineRoomInspection", engineRoomInspection);
 
 
-        return "admin/editEngineRoomInspection";
+        return "normal/editEngineRoomInspection";
     }*/
 
     // 修改机房巡检页面处理
@@ -640,7 +644,7 @@ public class AdminController {
         engineRoomInspectionService.updataById(engineRoomInspectionCustom.getId(), engineRoomInspectionCustom);
 
         //重定向
-        return "redirect:/admin/showEngineRoomInspection";
+        return "redirect:/normal/showEngineRoomInspection";
     }*/
 
 /*    // 开始处理机房巡检
@@ -652,7 +656,7 @@ public class AdminController {
 
 
         if (id == null) {
-            return "redirect:/admin/showEngineRoomInspection";
+            return "redirect:/normal/showEngineRoomInspection";
         }
 
         //获取当前机房巡检问题
@@ -679,7 +683,7 @@ public class AdminController {
 
 
         if (id == null) {
-            return "redirect:/admin/showEngineRoomInspection";
+            return "redirect:/normal/showEngineRoomInspection";
         }
 
         //获取当前机房巡检信息
@@ -702,7 +706,7 @@ public class AdminController {
     @RequestMapping(value = "/checkEngineRoomInspection", method = {RequestMethod.GET})
     public String checkEngineRoomInspection(Integer id, Model model) throws Exception {
         if (id == null) {
-            return "redirect:/admin/showEngineRoomInspection";
+            return "redirect:/normal/showEngineRoomInspection";
         }
         EngineRoomInspection engineRoomInspection = engineRoomInspectionService.findById(id);
         if (engineRoomInspection == null) {
@@ -712,7 +716,7 @@ public class AdminController {
         model.addAttribute("engineRoomInspection", engineRoomInspection);
 
 
-        return "admin/checkEngineRoomInspection";
+        return "normal/checkEngineRoomInspection";
     }
 
     // 查看机房巡检详情
@@ -722,7 +726,7 @@ public class AdminController {
         engineRoomInspectionService.updataById(engineRoomInspectionCustom.getId(), engineRoomInspectionCustom);
 
         //重定向
-        return "redirect:/admin/showEngineRoomInspection";
+        return "redirect:/normal/showEngineRoomInspection";
     }
 
     //搜索机房巡检
@@ -741,7 +745,7 @@ public class AdminController {
         listResult.addAll(listByExaminer);
 
         model.addAttribute("engineRoomInspectionList", listResult);
-        return "admin/showEngineRoomInspection";
+        return "normal/showEngineRoomInspection";
     }
 
 }

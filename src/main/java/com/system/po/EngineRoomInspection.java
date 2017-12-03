@@ -1,19 +1,5 @@
 package com.system.po;
 
-/**
- *
- * 项目名称：绍兴第七人民医院信息维护系统
- * 类名称：EngineRoomInspection
- * 类描述：机房巡检pojo
- * 创建人：lxk
- * 创建时间：2017-11-29 14:01:44
- * 修改人：
- * 修改时间：
- * 修改备注：
- * @version
- *
- */
-
 public class EngineRoomInspection {
     private Integer id;
 

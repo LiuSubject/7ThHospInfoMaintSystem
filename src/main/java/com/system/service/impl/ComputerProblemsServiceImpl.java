@@ -1,6 +1,5 @@
 package com.system.service.impl;
 
-import com.system.mapper.CollegeMapper;
 import com.system.mapper.ComputerProblemsMapper;
 import com.system.mapper.ComputerProblemsMapperCustom;
 import com.system.po.*;
@@ -24,8 +23,6 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
     @Autowired
     private ComputerProblemsMapper ComputerProblemsMapper;
 
-    @Autowired
-    private CollegeMapper collegeMapper;
 
     public void updataById(Integer id, ComputerProblemsCustom ComputerProblemsCustom) throws Exception {
         ComputerProblemsMapper.updateByPrimaryKey(ComputerProblemsCustom);

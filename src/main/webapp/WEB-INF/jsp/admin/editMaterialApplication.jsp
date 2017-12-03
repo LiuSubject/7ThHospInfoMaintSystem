@@ -96,14 +96,14 @@
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">回复：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="feedback" name="feedback"
-									   value="${materialApplication.reason}" readonly="readonly">
+								<input type="text" class="form-control" id="reback" name="reback"
+									   value="${materialApplication.reback}">
 							</div>
 						</div>
 						<div class="form-group" style="text-align: center">
-							<button class="btn btn-default" id="dealBtn">处理</button>
-							<button class="btn btn-default" id="completeBtn">完成</button>
-							<button class="btn btn-default" id="returnListBtn">返回</button>
+							<button class="btn btn-default" type="button" id="dealBtn">处理</button>
+							<button class="btn btn-default" type="button" id="completeBtn">完成</button>
+							<button class="btn btn-default" type="button" id="returnListBtn">返回</button>
 						</div>
 					</form>
 				</div>
