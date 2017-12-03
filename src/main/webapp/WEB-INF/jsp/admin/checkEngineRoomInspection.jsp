@@ -33,7 +33,7 @@
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">检查日期：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="date" name="date"
+								<input type="date" class="form-control" id="date" name="date"
 									   value="${engineRoomInspection.date}" readonly="readonly">
 							</div>
 						</div>
@@ -47,120 +47,205 @@
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">EMR服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="emr" name="emr"
-									   value="${engineRoomInspection.emr}" readonly="readonly">
+								<select class="form-control" name="emr" id="emr"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">HIS服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="his" name="his"
-									   value="${engineRoomInspection.his}" readonly="readonly">
+								<select class="form-control" name="his" id="his"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">LIS服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="lis" name="lis"
-									   value="${engineRoomInspection.lis}" readonly="readonly">
+								<select class="form-control" name="lis" id="lis"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">PACS服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="pacs" name="pacs"
-									   value="${engineRoomInspection.pacs}" readonly="readonly">
+								<select class="form-control" name="pacs" id="pacs"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">云服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="xny" name="xny"
-									   value="${engineRoomInspection.xny}" readonly="readonly">
+								<select class="form-control" name="xny" id="xny"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">OA服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="oa" name="oa"
-									   value="${engineRoomInspection.oa}" readonly="readonly">
+								<select class="form-control" name="oa" id="oa"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">医保前置：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="yb" name="yb"
-									   value="${engineRoomInspection.yb}" readonly="readonly">
+								<select class="form-control" name="yb" id="yb"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">区域网前置：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="qyw" name="qyw"
-									   value="${engineRoomInspection.qyw}" readonly="readonly">
+								<select class="form-control" name="qyw" id="qyw"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">应用服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="yy" name="yy"
-									   value="${engineRoomInspection.yy}" readonly="readonly">
+								<select class="form-control" name="yy" id="yy"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">监控服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="jk" name="jk"
-									   value="${engineRoomInspection.jk}" readonly="readonly">
+								<select class="form-control" name="jk" id="jk"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">HIS存储：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="hiscc" name="hiscc"
-									   value="${engineRoomInspection.hiscc}" readonly="readonly">
+								<select class="form-control" name="hiscc" id="hiscc"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">核心交换机：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="hx" name="hx"
-									   value="${engineRoomInspection.hx}" readonly="readonly">
+								<select class="form-control" name="hx" id="hx"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">汇聚交换机：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="hj" name="hj"
-									   value="${engineRoomInspection.hj}" readonly="readonly">
+								<select class="form-control" name="hj" id="hj"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">安全设备：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="aqsb" name="aqsb"
-									   value="${engineRoomInspection.aqsb}" readonly="readonly">
+								<select class="form-control" name="aqsb" id="aqsb"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">UPS供电：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="ups" name="ups"
-									   value="${engineRoomInspection.ups}" readonly="readonly">
+								<select class="form-control" name="ups" id="ups"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">气体灭火：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="qtmh" name="qtmh"
-									   value="${engineRoomInspection.qtmh}" readonly="readonly">
+								<select class="form-control" name="qtmh" id="qtmh"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">空调：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="kt" name="kt"
-									   value="${engineRoomInspection.kt}" readonly="readonly">
+								<select class="form-control" name="kt" id="kt"
+										onfocus="this.defaultIndex=this.selectedIndex;"
+										onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
@@ -170,10 +255,8 @@
 									   value="${engineRoomInspection.ycyy}" readonly="readonly">
 							</div>
 						</div>
-
-
 						<div class="form-group" style="text-align: center">
-							<button class="btn btn-default" id="returnListBtn">返回</button>
+							<button class="btn btn-default" id="returnListBtn" type="button">返回</button>
 						</div>
 					</form>
 				</div>
@@ -190,8 +273,33 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(3)").addClass("active");
+	//改变菜单状态
+    $("#nav li:nth-child(5)").addClass("active");
 
+	//选项调整
+	/*	等同于：
+		 for (var i=0; i<typeSelect.length; i++) {
+			 if (typeSelect[i].value == engineRoomInspection.emr) {
+				 typeSelect[i].selected = true;
+			 }
+		 }*/
+    $("#emr option")[${engineRoomInspection.emr}].selected = true;
+    $("#his option")[${engineRoomInspection.his}].selected = true;
+    $("#lis option")[${engineRoomInspection.lis}].selected = true;
+    $("#pacs option")[${engineRoomInspection.pacs}].selected = true;
+    $("#xny option")[${engineRoomInspection.xny}].selected = true;
+    $("#oa option")[${engineRoomInspection.oa}].selected = true;
+    $("#yb option")[${engineRoomInspection.yb}].selected = true;
+    $("#qyw option")[${engineRoomInspection.qyw}].selected = true;
+    $("#yy option")[${engineRoomInspection.yy}].selected = true;
+    $("#jk option")[${engineRoomInspection.jk}].selected = true;
+    $("#hiscc option")[${engineRoomInspection.hiscc}].selected = true;
+    $("#hx option")[${engineRoomInspection.hx}].selected = true;
+    $("#hj option")[${engineRoomInspection.hj}].selected = true;
+    $("#aqsb option")[${engineRoomInspection.aqsb}].selected = true;
+    $("#ups option")[${engineRoomInspection.ups}].selected = true;
+    $("#qtmh option")[${engineRoomInspection.qtmh}].selected = true;
+    $("#kt option")[${engineRoomInspection.kt}].selected = true;
 
     //返回按钮点击
     $('#returnListBtn').on('click', function() {

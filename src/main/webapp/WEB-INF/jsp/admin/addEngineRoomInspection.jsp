@@ -33,7 +33,7 @@
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">检查日期：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="date" name="date"
+								<input type="date" class="form-control" id="date" name="date"
 								>
 							</div>
 						</div>
@@ -47,127 +47,181 @@
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">EMR服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="emr" name="emr"
-								>
+								<select class="form-control" name="emr" id="emr">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">HIS服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="his" name="his"
-								>
+								<select class="form-control" name="his" id="his">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">LIS服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="lis" name="lis"
-								>
+								<select class="form-control" name="lis" id="lis">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">PACS服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="pacs" name="pacs"
-								>
+								<select class="form-control" name="pacs" id="pacs">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">云服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="xny" name="xny"
-								>
+								<select class="form-control" name="xny" id="xny">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">OA服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="oa" name="oa"
-								>
+								<select class="form-control" name="oa" id="oa">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">医保前置：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="yb" name="yb"
-								>
+								<select class="form-control" name="yb" id="yb">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">区域网前置：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="qyw" name="qyw"
-								>
+								<select class="form-control" name="qyw" id="qyw">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">应用服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="yy" name="yy"
-								>
+								<select class="form-control" name="yy" id="yy">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">监控服务器：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="jk" name="jk"
-								>
+								<select class="form-control" name="jk" id="jk">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">HIS存储：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="hiscc" name="hiscc"
-								>
+								<select class="form-control" name="hiscc" id="hiscc">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">核心交换机：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="hx" name="hx"
-								>
+								<select class="form-control" name="hx" id="hx">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">汇聚交换机：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="hj" name="hj"
-								>
+								<select class="form-control" name="hj" id="hj">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">安全设备：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="aqsb" name="aqsb"
-								>
+								<select class="form-control" name="aqsb" id="aqsb">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">UPS供电：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="ups" name="ups"
-								>
+								<select class="form-control" name="ups" id="ups">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">气体灭火：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="qtmh" name="qtmh"
-								>
+								<select class="form-control" name="qtmh" id="qtmh">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">空调：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="kt" name="kt"
-								>
+								<select class="form-control" name="kt" id="kt">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">原因/结果：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="ycyy" name="ycyy"
-								>
+								<select class="form-control" name="ycyy" id="ycyy">
+									<option value="0">未检查</option>
+									<option value="1">正常</option>
+									<option value="2">异常</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group" style="text-align: center">

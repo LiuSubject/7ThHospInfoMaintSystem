@@ -70,9 +70,8 @@
 									<td>${item.flag}</td>
 									<td>${item.leader}</td>
 									<td>${item.createTime}</td>
-									<td>
-										<button class="btn btn-default btn-xs btn-info" onClick="location.href='/admin/editComputerProblems?id=${item.id}'">处理问题</button>
-										<button class="btn btn-default btn-xs btn-danger btn-primary" onClick="location.href='/admin/checkComputerProblems?id=${item.id}'">查看详情</button>
+									<td style="text-align: center">
+										<button class="btn btn-default btn-xs btn-danger btn-primary" onClick="location.href='/normal/checkComputerProblems?id=${item.id}'">查看详情</button>
 										<!--弹出框-->
 									</td>
 								</tr>

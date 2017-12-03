@@ -66,8 +66,36 @@
 									<td>${item.dept}</td>
 									<td>${item.name}</td>
 									<td>${item.tel}</td>
-									<td>${item.type}</td>
-									<td>${item.flag}</td>
+									<c:if test="${item.type == 1}">
+										<td>电脑问题</td>
+									</c:if>
+									<c:if test="${item.type == 2}">
+										<td>打印机问题</td>
+									</c:if>
+									<c:if test="${item.type == 3}">
+										<td>监控问题</td>
+									</c:if>
+									<c:if test="${item.type == 4}">
+										<td>网络问题</td>
+									</c:if>
+									<c:if test="${item.type == 5}">
+										<td>病区软件问题</td>
+									</c:if>
+									<c:if test="${item.type == 6}">
+										<td>门诊软件问题</td>
+									</c:if>
+									<c:if test="${item.type == 7}">
+										<td>其它问题</td>
+									</c:if>
+									<c:if test="${item.flag == 0}">
+										<td><button class="btn btn-warning btn-sm" type="button">提交中</button></td>
+									</c:if>
+									<c:if test="${item.flag == 1}">
+										<td><button class="btn btn-info btn-sm" type="button">处理中</button></td>
+									</c:if>
+									<c:if test="${item.flag == 2}">
+										<td><button class="btn btn-success btn-sm" type="button">已解决</button></td>
+									</c:if>
 									<td>${item.leader}</td>
 									<td>${item.createTime}</td>
 									<td>
@@ -125,15 +153,16 @@
         }
         </c:if>
 
-        function confirmd() {
+/*        function confirmd() {
             var msg = "您真的确定要删除吗？！";
             if (confirm(msg)==true){
                 return true;
             }else{
                 return false;
             }
-        }
+        }*/
 
+//搜索按钮点击
         $("#searchBtn").click(function () {
             $("#searchFunction").submit();
         });

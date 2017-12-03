@@ -68,7 +68,7 @@
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">使用日期：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="useDate" name="useDate" placeholder="请输入使用日期">
+								<input type="date" class="form-control" id="useDate" name="useDate" placeholder="请输入使用日期">
 							</div>
 						</div>
 						<div class="form-group">

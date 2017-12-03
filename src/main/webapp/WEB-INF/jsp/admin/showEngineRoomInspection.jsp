@@ -53,11 +53,11 @@
 					<tbody>
 					<c:forEach  items="${engineRoomInspectionList}" var="item">
 						<tr>
-							<td>${item.date}</td>
-							<td>${item.examiner}</td>
-							<td>${item.createTime}</td>
-							<td>
-								<button class="btn btn-default btn-xs btn-danger btn-primary" onClick="location.href='/admin/checkEngineRoomInspection?id=${item.id}'">查看详情</button>
+							<td style="text-align: center">${item.date}</td>
+							<td style="text-align: center">${item.examiner}</td>
+							<td style="text-align: center">${item.createTime}</td>
+							<td style="text-align: center">
+								<button class="btn btn-default btn-info btn-primary" onClick="location.href='/admin/checkEngineRoomInspection?id=${item.id}'">查看详情</button>
 								<!--弹出框-->
 							</td>
 						</tr>
@@ -110,15 +110,16 @@
     }
     </c:if>
 
-    function confirmd() {
+/*    function confirmd() {
         var msg = "您真的确定要删除吗？！";
         if (confirm(msg)==true){
             return true;
         }else{
             return false;
         }
-    }
+    }*/
 
+//	搜索按钮点击
     $("#searchBtn").click(function () {
         $("#searchFunction").submit();
     });

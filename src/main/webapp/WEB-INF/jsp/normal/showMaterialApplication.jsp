@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>故障列表</title>
+	<title>申购列表</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- 引入bootstrap -->
@@ -71,11 +71,18 @@
 							<td>${item.total}</td>
 							<td>${item.useDate}</td>
 							<td>${item.applicant}</td>
-							<td>${item.flag}</td>
+							<c:if test="${item.flag == 0}">
+								<td><button class="btn btn-warning btn-sm" type="button">提交中</button></td>
+							</c:if>
+							<c:if test="${item.flag == 1}">
+								<td><button class="btn btn-info btn-sm" type="button">处理中</button></td>
+							</c:if>
+							<c:if test="${item.flag == 2}">
+								<td><button class="btn btn-success btn-sm" type="button">已解决</button></td>
+							</c:if>
 							<td>${item.createTime}</td>
-							<td>
-								<button class="btn btn-default btn-xs btn-info" onClick="location.href='/admin/editMaterialApplication?id=${item.id}'">处理问题</button>
-								<button class="btn btn-default btn-xs btn-danger btn-primary" onClick="location.href='/admin/checkMaterialApplication?id=${item.id}'">查看详情</button>
+							<td style="text-align: center">
+								<button class="btn btn-default btn-xs btn-danger btn-primary" onClick="location.href='/normal/checkMaterialApplication?id=${item.id}'">查看详情</button>
 								<!--弹出框-->
 							</td>
 						</tr>
@@ -128,14 +135,14 @@
     }
     </c:if>
 
-    function confirmd() {
-        var msg = "您真的确定要删除吗？！";
-        if (confirm(msg)==true){
-            return true;
-        }else{
-            return false;
-        }
-    }
+    /*    function confirmd() {
+            var msg = "您真的确定要删除吗？！";
+            if (confirm(msg)==true){
+                return true;
+            }else{
+                return false;
+            }
+        }*/
 
     $("#searchBtn").click(function () {
         $("#searchFunction").submit();
