@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 项目名称：Test
+ * 项目名称：7ThHospInfoMaintSystem
  * 类名称：AdminController
  * 类描述：管理员请求拦截器
  * 创建人：lxk

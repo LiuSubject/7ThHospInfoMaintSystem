@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.MaterialApplicationMapper" >
+  <resultMap id="BaseResultMap" type="com.system.po.MaterialApplication" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="dept" property="dept" jdbcType="VARCHAR" />
+    <result column="departCode" property="departcode" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="brand" property="brand" jdbcType="VARCHAR" />
+    <result column="model" property="model" jdbcType="VARCHAR" />
+    <result column="judge" property="judge" jdbcType="INTEGER" />
+    <result column="total" property="total" jdbcType="INTEGER" />
+    <result column="use_date" property="useDate" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="bmYj" property="bmyj" jdbcType="VARCHAR" />
+    <result column="fgyzYj" property="fgyzyj" jdbcType="VARCHAR" />
+    <result column="xxkYj" property="xxkyj" jdbcType="VARCHAR" />
+    <result column="yzYj" property="yzyj" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+    <result column="leader" property="leader" jdbcType="VARCHAR" />
+    <result column="reback" property="reback" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, userId, name, dept, departCode, number, brand, model, judge, total, use_date, 
+    applicant, reason, bmYj, fgyzYj, xxkYj, yzYj, flag, leader, reback, create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.po.MaterialApplicationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from material_application
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from material_application
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from material_application
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.system.po.MaterialApplicationExample" >
+    delete from material_application
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.system.po.MaterialApplication" >
+    insert into material_application (id, userId, name, 
+      dept, departCode, number, 
+      brand, model, judge, 
+      total, use_date, applicant, 
+      reason, bmYj, fgyzYj, 
+      xxkYj, yzYj, flag, 
+      leader, reback, create_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{dept,jdbcType=VARCHAR}, #{departcode,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
+      #{brand,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{judge,jdbcType=INTEGER}, 
+      #{total,jdbcType=INTEGER}, #{useDate,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, 
+      #{reason,jdbcType=VARCHAR}, #{bmyj,jdbcType=VARCHAR}, #{fgyzyj,jdbcType=VARCHAR}, 
+      #{xxkyj,jdbcType=VARCHAR}, #{yzyj,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER}, 
+      #{leader,jdbcType=VARCHAR}, #{reback,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.po.MaterialApplication" >
+    insert into material_application
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="dept != null" >
+        dept,
+      </if>
+      <if test="departcode != null" >
+        departCode,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="brand != null" >
+        brand,
+      </if>
+      <if test="model != null" >
+        model,
+      </if>
+      <if test="judge != null" >
+        judge,
+      </if>
+      <if test="total != null" >
+        total,
+      </if>
+      <if test="useDate != null" >
+        use_date,
+      </if>
+      <if test="applicant != null" >
+        applicant,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="bmyj != null" >
+        bmYj,
+      </if>
+      <if test="fgyzyj != null" >
+        fgyzYj,
+      </if>
+      <if test="xxkyj != null" >
+        xxkYj,
+      </if>
+      <if test="yzyj != null" >
+        yzYj,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="leader != null" >
+        leader,
+      </if>
+      <if test="reback != null" >
+        reback,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="dept != null" >
+        #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="departcode != null" >
+        #{departcode,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="brand != null" >
+        #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="judge != null" >
+        #{judge,jdbcType=INTEGER},
+      </if>
+      <if test="total != null" >
+        #{total,jdbcType=INTEGER},
+      </if>
+      <if test="useDate != null" >
+        #{useDate,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null" >
+        #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="bmyj != null" >
+        #{bmyj,jdbcType=VARCHAR},
+      </if>
+      <if test="fgyzyj != null" >
+        #{fgyzyj,jdbcType=VARCHAR},
+      </if>
+      <if test="xxkyj != null" >
+        #{xxkyj,jdbcType=VARCHAR},
+      </if>
+      <if test="yzyj != null" >
+        #{yzyj,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="leader != null" >
+        #{leader,jdbcType=VARCHAR},
+      </if>
+      <if test="reback != null" >
+        #{reback,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.system.po.MaterialApplicationExample" resultType="java.lang.Integer" >
+    select count(*) from material_application
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update material_application
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.userid != null" >
+        userId = #{record.userid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dept != null" >
+        dept = #{record.dept,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departcode != null" >
+        departCode = #{record.departcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.number != null" >
+        number = #{record.number,jdbcType=INTEGER},
+      </if>
+      <if test="record.brand != null" >
+        brand = #{record.brand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.model != null" >
+        model = #{record.model,jdbcType=VARCHAR},
+      </if>
+      <if test="record.judge != null" >
+        judge = #{record.judge,jdbcType=INTEGER},
+      </if>
+      <if test="record.total != null" >
+        total = #{record.total,jdbcType=INTEGER},
+      </if>
+      <if test="record.useDate != null" >
+        use_date = #{record.useDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicant != null" >
+        applicant = #{record.applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reason != null" >
+        reason = #{record.reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bmyj != null" >
+        bmYj = #{record.bmyj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fgyzyj != null" >
+        fgyzYj = #{record.fgyzyj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xxkyj != null" >
+        xxkYj = #{record.xxkyj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yzyj != null" >
+        yzYj = #{record.yzyj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flag != null" >
+        flag = #{record.flag,jdbcType=INTEGER},
+      </if>
+      <if test="record.leader != null" >
+        leader = #{record.leader,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reback != null" >
+        reback = #{record.reback,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update material_application
+    set id = #{record.id,jdbcType=INTEGER},
+      userId = #{record.userid,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      dept = #{record.dept,jdbcType=VARCHAR},
+      departCode = #{record.departcode,jdbcType=VARCHAR},
+      number = #{record.number,jdbcType=INTEGER},
+      brand = #{record.brand,jdbcType=VARCHAR},
+      model = #{record.model,jdbcType=VARCHAR},
+      judge = #{record.judge,jdbcType=INTEGER},
+      total = #{record.total,jdbcType=INTEGER},
+      use_date = #{record.useDate,jdbcType=VARCHAR},
+      applicant = #{record.applicant,jdbcType=VARCHAR},
+      reason = #{record.reason,jdbcType=VARCHAR},
+      bmYj = #{record.bmyj,jdbcType=VARCHAR},
+      fgyzYj = #{record.fgyzyj,jdbcType=VARCHAR},
+      xxkYj = #{record.xxkyj,jdbcType=VARCHAR},
+      yzYj = #{record.yzyj,jdbcType=VARCHAR},
+      flag = #{record.flag,jdbcType=INTEGER},
+      leader = #{record.leader,jdbcType=VARCHAR},
+      reback = #{record.reback,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.po.MaterialApplication" >
+    update material_application
+    <set >
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="dept != null" >
+        dept = #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="departcode != null" >
+        departCode = #{departcode,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="brand != null" >
+        brand = #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="judge != null" >
+        judge = #{judge,jdbcType=INTEGER},
+      </if>
+      <if test="total != null" >
+        total = #{total,jdbcType=INTEGER},
+      </if>
+      <if test="useDate != null" >
+        use_date = #{useDate,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null" >
+        applicant = #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="bmyj != null" >
+        bmYj = #{bmyj,jdbcType=VARCHAR},
+      </if>
+      <if test="fgyzyj != null" >
+        fgyzYj = #{fgyzyj,jdbcType=VARCHAR},
+      </if>
+      <if test="xxkyj != null" >
+        xxkYj = #{xxkyj,jdbcType=VARCHAR},
+      </if>
+      <if test="yzyj != null" >
+        yzYj = #{yzyj,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="leader != null" >
+        leader = #{leader,jdbcType=VARCHAR},
+      </if>
+      <if test="reback != null" >
+        reback = #{reback,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.po.MaterialApplication" >
+    update material_application
+    set userId = #{userid,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      dept = #{dept,jdbcType=VARCHAR},
+      departCode = #{departcode,jdbcType=VARCHAR},
+      number = #{number,jdbcType=INTEGER},
+      brand = #{brand,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      judge = #{judge,jdbcType=INTEGER},
+      total = #{total,jdbcType=INTEGER},
+      use_date = #{useDate,jdbcType=VARCHAR},
+      applicant = #{applicant,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      bmYj = #{bmyj,jdbcType=VARCHAR},
+      fgyzYj = #{fgyzyj,jdbcType=VARCHAR},
+      xxkYj = #{xxkyj,jdbcType=VARCHAR},
+      yzYj = #{yzyj,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER},
+      leader = #{leader,jdbcType=VARCHAR},
+      reback = #{reback,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -25,9 +25,9 @@ import java.util.List;
 
 /**
  /**
- * 项目名称：Test
+ * 项目名称：7ThHospInfoMaintSystem
  * 类名称：NormalController
- * 类描述：操作员请求拦截器
+ * 类描述：普通用户请求拦截器
  * 创建人：lxk
  * 创建时间：2017-12-3 14:07:07
  * 修改人：

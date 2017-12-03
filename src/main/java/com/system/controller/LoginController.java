@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * 项目名称：Test
+ * 项目名称：7ThHospInfoMaintSystem
  * 类名称：LoginController
  * 类描述：登录请求拦截器
  * 创建人：lxk
