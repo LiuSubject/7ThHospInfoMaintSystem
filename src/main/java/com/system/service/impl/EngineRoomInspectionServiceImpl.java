@@ -14,8 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Jacey on 2017/6/29.
- */
+ * 项目名称：7ThHospInfoMaintSystem
+ * 类名称：EngineRoomInspectionServiceImpl
+ * 类描述：EngineRoomInspection机房巡检表Service层具体实现
+ * 创建人：lxk
+ * 创建时间：2017-12-3 14:52:22
+ * 修改人：
+ * 修改时间：
+ * 修改备注：
+ **/
 @Service
 public class EngineRoomInspectionServiceImpl implements EngineRoomInspectionService {
 

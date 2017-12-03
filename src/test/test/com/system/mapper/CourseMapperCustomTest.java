@@ -1,7 +1,6 @@
 package com.system.mapper;
 
 import com.system.po.PagingVO;
-import com.system.po.TeacherCustom;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;

@@ -1,14 +1,20 @@
 package com.system.service;
 
 import com.system.po.ComputerProblemsCustom;
-import com.system.po.ComputerProblemsExample;
-import com.system.po.StudentCustom;
 
 import java.util.List;
 
 /**
- * ComputerProblems电脑故障Service层
- */
+ * 项目名称：7ThHospInfoMaintSystem
+ * 类名称：ComputerProblemsService
+ * 类描述：ComputerProblems电脑故障表Service层
+ * 创建人：lxk
+ * 创建时间：2017-12-3 14:52:22
+ * 修改人：
+ * 修改时间：
+ * 修改备注：
+ **/
+
 public interface ComputerProblemsService {
     //根据id更新电脑故障信息
     void updataById(Integer id, ComputerProblemsCustom computerProblemsCustom) throws Exception;

@@ -1,5 +1,16 @@
 package com.system.po;
 
+/**
+ * 项目名称：7ThHospInfoMaintSystem
+ * 类名称：ComputerProblems
+ * 类描述：电脑故障（pojo）
+ * 创建人：lxk
+ * 创建时间：2017-12-3 14:21:41
+ * 修改人：
+ * 修改时间：
+ * 修改备注：
+ **/
+
 public class ComputerProblems {
     private Integer id;
 

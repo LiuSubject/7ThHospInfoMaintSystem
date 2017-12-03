@@ -5,8 +5,16 @@ import com.system.po.MaterialApplicationCustom;
 import java.util.List;
 
 /**
- * MaterialApplication物资申购Service层
- */
+ * 项目名称：7ThHospInfoMaintSystem
+ * 类名称：MaterialApplicationService
+ * 类描述：MaterialApplication物资申购表Service层
+ * 创建人：lxk
+ * 创建时间：2017-12-3 14:52:22
+ * 修改人：
+ * 修改时间：
+ * 修改备注：
+ **/
+
 public interface MaterialApplicationService {
     //根据id更新物资申购信息
     void updataById(Integer id, MaterialApplicationCustom materialApplicationCustom) throws Exception;

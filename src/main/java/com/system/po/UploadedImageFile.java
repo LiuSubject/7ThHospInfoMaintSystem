@@ -3,7 +3,7 @@ package com.system.po;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 项目名称：Test
+ * 项目名称：7ThHospInfoMaintSystem
  * 类名称：UploadedImageFile
  * 类描述：图片上传
  * 创建人：lxk

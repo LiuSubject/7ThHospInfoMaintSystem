@@ -16,9 +16,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by Jacey on 2017/6/30.
- */
-
+ * 项目名称：7ThHospInfoMaintSystem
+ * 类名称：LoginRealm
+ * 类描述：登录相关身份信息
+ * 创建人：lxk
+ * 创建时间：2017-12-01 19:24
+ * 修改人：
+ * 修改时间：
+ * 修改备注：
+ **/
 @Component
 public class LoginRealm extends AuthorizingRealm{
 

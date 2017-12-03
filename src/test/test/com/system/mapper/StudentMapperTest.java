@@ -1,7 +1,5 @@
 package com.system.mapper;
 
-import com.system.po.Student;
-import com.system.po.StudentExample;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;

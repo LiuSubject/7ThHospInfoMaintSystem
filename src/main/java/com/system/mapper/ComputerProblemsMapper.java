@@ -3,7 +3,7 @@ package com.system.mapper;
 /**
  * 项目名称：7ThHospInfoMaintSystem
  * 类名称：ComputerProblemsMapper
- * 类描述：ComputerProblemsMapper
+ * 类描述：ComputerProblemsMapper（电脑故障表Mapper）
  * 创建人：lxk
  * 创建时间：2017-12-3 14:21:41
  * 修改人：

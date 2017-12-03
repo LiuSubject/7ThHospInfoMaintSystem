@@ -3,6 +3,17 @@ package com.system.po;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 项目名称：Test
+ * 类名称：ComputerProblemsExample
+ * 类描述：电脑故障条件查询扩展类
+ * 创建人：lxk
+ * 创建时间：2017-11-29 16:33
+ * 修改人：
+ * 修改时间：
+ * 修改备注：
+ **/
+
 public class ComputerProblemsExample {
     protected String orderByClause;
 
