@@ -17,7 +17,7 @@
 			/*border:1px solid #F00;*/
 			padding: 35px;
 			border-radius:15px;
-			background: #56666B;
+			background: #367fa9;
 			color: #fff;
 		}
 
@@ -28,7 +28,7 @@
 	<div style="height:150px"></div><%--空白填充--%>
 	<div class="row" style="margin-top: 280px; ">
 		<div class="col-md-4"></div>
-		<div class="col-md-4" id="login-box">
+		<div class="col-md-4" id="login-box" >
 			<form class="form-horizontal" role="form" action="/login" id="loginForm" method="post">
 				<div class="form-group">
 					<label for="firstname" class="col-sm-3 control-label">工号</label>

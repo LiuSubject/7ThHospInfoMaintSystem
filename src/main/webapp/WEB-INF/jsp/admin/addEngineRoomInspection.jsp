@@ -3,6 +3,8 @@
 
 <!DOCTYPE html>
 <html>
+<style>
+</style>
 <head>
 	<title></title>
 
@@ -217,11 +219,7 @@
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">原因/结果：</label>
 							<div class="col-sm-8">
-								<select class="form-control" name="ycyy" id="ycyy">
-									<option value="0">未检查</option>
-									<option value="1">正常</option>
-									<option value="2">异常</option>
-								</select>
+								<input type="text" class="form-control" id="ycyy" name="ycyy">
 							</div>
 						</div>
 						<div class="form-group" style="text-align: center">
