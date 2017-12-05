@@ -33,7 +33,7 @@
 				<div class="form-group">
 					<label for="firstname" class="col-sm-3 control-label">工号</label>
 					<div class="col-sm-9">
-						<input type="text" class="form-control" id="userID" placeholder="请输入工号" name="username">
+						<input type="text" class="form-control" id="code" placeholder="请输入工号" name="code">
 					</div>
 				</div>
 				<div class="form-group">

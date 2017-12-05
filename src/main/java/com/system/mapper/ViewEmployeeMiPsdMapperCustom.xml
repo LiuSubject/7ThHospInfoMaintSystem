@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.system.mapper.ViewEmployeeMiPsdMapperCustom" >
+
+    <resultMap id="BaseResultMap" type="com.system.po.ViewEmployeeMiPsd" >
+        <result column="code" property="code" jdbcType="CHAR" />
+        <result column="name" property="name" jdbcType="CHAR" />
+        <result column="py_code" property="pyCode" jdbcType="CHAR" />
+        <result column="d_code" property="dCode" jdbcType="CHAR" />
+        <result column="dept_code" property="deptCode" jdbcType="CHAR" />
+        <result column="dept_name" property="deptName" jdbcType="CHAR" />
+        <result column="psd" property="psd" jdbcType="VARCHAR" />
+
+    </resultMap>
+
+    <select id="findOne" parameterType="String" resultMap="BaseResultMap">
+        SELECT
+          view_employee_mi_psd.*,
+        FROM
+          view_employee_mi_psd
+    </select>
+
+</mapper>

@@ -1,9 +1,9 @@
 package com.system.realm;
 
 import com.system.po.Role;
-import com.system.po.Userlogin;
+import com.system.po.ViewEmployeeMiPsd;
 import com.system.service.RoleService;
-import com.system.service.UserloginService;
+import com.system.service.ViewEmployeeMiPsdService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -28,26 +28,27 @@ import java.util.Set;
 @Component
 public class LoginRealm extends AuthorizingRealm{
 
-    @Resource(name = "userloginServiceImpl")
-    private UserloginService userloginService;
 
     @Resource(name = "roleServiceImpl")
     private RoleService roleService;
 
+    @Resource(name = "viewEmployeeMiPsdServiceImpl")
+    private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
+
     /**
-     * 获取身份信息，我们可以在这个方法中，从数据库获取该用户的权限和角色信息
-     *     当调用权限验证时，就会调用此方法
+     *      获取身份信息，我们可以在这个方法中，从数据库获取该用户的权限和角色信息
+     *      当调用权限验证时，就会调用此方法
      */
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 
-        String username = (String) getAvailablePrincipal(principalCollection);
+        String code = (String) getAvailablePrincipal(principalCollection);
 
         Role role = null;
 
         try {
-            Userlogin userlogin = userloginService.findByName(username);
+            ViewEmployeeMiPsd viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode(code);
             //获取角色对象
-            role = roleService.findByid(userlogin.getRole());
+            role = roleService.findByid(Integer.parseInt(viewEmployeeMiPsd.getCode()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -64,31 +65,31 @@ public class LoginRealm extends AuthorizingRealm{
 
     /**
      * 在这个方法中，进行身份验证
-     *         login时调用
+     * login时调用
      */
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        //用户名
-        String username = (String) token.getPrincipal();
+        //工号
+        String code = (String) token.getPrincipal();
         //密码
         String password = new String((char[])token.getCredentials());
 
-        Userlogin userlogin = null;
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
         try {
-            userlogin = userloginService.findByName(username);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode(code);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (userlogin == null) {
+        if (viewEmployeeMiPsd == null) {
             //没有该用户名
             throw new UnknownAccountException();
-        } else if (!password.equals(userlogin.getPassword())) {
+        } else if (!password.equals(viewEmployeeMiPsd.getPsd())) {
             //密码错误
             throw new IncorrectCredentialsException();
         }
 
         //身份验证通过,返回一个身份信息
-        AuthenticationInfo aInfo = new SimpleAuthenticationInfo(username,password,getName());
+        AuthenticationInfo aInfo = new SimpleAuthenticationInfo(code,password,getName());
 
         return aInfo;
     }

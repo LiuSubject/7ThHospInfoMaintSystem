@@ -1,6 +1,7 @@
 package com.system.controller;
 
 import com.system.po.Userlogin;
+import com.system.po.ViewEmployeeMiPsd;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -29,11 +30,11 @@ public class LoginController {
 
     //登录表单处理
     @RequestMapping(value = "/login", method = {RequestMethod.POST})
-    public String login(Userlogin userlogin) throws Exception {
+    public String login(ViewEmployeeMiPsd viewEmployeeMiPsd) throws Exception {
 
         //Shiro实现登录
-        UsernamePasswordToken token = new UsernamePasswordToken(userlogin.getUsername(),
-                userlogin.getPassword());
+        UsernamePasswordToken token = new UsernamePasswordToken(viewEmployeeMiPsd.getCode(),
+                viewEmployeeMiPsd.getPsd());
         Subject subject = SecurityUtils.getSubject();
 
         //如果获取不到用户名就是登录失败，但登录失败的话，会直接抛出异常
@@ -41,7 +42,7 @@ public class LoginController {
 
         if (subject.hasRole("admin")) {
             return "redirect:/admin/showComputerProblems";
-        } else if (subject.hasRole("normal")) {
+        } else if (!subject.hasRole("admin")) {
             return "redirect:/normal/showComputerProblems";
         }
 

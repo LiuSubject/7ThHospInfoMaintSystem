@@ -30,7 +30,6 @@ public class UserloginServiceImpl implements UserloginService {
 
 
     public Userlogin findByName(String name) throws Exception {
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
         UserloginExample userloginExample = new UserloginExample();
 
         UserloginExample.Criteria criteria = userloginExample.createCriteria();
