@@ -1,5 +1,7 @@
 # 该文件作用是，配置，git忽略，哪些文件不上传，不监控其变化
 
+jdbc.properties
+
 # Compiled class file
 *.class
 

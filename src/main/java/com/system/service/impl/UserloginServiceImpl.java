@@ -4,6 +4,7 @@ import com.system.mapper.UserloginMapper;
 import com.system.po.Userlogin;
 import com.system.po.UserloginExample;
 import com.system.service.UserloginService;
+import com.system.util.CustomerContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,13 @@ import java.util.List;
 @Service
 public class UserloginServiceImpl implements UserloginService {
 
+
     @Autowired
     private UserloginMapper userloginMapper;
 
 
     public Userlogin findByName(String name) throws Exception {
+        CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
         UserloginExample userloginExample = new UserloginExample();
 
         UserloginExample.Criteria criteria = userloginExample.createCriteria();
