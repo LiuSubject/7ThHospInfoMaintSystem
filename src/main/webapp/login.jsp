@@ -6,9 +6,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- 引入bootstrap -->
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-	<!-- 引入JQuery  bootstrap.js-->
+	<!-- 引入JQuery  bootstrap.js pwd-encryption-->
 	<script src="/js/jquery-3.2.1.min.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/pwd-encryption.js"></script>
 	<style type="text/css">
 		body{
 			background: url(images/a.jpg)repeat;
@@ -39,12 +40,12 @@
 				<div class="form-group">
 					<label for="lastname" class="col-sm-3 control-label">密码</label>
 					<div class="col-sm-9">
-						<input type="password" class="form-control" id="password" placeholder="请输入密码" name="password">
+						<input type="password" class="form-control" id="psd" placeholder="请输入密码" name="psd">
 					</div>
 				</div>
 				<div class="form-group pull-right" style="margin-right: 15px;">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default btn-info">登录</button>
+						<button type="button" class="btn btn-default btn-info"  id="loginBtn">登录</button>
 					</div>
 				</div>
 			</form>
@@ -53,4 +54,14 @@
 	</div>
 </div>
 </body>
+<script type="text/javascript">
+
+	//登录按钮点击
+    $('#loginBtn').on('click', function() {
+        //密码加密后再传输
+        $('#psd').val(Encrypting($('#code').val(),$('#psd').val()));
+        $('#loginForm').submit();
+    });
+
+</script>
 </html>

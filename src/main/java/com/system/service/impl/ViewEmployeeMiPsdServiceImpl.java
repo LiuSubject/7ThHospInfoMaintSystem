@@ -33,26 +33,23 @@ public class ViewEmployeeMiPsdServiceImpl implements ViewEmployeeMiPsdService {
 
 
     public ViewEmployeeMiPsd findByName(String name) throws Exception {
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
         ViewEmployeeMiPsdExample viewEmployeeMiPsdExample = new ViewEmployeeMiPsdExample();
 
         ViewEmployeeMiPsdExample.Criteria criteria = viewEmployeeMiPsdExample.createCriteria();
         criteria.andNameEqualTo(name);
 
         List<ViewEmployeeMiPsd> list = viewEmployeeMiPsdMapper.selectByExample(viewEmployeeMiPsdExample);
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
         return list.get(0);
     }
 
     public ViewEmployeeMiPsd findByCode(String code) throws Exception {
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
         ViewEmployeeMiPsdExample viewEmployeeMiPsdExample = new ViewEmployeeMiPsdExample();
 
         ViewEmployeeMiPsdExample.Criteria criteria = viewEmployeeMiPsdExample.createCriteria();
         criteria.andCodeEqualTo(code);
 
         List<ViewEmployeeMiPsd> list = viewEmployeeMiPsdMapper.selectByExample(viewEmployeeMiPsdExample);
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+
         return list.get(0);
     }
 

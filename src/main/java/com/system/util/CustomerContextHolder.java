@@ -14,9 +14,9 @@ import org.apache.commons.lang.StringUtils;
  **/
 public class CustomerContextHolder {
     //MySQL
-    public static final String DATA_SOURCE_MYSQL = "dataSource";
+    public static final String DATA_SOURCE_MYSQL = "dataSource2MySQL";
     //SQLServer
-    public static final String DATA_SOURCE_MSSQL = "dataSource2";
+    public static final String DATA_SOURCE_MSSQL = "dataSource2SQLServer";
     //用ThreadLocal来设置当前线程使用哪个dataSource
     private static final ThreadLocal<String> contextHolder = new ThreadLocal<String>();
     public static void setCustomerType(String customerType) {

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.ViewEmployeeMiPsdMapper" >
+  <resultMap id="BaseResultMap" type="com.system.po.ViewEmployeeMiPsd" >
+    <result column="code" property="code" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="CHAR" />
+    <result column="py_code" property="pyCode" jdbcType="CHAR" />
+    <result column="d_code" property="dCode" jdbcType="CHAR" />
+    <result column="dept_code" property="deptCode" jdbcType="CHAR" />
+    <result column="dept_name" property="deptName" jdbcType="CHAR" />
+    <result column="psd" property="psd" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    code, name, py_code, d_code, dept_code, dept_name, psd
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.po.ViewEmployeeMiPsdExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from view_employee_mi_psd
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.system.po.ViewEmployeeMiPsdExample" >
+    delete from view_employee_mi_psd
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.system.po.ViewEmployeeMiPsd" >
+    insert into view_employee_mi_psd (code, name, py_code, d_code, 
+      dept_code, dept_name, psd)
+    values (#{code,jdbcType=CHAR}, #{name,jdbcType=CHAR}, #{pyCode,jdbcType=CHAR}, #{dCode,jdbcType=CHAR}, 
+      #{deptCode,jdbcType=CHAR}, #{deptName,jdbcType=CHAR}, #{psd,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.po.ViewEmployeeMiPsd" >
+    insert into view_employee_mi_psd
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="pyCode != null" >
+        py_code,
+      </if>
+      <if test="dCode != null" >
+        d_code,
+      </if>
+      <if test="deptCode != null" >
+        dept_code,
+      </if>
+      <if test="deptName != null" >
+        dept_name,
+      </if>
+      <if test="psd != null" >
+        psd,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=CHAR},
+      </if>
+      <if test="pyCode != null" >
+        #{pyCode,jdbcType=CHAR},
+      </if>
+      <if test="dCode != null" >
+        #{dCode,jdbcType=CHAR},
+      </if>
+      <if test="deptCode != null" >
+        #{deptCode,jdbcType=CHAR},
+      </if>
+      <if test="deptName != null" >
+        #{deptName,jdbcType=CHAR},
+      </if>
+      <if test="psd != null" >
+        #{psd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.system.po.ViewEmployeeMiPsdExample" resultType="java.lang.Integer" >
+    select count(*) from view_employee_mi_psd
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update view_employee_mi_psd
+    <set >
+      <if test="record.code != null" >
+        code = #{record.code,jdbcType=CHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=CHAR},
+      </if>
+      <if test="record.pyCode != null" >
+        py_code = #{record.pyCode,jdbcType=CHAR},
+      </if>
+      <if test="record.dCode != null" >
+        d_code = #{record.dCode,jdbcType=CHAR},
+      </if>
+      <if test="record.deptCode != null" >
+        dept_code = #{record.deptCode,jdbcType=CHAR},
+      </if>
+      <if test="record.deptName != null" >
+        dept_name = #{record.deptName,jdbcType=CHAR},
+      </if>
+      <if test="record.psd != null" >
+        psd = #{record.psd,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update view_employee_mi_psd
+    set code = #{record.code,jdbcType=CHAR},
+      name = #{record.name,jdbcType=CHAR},
+      py_code = #{record.pyCode,jdbcType=CHAR},
+      d_code = #{record.dCode,jdbcType=CHAR},
+      dept_code = #{record.deptCode,jdbcType=CHAR},
+      dept_name = #{record.deptName,jdbcType=CHAR},
+      psd = #{record.psd,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

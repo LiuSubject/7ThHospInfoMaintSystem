@@ -1,6 +1,5 @@
 package com.system.controller;
 
-import com.system.po.Userlogin;
 import com.system.po.ViewEmployeeMiPsd;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -35,10 +34,16 @@ public class LoginController {
         //Shiro实现登录
         UsernamePasswordToken token = new UsernamePasswordToken(viewEmployeeMiPsd.getCode(),
                 viewEmployeeMiPsd.getPsd());
-        Subject subject = SecurityUtils.getSubject();
 
+        Subject subject = SecurityUtils.getSubject();
         //如果获取不到用户名就是登录失败，但登录失败的话，会直接抛出异常
-        subject.login(token);
+        try
+        {
+            subject.login(token);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         if (subject.hasRole("admin")) {
             return "redirect:/admin/showComputerProblems";

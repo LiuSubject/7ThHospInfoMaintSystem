@@ -4,6 +4,7 @@ import com.system.po.Role;
 import com.system.po.ViewEmployeeMiPsd;
 import com.system.service.RoleService;
 import com.system.service.ViewEmployeeMiPsdService;
+import com.system.util.CustomerContextHolder;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -35,6 +36,8 @@ public class LoginRealm extends AuthorizingRealm{
     @Resource(name = "viewEmployeeMiPsdServiceImpl")
     private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
 
+
+
     /**
      *      获取身份信息，我们可以在这个方法中，从数据库获取该用户的权限和角色信息
      *      当调用权限验证时，就会调用此方法
@@ -46,7 +49,11 @@ public class LoginRealm extends AuthorizingRealm{
         Role role = null;
 
         try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
             ViewEmployeeMiPsd viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode(code);
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
             //获取角色对象
             role = roleService.findByid(Integer.parseInt(viewEmployeeMiPsd.getCode()));
         } catch (Exception e) {
@@ -75,7 +82,11 @@ public class LoginRealm extends AuthorizingRealm{
 
         ViewEmployeeMiPsd viewEmployeeMiPsd = null;
         try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
             viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode(code);
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
         } catch (Exception e) {
             e.printStackTrace();
         }
