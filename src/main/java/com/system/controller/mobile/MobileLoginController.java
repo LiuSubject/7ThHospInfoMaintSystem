@@ -1,4 +1,4 @@
-package com.system.controller;
+package com.system.controller.mobile;
 
 import com.system.po.ViewEmployeeMiPsd;
 import org.apache.shiro.SecurityUtils;
@@ -8,28 +8,36 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.ServletRequest;
+
 /**
  * 项目名称：7ThHospInfoMaintSystem
- * 类名称：LoginController
- * 类描述：PC端登录请求拦截器
+ * 类名称：MobileLoginController
+ * 类描述：Mobile端登录请求拦截器
  * 创建人：lxk
- * 创建时间：2017-12-3 14:06:16
+ * 创建时间：2017-12-08 8:47
  * 修改人：
  * 修改时间：
  * 修改备注：
  **/
 @Controller
-public class LoginController {
+public class MobileLoginController {
+    //登录跳转(直接访问跳转到PC端登录页)
+    @RequestMapping(value = "/mobilelogin", method = {RequestMethod.GET})
+    public String mobileLoginUI() throws Exception {
+        try{
+            return "redirect:/login";
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return "redirect:/login";
+        }
 
-    //登录跳转
-    @RequestMapping(value = "/login", method = {RequestMethod.GET})
-    public String loginUI() throws Exception {
-        return "../../login";
     }
 
     //登录表单处理
-    @RequestMapping(value = "/login", method = {RequestMethod.POST})
-    public String login(ViewEmployeeMiPsd viewEmployeeMiPsd) throws Exception {
+    @RequestMapping(value = "/mobilelogin", method = {RequestMethod.POST})
+    public String mobileLogin(ViewEmployeeMiPsd viewEmployeeMiPsd,ServletRequest request) throws Exception {
 
         //Shiro实现登录
         UsernamePasswordToken token = new UsernamePasswordToken(viewEmployeeMiPsd.getCode(),
@@ -42,16 +50,16 @@ public class LoginController {
             subject.login(token);
         }catch (Exception e){
             e.printStackTrace();
+            return "error";
         }
 
 
         if (subject.hasRole("admin")) {
-            return "redirect:/admin/showComputerProblems";
+            return "success";
         } else if (!subject.hasRole("admin")) {
             return "redirect:/normal/showComputerProblems";
         }
 
         return "/login";
     }
-
 }
