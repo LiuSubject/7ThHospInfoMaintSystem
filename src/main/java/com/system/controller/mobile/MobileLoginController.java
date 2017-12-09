@@ -7,6 +7,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
 
@@ -24,7 +25,8 @@ import javax.servlet.ServletRequest;
 public class MobileLoginController {
     //登录跳转(直接访问跳转到PC端登录页)
     @RequestMapping(value = "/mobilelogin", method = {RequestMethod.GET})
-    public String mobileLoginUI() throws Exception {
+    public @ResponseBody
+    String mobileLoginUI() throws Exception {
         try{
             return "redirect:/login";
         }catch (Exception e)
@@ -55,7 +57,8 @@ public class MobileLoginController {
 
 
         if (subject.hasRole("admin")) {
-            return "success";
+
+            return "'status':'success'";
         } else if (!subject.hasRole("admin")) {
             return "redirect:/normal/showComputerProblems";
         }

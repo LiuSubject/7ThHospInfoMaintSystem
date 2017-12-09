@@ -29,10 +29,11 @@ import java.util.Set;
 @Component
 public class LoginRealm extends AuthorizingRealm{
 
-
+    @SuppressWarnings("SpringJavaAutowiringInspection")//忽略警告，下同
     @Resource(name = "roleServiceImpl")
     private RoleService roleService;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")//忽略警告，下同
     @Resource(name = "viewEmployeeMiPsdServiceImpl")
     private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
 
@@ -47,16 +48,27 @@ public class LoginRealm extends AuthorizingRealm{
         String code = (String) getAvailablePrincipal(principalCollection);
 
         Role role = null;
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
 
         try {
             //切换数据源至SQLServer
             CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            ViewEmployeeMiPsd viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode(code);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode(code);
             //切换数据源至MySQL
             CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
             //获取角色对象
             role = roleService.findByid(Integer.parseInt(viewEmployeeMiPsd.getCode()));
         } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode(code);
+                //获取角色对象
+                role = roleService.findByid(Integer.parseInt(viewEmployeeMiPsd.getCode()));
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
             e.printStackTrace();
         }
         //通过用户名从数据库获取权限/角色信息
@@ -88,6 +100,14 @@ public class LoginRealm extends AuthorizingRealm{
             //切换数据源至MySQL
             CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
         } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode(code);
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
             e.printStackTrace();
         }
 
