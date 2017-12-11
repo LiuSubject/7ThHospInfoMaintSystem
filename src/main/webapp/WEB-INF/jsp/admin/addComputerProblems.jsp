@@ -70,7 +70,7 @@
 						<div id="textareadetail" class="form-group">
 							<label  class="col-sm-2 control-label">详情描述：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" name="detail" placeholder="请输入描述">
+								<input type="text" class="form-control" id="detail" name="detail" placeholder="请输入描述">
 							</div>
 						</div>
 						<div class="form-group">
