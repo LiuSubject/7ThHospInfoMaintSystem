@@ -73,6 +73,7 @@ public class MobileAdminController {
         }
 
         map.put("computerProblemsList", list);
+        map.put("pagingVO", pagingVO);
 
         return map;
 
@@ -309,19 +310,27 @@ public class MobileAdminController {
 
     // 查看电脑故障详情
     @RequestMapping(value = "/checkComputerProblems", method = {RequestMethod.GET})
-    public String checkComputerProblems(Integer id, Model model) throws Exception {
+    @ResponseBody
+    public Map<String, Object> checkComputerProblems(Integer id, Model model) throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
         if (id == null) {
-            return "redirect:/admin/showComputerProblems";
+            map.put("success", "false");
+            map.put("msg", "数据异常");
+            return map;
         }
         ComputerProblems computerProblems = computerProblemsService.findById(id);
         if (computerProblems == null) {
-            throw new CustomException("抱歉，未找到该故障相关信息");
+            map.put("success", "false");
+            map.put("msg", "不存在的数据");
+            return map;
         }
 
-        model.addAttribute("computerProblems", computerProblems);
+        map.put("success", "true");
+        map.put("msg", "success");
+        map.put("computerProblems", computerProblems);
 
 
-        return "admin/checkComputerProblems";
+        return map;
     }
 
     // 查看电脑故障详情
@@ -336,9 +345,10 @@ public class MobileAdminController {
 
     //搜索电脑故障
     @RequestMapping(value = "/searchComputerProblems")
-    private String searchComputerProblems(String findByDept,String findByName,String findByFlag, Model model) throws Exception {
+    @ResponseBody
+    public Map<String, Object> searchComputerProblems(String findByDept,String findByName,String findByFlag) throws Exception {
 
-
+        Map<String, Object> map =new HashMap<String, Object>();
         List<ComputerProblemsCustom> listByDept = new ArrayList<ComputerProblemsCustom>();
         List<ComputerProblemsCustom> listByName = new ArrayList<ComputerProblemsCustom>();
         List<ComputerProblemsCustom> listByFlag = new ArrayList<ComputerProblemsCustom>();
@@ -356,8 +366,14 @@ public class MobileAdminController {
 
         if(!findByFlag.equals(""))
         {
-            Integer flag = Integer.parseInt(findByFlag);
-            listByFlag = computerProblemsService.findByFlag(flag);
+            try{
+                Integer flag = Integer.parseInt(findByFlag);
+                listByFlag = computerProblemsService.findByFlag(flag);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
         }
 
 
@@ -369,8 +385,14 @@ public class MobileAdminController {
         listResult.removeAll(listByName);
         listResult.addAll(listByName);
 
-        model.addAttribute("computerProblemsList", listResult);
-        return "admin/showComputerProblems";
+        if(listResult.size() <= 50){
+            map.put("success", "true");
+            map.put("computerProblemsList", listResult);
+        }else{
+            map.put("success", "false");
+            map.put("msg", "结果过多，请精确查找");
+        }
+        return map;
     }
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
