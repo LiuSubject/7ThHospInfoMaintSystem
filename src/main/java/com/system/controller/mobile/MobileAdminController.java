@@ -852,7 +852,9 @@ public class MobileAdminController {
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<机房巡检>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
     // 机房巡检显示
     @RequestMapping("/showEngineRoomInspection")
-    public String showEngineRoomInspection(Model model, Integer page) throws Exception {
+    @ResponseBody
+    public Map<String, Object> showEngineRoomInspection(Model model, Integer page) throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
         List<EngineRoomInspectionCustom> list = null;
         //页码对象
         PagingVO pagingVO = new PagingVO();
@@ -866,24 +868,31 @@ public class MobileAdminController {
             list = engineRoomInspectionService.findByPaging(page);
         }
 
-        model.addAttribute("engineRoomInspectionList", list);
-        model.addAttribute("pagingVO", pagingVO);
+        map.put("engineRoomInspectionList", list);
+        map.put("pagingVO", pagingVO);
 
-        return "admin/showEngineRoomInspection";
+        return map;
 
     }
 
     //添加机房巡检
     @RequestMapping(value = "/addEngineRoomInspection", method = {RequestMethod.GET})
-    public String addEngineRoomInspectionUI(Model model) throws Exception {
+    @ResponseBody
+    public Map<String, Object> addEngineRoomInspectionUI(Model model) throws Exception {
 
-        return "admin/addEngineRoomInspection";
+        Map<String, Object> map =new HashMap<String, Object>();
+        map.put("success", "false");
+        map.put("msg", "路径错误");
+
+        return map;
     }
 
     // 添加机房巡检
     @RequestMapping(value = "/addEngineRoomInspection", method = {RequestMethod.POST})
-    public String addEngineRoomInspectionCustom(EngineRoomInspectionCustom engineRoomInspectionCustom, Model model) throws Exception {
+    @ResponseBody
+    public Map<String, Object> addEngineRoomInspectionCustom(EngineRoomInspectionCustom engineRoomInspectionCustom, Model model) throws Exception {
 
+        Map<String, Object> map =new HashMap<String, Object>();
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
         ViewEmployeeMiPsd viewEmployeeMiPsd = null;
@@ -924,13 +933,16 @@ public class MobileAdminController {
         Boolean result = engineRoomInspectionService.save(engineRoomInspectionCustom);
 
         if (!result) {
-            model.addAttribute("message", "抱歉，机房巡检信息保存失败");
-            return "error";
+            map.put("success", "false");
+            map.put("msg", "抱歉，巡检信息保存失败");
+            return map;
         }
 
 
         //重定向
-        return "redirect:/admin/showEngineRoomInspection";
+        map.put("success", "true");
+        map.put("msg", "保存成功");
+        return map;
     }
 
 /*    // 修改机房巡检页面显示
@@ -1021,19 +1033,27 @@ public class MobileAdminController {
 
     // 查看机房巡检详情
     @RequestMapping(value = "/checkEngineRoomInspection", method = {RequestMethod.GET})
-    public String checkEngineRoomInspection(Integer id, Model model) throws Exception {
+    @ResponseBody
+    public Map<String, Object> checkEngineRoomInspection(Integer id, Model model) throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
         if (id == null) {
-            return "redirect:/admin/showEngineRoomInspection";
+            map.put("success", "false");
+            map.put("msg", "数据异常");
+            return map;
         }
         EngineRoomInspection engineRoomInspection = engineRoomInspectionService.findById(id);
         if (engineRoomInspection == null) {
-            throw new CustomException("抱歉，未找到该机房巡检相关信息");
+            map.put("success", "false");
+            map.put("msg", "未找到该机房巡检相关信息");
+            return map;
         }
 
-        model.addAttribute("engineRoomInspection", engineRoomInspection);
+        map.put("success", "true");
+        map.put("msg", "success");
+        map.put("engineRoomInspection", engineRoomInspection);
 
 
-        return "admin/checkEngineRoomInspection";
+        return map;
     }
 
     // 查看机房巡检详情
@@ -1048,9 +1068,10 @@ public class MobileAdminController {
 
     //搜索机房巡检
     @RequestMapping(value = "/searchEngineRoomInspection")
-    private String searchEngineRoomInspection(String findByExaminer, Model model) throws Exception {
+    @ResponseBody
+    public Map<String, Object> searchEngineRoomInspection(String findByExaminer, Model model) throws Exception {
 
-
+        Map<String, Object> map =new HashMap<String, Object>();
         List<EngineRoomInspectionCustom> listByExaminer = new ArrayList<EngineRoomInspectionCustom>();
         List<EngineRoomInspectionCustom> listResult = new ArrayList<EngineRoomInspectionCustom>();
 
@@ -1061,8 +1082,14 @@ public class MobileAdminController {
 
         listResult.addAll(listByExaminer);
 
-        model.addAttribute("engineRoomInspectionList", listResult);
-        return "admin/showEngineRoomInspection";
+        if(listResult.size() <= 50){
+            map.put("success", "true");
+            map.put("engineRoomInspectionList", listResult);
+        }else{
+            map.put("success", "false");
+            map.put("msg", "结果过多，请精确查找");
+        }
+        return map;
     }
 
 }
