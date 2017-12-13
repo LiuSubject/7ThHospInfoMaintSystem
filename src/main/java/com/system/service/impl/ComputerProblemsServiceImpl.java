@@ -58,7 +58,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         return false;
     }
 
-    //返回学生总数
+    //返回总数
     public int getCountComputerProblems() throws Exception {
         //自定义查询对象
         ComputerProblemsExample ComputerProblemsExample = new ComputerProblemsExample();
@@ -90,7 +90,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
 
         criteria.andDeptLike("%" + dept + "%");
-
+        ComputerProblemsExample.setOrderByClause("flag asc");
         List<ComputerProblems> list = ComputerProblemsMapper.selectByExample(ComputerProblemsExample);
 
         List<ComputerProblemsCustom> ComputerProblemsCustomList = null;
@@ -116,6 +116,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
 
         criteria.andNameLike("%" + name + "%");
+        ComputerProblemsExample.setOrderByClause("flag asc");
 
         List<ComputerProblems> list = ComputerProblemsMapper.selectByExample(ComputerProblemsExample);
 
@@ -142,6 +143,61 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
 
         criteria.andFlagEqualTo(flag );
+        ComputerProblemsExample.setOrderByClause("flag asc");
+
+        List<ComputerProblems> list = ComputerProblemsMapper.selectByExample(ComputerProblemsExample);
+
+        List<ComputerProblemsCustom> ComputerProblemsCustomList = null;
+
+        if (list != null) {
+            ComputerProblemsCustomList = new ArrayList<ComputerProblemsCustom>();
+            for (ComputerProblems s : list) {
+                ComputerProblemsCustom ComputerProblemsCustom = new ComputerProblemsCustom();
+                //类拷贝
+                org.springframework.beans.BeanUtils.copyProperties(s, ComputerProblemsCustom);
+                ComputerProblemsCustomList.add(ComputerProblemsCustom);
+            }
+        }
+
+        return ComputerProblemsCustomList;
+    }
+
+    //模糊查询
+    public List<ComputerProblemsCustom> findByUserID(String code) throws Exception {
+
+        ComputerProblemsExample ComputerProblemsExample = new ComputerProblemsExample();
+        //自定义查询条件
+        ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
+
+        criteria.andUseridEqualTo(code);
+        ComputerProblemsExample.setOrderByClause("flag asc");
+
+        List<ComputerProblems> list = ComputerProblemsMapper.selectByExample(ComputerProblemsExample);
+
+        List<ComputerProblemsCustom> ComputerProblemsCustomList = null;
+
+        if (list != null) {
+            ComputerProblemsCustomList = new ArrayList<ComputerProblemsCustom>();
+            for (ComputerProblems s : list) {
+                ComputerProblemsCustom ComputerProblemsCustom = new ComputerProblemsCustom();
+                //类拷贝
+                org.springframework.beans.BeanUtils.copyProperties(s, ComputerProblemsCustom);
+                ComputerProblemsCustomList.add(ComputerProblemsCustom);
+            }
+        }
+
+        return ComputerProblemsCustomList;
+    }
+
+    //模糊查询
+    public List<ComputerProblemsCustom> findByLeader(String code) throws Exception {
+
+        ComputerProblemsExample ComputerProblemsExample = new ComputerProblemsExample();
+        //自定义查询条件
+        ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
+
+        criteria.andLeaderEqualTo(code);
+        ComputerProblemsExample.setOrderByClause("flag asc");
 
         List<ComputerProblems> list = ComputerProblemsMapper.selectByExample(ComputerProblemsExample);
 

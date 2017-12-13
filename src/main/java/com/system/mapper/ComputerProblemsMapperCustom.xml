@@ -22,6 +22,7 @@
   <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select computer_problems.*
     from computer_problems
+    ORDER by flag asc
     limit #{toPageNo}, #{pageSize}
   </select>
 

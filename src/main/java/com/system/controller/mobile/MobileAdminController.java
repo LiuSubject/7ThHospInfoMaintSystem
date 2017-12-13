@@ -81,15 +81,21 @@ public class MobileAdminController {
 
     //添加电脑故障
     @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.GET})
-    public String addComputerProblemsUI(Model model) throws Exception {
+    @ResponseBody
+    public Map<String, Object> addComputerProblemsUI(Model model) throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
+        map.put("success", "false");
+        map.put("msg", "路径错误");
 
-        return "admin/addComputerProblems";
+        return map;
     }
 
     // 添加电脑故障处理
     @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.POST})
-    public String addComputerProblemsCustom(ComputerProblemsCustom computerProblemsCustom, Model model,HttpServletRequest request,UploadedImageFile file) throws Exception {
+    @ResponseBody
+    public Map<String, Object> addComputerProblemsCustom(ComputerProblemsCustom computerProblemsCustom, Model model,HttpServletRequest request,UploadedImageFile file) throws Exception {
 
+        Map<String, Object> map =new HashMap<String, Object>();
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
         ViewEmployeeMiPsd viewEmployeeMiPsd = null;
@@ -151,13 +157,16 @@ public class MobileAdminController {
         Boolean result = computerProblemsService.save(computerProblemsCustom);
 
         if (!result) {
-            model.addAttribute("message", "抱歉，故障信息保存失败");
-            return "error";
+            map.put("success", "false");
+            map.put("msg", "抱歉，故障信息保存失败");
+            return map;
         }
 
 
         //重定向
-        return "redirect:/admin/showComputerProblems";
+        map.put("success", "true");
+        map.put("msg", "保存成功");
+        return map;
     }
 
     // 修改电脑故障页面显示
@@ -212,20 +221,25 @@ public class MobileAdminController {
 
     // 开始处理电脑故障
     @RequestMapping(value = "/dealComputerProblems")
-    public String dealComputerProblems(HttpServletRequest request) throws Exception {
+    @ResponseBody
+    public Map<String, Object>  dealComputerProblems(HttpServletRequest request) throws Exception {
 
         Integer id = Integer.parseInt(request.getParameter("id"));
         String feedback = request.getParameter("feedback");
-
+        Map<String, Object> map =new HashMap<String, Object>();
 
         if (id == null) {
-            return "redirect:/admin/showComputerProblems";
+            map.put("success", "false");
+            map.put("msg", "未找到该故障相关信息");
+            return map;
         }
 
         //获取当前故障问题
         ComputerProblemsCustom computerProblemsCustom = computerProblemsService.findById(id);
         if (computerProblemsCustom == null) {
-            throw new CustomException("抱歉，未找到该故障相关信息");
+            map.put("success", "false");
+            map.put("msg", "未找到该故障相关信息");
+            return map;
         }
 
         //获取当前操作用户对象
@@ -251,30 +265,48 @@ public class MobileAdminController {
         if(computerProblemsCustom.getFlag() == 0){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(1);
-            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getName());
+            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+            map.put("success", "true");
+            map.put("msg", "操作成功，处理中");
+            return map;
+        }else if(computerProblemsCustom.getFlag() == 1){
+            map.put("success", "false");
+            map.put("msg", "请勿重复处理");
+            return map;
+        }else if(computerProblemsCustom.getFlag() == 2){
+            map.put("success", "false");
+            map.put("msg", "已解决，操作失败");
+            return map;
         }
 
-        return "redirect:editComputerProblems?id=" + computerProblemsCustom.getId();
+        map.put("success", "false");
+        map.put("msg", "操作异常");
+        return map;
     }
 
     // 电脑故障处理完成
     @RequestMapping(value = "/completeComputerProblems")
-    public String completeComputerProblems(HttpServletRequest request) throws Exception {
+    @ResponseBody
+    public Map<String, Object> completeComputerProblems(HttpServletRequest request) throws Exception {
 
         Integer id = Integer.parseInt(request.getParameter("id"));
         String feedback = request.getParameter("feedback");
-
+        Map<String, Object> map =new HashMap<String, Object>();
 
         if (id == null) {
-            return "redirect:/admin/showComputerProblems";
+            map.put("success", "false");
+            map.put("msg", "未找到该故障相关信息");
+            return map;
         }
 
         //获取当前故障问题
         ComputerProblemsCustom computerProblemsCustom = computerProblemsService.findById(id);
         if (computerProblemsCustom == null) {
-            throw new CustomException("抱歉，未找到该故障相关信息");
+            map.put("success", "false");
+            map.put("msg", "未找到该故障相关信息");
+            return map;
         }
 
         //获取当前操作用户对象
@@ -297,15 +329,33 @@ public class MobileAdminController {
             }
             e.printStackTrace();
         }
-        if(computerProblemsCustom.getFlag() == 0){
+        if(computerProblemsCustom.getFlag() == 1){
+            //更新该故障问题数据
+            computerProblemsCustom.setFlag(2);
+            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
+            computerProblemsCustom.setReback(feedback);
+            computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+            map.put("success", "true");
+            map.put("msg", "操作成功，故障处理完成");
+            return map;
+        }else if(computerProblemsCustom.getFlag() == 2){
+            map.put("success", "false");
+            map.put("msg", "请勿重复处理");
+            return map;
+        }else if(computerProblemsCustom.getFlag() == 0){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(2);
             computerProblemsCustom.setLeader(viewEmployeeMiPsd.getName());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+            map.put("success", "true");
+            map.put("msg", "操作成功，故障处理完成");
+            return map;
         }
 
-        return "redirect:editComputerProblems?id=" + computerProblemsCustom.getId();
+        map.put("success", "false");
+        map.put("msg", "操作异常");
+        return map;
     }
 
     // 查看电脑故障详情
@@ -395,11 +445,44 @@ public class MobileAdminController {
         return map;
     }
 
+    //搜索当前用户相关电脑故障
+    @RequestMapping(value = "/searchMyComputerProblems")
+    @ResponseBody
+    public Map<String, Object> searchMyComputerProblems() throws Exception {
+
+        Subject subject = SecurityUtils.getSubject();
+        String code = (String) subject.getPrincipal();
+
+        Map<String, Object> map =new HashMap<String, Object>();
+        List<ComputerProblemsCustom> listByUserID = new ArrayList<ComputerProblemsCustom>();
+        List<ComputerProblemsCustom> listByLeader = new ArrayList<ComputerProblemsCustom>();
+        List<ComputerProblemsCustom> listResult = new ArrayList<ComputerProblemsCustom>();
+
+        if(!code.equals(""))
+        {
+            listByUserID = computerProblemsService.findByUserID(code);
+            listByLeader = computerProblemsService.findByLeader(code);
+        }
+
+
+
+        //合并去重
+        listResult.addAll(listByUserID);
+        listResult.removeAll(listByLeader);
+        listResult.addAll(listByLeader);
+
+        map.put("success", "true");
+        map.put("computerProblemsList", listResult);
+        return map;
+    }
+
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
     // 物资申购显示
     @RequestMapping("/showMaterialApplication")
-    public String showMaterialApplication(Model model, Integer page) throws Exception {
+    @ResponseBody
+    public Map<String, Object>  showMaterialApplication(Model model, Integer page) throws Exception {
         List<MaterialApplicationCustom> list = null;
+        Map<String, Object> map =new HashMap<String, Object>();
         //页码对象
         PagingVO pagingVO = new PagingVO();
         //设置总页数
@@ -412,24 +495,29 @@ public class MobileAdminController {
             list = materialApplicationService.findByPaging(page);
         }
 
-        model.addAttribute("materialApplicationList", list);
-        model.addAttribute("pagingVO", pagingVO);
+        map.put("materialApplicationList", list);
+        map.put("pagingVO", pagingVO);
 
-        return "admin/showMaterialApplication";
+        return map;
 
     }
 
     //添加物资申购
     @RequestMapping(value = "/addMaterialApplication", method = {RequestMethod.GET})
-    public String addMaterialApplicationUI(Model model) throws Exception {
+    @ResponseBody
+    public Map<String, Object> addMaterialApplicationUI(Model model) throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
+        map.put("success", "false");
+        map.put("msg", "路径错误");
 
-        return "admin/addMaterialApplication";
+        return map;
     }
 
     // 添加物资申购
     @RequestMapping(value = "/addMaterialApplication", method = {RequestMethod.POST})
-    public String addMaterialApplicationCustom(MaterialApplicationCustom materialApplicationCustom, Model model) throws Exception {
-
+    @ResponseBody
+    public Map<String, Object> addMaterialApplicationCustom(MaterialApplicationCustom materialApplicationCustom, Model model) throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
         ViewEmployeeMiPsd viewEmployeeMiPsd = null;
@@ -479,13 +567,16 @@ public class MobileAdminController {
         Boolean result = materialApplicationService.save(materialApplicationCustom);
 
         if (!result) {
-            model.addAttribute("message", "抱歉，物资申购信息保存失败");
-            return "error";
+            map.put("success", "false");
+            map.put("msg", "抱歉，故障信息保存失败");
+            return map;
         }
 
 
         //重定向
-        return "redirect:/admin/showMaterialApplication";
+        map.put("success", "true");
+        map.put("msg", "保存成功");
+        return map;
     }
 
     // 修改物资申购页面显示
@@ -540,20 +631,25 @@ public class MobileAdminController {
 
     // 开始处理物资申购
     @RequestMapping(value = "/dealMaterialApplication")
-    public String dealMaterialApplication(HttpServletRequest request) throws Exception {
+    @ResponseBody
+    public Map<String, Object> dealMaterialApplication(HttpServletRequest request) throws Exception {
 
         Integer id = Integer.parseInt(request.getParameter("id"));
         String feedback = request.getParameter("feedback");
-
+        Map<String, Object> map =new HashMap<String, Object>();
 
         if (id == null) {
-            return "redirect:/admin/showMaterialApplication";
+            map.put("success", "false");
+            map.put("msg", "未找到该申购相关信息");
+            return map;
         }
 
         //获取当前物资申购问题
         MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
         if (materialApplicationCustom == null) {
-            throw new CustomException("抱歉，未找到该物资申购相关信息");
+            map.put("success", "false");
+            map.put("msg", "未找到该申购相关信息");
+            return map;
         }
 
         //获取当前操作用户对象
@@ -579,30 +675,48 @@ public class MobileAdminController {
         if(materialApplicationCustom.getFlag() == 0){
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(1);
-            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+            map.put("success", "true");
+            map.put("msg", "操作成功，处理中");
+            return map;
+        }else if(materialApplicationCustom.getFlag() == 1){
+            map.put("success", "false");
+            map.put("msg", "请勿重复处理");
+            return map;
+        }else if(materialApplicationCustom.getFlag() == 2){
+            map.put("success", "false");
+            map.put("msg", "已解决，操作失败");
+            return map;
         }
 
-        return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+        map.put("success", "false");
+        map.put("msg", "操作异常");
+        return map;
     }
 
     // 物资申购处理完成
     @RequestMapping(value = "/completeMaterialApplication")
-    public String completeMaterialApplication(HttpServletRequest request) throws Exception {
+    @ResponseBody
+    public Map<String, Object> completeMaterialApplication(HttpServletRequest request) throws Exception {
 
         Integer id = Integer.parseInt(request.getParameter("id"));
         String feedback = request.getParameter("feedback");
-
+        Map<String, Object> map =new HashMap<String, Object>();
 
         if (id == null) {
-            return "redirect:/admin/showMaterialApplication";
+            map.put("success", "false");
+            map.put("msg", "未找到该申购相关信息");
+            return map;
         }
 
         //获取当前物资申购信息
         MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
         if (materialApplicationCustom == null) {
-            throw new CustomException("抱歉，未找到该物资申购相关信息");
+            map.put("success", "false");
+            map.put("msg", "未找到该申购相关信息");
+            return map;
         }
 
         //获取当前操作用户对象
@@ -628,29 +742,55 @@ public class MobileAdminController {
         if(materialApplicationCustom.getFlag() == 1){
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(2);
-            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+            map.put("success", "true");
+            map.put("msg", "操作成功，申购处理完成");
+            return map;
+        }else if(materialApplicationCustom.getFlag() == 2){
+            map.put("success", "false");
+            map.put("msg", "请勿重复处理");
+            return map;
+        }else if(materialApplicationCustom.getFlag() == 0){
+            //更新该故障问题数据
+            materialApplicationCustom.setFlag(2);
+            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
+            materialApplicationCustom.setReback(feedback);
+            materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+            map.put("success", "true");
+            map.put("msg", "操作成功，申购处理完成");
+            return map;
         }
 
-        return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+        map.put("success", "false");
+        map.put("msg", "操作异常");
+        return map;
     }
 
     // 查看物资申购详情
     @RequestMapping(value = "/checkMaterialApplication", method = {RequestMethod.GET})
-    public String checkMaterialApplication(Integer id, Model model) throws Exception {
+    @ResponseBody
+    public Map<String, Object> checkMaterialApplication(Integer id, Model model) throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
         if (id == null) {
-            return "redirect:/admin/showMaterialApplication";
+            map.put("success", "false");
+            map.put("msg", "数据异常");
+            return map;
         }
         MaterialApplication materialApplication = materialApplicationService.findById(id);
         if (materialApplication == null) {
-            throw new CustomException("抱歉，未找到该物资申购相关信息");
+            map.put("success", "false");
+            map.put("msg", "不存在的数据");
+            return map;
         }
 
-        model.addAttribute("materialApplication", materialApplication);
+        map.put("success", "true");
+        map.put("msg", "success");
+        map.put("materialApplication", materialApplication);
 
 
-        return "admin/checkMaterialApplication";
+        return map;
     }
 
     // 查看物资申购详情
@@ -665,9 +805,10 @@ public class MobileAdminController {
 
     //搜索物资申购
     @RequestMapping(value = "/searchMaterialApplication")
-    private String searchMaterialApplication(String findByDept,String findByName,String findByFlag, Model model) throws Exception {
+    @ResponseBody
+    public Map<String, Object> searchMaterialApplication(String findByDept,String findByName,String findByFlag, Model model) throws Exception {
 
-
+        Map<String, Object> map =new HashMap<String, Object>();
         List<MaterialApplicationCustom> listByDept = new ArrayList<MaterialApplicationCustom>();
         List<MaterialApplicationCustom> listByName = new ArrayList<MaterialApplicationCustom>();
         List<MaterialApplicationCustom> listByFlag = new ArrayList<MaterialApplicationCustom>();
@@ -698,8 +839,14 @@ public class MobileAdminController {
         listResult.removeAll(listByName);
         listResult.addAll(listByName);
 
-        model.addAttribute("materialApplicationList", listResult);
-        return "admin/showMaterialApplication";
+        if(listResult.size() <= 50){
+            map.put("success", "true");
+            map.put("materialApplicationList", listResult);
+        }else{
+            map.put("success", "false");
+            map.put("msg", "结果过多，请精确查找");
+        }
+        return map;
     }
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<机房巡检>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/

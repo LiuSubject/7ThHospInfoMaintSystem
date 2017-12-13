@@ -42,4 +42,10 @@ public interface ComputerProblemsService {
 
     //根据状态模糊查询
     List<ComputerProblemsCustom> findByFlag(Integer flag) throws Exception;
+
+    //根据申请人工号查询
+    List<ComputerProblemsCustom> findByUserID(String code) throws Exception;
+
+    //根据负责人工号查询
+    List<ComputerProblemsCustom> findByLeader(String code) throws Exception;
 }

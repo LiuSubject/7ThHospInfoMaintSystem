@@ -38,6 +38,7 @@
                 # PC端登录
                 /login = anon
                 /logout = logout
+
                 # Mobile端登录
                 /mobilelogin = anon
 
