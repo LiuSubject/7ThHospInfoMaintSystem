@@ -2,10 +2,8 @@ package com.system.controller;
 
 import com.system.exception.CustomException;
 import com.system.po.*;
-import com.system.service.ComputerProblemsService;
-import com.system.service.EngineRoomInspectionService;
-import com.system.service.MaterialApplicationService;
-import com.system.service.UserloginService;
+import com.system.service.*;
+import com.system.util.CustomerContextHolder;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -55,7 +53,9 @@ public class NormalController {
     @Resource(name = "engineRoomInspectionServiceImpl")
     private EngineRoomInspectionService engineRoomInspectionService;
 
-
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "viewEmployeeMiPsdServiceImpl")
+    private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
@@ -96,7 +96,24 @@ public class NormalController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
 
 
 
@@ -127,13 +144,13 @@ public class NormalController {
         computerProblemsCustom.setFlag(0);
 
         //设置问题所属部门
-        computerProblemsCustom.setDept(userlogin.getDepart());
+        computerProblemsCustom.setDept(viewEmployeeMiPsd.getDeptName());
 
         //设置问题所属部门编码
-        computerProblemsCustom.setDepartcode(userlogin.getDepartcode());
+        computerProblemsCustom.setDepartcode(viewEmployeeMiPsd.getDeptCode());
 
         //设置问题所属人员ID
-        computerProblemsCustom.setUserid(userlogin.getUsername());
+        computerProblemsCustom.setUserid(viewEmployeeMiPsd.getCode());
 
         Boolean result = computerProblemsService.save(computerProblemsCustom);
 
@@ -170,9 +187,26 @@ public class NormalController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
 
-        computerProblemsCustom.setLeader(userlogin.getName());
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+
+        computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
 
         computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
 
@@ -200,11 +234,28 @@ public class NormalController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
         if(computerProblemsCustom.getFlag() == 0){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(1);
-            computerProblemsCustom.setLeader(userlogin.getName());
+            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
         }
@@ -232,11 +283,28 @@ public class NormalController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
         if(computerProblemsCustom.getFlag() == 0){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(2);
-            computerProblemsCustom.setLeader(userlogin.getName());
+            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
         }
@@ -347,7 +415,24 @@ public class NormalController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
 
 
 
@@ -366,13 +451,13 @@ public class NormalController {
         materialApplicationCustom.setFlag(0);
 
         //设置问题所属部门
-        materialApplicationCustom.setDept(userlogin.getDepart());
+        materialApplicationCustom.setDept(viewEmployeeMiPsd.getDeptName());
 
         //设置问题所属部门编码
-        materialApplicationCustom.setDepartcode(userlogin.getDepartcode());
+        materialApplicationCustom.setDepartcode(viewEmployeeMiPsd.getDeptCode());
 
         //设置问题所属人员ID
-        materialApplicationCustom.setUserid(userlogin.getUsername());
+        materialApplicationCustom.setUserid(viewEmployeeMiPsd.getCode());
 
         Boolean result = materialApplicationService.save(materialApplicationCustom);
 
@@ -409,9 +494,26 @@ public class NormalController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
 
-        materialApplicationCustom.setLeader(userlogin.getName());
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+
+        materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
 
         materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
 
@@ -439,11 +541,28 @@ public class NormalController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
         if(materialApplicationCustom.getFlag() == 0){
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(1);
-            materialApplicationCustom.setLeader(userlogin.getName());
+            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
         }
@@ -471,11 +590,28 @@ public class NormalController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
         if(materialApplicationCustom.getFlag() == 1){
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(2);
-            materialApplicationCustom.setLeader(userlogin.getName());
+            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
         }
@@ -586,7 +722,24 @@ public class NormalController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
 
 
 
@@ -602,7 +755,7 @@ public class NormalController {
         }
 
         //设置问题所属人员ID
-        engineRoomInspectionCustom.setUserid(userlogin.getUsername());
+        engineRoomInspectionCustom.setUserid(viewEmployeeMiPsd.getCode());
 
         Boolean result = engineRoomInspectionService.save(engineRoomInspectionCustom);
 

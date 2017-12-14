@@ -36,9 +36,6 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @SuppressWarnings("SpringJavaAutowiringInspection")//忽略警告，下同
-    @Resource(name = "userloginServiceImpl")
-    private UserloginService userloginService;
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "computerProblemsServiceImpl")
@@ -207,7 +204,7 @@ public class AdminController {
             e.printStackTrace();
         }
 
-        computerProblemsCustom.setLeader(viewEmployeeMiPsd.getName());
+        computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
 
         computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
 
@@ -305,7 +302,7 @@ public class AdminController {
         if(computerProblemsCustom.getFlag() == 0){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(2);
-            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getName());
+            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
         }
@@ -514,7 +511,7 @@ public class AdminController {
             e.printStackTrace();
         }
 
-        materialApplicationCustom.setLeader(viewEmployeeMiPsd.getName());
+        materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
 
         materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
 
@@ -563,7 +560,7 @@ public class AdminController {
         if(materialApplicationCustom.getFlag() == 0){
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(1);
-            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
         }
@@ -612,7 +609,7 @@ public class AdminController {
         if(materialApplicationCustom.getFlag() == 1){
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(2);
-            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
         }

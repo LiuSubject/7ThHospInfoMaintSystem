@@ -165,7 +165,7 @@ public class MobileAdminController {
 
         //重定向
         map.put("success", "true");
-        map.put("msg", "保存成功");
+        map.put("msg", "提交成功");
         return map;
     }
 
@@ -575,7 +575,7 @@ public class MobileAdminController {
 
         //重定向
         map.put("success", "true");
-        map.put("msg", "保存成功");
+        map.put("msg", "提交成功");
         return map;
     }
 
@@ -941,7 +941,7 @@ public class MobileAdminController {
 
         //重定向
         map.put("success", "true");
-        map.put("msg", "保存成功");
+        map.put("msg", "提交成功");
         return map;
     }
 
