@@ -2,6 +2,7 @@ package com.system.controller.mobile;
 
 import com.system.exception.CustomException;
 import com.system.po.*;
+import com.system.push.CreatePushMessage;
 import com.system.service.*;
 import com.system.util.CustomerContextHolder;
 import org.apache.commons.lang.RandomStringUtils;
@@ -164,6 +165,8 @@ public class MobileAdminController {
 
 
         //重定向
+        new CreatePushMessage().GetPushMessage(viewEmployeeMiPsd.getCode(),"0","0",
+                "0","","","");
         map.put("success", "true");
         map.put("msg", "提交成功");
         return map;

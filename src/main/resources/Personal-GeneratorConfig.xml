@@ -7,7 +7,7 @@
 
 
     <!-- 配置mysql 驱动jar包路径.用了绝对路径 -->
-    <classPathEntry location="E:\code\java\lib\myadd\mssql-jdbc-6.2.2.jre8.jar" />
+    <classPathEntry location="E:\code\java\lib\myadd\mysql-connector-java-5.0.8-bin.jar" />
 
     <context id="ShaoXing7thHosp" targetRuntime="MyBatis3">
 
@@ -19,10 +19,10 @@
         <!-- 注释控制完毕 -->
 
         <!-- 数据库连接 -->
-        <jdbcConnection driverClass="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-                        connectionURL="jdbc:sqlserver://192.168.0.7:1433;database=chisdb;"
-                        userId="xxk"
-                        password="xxk123">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/examination_system"
+                        userId="root"
+                        password="admin">
         </jdbcConnection>
 
         <!-- 非必需，类型处理器，在数据库类型和java类型之间的转换控制-->
@@ -58,7 +58,7 @@
             去除自动生成的例子
         -->
 
-        <table schema="" tableName="view_employee_mi_psd">
+        <table schema="" tableName="push_message">
         </table>
 
 

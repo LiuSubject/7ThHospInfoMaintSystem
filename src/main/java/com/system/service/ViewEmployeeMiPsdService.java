@@ -5,7 +5,7 @@ import com.system.po.ViewEmployeeMiPsd;
 /**
  * 项目名称：7ThHospInfoMaintSystem
  * 类名称：ViewEmployeeMiPsdService
- * 类描述：ViewEmployeeMiPsd登录表Service层
+ * 类描述：ViewEmployeeMiPsd登录表Service接口层
  * 创建人：lxk
  * 创建时间：2017-12-05 16:00
  * 修改人：

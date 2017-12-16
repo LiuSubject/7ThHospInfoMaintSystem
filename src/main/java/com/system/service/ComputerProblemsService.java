@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 项目名称：7ThHospInfoMaintSystem
  * 类名称：ComputerProblemsService
- * 类描述：ComputerProblems电脑故障表Service层
+ * 类描述：ComputerProblems电脑故障表Service接口层
  * 创建人：lxk
  * 创建时间：2017-12-3 14:52:22
  * 修改人：
