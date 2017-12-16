@@ -1,5 +1,13 @@
 package com.system.push;
 
+import com.system.po.PushMessage;
+import com.system.service.PushMessageService;
+import com.system.service.ViewEmployeeMiPsdService;
+
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * 项目名称：7ThHospInfoMaintSystem
  * 类名称：CreatePushMessage
@@ -11,9 +19,38 @@ package com.system.push;
  * 修改备注：
  **/
 public class CreatePushMessage {
-    //推送状态为0（未发送）
-    public static String PUSHSTATUS = "0";
-    public static boolean GetPushMessage(String founder, String pushWay, String msgType, String msgTarget, String msgContent1, String msgContent2, String msgContent3){
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "pushMessageServiceImpl")
+    private PushMessageService pushMessageService;
+
+    //创建个推消息1
+    public boolean GetPushMessage(String founder, String pushWay, String msgType, String msgTarget, String msgContent1){
+        //推送状态为0（未发送）
+        String PUSHSTATUS = "0";
+        PushMessage pushMessage = new PushMessage();
+        pushMessage.setFounder(founder);
+        pushMessage.setPushStatus(PUSHSTATUS);
+        pushMessage.setPushWay(pushWay);
+        pushMessage.setMsgType(msgType);
+        pushMessage.setMsgTarget(msgTarget);
+        pushMessage.setMsgContent1(msgContent1);
+
+        //设置问题初始化时间
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+        pushMessage.setCreateTime(dateString);
+
+        try {
+            pushMessageService.save(pushMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    //进行个推创建的重载
+    public static boolean GetPushMessage(){
 
 
 

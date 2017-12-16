@@ -15,16 +15,16 @@ import com.system.po.PushMessage;
  **/
 public interface PushMessageService {
 
-    //根据工号查找client_id
-    PushMessage findByCode(String code) throws Exception;
+    //查找未发送个推消息
+    PushMessage findByStatus(String status) throws Exception;
 
-    //新增 工号 —— client_id 信息
+    //新增个推消息
     void save(PushMessage pushMessage) throws Exception;
 
-    //根据工号删除重复记录
-    void removeByCode(String code) throws Exception;
+    //根据主键删除指定个推消息
+    void removeById(int id) throws Exception;
 
-    //根据工号更新 工号 —— client_id 信息
-    void updateByCode(String code, PushMessage pushMessage);
+    //根据主键更新指定个推消息
+    void updateById(int id, PushMessage pushMessage);
 
 }

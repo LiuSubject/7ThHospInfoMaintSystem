@@ -1,9 +1,9 @@
 package com.system.service.impl;
 
-import com.system.mapper.PushIdMapper;
-import com.system.po.PushId;
-import com.system.po.PushIdExample;
-import com.system.service.PushIdService;
+import com.system.mapper.PushMessageMapper;
+import com.system.po.PushMessage;
+import com.system.po.PushMessageExample;
+import com.system.service.PushMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,30 +11,30 @@ import java.util.List;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
- * 类名称：PushIdServiceImpl
- * 类描述：PushId登录表Service层具体实现
+ * 类名称：PushMessageServiceImpl
+ * 类描述：PushMessage个推消息表Service层具体实现
  * 创建人：lxk
- * 创建时间：2017-12-3 14:52:22
+ * 创建时间：2017-12-16 14:35:09
  * 修改人：
  * 修改时间：
  * 修改备注：
  **/
 
 @Service
-public class PushMessageServiceImpl implements PushIdService {
+public class PushMessageServiceImpl implements PushMessageService {
 
 
     @Autowired
-    private PushIdMapper pushIdMapper;
+    private PushMessageMapper pushMessageMapper;
 
 
-    public PushId findByCode(String code) throws Exception {
-        PushIdExample pushIdExample = new PushIdExample();
+    public PushMessage findByStatus(String status) throws Exception {
+        PushMessageExample pushMessageExample = new PushMessageExample();
 
-        PushIdExample.Criteria criteria = pushIdExample.createCriteria();
-        criteria.andCodeEqualTo(code);
+        PushMessageExample.Criteria criteria = pushMessageExample.createCriteria();
+        criteria.andPushStatusEqualTo(status);
 
-        List<PushId> list = pushIdMapper.selectByExample(pushIdExample);
+        List<PushMessage> list = pushMessageMapper.selectByExample(pushMessageExample);
         if(list.size() > 0){
             return list.get(0);
         }else
@@ -43,26 +43,26 @@ public class PushMessageServiceImpl implements PushIdService {
         }
     }
 
-    public void save(PushId pushId) throws Exception {
-        pushIdMapper.insert(pushId);
+    public void save(PushMessage pushMessage) throws Exception {
+        pushMessageMapper.insert(pushMessage);
     }
 
-    public void removeByCode(String code) throws Exception {
-        PushIdExample pushIdExample = new PushIdExample();
+    public void removeById(int id) throws Exception {
+        PushMessageExample pushMessageExample = new PushMessageExample();
 
-        PushIdExample.Criteria criteria = pushIdExample.createCriteria();
-        criteria.andCodeEqualTo(code);
+        PushMessageExample.Criteria criteria = pushMessageExample.createCriteria();
+        criteria.andIdEqualTo(id);
 
-        pushIdMapper.deleteByExample(pushIdExample);
+        pushMessageMapper.deleteByExample(pushMessageExample);
     }
 
-    public void updateByCode(String code, PushId pushId) {
-        PushIdExample pushIdExample = new PushIdExample();
+    public void updateById(int id, PushMessage pushMessage) {
+        PushMessageExample pushMessageExample = new PushMessageExample();
 
-        PushIdExample.Criteria criteria = pushIdExample.createCriteria();
-        criteria.andCodeEqualTo(code);
+        PushMessageExample.Criteria criteria = pushMessageExample.createCriteria();
+        criteria.andIdEqualTo(id);
 
-        pushIdMapper.updateByExample(pushId, pushIdExample);
+        pushMessageMapper.updateByExample(pushMessage, pushMessageExample);
     }
 
 }
