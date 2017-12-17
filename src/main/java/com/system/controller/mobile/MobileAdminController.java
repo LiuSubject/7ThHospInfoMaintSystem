@@ -2,7 +2,7 @@ package com.system.controller.mobile;
 
 import com.system.exception.CustomException;
 import com.system.po.*;
-import com.system.push.CreatePushMessage;
+import com.system.controller.push.CreatePushMessage;
 import com.system.service.*;
 import com.system.util.CustomerContextHolder;
 import org.apache.commons.lang.RandomStringUtils;
@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;

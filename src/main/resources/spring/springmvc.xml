@@ -45,7 +45,7 @@
     并注册添加到 spring 容器中
     这里扫描 controller，指定controller的包
     -->
-    <context:component-scan base-package="com.system.controller,com.system.push"/>
+    <context:component-scan base-package="com.system.controller"/>
 
     <!--全局错误信息处理器
     只要实现HandlerExceptionResolver接口就是全局异常处理器

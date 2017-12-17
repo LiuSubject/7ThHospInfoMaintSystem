@@ -1,8 +1,9 @@
-package com.system.push;
+package com.system.controller.push;
 
 import com.system.po.PushMessage;
 import com.system.service.PushMessageService;
-import com.system.service.ViewEmployeeMiPsdService;
+import com.system.service.impl.PushMessageServiceImpl;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,7 @@ import java.util.Date;
  * 修改时间：
  * 修改备注：
  **/
+@Component
 public class CreatePushMessage {
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
@@ -45,7 +47,12 @@ public class CreatePushMessage {
         try {
             pushMessageService.save(pushMessage);
         } catch (Exception e) {
-            e.printStackTrace();
+            PushMessageServiceImpl pushMessageServiceImpl = new PushMessageServiceImpl();
+            try {
+                pushMessageServiceImpl.save(pushMessage);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
         return false;
     }

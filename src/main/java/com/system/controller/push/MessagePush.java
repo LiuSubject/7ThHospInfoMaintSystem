@@ -1,4 +1,4 @@
-package com.system.push;
+package com.system.controller.push;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem

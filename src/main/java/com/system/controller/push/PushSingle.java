@@ -1,4 +1,4 @@
-package com.system.push;
+package com.system.controller.push;
 
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.SingleMessage;
