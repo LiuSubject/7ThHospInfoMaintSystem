@@ -1,6 +1,5 @@
 package com.system.service;
 
-import com.system.po.PushId;
 import com.system.po.PushMessage;
 
 /**

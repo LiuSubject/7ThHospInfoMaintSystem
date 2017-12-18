@@ -2,6 +2,7 @@ package com.system.controller;
 
 import com.system.exception.CustomException;
 import com.system.po.*;
+import com.system.push.CreatePushMessage;
 import com.system.service.*;
 import com.system.util.CustomerContextHolder;
 import org.apache.commons.lang.RandomStringUtils;
@@ -52,6 +53,7 @@ public class AdminController {
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "viewEmployeeMiPsdServiceImpl")
     private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
+
 
 
 
@@ -157,6 +159,9 @@ public class AdminController {
             return "error";
         }
 
+        //重定向
+        new CreatePushMessage().GetPushMessage(viewEmployeeMiPsd.getCode(),"0","0",
+                "0","11");
 
         //重定向
         return "redirect:/admin/showComputerProblems";

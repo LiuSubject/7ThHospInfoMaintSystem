@@ -1,9 +1,12 @@
-package com.system.controller.push;
+package com.system.push;
 
 import com.system.po.PushMessage;
 import com.system.service.PushMessageService;
 import com.system.service.impl.PushMessageServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -19,12 +22,12 @@ import java.util.Date;
  * 修改时间：
  * 修改备注：
  **/
-@Component
+@Controller
 public class CreatePushMessage {
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "pushMessageServiceImpl")
-    private PushMessageService pushMessageService;
+    public PushMessageService pushMessageService;
 
     //创建个推消息1
     public boolean GetPushMessage(String founder, String pushWay, String msgType, String msgTarget, String msgContent1){

@@ -2,7 +2,7 @@ package com.system.controller.mobile;
 
 import com.system.exception.CustomException;
 import com.system.po.*;
-import com.system.controller.push.CreatePushMessage;
+import com.system.push.CreatePushMessage;
 import com.system.service.*;
 import com.system.util.CustomerContextHolder;
 import org.apache.commons.lang.RandomStringUtils;
@@ -49,6 +49,11 @@ public class MobileAdminController {
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "viewEmployeeMiPsdServiceImpl")
     private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "pushMessageServiceImpl")
+    private PushMessageService pushMessageService;
+
 
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
