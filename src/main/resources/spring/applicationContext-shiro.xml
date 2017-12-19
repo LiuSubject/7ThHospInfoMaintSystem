@@ -67,7 +67,7 @@
     </bean>
     <!-- 生命周期 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
-
+    <bean id="createPushMessage" class="com.system.push.CreatePushMessage"/>
 
     <!-- 启用shiro注解 -->
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>

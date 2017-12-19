@@ -1,13 +1,17 @@
 package com.system.push;
 
+import com.mchange.v2.c3p0.util.TestUtils;
 import com.system.po.PushMessage;
+import com.system.service.ComputerProblemsService;
 import com.system.service.PushMessageService;
 import com.system.service.impl.PushMessageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,12 +26,19 @@ import java.util.Date;
  * 修改时间：
  * 修改备注：
  **/
-@Controller
+@Component
 public class CreatePushMessage {
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "pushMessageServiceImpl")
-    public PushMessageService pushMessageService;
+    private PushMessageService pushMessageService;
+
+    private static CreatePushMessage createPushMessage2;
+
+    @PostConstruct
+    public void init() {
+        createPushMessage2 = this;
+    }
 
     //创建个推消息1
     public boolean GetPushMessage(String founder, String pushWay, String msgType, String msgTarget, String msgContent1){
@@ -49,22 +60,13 @@ public class CreatePushMessage {
 
         try {
             pushMessageService.save(pushMessage);
+            createPushMessage2.pushMessageService.save(pushMessage);
+
         } catch (Exception e) {
-            PushMessageServiceImpl pushMessageServiceImpl = new PushMessageServiceImpl();
-            try {
-                pushMessageServiceImpl.save(pushMessage);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+            e.printStackTrace();
+            return false;
         }
-        return false;
-    }
-    //进行个推创建的重载
-    public static boolean GetPushMessage(){
-
-
-
-        return false;
+        return true;
     }
 
 }
