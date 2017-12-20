@@ -169,7 +169,7 @@ public class MobileAdminController {
 
 
         //重定向
-        new CreatePushMessage().GetPushMessage(viewEmployeeMiPsd.getCode(),"0","0",
+        new CreatePushMessage().PushPushMessage(viewEmployeeMiPsd.getCode(),"0","0",
                 "0","11");
         map.put("success", "true");
         map.put("msg", "提交成功");

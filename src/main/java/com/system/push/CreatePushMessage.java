@@ -2,14 +2,8 @@ package com.system.push;
 
 import com.mchange.v2.c3p0.util.TestUtils;
 import com.system.po.PushMessage;
-import com.system.service.ComputerProblemsService;
 import com.system.service.PushMessageService;
-import com.system.service.impl.PushMessageServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -33,15 +27,15 @@ public class CreatePushMessage {
     @Resource(name = "pushMessageServiceImpl")
     private PushMessageService pushMessageService;
 
-    private static CreatePushMessage createPushMessage2;
+    public static CreatePushMessage createPushMessage;
 
     @PostConstruct
     public void init() {
-        createPushMessage2 = this;
+        createPushMessage = this;
     }
 
     //创建个推消息1
-    public boolean GetPushMessage(String founder, String pushWay, String msgType, String msgTarget, String msgContent1){
+    public boolean PushPushMessage(String founder, String pushWay, String msgType, String msgTarget, String msgContent1){
         //推送状态为0（未发送）
         String PUSHSTATUS = "0";
         PushMessage pushMessage = new PushMessage();
@@ -60,7 +54,7 @@ public class CreatePushMessage {
 
         try {
             pushMessageService.save(pushMessage);
-            createPushMessage2.pushMessageService.save(pushMessage);
+            createPushMessage.pushMessageService.save(pushMessage);
 
         } catch (Exception e) {
             e.printStackTrace();

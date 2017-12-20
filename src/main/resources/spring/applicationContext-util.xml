@@ -17,7 +17,7 @@
     <context:component-scan base-package="com.system.push" />
 
     <!--创建个推消息-->
-
+    <bean id="createPushMessage" class="com.system.push.CreatePushMessage" scope="singleton"></bean>
 
 
 </beans>

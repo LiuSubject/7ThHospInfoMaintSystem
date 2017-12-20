@@ -16,6 +16,7 @@
     <!--组件扫描器-->
     <context:component-scan base-package="com.system.realm" />
 
+
     <!-- shiro过滤器bean，id要和web.xml中filter-name一致 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" />
@@ -67,7 +68,6 @@
     </bean>
     <!-- 生命周期 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
-    <bean id="createPushMessage" class="com.system.push.CreatePushMessage"/>
 
     <!-- 启用shiro注解 -->
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
