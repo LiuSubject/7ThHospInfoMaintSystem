@@ -13,11 +13,20 @@
 	http://www.springframework.org/schema/tx
 	http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!--工具类注册以获取ApplicationContext-->
-    <context:component-scan base-package="com.system.push" />
+<!--工具类-->
+    <context:component-scan base-package="com.system.util.*" />
 
-    <!--创建个推消息-->
-    <bean id="createPushMessage" class="com.system.push.CreatePushMessage" scope="singleton"></bean>
+    <!--PushUtil-->
+        <!--创建个推消息工具类（保存记录相关数据以便产生推送)-->
+        <bean id="createPushMessage" class="com.system.util.push.CreatePushUtil" scope="singleton"/>
 
+        <!--消息推送工具类(发布推送消息)-->
+        <bean id="messagePushUtil" class="com.system.util.push.MessagePushUtil" scope="singleton"/>
+
+        <!--消息拼接生成工具类(生成推送消息)-->
+        <bean id="pushSingleUtil" class="com.system.util.push.PushSingleUtil" scope="singleton"/>
+
+        <!--消息拼接生成工具类(生成推送消息)-->
+        <bean id="messageStitchUtil" class="com.system.util.push.MessageStitchUtil" scope="singleton"/>
 
 </beans>

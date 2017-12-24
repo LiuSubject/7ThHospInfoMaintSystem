@@ -1,4 +1,4 @@
-package com.system.push;
+package com.system.util.push;
 
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.SingleMessage;
@@ -6,13 +6,14 @@ import com.gexin.rp.sdk.base.payload.APNPayload;
 import com.gexin.rp.sdk.http.IGtPush;
 import com.gexin.rp.sdk.template.TransmissionTemplate;
 import com.gexin.rp.sdk.base.impl.Target;
+import com.system.po.PushMessage;
 
 import java.io.IOException;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
- * 类名称：PushSingle
- * 类描述：对单个用户推送消息。
+ * 类名称：PushSingleUtil
+ * 类描述：推送消息工具类（单个用户）
  *        如果仅对单个用户推送务必使用单推接口，否则会严重影响推送性能，
  *        如果对少量甚至几个用户推送同样的消息，同样建议使用单推实现，性能会更高。
  * 创建人：lxk
@@ -21,7 +22,7 @@ import java.io.IOException;
  * 修改时间：
  * 修改备注：
  **/
-public class PushSingle {
+public class PushSingleUtil {
     //定义常量, appId、appKey、masterSecret(个推-开发者中心中获得的应用配置)
     private static String appId = "lraFkpXwtL86ABCwBevQh2";
     private static String appKey = "AeSJwsMUfi9bE95wZlrVm2";
@@ -30,7 +31,7 @@ public class PushSingle {
     public static String cid = "";
 
     //向个推服务器发送请求
-    public static void push(String cid) throws IOException {
+    public static void push(String cid, PushMessage pushMessage) throws IOException {
         IGtPush push = new IGtPush(appKey, masterSecret);
         push.connect();
 

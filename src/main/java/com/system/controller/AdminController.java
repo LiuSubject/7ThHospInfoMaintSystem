@@ -2,9 +2,10 @@ package com.system.controller;
 
 import com.system.exception.CustomException;
 import com.system.po.*;
-import com.system.push.CreatePushMessage;
+import com.system.util.push.CreatePushUtil;
 import com.system.service.*;
 import com.system.util.CustomerContextHolder;
+import com.system.util.push.MessagePushUtil;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -59,7 +60,10 @@ public class AdminController {
     private PushMessageService pushMessageService;
 
     @Autowired
-    private CreatePushMessage createPushMessage;
+    private CreatePushUtil createPushUtil;
+
+    @Autowired
+    private MessagePushUtil messagePushUtil;
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
@@ -163,9 +167,12 @@ public class AdminController {
             return "error";
         }
 
-        //重定向
-        createPushMessage.PushPushMessage(viewEmployeeMiPsd.getCode(),"0","0",
+        //保存该记录相关数据以便产生推送
+        createPushUtil.PushPushMessage(viewEmployeeMiPsd.getCode(),"0","0",
                 "0","11");
+        //发布推送消息
+
+
 
         //重定向
         return "redirect:/admin/showComputerProblems";

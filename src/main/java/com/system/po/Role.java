@@ -1,18 +1,28 @@
 package com.system.po;
 
 public class Role {
-    private Integer roleid;
+    private Integer id;
+
+    private String roleid;
 
     private String rolename;
 
     private String permissions;
 
-    public Integer getRoleid() {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getRoleid() {
         return roleid;
     }
 
-    public void setRoleid(Integer roleid) {
-        this.roleid = roleid;
+    public void setRoleid(String roleid) {
+        this.roleid = roleid == null ? null : roleid.trim();
     }
 
     public String getRolename() {

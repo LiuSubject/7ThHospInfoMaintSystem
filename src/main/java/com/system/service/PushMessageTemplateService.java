@@ -1,6 +1,7 @@
 package com.system.service;
 
 import com.system.po.PushMessage;
+import com.system.po.PushMessageTemplate;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
@@ -14,5 +15,7 @@ import com.system.po.PushMessage;
  **/
 public interface PushMessageTemplateService {
 
+    //查找指定个推消息模板
+    PushMessageTemplate findById(int Id) throws Exception;
 
 }

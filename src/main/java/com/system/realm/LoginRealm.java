@@ -57,14 +57,14 @@ public class LoginRealm extends AuthorizingRealm{
             //切换数据源至MySQL
             CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
             //获取角色对象
-            role = roleService.findByid(Integer.parseInt(viewEmployeeMiPsd.getCode()));
+            role = roleService.findByRoleId(viewEmployeeMiPsd.getCode()).get(0);
         } catch (Exception e) {
             //切换数据源至MySQL(启用备用库)
             try{
                 CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
                 viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode(code);
                 //获取角色对象
-                role = roleService.findByid(Integer.parseInt(viewEmployeeMiPsd.getCode()));
+                role = roleService.findByRoleId(viewEmployeeMiPsd.getCode()).get(0);
 
             }catch (Exception eSwitch){
                 eSwitch.printStackTrace();

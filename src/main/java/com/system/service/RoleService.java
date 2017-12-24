@@ -2,6 +2,8 @@ package com.system.service;
 
 import com.system.po.Role;
 
+import java.util.List;
+
 /**
  * 项目名称：7ThHospInfoMaintSystem
  * 类名称：RoleService
@@ -15,6 +17,7 @@ import com.system.po.Role;
 
 public interface RoleService {
 
-    Role findByid(Integer id) throws Exception;
+    List<Role> findByRoleId(String roleId) throws Exception;
 
+    List<Role> findByRoleName(String roleName) throws Exception;
 }

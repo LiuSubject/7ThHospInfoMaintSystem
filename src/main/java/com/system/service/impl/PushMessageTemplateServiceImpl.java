@@ -1,8 +1,9 @@
 package com.system.service.impl;
 
 import com.system.mapper.PushIdMapper;
-import com.system.po.PushId;
-import com.system.po.PushIdExample;
+import com.system.mapper.PushMessageMapper;
+import com.system.mapper.PushMessageTemplateMapper;
+import com.system.po.*;
 import com.system.service.PushIdService;
 import com.system.service.PushMessageTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,23 @@ import java.util.List;
 
 @Service
 public class PushMessageTemplateServiceImpl implements PushMessageTemplateService {
+    @Autowired
+    private PushMessageTemplateMapper pushMessageTemplateMapper;
 
+
+    public PushMessageTemplate findById(int Id) throws Exception {
+        PushMessageTemplateExample pushMessageTemplateExample = new PushMessageTemplateExample();
+
+        PushMessageTemplateExample.Criteria criteria = pushMessageTemplateExample.createCriteria();
+        criteria.andIdEqualTo(Id);
+
+        List<PushMessageTemplate> list = pushMessageTemplateMapper.selectByExample(pushMessageTemplateExample);
+        if(list.size() > 0){
+            return list.get(0);
+        }else
+        {
+            return null;
+        }
+    }
 
 }

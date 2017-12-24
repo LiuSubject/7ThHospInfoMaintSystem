@@ -1,11 +1,9 @@
-package com.system.push;
+package com.system.util.push;
 
-import com.mchange.v2.c3p0.util.TestUtils;
 import com.system.po.PushMessage;
 import com.system.service.PushMessageService;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +11,7 @@ import java.util.Date;
 /**
  * 项目名称：7ThHospInfoMaintSystem
  * 类名称：CreatePushMessage
- * 类描述：创建个推消息
+ * 类描述：创建个推消息工具类（保存记录相关数据以便产生推送)
  * 创建人：lxk
  * 创建时间：2017-12-16 10:09
  * 修改人：
@@ -21,20 +19,13 @@ import java.util.Date;
  * 修改备注：
  **/
 @Component
-public class CreatePushMessage {
+public class CreatePushUtil {
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "pushMessageServiceImpl")
     private PushMessageService pushMessageService;
 
-    public static CreatePushMessage createPushMessage;
-
-    @PostConstruct
-    public void init() {
-        createPushMessage = this;
-    }
-
-    //创建个推消息1
+    //创建个推消息
     public boolean PushPushMessage(String founder, String pushWay, String msgType, String msgTarget, String msgContent1){
         //推送状态为0（未发送）
         String PUSHSTATUS = "0";
@@ -54,7 +45,7 @@ public class CreatePushMessage {
 
         try {
             pushMessageService.save(pushMessage);
-            createPushMessage.pushMessageService.save(pushMessage);
+
 
         } catch (Exception e) {
             e.printStackTrace();
