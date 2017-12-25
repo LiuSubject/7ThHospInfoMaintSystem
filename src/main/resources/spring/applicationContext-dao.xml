@@ -35,6 +35,8 @@
         <property name="user" value="${jdbc.sqlserver.username}" />
         <property name="password" value="${jdbc.sqlserver.password}" />
         <property name="checkoutTimeout" value="100" />
+        <property name="idleConnectionTestPeriod" value="50" />
+        <property name="maxStatements" value="0" />
     </bean>
 
     <!--将DynamicDataSource Bean加入到Spring的上下文xml配置文件中去，同时配置DynamicDataSource的targetDataSources(多数据源目标)属性的Map映射。-->

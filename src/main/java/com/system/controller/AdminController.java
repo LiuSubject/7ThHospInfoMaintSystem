@@ -168,12 +168,14 @@ public class AdminController {
         }
 
         //保存该记录相关数据以便产生推送
-        createPushUtil.PushPushMessage(viewEmployeeMiPsd.getCode(),"0","0",
-                "0","11");
-        //发布推送消息
-
-
-
+        try {
+            createPushUtil.PushPushMessage(viewEmployeeMiPsd.getCode(),"0","0",
+                    "0","11");
+            //给管理组推送消息
+            messagePushUtil.GroupPushSingle("admin");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //重定向
         return "redirect:/admin/showComputerProblems";
     }

@@ -9,6 +9,8 @@ import com.system.service.ViewEmployeeMiPsdService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,33 +40,46 @@ public class MessagePushUtil {
     private MessageStitchUtil messageStitchUtil;
 
     //以单个用户方式为指定用户组推送简单消息
-    public boolean GroupPushSingle(String userGroup){
+    public boolean GroupPushSingle(String userGroup) throws Exception{
         //拼接推送消息表内标识为未推送的第一条消息
         PushMessage pushMessage = messageStitchUtil.MessageStitch();
-        List<Role> pushGroup = null;
-        List<PushId> pushGroupId = null;
+        List<String> clientIds = new ArrayList<String>();
+        clientIds = GetPushIds(userGroup);
+        if(clientIds.size()>0){
+            for(int i = 0; i < clientIds.size(); i++){
+                String clientId = clientIds.get(i);
+                try {
+                    PushSingleUtil.push(clientId, pushMessage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
-        //获取用户组
+        }
+        return true;
+    }
+
+    //获取用户组推送标识集合
+    public List<String> GetPushIds(String userGroup) throws Exception{
+        List<Role> pushGroup = new ArrayList<Role>();
+        List<String> clientIds = new ArrayList<>();
         try {
             pushGroup = roleService.findByRoleName(userGroup);
 
             if (pushGroup.size() > 0){
                 for(int i = 0; i < pushGroup.size(); i++){
                     PushId pushId = pushIdService.findByCode(pushGroup.get(i).getRoleid());
-                    pushGroupId.add(pushId);
+                    clientIds.add(pushId.getClientId().toString());
                 }
+                return clientIds;
             }else{
-                return false;
+                return null;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
-
-
-
-        return false;
     }
 
 

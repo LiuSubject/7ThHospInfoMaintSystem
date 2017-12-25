@@ -3,9 +3,12 @@ package com.system.util.push;
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.SingleMessage;
 import com.gexin.rp.sdk.base.payload.APNPayload;
+import com.gexin.rp.sdk.exceptions.RequestException;
 import com.gexin.rp.sdk.http.IGtPush;
+import com.gexin.rp.sdk.template.NotificationTemplate;
 import com.gexin.rp.sdk.template.TransmissionTemplate;
 import com.gexin.rp.sdk.base.impl.Target;
+import com.gexin.rp.sdk.template.style.Style0;
 import com.system.po.PushMessage;
 
 import java.io.IOException;
@@ -25,10 +28,8 @@ import java.io.IOException;
 public class PushSingleUtil {
     //定义常量, appId、appKey、masterSecret(个推-开发者中心中获得的应用配置)
     private static String appId = "lraFkpXwtL86ABCwBevQh2";
-    private static String appKey = "AeSJwsMUfi9bE95wZlrVm2";
+    private static String appKey = "kFNQ7bt1Ty9CZdVlzkKPm4";
     private static String masterSecret = "EjSozOizgq9I7aKGEHfw81";
-    private static String pushText="";/*{title:'通知标题',content:'通知内容',payload:'通知去干嘛这里可以自定义'}*/
-    public static String cid = "";
 
     //向个推服务器发送请求
     public static void push(String cid, PushMessage pushMessage) throws IOException {
@@ -40,20 +41,29 @@ public class PushSingleUtil {
         // 离线有效时间，单位为毫秒，可选
         message.setOfflineExpireTime(4 * 3600 * 1000);
         //推送内容，格式为{title:'通知标题',content:'通知内容',payload:'通知去干嘛这里可以自定义'}
-        message.setData(getTemplate());
+        message.setData(getTemplate(pushMessage));
         // 可选，1为wifi，0为不限制网络环境。根据手机处于的网络情况，决定是否下发
         message.setPushNetWorkType(0);
-
-
+        //创建推送目标
         Target target = new Target();
         target.setAppId(appId);
         target.setClientId(cid);
-
-        IPushResult ret = push.pushMessageToSingle(message,target);
-        System.out.println(ret.getResponse().toString());
+        //推送并返回结果
+        IPushResult ret = null;
+        try {
+            ret = push.pushMessageToSingle(message, target);
+        } catch (RequestException e) {
+            e.printStackTrace();
+            ret = push.pushMessageToSingle(message, target, e.getRequestId());
+        }
+        if (ret != null) {
+            System.out.println(ret.getResponse().toString());
+        } else {
+            System.out.println("服务器响应异常");
+        }
     }
-    //生成推送消息
-    public static TransmissionTemplate getTemplate() {
+    //生成IOS推送消息
+/*    public static TransmissionTemplate getTemplate(PushMessage pushMessage) {
         TransmissionTemplate template = new TransmissionTemplate();
         template.setAppId(appId);
         template.setAppkey(appKey);
@@ -68,6 +78,37 @@ public class PushSingleUtil {
         //简单模式APNPayload.SimpleMsg
         payload.setAlertMsg(new APNPayload.SimpleAlertMsg(content));
         template.setAPNInfo(payload);
+        return template;
+    }*/
+    //生成Android推送消息
+    public static NotificationTemplate getTemplate(PushMessage pushMessage) {
+        NotificationTemplate template = new NotificationTemplate();
+        template.setAppId(appId);
+        template.setAppkey(appKey);
+/*        template.setTransmissionContent(pushMessage.getMsgContent1());
+        template.setTransmissionType(2);
+        // 设置定时展示时间
+        // template.setDuration("2015-01-16 11:40:00", "2015-01-16 12:24:00");
+        return template;*/
+        template.setTransmissionType(1);
+        //template.setTransmissionContent("请输入您要透传的内容");
+        // 设置定时展示时间
+        // template.setDuration("2015-01-16 11:40:00", "2015-01-16 12:24:00");
+
+        Style0 style = new Style0();
+        // 设置通知栏标题与内容
+        style.setTitle("通知");
+        style.setText(pushMessage.getMsgContent1());
+        // 配置通知栏图标
+        style.setLogo("icon.png");
+        // 配置通知栏网络图标
+        //style.setLogoUrl("");
+        // 设置通知是否响铃，震动，或者可清除
+        style.setRing(true);
+        style.setVibrate(true);
+        style.setClearable(true);
+        template.setStyle(style);
+
         return template;
     }
 }
