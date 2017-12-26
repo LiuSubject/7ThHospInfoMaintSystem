@@ -5,9 +5,11 @@ import com.system.po.*;
 import com.system.util.push.CreatePushUtil;
 import com.system.service.*;
 import com.system.util.CustomerContextHolder;
+import com.system.util.push.MessagePushUtil;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,9 +52,12 @@ public class MobileAdminController {
     @Resource(name = "viewEmployeeMiPsdServiceImpl")
     private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
 
-    @SuppressWarnings("SpringJavaAutowiringInspection")
-    @Resource(name = "pushMessageServiceImpl")
-    private PushMessageService pushMessageService;
+    @Autowired
+    private CreatePushUtil createPushUtil;
+
+    @Autowired
+    private MessagePushUtil messagePushUtil;
+
 
 
 
@@ -168,9 +173,16 @@ public class MobileAdminController {
         }
 
 
-        //重定向
-        new CreatePushUtil().PushPushMessage(viewEmployeeMiPsd.getCode(),"0","0",
-                "0","11");
+
+        //保存该记录相关数据以便产生推送
+        try {
+            createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+                    "0","11");
+            //向管理组推送消息
+            messagePushUtil.GroupPushSingle("admin");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         map.put("success", "true");
         map.put("msg", "提交成功");
         return map;
@@ -218,7 +230,7 @@ public class MobileAdminController {
             e.printStackTrace();
         }
 
-        computerProblemsCustom.setLeader(viewEmployeeMiPsd.getName());
+        computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
 
         computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
 
@@ -275,6 +287,15 @@ public class MobileAdminController {
             computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+            //保存该记录相关数据以便产生推送
+            try {
+                createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+                        "2","12");
+                //向申报人推送消息
+                messagePushUtil.SpecifiedPushSingle(computerProblemsCustom.getUserid());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             map.put("success", "true");
             map.put("msg", "操作成功，处理中");
             return map;
@@ -342,6 +363,15 @@ public class MobileAdminController {
             computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+            //保存该记录相关数据以便产生推送
+            try {
+                createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+                        "2","13");
+                //向申报人推送消息
+                messagePushUtil.SpecifiedPushSingle(computerProblemsCustom.getUserid());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             map.put("success", "true");
             map.put("msg", "操作成功，故障处理完成");
             return map;
@@ -352,7 +382,7 @@ public class MobileAdminController {
         }else if(computerProblemsCustom.getFlag() == 0){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(2);
-            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getName());
+            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
             map.put("success", "true");
@@ -579,6 +609,15 @@ public class MobileAdminController {
             return map;
         }
 
+        //保存该记录相关数据以便产生推送
+        try {
+            createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+                    "0","21");
+            //向管理组推送消息
+            messagePushUtil.GroupPushSingle("admin");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //重定向
         map.put("success", "true");
@@ -628,7 +667,8 @@ public class MobileAdminController {
             e.printStackTrace();
         }
 
-        materialApplicationCustom.setLeader(viewEmployeeMiPsd.getName());
+
+        materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
 
         materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
 
@@ -685,6 +725,15 @@ public class MobileAdminController {
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+            //保存该记录相关数据以便产生推送
+            try {
+                createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+                        "2","22");
+                //向申报人推送消息
+                messagePushUtil.SpecifiedPushSingle(materialApplicationCustom.getUserid());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             map.put("success", "true");
             map.put("msg", "操作成功，处理中");
             return map;
@@ -752,6 +801,15 @@ public class MobileAdminController {
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+            //保存该记录相关数据以便产生推送
+            try {
+                createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+                        "2","23");
+                //向申报人推送消息
+                messagePushUtil.SpecifiedPushSingle(materialApplicationCustom.getUserid());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             map.put("success", "true");
             map.put("msg", "操作成功，申购处理完成");
             return map;
@@ -875,6 +933,7 @@ public class MobileAdminController {
             list = engineRoomInspectionService.findByPaging(page);
         }
 
+
         map.put("engineRoomInspectionList", list);
         map.put("pagingVO", pagingVO);
 
@@ -945,6 +1004,15 @@ public class MobileAdminController {
             return map;
         }
 
+        //保存该记录相关数据以便产生推送
+        try {
+            createPushUtil.PushPushMessage(engineRoomInspectionCustom.getUserid(),"0","2",
+                    "0","31");
+            //向管理组推送消息
+            messagePushUtil.GroupPushSingle("admin");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //重定向
         map.put("success", "true");

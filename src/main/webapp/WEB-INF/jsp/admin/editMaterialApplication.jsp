@@ -125,21 +125,20 @@
 
     //处理按钮点击
     $('#dealBtn').on('click', function() {
-        var feedback=document.getElementById("feedback").value;
-        window.location.href = "/admin/dealMaterialApplication?id=${materialApplication.id}&feedback="+feedback;
+        var reback=document.getElementById("reback").value;
+        window.location.href = "/admin/dealMaterialApplication?id=${materialApplication.id}&feedback="+reback;
     });
 
     //完成按钮点击
     $('#completeBtn').on('click', function() {
-        var feedback=document.getElementById("feedback").value;
-        window.location.href = "/admin/completeMaterialApplication?id=${materialApplication.id}&feedback="+feedback;
+        var reback=document.getElementById("reback").value;
+        window.location.href = "/admin/completeMaterialApplication?id=${materialApplication.id}&feedback="+reback;
     });
 
     //返回按钮点击
     $('#returnListBtn').on('click', function() {
         window.location.href = "/admin/showMaterialApplication";
     });
-    setImgMaxSize();
 
 </script>
 </html>

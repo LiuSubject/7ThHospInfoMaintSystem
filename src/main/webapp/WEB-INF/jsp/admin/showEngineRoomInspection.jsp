@@ -47,7 +47,7 @@
 						<th style="text-align: center">检查日期</th>
 						<th style="text-align: center">检查者</th>
 						<th style="text-align: center">创建日期</th>
-						<th style="text-align: center">操作</th>
+						<th style="text-align: center"></th>
 					</tr>
 					</thead>
 					<tbody>

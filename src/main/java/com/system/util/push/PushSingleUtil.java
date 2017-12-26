@@ -10,7 +10,9 @@ import com.gexin.rp.sdk.template.TransmissionTemplate;
 import com.gexin.rp.sdk.base.impl.Target;
 import com.gexin.rp.sdk.template.style.Style0;
 import com.system.po.PushMessage;
+import com.system.service.PushMessageService;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 
 /**
@@ -26,12 +28,15 @@ import java.io.IOException;
  * 修改备注：
  **/
 public class PushSingleUtil {
+
+
+
     //定义常量, appId、appKey、masterSecret(个推-开发者中心中获得的应用配置)
     private static String appId = "lraFkpXwtL86ABCwBevQh2";
     private static String appKey = "kFNQ7bt1Ty9CZdVlzkKPm4";
     private static String masterSecret = "EjSozOizgq9I7aKGEHfw81";
 
-    //向个推服务器发送请求
+    //向个推服务器发送单条请求
     public static void push(String cid, PushMessage pushMessage) throws IOException {
         IGtPush push = new IGtPush(appKey, masterSecret);
         push.connect();
@@ -62,7 +67,7 @@ public class PushSingleUtil {
             System.out.println("服务器响应异常");
         }
     }
-    //生成IOS推送消息
+    //生成推送消息(透传消息)
 /*    public static TransmissionTemplate getTemplate(PushMessage pushMessage) {
         TransmissionTemplate template = new TransmissionTemplate();
         template.setAppId(appId);
@@ -80,12 +85,13 @@ public class PushSingleUtil {
         template.setAPNInfo(payload);
         return template;
     }*/
-    //生成Android推送消息
+
+    //生成推送消息(简单提醒，只激活应用，无后续动作)
     public static NotificationTemplate getTemplate(PushMessage pushMessage) {
         NotificationTemplate template = new NotificationTemplate();
         template.setAppId(appId);
         template.setAppkey(appKey);
-/*        template.setTransmissionContent(pushMessage.getMsgContent1());
+/*      template.setTransmissionContent(pushMessage.getMsgContent1());
         template.setTransmissionType(2);
         // 设置定时展示时间
         // template.setDuration("2015-01-16 11:40:00", "2015-01-16 12:24:00");
@@ -97,7 +103,7 @@ public class PushSingleUtil {
 
         Style0 style = new Style0();
         // 设置通知栏标题与内容
-        style.setTitle("通知");
+        style.setTitle("信息维护");
         style.setText(pushMessage.getMsgContent1());
         // 配置通知栏图标
         style.setLogo("icon.png");

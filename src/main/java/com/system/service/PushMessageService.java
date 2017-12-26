@@ -14,8 +14,11 @@ import com.system.po.PushMessage;
  **/
 public interface PushMessageService {
 
-    //查找未发送个推消息
+    //查找未发送个推消息(群发用)
     PushMessage findByStatus(String status) throws Exception;
+
+    //查找未发送个推消息(指定用户)
+    PushMessage findSpecifiedByStatus(String status,String code) throws Exception;
 
     //新增个推消息
     void save(PushMessage pushMessage) throws Exception;
@@ -25,5 +28,7 @@ public interface PushMessageService {
 
     //根据主键更新指定个推消息
     void updateById(int id, PushMessage pushMessage);
+
+
 
 }

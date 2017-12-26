@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.PushMessageMapperCustom" >
+  <resultMap id="BaseResultMap" type="com.system.po.PushMessage" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="founder" property="founder" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="push_status" property="pushStatus" jdbcType="CHAR" />
+    <result column="push_way" property="pushWay" jdbcType="CHAR" />
+    <result column="msg_type" property="msgType" jdbcType="CHAR" />
+    <result column="msg_target" property="msgTarget" jdbcType="CHAR" />
+    <result column="msg_content_1" property="msgContent1" jdbcType="VARCHAR" />
+    <result column="msg_content_2" property="msgContent2" jdbcType="VARCHAR" />
+    <result column="msg_content_3" property="msgContent3" jdbcType="VARCHAR" />
+    <result column="push_time" property="pushTime" jdbcType="CHAR" />
+  </resultMap>
+  <select id="findSpecifiedByStatus" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select push_message.*
+    from push_message
+    WHERE push_status LIKE #{status} and founder LIKE #{code}
+  </select>
+</mapper>

@@ -28,7 +28,7 @@
 					</div>
 				</div>
 				<div class="panel-body">
-					<form class="form-horizontal" role="form" action="/admin/addComputerProblems" id="editfrom" method="post" enctype="multipart/form-data">
+					<form class="form-horizontal" role="form" action="/normal/addComputerProblems" id="editfrom" method="post" enctype="multipart/form-data">
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">标题：</label>
 							<div class="col-sm-8">

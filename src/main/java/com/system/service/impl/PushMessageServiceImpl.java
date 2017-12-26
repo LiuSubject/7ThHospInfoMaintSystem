@@ -1,13 +1,16 @@
 package com.system.service.impl;
 
 import com.system.mapper.PushMessageMapper;
+import com.system.mapper.PushMessageMapperCustom;
 import com.system.po.PushMessage;
 import com.system.po.PushMessageExample;
 import com.system.service.PushMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
@@ -27,6 +30,18 @@ public class PushMessageServiceImpl implements PushMessageService {
     @Autowired
     private PushMessageMapper pushMessageMapper;
 
+    @Autowired
+    private PushMessageMapperCustom pushMessageMapperCustom;
+
+    //查找未发送个推消息(指定用户)
+    public PushMessage findSpecifiedByStatus(String status,String code) throws Exception{
+        Map<String,Object> params=new HashMap<String, Object>();
+        params.put("status", status);
+        params.put("code", code);
+        List<PushMessage> list =pushMessageMapperCustom.findSpecifiedByStatus(params);
+        PushMessage pushMessage = list.get(0);
+        return pushMessage;
+    }
 
     public PushMessage findByStatus(String status) throws Exception {
         PushMessageExample pushMessageExample = new PushMessageExample();
@@ -37,8 +52,7 @@ public class PushMessageServiceImpl implements PushMessageService {
         List<PushMessage> list = pushMessageMapper.selectByExample(pushMessageExample);
         if(list.size() > 0){
             return list.get(0);
-        }else
-        {
+        }else{
             return null;
         }
     }

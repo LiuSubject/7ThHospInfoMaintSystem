@@ -4,9 +4,12 @@ import com.system.exception.CustomException;
 import com.system.po.*;
 import com.system.service.*;
 import com.system.util.CustomerContextHolder;
+import com.system.util.push.CreatePushUtil;
+import com.system.util.push.MessagePushUtil;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,6 +60,11 @@ public class NormalController {
     @Resource(name = "viewEmployeeMiPsdServiceImpl")
     private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
 
+    @Autowired
+    private CreatePushUtil createPushUtil;
+
+    @Autowired
+    private MessagePushUtil messagePushUtil;
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
     // 电脑故障显示
@@ -157,6 +165,17 @@ public class NormalController {
         if (!result) {
             model.addAttribute("message", "抱歉，故障信息保存失败");
             return "error";
+        }
+
+
+        //保存该记录相关数据以便产生推送
+        try {
+            createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+                    "0","11");
+            //向管理组推送消息
+            messagePushUtil.GroupPushSingle("admin");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
@@ -464,6 +483,16 @@ public class NormalController {
         if (!result) {
             model.addAttribute("message", "抱歉，物资申购信息保存失败");
             return "error";
+        }
+
+        //保存该记录相关数据以便产生推送
+        try {
+            createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+                    "0","21");
+            //向管理组推送消息
+            messagePushUtil.GroupPushSingle("admin");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 

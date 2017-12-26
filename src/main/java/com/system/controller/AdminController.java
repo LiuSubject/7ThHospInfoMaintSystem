@@ -169,9 +169,9 @@ public class AdminController {
 
         //保存该记录相关数据以便产生推送
         try {
-            createPushUtil.PushPushMessage(viewEmployeeMiPsd.getCode(),"0","0",
+            createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
                     "0","11");
-            //给管理组推送消息
+            //向管理组推送消息
             messagePushUtil.GroupPushSingle("admin");
         } catch (Exception e) {
             e.printStackTrace();
@@ -271,10 +271,21 @@ public class AdminController {
         if(computerProblemsCustom.getFlag() == 0){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(1);
-            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getName());
+            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+
+            //保存该记录相关数据以便产生推送
+            try {
+                createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+                        "2","12");
+                //向申报人推送消息
+                messagePushUtil.SpecifiedPushSingle(computerProblemsCustom.getUserid());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
 
         return "redirect:editComputerProblems?id=" + computerProblemsCustom.getId();
     }
@@ -317,13 +328,25 @@ public class AdminController {
             }
             e.printStackTrace();
         }
-        if(computerProblemsCustom.getFlag() == 0){
+        if(computerProblemsCustom.getFlag() == 1){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(2);
             computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+
+            //保存该记录相关数据以便产生推送
+            try {
+                //创建推送消息
+                createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+                        "2","13");
+                //向申报人推送消息
+                messagePushUtil.SpecifiedPushSingle(computerProblemsCustom.getUserid());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
 
         return "redirect:editComputerProblems?id=" + computerProblemsCustom.getId();
     }
@@ -481,6 +504,15 @@ public class AdminController {
             model.addAttribute("message", "抱歉，物资申购信息保存失败");
             return "error";
         }
+        //保存该记录相关数据以便产生推送
+        try {
+            createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+                    "0","21");
+            //向管理组推送消息
+            messagePushUtil.GroupPushSingle("admin");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         //重定向
@@ -581,6 +613,15 @@ public class AdminController {
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+            //保存该记录相关数据以便产生推送
+            try {
+                createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+                        "2","22");
+                //向申报人推送消息
+                messagePushUtil.SpecifiedPushSingle(materialApplicationCustom.getUserid());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
@@ -630,6 +671,15 @@ public class AdminController {
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+            //保存该记录相关数据以便产生推送
+            try {
+                createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+                        "2","23");
+                //向申报人推送消息
+                messagePushUtil.SpecifiedPushSingle(materialApplicationCustom.getUserid());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
@@ -778,6 +828,15 @@ public class AdminController {
         if (!result) {
             model.addAttribute("message", "抱歉，机房巡检信息保存失败");
             return "error";
+        }
+        //保存该记录相关数据以便产生推送
+        try {
+            createPushUtil.PushPushMessage(engineRoomInspectionCustom.getUserid(),"0","2",
+                    "0","31");
+            //向管理组推送消息
+            messagePushUtil.GroupPushSingle("admin");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 

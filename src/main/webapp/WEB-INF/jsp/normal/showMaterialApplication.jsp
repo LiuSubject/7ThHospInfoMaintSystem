@@ -30,7 +30,7 @@
 					<h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">申购列表</h2>
 					<div class="row" style="text-align: right">
 						<form class="form-horizontal form-inline" role="form" style="margin: 20px 0 10px 0;"
-							  action="/admin/searchMaterialApplication" id="searchFunction" method="post">
+							  action="/normal/searchMaterialApplication" id="searchFunction" method="post">
 							<div class="form-group col-sm-12">
 								<input type="text" class="form-control" placeholder="请输入科室" id="findByDept"
 									   name="findByDept" style="margin-left: 5px">
@@ -58,6 +58,7 @@
 						<th style="text-align: center">申请人</th>
 						<th style="text-align: center">状态</th>
 						<th style="text-align: center">创建时间</th>
+						<th style="text-align: center"></th>
 					</tr>
 					</thead>
 					<tbody>

@@ -4,6 +4,7 @@ import com.system.po.PushId;
 import com.system.po.PushMessage;
 import com.system.po.Role;
 import com.system.service.PushIdService;
+import com.system.service.PushMessageService;
 import com.system.service.RoleService;
 import com.system.service.ViewEmployeeMiPsdService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,10 @@ public class MessagePushUtil {
     private PushIdService pushIdService;
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "pushMessageServiceImpl")
+    private PushMessageService pushMessageService;
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "roleServiceImpl")
     private RoleService roleService;
 
@@ -54,6 +59,13 @@ public class MessagePushUtil {
                     e.printStackTrace();
                 }
             }
+            try {
+                pushMessage.setPushStatus("1");
+                pushMessageService.updateById(pushMessage.getId(),pushMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
 
         }
         return true;
@@ -82,5 +94,31 @@ public class MessagePushUtil {
         }
     }
 
+    //获取用户组推送标识集合
+    public String GetPushId(String code) throws Exception{
+        PushId pushId = null;
+        try {
+            pushId = pushIdService.findByCode(code);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return pushId.getClientId();
+    }
+
+    //为指定用户推送简单消息
+    public boolean SpecifiedPushSingle(String code) throws Exception{
+        //拼接推送消息表内标识为未推送的第一条消息
+        PushMessage pushMessage = messageStitchUtil.MessageStitch(code);
+        String clientId = GetPushId(code);
+        try {
+            PushSingleUtil.push(clientId, pushMessage);
+            pushMessage.setPushStatus("1");
+            pushMessageService.updateById(pushMessage.getId(),pushMessage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 
 }

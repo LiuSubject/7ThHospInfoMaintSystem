@@ -3,6 +3,7 @@ package com.system.util.push;
 import com.system.po.PushMessage;
 import com.system.service.PushMessageService;
 import org.springframework.stereotype.Component;
+import org.apache.log4j.Logger;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;

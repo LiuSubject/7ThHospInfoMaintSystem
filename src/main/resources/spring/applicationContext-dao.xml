@@ -24,6 +24,9 @@
         <property name="user" value="${jdbc.mysql.username}" />
         <property name="password" value="${jdbc.mysql.password}" />
         <property name="checkoutTimeout" value="100" />
+        <property name="idleConnectionTestPeriod" value="50" />
+        <property name="maxStatements" value="0" />
+
     </bean>
 
     <!-- ===============第二个数据源SQLServer的配置=============== -->

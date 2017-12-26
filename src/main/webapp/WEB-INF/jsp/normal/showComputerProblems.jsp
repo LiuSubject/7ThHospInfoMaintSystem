@@ -30,7 +30,7 @@
 						<h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">故障列表</h2>
 						<div class="row" style="text-align: right">
 							<form class="form-horizontal form-inline" role="form" style="margin: 20px 0 10px 0;"
-								  action="/admin/searchComputerProblems" id="searchFunction" method="post">
+								  action="/normal/searchComputerProblems" id="searchFunction" method="post">
 								<div class="form-group col-sm-12">
 										<input type="text" class="form-control" placeholder="请输入科室" id="findByDept"
 											   name="findByDept" style="margin-left: 5px">
@@ -56,20 +56,48 @@
 									<th style="text-align: center">状态</th>
 									<th style="text-align: center">负责人</th>
 									<th style="text-align: center">创建时间</th>
-									<th style="text-align: center">操作</th>
+									<th style="text-align: center"></th>
 					            </tr>
 					        </thead>
-					        <tbody>
-							<c:forEach  items="${computerProblemsList}" var="item">
-								<tr>
-									<td>${item.title}</td>
-									<td>${item.dept}</td>
-									<td>${item.name}</td>
-									<td>${item.tel}</td>
-									<td>${item.type}</td>
-									<td>${item.flag}</td>
-									<td>${item.leader}</td>
-									<td>${item.createTime}</td>
+						<tbody>
+						<c:forEach  items="${computerProblemsList}" var="item">
+							<tr>
+								<td>${item.title}</td>
+								<td>${item.dept}</td>
+								<td>${item.name}</td>
+								<td>${item.tel}</td>
+								<c:if test="${item.type == 1}">
+									<td>电脑问题</td>
+								</c:if>
+								<c:if test="${item.type == 2}">
+									<td>打印机问题</td>
+								</c:if>
+								<c:if test="${item.type == 3}">
+									<td>监控问题</td>
+								</c:if>
+								<c:if test="${item.type == 4}">
+									<td>网络问题</td>
+								</c:if>
+								<c:if test="${item.type == 5}">
+									<td>病区软件问题</td>
+								</c:if>
+								<c:if test="${item.type == 6}">
+									<td>门诊软件问题</td>
+								</c:if>
+								<c:if test="${item.type == 7}">
+									<td>其它问题</td>
+								</c:if>
+								<c:if test="${item.flag == 0}">
+									<td><button class="btn btn-warning btn-sm" type="button">提交中</button></td>
+								</c:if>
+								<c:if test="${item.flag == 1}">
+									<td><button class="btn btn-info btn-sm" type="button">处理中</button></td>
+								</c:if>
+								<c:if test="${item.flag == 2}">
+									<td><button class="btn btn-success btn-sm" type="button">已解决</button></td>
+								</c:if>
+								<td>${item.leader}</td>
+								<td>${item.createTime}</td>
 									<td style="text-align: center">
 										<button class="btn btn-default btn-xs btn-danger btn-primary" onClick="location.href='/normal/checkComputerProblems?id=${item.id}'">查看详情</button>
 										<!--弹出框-->

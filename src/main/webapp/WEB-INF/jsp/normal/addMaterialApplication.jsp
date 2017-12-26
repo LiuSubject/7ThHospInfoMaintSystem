@@ -28,7 +28,7 @@
 					</div>
 				</div>
 				<div class="panel-body">
-					<form class="form-horizontal" role="form" action="/admin/addMaterialApplication"  method="post">
+					<form class="form-horizontal" role="form" action="/normal/addMaterialApplication"  method="post">
 						<div class="form-group">
 							<label  class="col-sm-2 control-label">名称：</label>
 							<div class="col-sm-8">
