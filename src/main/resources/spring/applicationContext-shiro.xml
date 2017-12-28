@@ -42,6 +42,7 @@
 
                 # Mobile端登录
                 /mobilelogin = anon
+                /mobileupdate = anon
 
 
                 # 配置静态资源可以匿名访问
@@ -49,8 +50,9 @@
                 /js/** = anon
                 /images/** = anon
                 /fonts/** = anon
+                /update/** = anon
 
-                # 除了上面额 /login 可以匿名访问，其他路径都需要登录访问
+                # 除了上面的 /login 可以匿名访问，其他路径都需要登录访问
                 # 如果没登录，就访问其他路径会跳转到 /login 登录
 
                 /** = authc

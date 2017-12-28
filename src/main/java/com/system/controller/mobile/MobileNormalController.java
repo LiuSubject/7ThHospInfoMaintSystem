@@ -1,5 +1,7 @@
 package com.system.controller.mobile;
 
+/*暂未使用*/
+
 /**
  * 项目名称：7ThHospInfoMaintSystem
  * 类名称：MobileNormalController

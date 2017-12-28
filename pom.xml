@@ -202,6 +202,27 @@
       <version>4.0.1.9</version>
     </dependency>
 
+    <!--Ini4j框架-->
+    <dependency>
+      <groupId>org.ini4j</groupId>
+      <artifactId>ini4j</artifactId>
+      <version>0.5.2</version>
+    </dependency>
+
+    <!--guava(与Ini4j框架搭配使用)-->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>14.0-rc3</version>
+    </dependency>
+
+    <!--lang3(与Ini4j框架搭配使用)-->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.1</version>
+    </dependency>
+
   </dependencies>
 
 
