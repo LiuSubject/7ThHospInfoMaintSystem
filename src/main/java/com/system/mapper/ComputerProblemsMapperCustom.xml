@@ -25,5 +25,11 @@
     ORDER by flag asc
     limit #{toPageNo}, #{pageSize}
   </select>
+  <select id="paginationOfSearchResults" parameterType="map" resultMap="BaseResultMap">
+    select computer_problems.*
+    from computer_problems
+    ORDER by flag asc
+    limit #{toPageNo}, #{pageSize}
+  </select>
 
 </mapper>

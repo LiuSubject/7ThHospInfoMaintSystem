@@ -3,6 +3,7 @@ package com.system.service;
 import com.system.po.ComputerProblemsCustom;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
@@ -25,11 +26,17 @@ public interface ComputerProblemsService {
     //获取分页查询电脑故障信息
     List<ComputerProblemsCustom> findByPaging(Integer toPageNo) throws Exception;
 
+    //电脑故障信息搜索结果分页
+    List<ComputerProblemsCustom> paginationOfSearchResults(Integer toPageNo, Map<String, Object> condition) throws Exception;
+
     //保存电脑故障信息
     Boolean save(ComputerProblemsCustom computerProblemsCustom) throws Exception;
 
     //获取电脑故障总数
     int getCountComputerProblems() throws Exception;
+
+    //获取电脑电脑故障信息搜索结果总数
+    int getCountOfSearchResults() throws Exception;
 
     //根据id获取电脑故障信息
     ComputerProblemsCustom findById(Integer id) throws Exception;
