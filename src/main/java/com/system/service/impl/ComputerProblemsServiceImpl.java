@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
@@ -48,6 +49,16 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         return list;
     }
 
+    public List<ComputerProblemsCustom> paginationOfSearchResults(Integer toPageNo, Map<String, Object> condition) throws Exception {
+        PagingVO pagingVO = new PagingVO();
+        pagingVO.setToPageNo(toPageNo);
+        condition.put("pagingVO", pagingVO);
+
+        List<ComputerProblemsCustom> list = ComputerProblemsMapperCustom.paginationOfSearchResults(condition);
+
+        return list;
+    }
+
     public Boolean save(ComputerProblemsCustom ComputerProblemsCustoms) throws Exception {
         ComputerProblems stu = ComputerProblemsMapper.selectByPrimaryKey(ComputerProblemsCustoms.getId());
         if (stu == null) {
@@ -60,6 +71,17 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
 
     //返回总数
     public int getCountComputerProblems() throws Exception {
+        //自定义查询对象
+        ComputerProblemsExample ComputerProblemsExample = new ComputerProblemsExample();
+        //通过criteria构造查询条件
+        ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
+        criteria.andUseridIsNotNull();
+
+        return ComputerProblemsMapper.countByExample(ComputerProblemsExample);
+    }
+
+    //返回查询总数
+    public int getCountOfSearchResults() throws Exception {
         //自定义查询对象
         ComputerProblemsExample ComputerProblemsExample = new ComputerProblemsExample();
         //通过criteria构造查询条件

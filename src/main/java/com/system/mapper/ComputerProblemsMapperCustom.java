@@ -3,6 +3,7 @@ package com.system.mapper;
 import com.system.po.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
@@ -18,4 +19,7 @@ import java.util.List;
 public interface ComputerProblemsMapperCustom {
     //分页查询电脑故障
     List<ComputerProblemsCustom> findByPaging(PagingVO pagingVO) throws Exception;
+
+    //电脑故障信息搜索结果分页
+    List<ComputerProblemsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception;
 }

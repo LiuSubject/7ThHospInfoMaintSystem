@@ -113,7 +113,7 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(2)").addClass("active");
+    $("#nav li:nth-child(1)").addClass("active");
 
     var typeSelect = $("#type option");
 
