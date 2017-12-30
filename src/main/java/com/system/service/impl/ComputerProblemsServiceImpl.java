@@ -2,10 +2,13 @@ package com.system.service.impl;
 
 import com.system.mapper.ComputerProblemsMapper;
 import com.system.mapper.ComputerProblemsMapperCustom;
+import com.system.mapper.PushMessageMapper;
+import com.system.mapper.PushMessageMapperCustom;
 import com.system.po.*;
 import com.system.service.ComputerProblemsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,45 +29,64 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
 
     //使用spring 自动注入
     @Autowired
-    private ComputerProblemsMapperCustom ComputerProblemsMapperCustom;
+    private ComputerProblemsMapperCustom computerProblemsMapperCustom;
 
     @Autowired
-    private ComputerProblemsMapper ComputerProblemsMapper;
+    private ComputerProblemsMapper computerProblemsMapper;
+
+    @Autowired
+    private PushMessageMapper pushMessageMapper;
+
+    @Autowired
+    private PushMessageMapperCustom pushMessageMapperCustom;
 
 
     public void updataById(Integer id, ComputerProblemsCustom ComputerProblemsCustom) throws Exception {
-        ComputerProblemsMapper.updateByPrimaryKey(ComputerProblemsCustom);
+        computerProblemsMapper.updateByPrimaryKey(ComputerProblemsCustom);
     }
 
     public void removeById(Integer id) throws Exception {
-        ComputerProblemsMapper.deleteByPrimaryKey(id);
+        computerProblemsMapper.deleteByPrimaryKey(id);
     }
 
     public List<ComputerProblemsCustom> findByPaging(Integer toPageNo) throws Exception {
         PagingVO pagingVO = new PagingVO();
         pagingVO.setToPageNo(toPageNo);
 
-        List<ComputerProblemsCustom> list = ComputerProblemsMapperCustom.findByPaging(pagingVO);
+        List<ComputerProblemsCustom> list = computerProblemsMapperCustom.findByPaging(pagingVO);
 
         return list;
     }
 
     public List<ComputerProblemsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception {
 
-        List<ComputerProblemsCustom> list = ComputerProblemsMapperCustom.paginationOfSearchResults(condition);
+        List<ComputerProblemsCustom> list = computerProblemsMapperCustom.paginationOfSearchResults(condition);
 
         return list;
     }
 
     public Boolean save(ComputerProblemsCustom ComputerProblemsCustoms) throws Exception {
-        ComputerProblems stu = ComputerProblemsMapper.selectByPrimaryKey(ComputerProblemsCustoms.getId());
+        ComputerProblems stu = computerProblemsMapper.selectByPrimaryKey(ComputerProblemsCustoms.getId());
         if (stu == null) {
-            ComputerProblemsMapper.insert(ComputerProblemsCustoms);
+            computerProblemsMapper.insert(ComputerProblemsCustoms);
             return true;
         }
 
         return false;
     }
+
+    @Transactional
+    public Boolean saveAndPre(ComputerProblemsCustom computerProblemsCustom, PushMessage preMessage) throws Exception{
+        ComputerProblems stu = computerProblemsMapper.selectByPrimaryKey(computerProblemsCustom.getId());
+        if (stu == null) {
+            computerProblemsMapper.insert(computerProblemsCustom);
+            pushMessageMapper.insert(preMessage);
+            return true;
+        }
+
+        return false;
+    }
+
 
     //返回总数
     public int getCountComputerProblems() throws Exception {
@@ -74,7 +96,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
         criteria.andUseridIsNotNull();
 
-        return ComputerProblemsMapper.countByExample(ComputerProblemsExample);
+        return computerProblemsMapper.countByExample(ComputerProblemsExample);
     }
 
     //返回查询总数
@@ -85,12 +107,12 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
         criteria.andUseridIsNotNull();
 
-        return ComputerProblemsMapper.countByExample(ComputerProblemsExample);
+        return computerProblemsMapper.countByExample(ComputerProblemsExample);
     }
 
     public ComputerProblemsCustom findById(Integer id) throws Exception {
 
-        ComputerProblems ComputerProblems  = ComputerProblemsMapper.selectByPrimaryKey(id);
+        ComputerProblems ComputerProblems  = computerProblemsMapper.selectByPrimaryKey(id);
         ComputerProblemsCustom ComputerProblemsCustom = null;
         if (ComputerProblems != null) {
             ComputerProblemsCustom = new ComputerProblemsCustom();
@@ -110,7 +132,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
 
         criteria.andDeptLike("%" + dept + "%");
         ComputerProblemsExample.setOrderByClause("flag asc");
-        List<ComputerProblems> list = ComputerProblemsMapper.selectByExample(ComputerProblemsExample);
+        List<ComputerProblems> list = computerProblemsMapper.selectByExample(ComputerProblemsExample);
 
         List<ComputerProblemsCustom> ComputerProblemsCustomList = null;
 
@@ -137,7 +159,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         criteria.andNameLike("%" + name + "%");
         ComputerProblemsExample.setOrderByClause("flag asc");
 
-        List<ComputerProblems> list = ComputerProblemsMapper.selectByExample(ComputerProblemsExample);
+        List<ComputerProblems> list = computerProblemsMapper.selectByExample(ComputerProblemsExample);
 
         List<ComputerProblemsCustom> ComputerProblemsCustomList = null;
 
@@ -164,7 +186,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         criteria.andFlagEqualTo(flag );
         ComputerProblemsExample.setOrderByClause("flag asc");
 
-        List<ComputerProblems> list = ComputerProblemsMapper.selectByExample(ComputerProblemsExample);
+        List<ComputerProblems> list = computerProblemsMapper.selectByExample(ComputerProblemsExample);
 
         List<ComputerProblemsCustom> ComputerProblemsCustomList = null;
 
@@ -191,7 +213,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         criteria.andUseridEqualTo(code);
         ComputerProblemsExample.setOrderByClause("flag asc");
 
-        List<ComputerProblems> list = ComputerProblemsMapper.selectByExample(ComputerProblemsExample);
+        List<ComputerProblems> list = computerProblemsMapper.selectByExample(ComputerProblemsExample);
 
         List<ComputerProblemsCustom> ComputerProblemsCustomList = null;
 
@@ -218,7 +240,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         criteria.andLeaderEqualTo(code);
         ComputerProblemsExample.setOrderByClause("flag asc");
 
-        List<ComputerProblems> list = ComputerProblemsMapper.selectByExample(ComputerProblemsExample);
+        List<ComputerProblems> list = computerProblemsMapper.selectByExample(ComputerProblemsExample);
 
         List<ComputerProblemsCustom> ComputerProblemsCustomList = null;
 

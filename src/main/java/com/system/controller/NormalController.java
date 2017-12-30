@@ -98,7 +98,7 @@ public class NormalController {
         return "normal/addComputerProblems";
     }
 
-    // 添加电脑故障处理
+    // 添加电脑故障记录
     @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.POST})
     public String addComputerProblemsCustom(ComputerProblemsCustom computerProblemsCustom, Model model,HttpServletRequest request,UploadedImageFile file) throws Exception {
 
@@ -160,22 +160,25 @@ public class NormalController {
         //设置问题所属人员ID
         computerProblemsCustom.setUserid(viewEmployeeMiPsd.getCode());
 
-        Boolean result = computerProblemsService.save(computerProblemsCustom);
 
-        if (!result) {
-            model.addAttribute("message", "抱歉，故障信息保存失败");
-            return "error";
-        }
 
 
         //保存该记录相关数据以便产生推送
         try {
-            createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+
+            PushMessage preMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
                     "0","11");
+            Boolean result = computerProblemsService.saveAndPre(computerProblemsCustom, preMessage);
+            if (!result) {
+                model.addAttribute("message", "抱歉，故障信息保存失败");
+                return "error";
+            }
             //向管理组推送消息
             messagePushUtil.GroupPushSingle("admin");
         } catch (Exception e) {
             e.printStackTrace();
+            return "error";
+
         }
 
 
@@ -478,21 +481,24 @@ public class NormalController {
         //设置问题所属人员ID
         materialApplicationCustom.setUserid(viewEmployeeMiPsd.getCode());
 
-        Boolean result = materialApplicationService.save(materialApplicationCustom);
 
-        if (!result) {
-            model.addAttribute("message", "抱歉，物资申购信息保存失败");
-            return "error";
-        }
 
         //保存该记录相关数据以便产生推送
         try {
-            createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+            PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
                     "0","21");
+
+            Boolean result = materialApplicationService.saveAndPre(materialApplicationCustom, pushMessage);
+
+            if (!result) {
+                model.addAttribute("message", "抱歉，物资申购提交失败");
+                return "error";
+            }
             //向管理组推送消息
             messagePushUtil.GroupPushSingle("admin");
         } catch (Exception e) {
             e.printStackTrace();
+            return "error";
         }
 
 

@@ -22,12 +22,9 @@ import java.util.Date;
 @Component
 public class CreatePushUtil {
 
-    @SuppressWarnings("SpringJavaAutowiringInspection")
-    @Resource(name = "pushMessageServiceImpl")
-    private PushMessageService pushMessageService;
 
-    //创建个推消息
-    public boolean PushPushMessage(String founder, String pushWay, String msgType, String msgTarget, String msgContent1){
+    //创建初始个推消息
+    public PushMessage CreatePreMessage(String founder, String pushWay, String msgType, String msgTarget, String msgContent1){
         //推送状态为0（未发送）
         String PUSHSTATUS = "0";
         PushMessage pushMessage = new PushMessage();
@@ -44,15 +41,7 @@ public class CreatePushUtil {
         String dateString = formatter.format(currentTime);
         pushMessage.setCreateTime(dateString);
 
-        try {
-            pushMessageService.save(pushMessage);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        return pushMessage;
     }
 
 }

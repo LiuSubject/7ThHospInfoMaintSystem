@@ -11,6 +11,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -98,6 +99,7 @@ public class AdminController {
 
     // 添加电脑故障处理
     @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.POST})
+    @Transactional
     public String addComputerProblemsCustom(ComputerProblemsCustom computerProblemsCustom, Model model,HttpServletRequest request,UploadedImageFile file) throws Exception {
 
         //获取当前操作用户对象
@@ -158,21 +160,22 @@ public class AdminController {
         //设置问题所属人员ID
         computerProblemsCustom.setUserid(viewEmployeeMiPsd.getCode());
 
-        Boolean result = computerProblemsService.save(computerProblemsCustom);
-
-        if (!result) {
-            model.addAttribute("message", "抱歉，故障信息保存失败");
-            return "error";
-        }
-
         //保存该记录相关数据以便产生推送
         try {
-            createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+
+            PushMessage preMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
                     "0","11");
+            Boolean result = computerProblemsService.saveAndPre(computerProblemsCustom, preMessage);
+            if (!result) {
+                model.addAttribute("message", "抱歉，故障信息保存失败");
+                return "error";
+            }
             //向管理组推送消息
             messagePushUtil.GroupPushSingle("admin");
         } catch (Exception e) {
             e.printStackTrace();
+            return "error";
+
         }
         //重定向
         return "redirect:/admin/showComputerProblems";
@@ -275,8 +278,15 @@ public class AdminController {
 
             //保存该记录相关数据以便产生推送
             try {
-                createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
                         "2","12");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return "error";
+                }
                 //向申报人推送消息
                 messagePushUtil.SpecifiedPushSingle(computerProblemsCustom.getUserid());
             } catch (Exception e) {
@@ -336,8 +346,14 @@ public class AdminController {
             //保存该记录相关数据以便产生推送
             try {
                 //创建推送消息
-                createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+                PushMessage pushMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
                         "2","13");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return "error";
+                }
                 //向申报人推送消息
                 messagePushUtil.SpecifiedPushSingle(computerProblemsCustom.getUserid());
             } catch (Exception e) {
@@ -486,20 +502,22 @@ public class AdminController {
         //设置问题所属人员ID
         materialApplicationCustom.setUserid(viewEmployeeMiPsd.getCode());
 
-        Boolean result = materialApplicationService.save(materialApplicationCustom);
-
-        if (!result) {
-            model.addAttribute("message", "抱歉，物资申购信息保存失败");
-            return "error";
-        }
         //保存该记录相关数据以便产生推送
         try {
-            createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+            PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
                     "0","21");
+
+            Boolean result = materialApplicationService.saveAndPre(materialApplicationCustom, pushMessage);
+
+            if (!result) {
+                model.addAttribute("message", "抱歉，故障信息保存失败");
+                return "error";
+            }
             //向管理组推送消息
             messagePushUtil.GroupPushSingle("admin");
         } catch (Exception e) {
             e.printStackTrace();
+            return "error";
         }
 
 
@@ -603,8 +621,15 @@ public class AdminController {
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
             try {
-                createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
                         "2","22");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return "error";
+                }
                 //向申报人推送消息
                 messagePushUtil.SpecifiedPushSingle(materialApplicationCustom.getUserid());
             } catch (Exception e) {
@@ -661,8 +686,15 @@ public class AdminController {
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
             try {
-                createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
                         "2","23");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return "error";
+                }
                 //向申报人推送消息
                 messagePushUtil.SpecifiedPushSingle(materialApplicationCustom.getUserid());
             } catch (Exception e) {
@@ -811,20 +843,22 @@ public class AdminController {
         //设置问题所属人员ID
         engineRoomInspectionCustom.setUserid(viewEmployeeMiPsd.getCode());
 
-        Boolean result = engineRoomInspectionService.save(engineRoomInspectionCustom);
 
-        if (!result) {
-            model.addAttribute("message", "抱歉，机房巡检信息保存失败");
-            return "error";
-        }
         //保存该记录相关数据以便产生推送
         try {
-            createPushUtil.PushPushMessage(engineRoomInspectionCustom.getUserid(),"0","2",
+            PushMessage pushMessage = createPushUtil.CreatePreMessage(engineRoomInspectionCustom.getUserid(),"0","2",
                     "0","31");
+            Boolean result = engineRoomInspectionService.saveAndPre(engineRoomInspectionCustom, pushMessage);
+
+            if (!result) {
+                model.addAttribute("message", "抱歉，机房巡检信息保存失败");
+                return "error";
+            }
             //向管理组推送消息
             messagePushUtil.GroupPushSingle("admin");
         } catch (Exception e) {
             e.printStackTrace();
+            return "error";
         }
 
 

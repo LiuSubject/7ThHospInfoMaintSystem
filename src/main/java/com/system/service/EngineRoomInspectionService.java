@@ -1,6 +1,7 @@
 package com.system.service;
 
 import com.system.po.EngineRoomInspectionCustom;
+import com.system.po.PushMessage;
 
 import java.util.List;
 
@@ -26,6 +27,9 @@ public interface EngineRoomInspectionService {
 
     //保存机房巡检信息
     Boolean save(EngineRoomInspectionCustom engineRoomInspectionCustom) throws Exception;
+
+    //事务：保存物资申购信息，并初始化推送消息
+    Boolean saveAndPre(EngineRoomInspectionCustom engineRoomInspectionCustom, PushMessage preMessage) throws Exception;
 
     //获取机房巡检总数
     int getCountEngineRoomInspection() throws Exception;
