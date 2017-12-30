@@ -29,7 +29,7 @@
   <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select material_application.*
     from material_application
-    ORDER by flag asc
+    ORDER by flag asc, create_time desc
     limit #{toPageNo}, #{pageSize}
   </select>
 

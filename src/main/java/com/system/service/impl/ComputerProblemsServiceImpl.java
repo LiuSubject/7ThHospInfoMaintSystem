@@ -49,10 +49,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         return list;
     }
 
-    public List<ComputerProblemsCustom> paginationOfSearchResults(Integer toPageNo, Map<String, Object> condition) throws Exception {
-        PagingVO pagingVO = new PagingVO();
-        pagingVO.setToPageNo(toPageNo);
-        condition.put("pagingVO", pagingVO);
+    public List<ComputerProblemsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception {
 
         List<ComputerProblemsCustom> list = ComputerProblemsMapperCustom.paginationOfSearchResults(condition);
 
