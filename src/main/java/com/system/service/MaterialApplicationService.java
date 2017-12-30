@@ -1,6 +1,8 @@
 package com.system.service;
 
+import com.system.po.ComputerProblemsCustom;
 import com.system.po.MaterialApplicationCustom;
+import com.system.po.PushMessage;
 
 import java.util.List;
 
@@ -27,6 +29,9 @@ public interface MaterialApplicationService {
 
     //保存物资申购信息
     Boolean save(MaterialApplicationCustom materialApplicationCustom) throws Exception;
+
+    //事务：保存物资申购信息，并初始化推送消息
+    Boolean saveAndPre(MaterialApplicationCustom materialApplicationCustom, PushMessage preMessage) throws Exception;
 
     //获取物资申购总数
     int getCountMaterialApplication() throws Exception;

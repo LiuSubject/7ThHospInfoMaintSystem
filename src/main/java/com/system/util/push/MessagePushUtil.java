@@ -61,6 +61,7 @@ public class MessagePushUtil {
             }
             try {
                 pushMessage.setPushStatus("1");
+                //写操作
                 pushMessageService.updateById(pushMessage.getId(),pushMessage);
             } catch (Exception e) {
                 e.printStackTrace();

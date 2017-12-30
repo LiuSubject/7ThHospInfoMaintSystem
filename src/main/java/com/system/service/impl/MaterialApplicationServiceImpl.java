@@ -2,13 +2,13 @@ package com.system.service.impl;
 
 import com.system.mapper.MaterialApplicationMapper;
 import com.system.mapper.MaterialApplicationMapperCustom;
-import com.system.po.MaterialApplication;
-import com.system.po.MaterialApplicationCustom;
-import com.system.po.MaterialApplicationExample;
-import com.system.po.PagingVO;
+import com.system.mapper.PushMessageMapper;
+import com.system.mapper.PushMessageMapperCustom;
+import com.system.po.*;
 import com.system.service.MaterialApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,39 +29,58 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
 
     //使用spring 自动注入
     @Autowired
-    private MaterialApplicationMapperCustom MaterialApplicationMapperCustom;
+    private MaterialApplicationMapperCustom materialApplicationMapperCustom;
 
     @Autowired
-    private MaterialApplicationMapper MaterialApplicationMapper;
+    private MaterialApplicationMapper materialApplicationMapper;
+
+    @Autowired
+    private PushMessageMapper pushMessageMapper;
+
+    @Autowired
+    private PushMessageMapperCustom pushMessageMapperCustom;
+
 
     public void updataById(Integer id, MaterialApplicationCustom MaterialApplicationCustom) throws Exception {
-        MaterialApplicationMapper.updateByPrimaryKey(MaterialApplicationCustom);
+        materialApplicationMapper.updateByPrimaryKey(MaterialApplicationCustom);
     }
 
     public void removeById(Integer id) throws Exception {
-        MaterialApplicationMapper.deleteByPrimaryKey(id);
+        materialApplicationMapper.deleteByPrimaryKey(id);
     }
 
     public List<MaterialApplicationCustom> findByPaging(Integer toPageNo) throws Exception {
         PagingVO pagingVO = new PagingVO();
         pagingVO.setToPageNo(toPageNo);
 
-        List<MaterialApplicationCustom> list = MaterialApplicationMapperCustom.findByPaging(pagingVO);
+        List<MaterialApplicationCustom> list = materialApplicationMapperCustom.findByPaging(pagingVO);
 
         return list;
     }
 
     public Boolean save(MaterialApplicationCustom MaterialApplicationCustoms) throws Exception {
-        MaterialApplication stu = MaterialApplicationMapper.selectByPrimaryKey(MaterialApplicationCustoms.getId());
+        MaterialApplication stu = materialApplicationMapper.selectByPrimaryKey(MaterialApplicationCustoms.getId());
         if (stu == null) {
-            MaterialApplicationMapper.insert(MaterialApplicationCustoms);
+            materialApplicationMapper.insert(MaterialApplicationCustoms);
             return true;
         }
 
         return false;
     }
 
-    //返回学生总数
+    @Transactional
+    public Boolean saveAndPre(MaterialApplicationCustom materialApplicationCustom, PushMessage preMessage) throws Exception{
+        MaterialApplication stu = materialApplicationMapper.selectByPrimaryKey(materialApplicationCustom.getId());
+        if (stu == null) {
+            materialApplicationMapper.insert(materialApplicationCustom);
+            pushMessageMapper.insert(preMessage);
+            return true;
+        }
+
+        return false;
+    }
+
+    //返回物资申购总数
     public int getCountMaterialApplication() throws Exception {
         //自定义查询对象
         MaterialApplicationExample MaterialApplicationExample = new MaterialApplicationExample();
@@ -69,12 +88,12 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
         MaterialApplicationExample.Criteria criteria = MaterialApplicationExample.createCriteria();
         criteria.andUseridIsNotNull();
 
-        return MaterialApplicationMapper.countByExample(MaterialApplicationExample);
+        return materialApplicationMapper.countByExample(MaterialApplicationExample);
     }
 
     public MaterialApplicationCustom findById(Integer id) throws Exception {
 
-        MaterialApplication MaterialApplication  = MaterialApplicationMapper.selectByPrimaryKey(id);
+        MaterialApplication MaterialApplication  = materialApplicationMapper.selectByPrimaryKey(id);
         MaterialApplicationCustom MaterialApplicationCustom = null;
         if (MaterialApplication != null) {
             MaterialApplicationCustom = new MaterialApplicationCustom();
@@ -94,7 +113,7 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
 
         criteria.andDeptLike("%" + dept + "%");
 
-        List<MaterialApplication> list = MaterialApplicationMapper.selectByExample(MaterialApplicationExample);
+        List<MaterialApplication> list = materialApplicationMapper.selectByExample(MaterialApplicationExample);
 
         List<MaterialApplicationCustom> MaterialApplicationCustomList = null;
 
@@ -120,7 +139,7 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
 
         criteria.andNameLike("%" + name + "%");
 
-        List<MaterialApplication> list = MaterialApplicationMapper.selectByExample(MaterialApplicationExample);
+        List<MaterialApplication> list = materialApplicationMapper.selectByExample(MaterialApplicationExample);
 
         List<MaterialApplicationCustom> MaterialApplicationCustomList = null;
 
@@ -146,7 +165,7 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
 
         criteria.andFlagEqualTo(flag );
 
-        List<MaterialApplication> list = MaterialApplicationMapper.selectByExample(MaterialApplicationExample);
+        List<MaterialApplication> list = materialApplicationMapper.selectByExample(MaterialApplicationExample);
 
         List<MaterialApplicationCustom> MaterialApplicationCustomList = null;
 

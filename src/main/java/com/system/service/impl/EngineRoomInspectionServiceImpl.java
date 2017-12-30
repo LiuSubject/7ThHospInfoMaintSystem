@@ -2,10 +2,9 @@ package com.system.service.impl;
 
 import com.system.mapper.EngineRoomInspectionMapper;
 import com.system.mapper.EngineRoomInspectionMapperCustom;
-import com.system.po.EngineRoomInspection;
-import com.system.po.EngineRoomInspectionCustom;
-import com.system.po.EngineRoomInspectionExample;
-import com.system.po.PagingVO;
+import com.system.mapper.PushMessageMapper;
+import com.system.mapper.PushMessageMapperCustom;
+import com.system.po.*;
 import com.system.service.EngineRoomInspectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,40 +27,57 @@ public class EngineRoomInspectionServiceImpl implements EngineRoomInspectionServ
 
     //使用spring 自动注入
     @Autowired
-    private EngineRoomInspectionMapperCustom EngineRoomInspectionMapperCustom;
+    private EngineRoomInspectionMapperCustom engineRoomInspectionMapperCustom;
 
     @Autowired
-    private EngineRoomInspectionMapper EngineRoomInspectionMapper;
+    private EngineRoomInspectionMapper engineRoomInspectionMapper;
 
+    @Autowired
+    private PushMessageMapper pushMessageMapper;
+
+    @Autowired
+    private PushMessageMapperCustom pushMessageMapperCustom;
 
     public void updataById(Integer id, EngineRoomInspectionCustom EngineRoomInspectionCustom) throws Exception {
-        EngineRoomInspectionMapper.updateByPrimaryKey(EngineRoomInspectionCustom);
+        engineRoomInspectionMapper.updateByPrimaryKey(EngineRoomInspectionCustom);
     }
 
     public void removeById(Integer id) throws Exception {
-        EngineRoomInspectionMapper.deleteByPrimaryKey(id);
+        engineRoomInspectionMapper.deleteByPrimaryKey(id);
     }
 
     public List<EngineRoomInspectionCustom> findByPaging(Integer toPageNo) throws Exception {
         PagingVO pagingVO = new PagingVO();
         pagingVO.setToPageNo(toPageNo);
 
-        List<EngineRoomInspectionCustom> list = EngineRoomInspectionMapperCustom.findByPaging(pagingVO);
+        List<EngineRoomInspectionCustom> list = engineRoomInspectionMapperCustom.findByPaging(pagingVO);
 
         return list;
     }
 
     public Boolean save(EngineRoomInspectionCustom EngineRoomInspectionCustoms) throws Exception {
-        EngineRoomInspection stu = EngineRoomInspectionMapper.selectByPrimaryKey(EngineRoomInspectionCustoms.getId());
+        EngineRoomInspection stu = engineRoomInspectionMapper.selectByPrimaryKey(EngineRoomInspectionCustoms.getId());
         if (stu == null) {
-            EngineRoomInspectionMapper.insert(EngineRoomInspectionCustoms);
+            engineRoomInspectionMapper.insert(EngineRoomInspectionCustoms);
             return true;
         }
 
         return false;
     }
 
-    //返回学生总数
+    public Boolean saveAndPre(
+        EngineRoomInspectionCustom engineRoomInspectionCustom, PushMessage preMessage
+        ) throws Exception{
+        EngineRoomInspection stu = engineRoomInspectionMapper.selectByPrimaryKey(engineRoomInspectionCustom.getId());
+        if (stu == null) {
+            engineRoomInspectionMapper.insert(engineRoomInspectionCustom);
+            pushMessageMapper.insert(preMessage);
+            return true;
+        }
+
+        return false;
+    }
+    //返回物资申购总数
     public int getCountEngineRoomInspection() throws Exception {
         //自定义查询对象
         EngineRoomInspectionExample EngineRoomInspectionExample = new EngineRoomInspectionExample();
@@ -69,12 +85,12 @@ public class EngineRoomInspectionServiceImpl implements EngineRoomInspectionServ
         EngineRoomInspectionExample.Criteria criteria = EngineRoomInspectionExample.createCriteria();
         criteria.andUseridIsNotNull();
 
-        return EngineRoomInspectionMapper.countByExample(EngineRoomInspectionExample);
+        return engineRoomInspectionMapper.countByExample(EngineRoomInspectionExample);
     }
 
     public EngineRoomInspectionCustom findById(Integer id) throws Exception {
 
-        EngineRoomInspection EngineRoomInspection  = EngineRoomInspectionMapper.selectByPrimaryKey(id);
+        EngineRoomInspection EngineRoomInspection  = engineRoomInspectionMapper.selectByPrimaryKey(id);
         EngineRoomInspectionCustom EngineRoomInspectionCustom = null;
         if (EngineRoomInspection != null) {
             EngineRoomInspectionCustom = new EngineRoomInspectionCustom();
@@ -94,7 +110,7 @@ public class EngineRoomInspectionServiceImpl implements EngineRoomInspectionServ
 
         criteria.andExaminerLike("%" + examiner + "%");
 
-        List<EngineRoomInspection> list = EngineRoomInspectionMapper.selectByExample(EngineRoomInspectionExample);
+        List<EngineRoomInspection> list = engineRoomInspectionMapper.selectByExample(EngineRoomInspectionExample);
 
         List<EngineRoomInspectionCustom> EngineRoomInspectionCustomList = null;
 

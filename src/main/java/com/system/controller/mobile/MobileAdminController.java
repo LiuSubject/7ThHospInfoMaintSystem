@@ -52,6 +52,10 @@ public class MobileAdminController {
     @Resource(name = "viewEmployeeMiPsdServiceImpl")
     private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "pushMessageServiceImpl")
+    private PushMessageService pushMessageService;
+
     @Autowired
     private CreatePushUtil createPushUtil;
 
@@ -164,24 +168,24 @@ public class MobileAdminController {
         //设置问题所属人员ID
         computerProblemsCustom.setUserid(viewEmployeeMiPsd.getCode());
 
-        Boolean result = computerProblemsService.save(computerProblemsCustom);
-
-        if (!result) {
-            map.put("success", "false");
-            map.put("msg", "抱歉，故障信息保存失败");
-            return map;
-        }
-
-
-
-        //保存该记录相关数据以便产生推送
         try {
-            createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+            PushMessage preMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
                     "0","11");
+            Boolean result = computerProblemsService.saveAndPre(computerProblemsCustom, preMessage);
+
+            if (!result) {
+                map.put("success", "false");
+                map.put("msg", "抱歉，故障信息保存失败");
+                return map;
+            }
+
             //向管理组推送消息
             messagePushUtil.GroupPushSingle("admin");
         } catch (Exception e) {
             e.printStackTrace();
+            map.put("success", "false");
+            map.put("msg", "抱歉，故障信息保存失败");
+            return map;
         }
         map.put("success", "true");
         map.put("msg", "提交成功");
@@ -289,8 +293,17 @@ public class MobileAdminController {
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
             //保存该记录相关数据以便产生推送
             try {
-                createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
                         "2","12");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    map.put("success", "false");
+                    map.put("msg", "操作异常");
+                    return map;
+                }
                 //向申报人推送消息
                 messagePushUtil.SpecifiedPushSingle(computerProblemsCustom.getUserid());
             } catch (Exception e) {
@@ -365,8 +378,17 @@ public class MobileAdminController {
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
             //保存该记录相关数据以便产生推送
             try {
-                createPushUtil.PushPushMessage(computerProblemsCustom.getUserid(),"0","0",
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
                         "2","13");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    map.put("success", "false");
+                    map.put("msg", "操作异常");
+                    return map;
+                }
                 //向申报人推送消息
                 messagePushUtil.SpecifiedPushSingle(computerProblemsCustom.getUserid());
             } catch (Exception e) {
@@ -578,7 +600,7 @@ public class MobileAdminController {
 
 
 
-        //设置问题初始化时间
+        //设置申购初始化时间
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(currentTime);
@@ -589,34 +611,40 @@ public class MobileAdminController {
             materialApplicationCustom.setCreateTime(dateString);
         }
 
-        //设置问题初始化状态
+        //设置申购初始化状态
         materialApplicationCustom.setFlag(0);
 
-        //设置问题所属部门
+        //设置申购所属部门
         materialApplicationCustom.setDept(viewEmployeeMiPsd.getDeptName());
 
-        //设置问题所属部门编码
+        //设置申购所属部门编码
         materialApplicationCustom.setDepartcode(viewEmployeeMiPsd.getDeptCode());
 
-        //设置问题所属人员ID
+        //设置申购所属人员ID
         materialApplicationCustom.setUserid(viewEmployeeMiPsd.getCode());
 
-        Boolean result = materialApplicationService.save(materialApplicationCustom);
 
-        if (!result) {
-            map.put("success", "false");
-            map.put("msg", "抱歉，故障信息保存失败");
-            return map;
-        }
 
         //保存该记录相关数据以便产生推送
         try {
-            createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+            PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
                     "0","21");
+
+            Boolean result = materialApplicationService.saveAndPre(materialApplicationCustom, pushMessage);
+
+            if (!result) {
+                map.put("success", "false");
+                map.put("msg", "抱歉，物资申购保存失败");
+                return map;
+            }
+
             //向管理组推送消息
             messagePushUtil.GroupPushSingle("admin");
         } catch (Exception e) {
             e.printStackTrace();
+            map.put("success", "false");
+            map.put("msg", "抱歉，物资申购保存失败");
+            return map;
         }
 
         //重定向
@@ -727,8 +755,17 @@ public class MobileAdminController {
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
             try {
-                createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
                         "2","22");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    map.put("success", "false");
+                    map.put("msg", "操作异常");
+                    return map;
+                }
                 //向申报人推送消息
                 messagePushUtil.SpecifiedPushSingle(materialApplicationCustom.getUserid());
             } catch (Exception e) {
@@ -803,8 +840,17 @@ public class MobileAdminController {
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
             try {
-                createPushUtil.PushPushMessage(materialApplicationCustom.getUserid(),"0","1",
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
                         "2","23");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    map.put("success", "false");
+                    map.put("msg", "操作异常");
+                    return map;
+                }
                 //向申报人推送消息
                 messagePushUtil.SpecifiedPushSingle(materialApplicationCustom.getUserid());
             } catch (Exception e) {
@@ -996,22 +1042,28 @@ public class MobileAdminController {
         //设置问题所属人员ID
         engineRoomInspectionCustom.setUserid(viewEmployeeMiPsd.getCode());
 
-        Boolean result = engineRoomInspectionService.save(engineRoomInspectionCustom);
 
-        if (!result) {
-            map.put("success", "false");
-            map.put("msg", "抱歉，巡检信息保存失败");
-            return map;
-        }
 
         //保存该记录相关数据以便产生推送
         try {
-            createPushUtil.PushPushMessage(engineRoomInspectionCustom.getUserid(),"0","2",
+            PushMessage pushMessage = createPushUtil.CreatePreMessage(engineRoomInspectionCustom.getUserid(),"0","2",
                     "0","31");
+
+            Boolean result = engineRoomInspectionService.saveAndPre(engineRoomInspectionCustom, pushMessage);
+
+            if (!result) {
+                map.put("success", "false");
+                map.put("msg", "抱歉，巡检信息保存失败");
+                return map;
+            }
+
             //向管理组推送消息
             messagePushUtil.GroupPushSingle("admin");
         } catch (Exception e) {
             e.printStackTrace();
+            map.put("success", "false");
+            map.put("msg", "抱歉，巡检信息保存失败");
+            return map;
         }
 
         //重定向

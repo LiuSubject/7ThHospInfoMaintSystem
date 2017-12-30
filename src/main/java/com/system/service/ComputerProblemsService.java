@@ -1,6 +1,7 @@
 package com.system.service;
 
 import com.system.po.ComputerProblemsCustom;
+import com.system.po.PushMessage;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,9 @@ public interface ComputerProblemsService {
 
     //保存电脑故障信息
     Boolean save(ComputerProblemsCustom computerProblemsCustom) throws Exception;
+
+    //事务：保存电脑故障信息，并初始化推送消息
+    Boolean saveAndPre(ComputerProblemsCustom computerProblemsCustom, PushMessage preMessage) throws Exception;
 
     //获取电脑故障总数
     int getCountComputerProblems() throws Exception;

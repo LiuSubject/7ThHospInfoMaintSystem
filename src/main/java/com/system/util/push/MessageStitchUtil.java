@@ -36,8 +36,10 @@ public class MessageStitchUtil {
         int pushMessageTemplateId = 0;
 
         try {
+            //只读操作
             pushMessage = pushMessageService.findByStatus("0");
             pushMessageTemplateId = Integer.parseInt(pushMessage.getMsgContent1());
+            //只读操作
             pushMessageTemplate = pushMessageTemplateService.findById(pushMessageTemplateId);
             //导入消息模板
             pushMessage.setMsgContent1(pushMessageTemplate.getContent());
