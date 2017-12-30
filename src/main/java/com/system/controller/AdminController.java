@@ -19,9 +19,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
@@ -380,40 +378,30 @@ public class AdminController {
 
     //搜索电脑故障
     @RequestMapping(value = "/searchComputerProblems")
-    private String searchComputerProblems(String findByDept,String findByName,String findByFlag, Model model) throws Exception {
+    private String searchComputerProblems(String findByDept,String findByName,String findByFlag, Model model,Integer page) throws Exception {
 
-
-        List<ComputerProblemsCustom> listByDept = new ArrayList<ComputerProblemsCustom>();
-        List<ComputerProblemsCustom> listByName = new ArrayList<ComputerProblemsCustom>();
-        List<ComputerProblemsCustom> listByFlag = new ArrayList<ComputerProblemsCustom>();
-        List<ComputerProblemsCustom> listResult = new ArrayList<ComputerProblemsCustom>();
-
-        if(!findByDept.equals(""))
-        {
-            listByDept = computerProblemsService.findByDept(findByDept);
+        List<ComputerProblemsCustom> list = null;
+        Map<String, Object> map =new HashMap<String, Object>();
+        map.put("dept",findByDept);
+        map.put("name",findByName);
+        map.put("flag",findByFlag);
+        //页码对象
+        PagingVO pagingVO = new PagingVO();
+        //设置总页数
+        pagingVO.setTotalCount(computerProblemsService.getCountOfSearchResults());
+        if (page == null || page == 0) {
+            pagingVO.setToPageNo(1);
+            map.put("pagingVO",pagingVO);
+            list = computerProblemsService.paginationOfSearchResults(map);
+        } else {
+            pagingVO.setToPageNo(page);
+            map.put("pagingVO",pagingVO);
+            list = computerProblemsService.paginationOfSearchResults(map);
         }
 
-        if(!findByName.equals(""))
-        {
-            listByName = computerProblemsService.findByName(findByName);
-        }
+        model.addAttribute("computerProblemsList", list);
+        model.addAttribute("pagingVO", pagingVO);
 
-        if(!findByFlag.equals(""))
-        {
-            Integer flag = Integer.parseInt(findByFlag);
-            listByFlag = computerProblemsService.findByFlag(flag);
-        }
-
-
-
-        //合并去重
-        listResult.addAll(listByDept);
-        listResult.removeAll(listByFlag);
-        listResult.addAll(listByFlag);
-        listResult.removeAll(listByName);
-        listResult.addAll(listByName);
-
-        model.addAttribute("computerProblemsList", listResult);
         return "admin/showComputerProblems";
     }
 

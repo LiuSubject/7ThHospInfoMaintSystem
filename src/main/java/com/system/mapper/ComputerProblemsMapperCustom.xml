@@ -22,14 +22,24 @@
   <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select computer_problems.*
     from computer_problems
-    ORDER by flag asc
+    ORDER by flag asc, create_time desc
     limit #{toPageNo}, #{pageSize}
   </select>
   <select id="paginationOfSearchResults" parameterType="map" resultMap="BaseResultMap">
-    select computer_problems.*
-    from computer_problems
-    ORDER by flag asc
-    limit #{toPageNo}, #{pageSize}
+    select computer_problems.* from computer_problems
+    <where>
+    <if test="dept != null and dept != ''">
+      AND dept LIKE concat(concat('%',#{dept}),'%')
+    </if>
+    <if test="name != null and name != ''">
+      OR name LIKE concat(concat('%',#{name}),'%')
+    </if>
+    <if test="flag != null and flag != ''" >
+      OR flag = #{flag}
+    </if>
+    </where>
+    ORDER by flag asc, create_time desc
+    /*limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}*/
   </select>
 
 </mapper>
