@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -27,19 +28,24 @@ import java.util.Map;
 public class MobileUpdateController {
     @RequestMapping("/mobileupdate")
     @ResponseBody
-    public Map<String, Object> showComputerProblems(HttpSession session) throws Exception {
+    public Map<String, Object> showComputerProblems(HttpServletRequest httpRequest,HttpSession session) throws Exception {
 
-        Map<String, Object> map =ReadIni(session);
+        Map<String, Object> map =ReadIni(httpRequest, session);
 
         return map;
 
     }
 
-    public Map<String, Object> ReadIni(HttpSession session) throws IOException {
+    public Map<String, Object> ReadIni(HttpServletRequest httpRequest, HttpSession session) throws IOException {
         Wini ini = null;
         String paPath = session.getServletContext().getRealPath("/") ;
         String iniPath = paPath + "update\\appinfo.ini";
-        String wgtPath = paPath + "update\\update.wgt";
+        String wgtPath = "http://" + httpRequest.getServerName() //服务器地址
+                + ":"
+                + httpRequest.getServerPort()           //端口号
+                + httpRequest.getContextPath()      //项目名称
+                + "/update/update.wgt";
+        //String wgtPath = paPath + "update\\update.wgt";
         try {
             ini = new Wini(new File(iniPath));
         } catch (IOException e) {

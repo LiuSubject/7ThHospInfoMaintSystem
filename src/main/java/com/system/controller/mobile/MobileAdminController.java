@@ -72,24 +72,35 @@ public class MobileAdminController {
     @ResponseBody
     public Map<String, Object> showComputerProblems(Model model, Integer page) throws Exception {
 
+
+        Subject subject = SecurityUtils.getSubject();
         Map<String, Object> map =new HashMap<String, Object>();
-        List<ComputerProblemsCustom> list = null;
-        //页码对象
-        PagingVO pagingVO = new PagingVO();
-        //设置总页数
-        pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
-        if (page == null || page == 0) {
-            pagingVO.setToPageNo(1);
-            list = computerProblemsService.findByPaging(1);
-        } else {
-            pagingVO.setToPageNo(page);
-            list = computerProblemsService.findByPaging(page);
+        if (subject.hasRole("admin")) {
+            List<ComputerProblemsCustom> list = null;
+            //页码对象
+            PagingVO pagingVO = new PagingVO();
+            //设置总页数
+            pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
+            if (page == null || page == 0) {
+                pagingVO.setToPageNo(1);
+                list = computerProblemsService.findByPaging(1);
+            } else {
+                pagingVO.setToPageNo(page);
+                list = computerProblemsService.findByPaging(page);
+            }
+
+            map.put("computerProblemsList", list);
+            map.put("pagingVO", pagingVO);
+
+            return map;
+        }else{
+            String current = (String) subject.getPrincipal();
+            List<ComputerProblemsCustom> listByName = new ArrayList<>();
+            listByName = computerProblemsService.findByUserID(current);
+            map.put("computerProblemsList", listByName);
+            return map;
         }
 
-        map.put("computerProblemsList", list);
-        map.put("pagingVO", pagingVO);
-
-        return map;
 
     }
 
@@ -499,7 +510,7 @@ public class MobileAdminController {
             map.put("computerProblemsList", listResult);
         }else{
             map.put("success", "false");
-            map.put("msg", "结果过多，请精确查找");
+            map.put("msg", "结果大于50条，请精确查找");
         }
         return map;
     }
@@ -540,24 +551,33 @@ public class MobileAdminController {
     @RequestMapping("/showMaterialApplication")
     @ResponseBody
     public Map<String, Object>  showMaterialApplication(Model model, Integer page) throws Exception {
-        List<MaterialApplicationCustom> list = null;
+        Subject subject = SecurityUtils.getSubject();
         Map<String, Object> map =new HashMap<String, Object>();
-        //页码对象
-        PagingVO pagingVO = new PagingVO();
-        //设置总页数
-        pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
-        if (page == null || page == 0) {
-            pagingVO.setToPageNo(1);
-            list = materialApplicationService.findByPaging(1);
-        } else {
-            pagingVO.setToPageNo(page);
-            list = materialApplicationService.findByPaging(page);
+        if (subject.hasRole("admin")) {
+            List<MaterialApplicationCustom> list = null;
+            //页码对象
+            PagingVO pagingVO = new PagingVO();
+            //设置总页数
+            pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
+            if (page == null || page == 0) {
+                pagingVO.setToPageNo(1);
+                list = materialApplicationService.findByPaging(1);
+            } else {
+                pagingVO.setToPageNo(page);
+                list = materialApplicationService.findByPaging(page);
+            }
+
+            map.put("materialApplicationList", list);
+            map.put("pagingVO", pagingVO);
+
+            return map;
+        }else{
+            String current = (String) subject.getPrincipal();
+            List<MaterialApplicationCustom> listByName = new ArrayList<>();
+            listByName = materialApplicationService.findByUserID(current);
+            map.put("materialApplicationList", listByName);
+            return map;
         }
-
-        map.put("materialApplicationList", list);
-        map.put("pagingVO", pagingVO);
-
-        return map;
 
     }
 

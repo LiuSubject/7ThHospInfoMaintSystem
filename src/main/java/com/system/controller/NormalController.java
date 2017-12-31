@@ -67,25 +67,16 @@ public class NormalController {
     private MessagePushUtil messagePushUtil;
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
-    // 电脑故障显示
+    // 电脑故障显示(普通用户只能看到自己提交的故障报告)
     @RequestMapping("/showComputerProblems")
     public String showComputerProblems(Model model, Integer page) throws Exception {
 
-        List<ComputerProblemsCustom> list = null;
-        //页码对象
-        PagingVO pagingVO = new PagingVO();
-        //设置总页数
-        pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
-        if (page == null || page == 0) {
-            pagingVO.setToPageNo(1);
-            list = computerProblemsService.findByPaging(1);
-        } else {
-            pagingVO.setToPageNo(page);
-            list = computerProblemsService.findByPaging(page);
-        }
+        Subject subject = SecurityUtils.getSubject();
+        String current = (String) subject.getPrincipal();
+        List<ComputerProblemsCustom> listByName = new ArrayList<>();
+        listByName = computerProblemsService.findByUserID(current);
 
-        model.addAttribute("computerProblemsList", list);
-        model.addAttribute("pagingVO", pagingVO);
+        model.addAttribute("computerProblemsList", listByName);
 
         return "normal/showComputerProblems";
 
@@ -366,8 +357,8 @@ public class NormalController {
     private String searchComputerProblems(String findByDept,String findByName,String findByFlag, Model model) throws Exception {
 
 
-        List<ComputerProblemsCustom> listByDept = new ArrayList<ComputerProblemsCustom>();
-        List<ComputerProblemsCustom> listByName = new ArrayList<ComputerProblemsCustom>();
+        List<ComputerProblemsCustom> listByDept = new ArrayList<>();
+        List<ComputerProblemsCustom> listByName = new ArrayList<>();
         List<ComputerProblemsCustom> listByFlag = new ArrayList<ComputerProblemsCustom>();
         List<ComputerProblemsCustom> listResult = new ArrayList<ComputerProblemsCustom>();
 
@@ -401,24 +392,15 @@ public class NormalController {
     }
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-    // 物资申购显示
+    // 物资申购显示(普通用户只能看到自己提交的故障报告)
     @RequestMapping("/showMaterialApplication")
     public String showMaterialApplication(Model model, Integer page) throws Exception {
-        List<MaterialApplicationCustom> list = null;
-        //页码对象
-        PagingVO pagingVO = new PagingVO();
-        //设置总页数
-        pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
-        if (page == null || page == 0) {
-            pagingVO.setToPageNo(1);
-            list = materialApplicationService.findByPaging(1);
-        } else {
-            pagingVO.setToPageNo(page);
-            list = materialApplicationService.findByPaging(page);
-        }
+        Subject subject = SecurityUtils.getSubject();
+        String current = (String) subject.getPrincipal();
+        List<MaterialApplicationCustom> listByName = new ArrayList<>();
+        listByName = materialApplicationService.findByUserID(current);
 
-        model.addAttribute("materialApplicationList", list);
-        model.addAttribute("pagingVO", pagingVO);
+        model.addAttribute("materialApplicationList", listByName);
 
         return "normal/showMaterialApplication";
 

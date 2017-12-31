@@ -181,4 +181,32 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
 
         return MaterialApplicationCustomList;
     }
+
+    //模糊查询
+    public List<MaterialApplicationCustom> findByUserID(String code) throws Exception {
+
+        MaterialApplicationExample materialApplicationExample = new MaterialApplicationExample();
+        //自定义查询条件
+        MaterialApplicationExample.Criteria criteria = materialApplicationExample.createCriteria();
+
+
+        criteria.andUseridEqualTo(code);
+        materialApplicationExample.setOrderByClause("flag asc");
+
+        List<MaterialApplication> list = materialApplicationMapper.selectByExample(materialApplicationExample);
+
+        List<MaterialApplicationCustom> MaterialApplicationCustomList = null;
+
+        if (list != null) {
+            MaterialApplicationCustomList = new ArrayList<>();
+            for (MaterialApplication s : list) {
+                MaterialApplicationCustom MaterialApplicationCustom = new MaterialApplicationCustom();
+                //类拷贝
+                org.springframework.beans.BeanUtils.copyProperties(s, MaterialApplicationCustom);
+                MaterialApplicationCustomList.add(MaterialApplicationCustom);
+            }
+        }
+
+        return MaterialApplicationCustomList;
+    }
 }
