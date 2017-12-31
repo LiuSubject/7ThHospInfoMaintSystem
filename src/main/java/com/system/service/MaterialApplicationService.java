@@ -47,4 +47,7 @@ public interface MaterialApplicationService {
 
     //根据状态模糊查询
     List<MaterialApplicationCustom> findByFlag(Integer flag) throws Exception;
+
+    //根据申请人工号查询
+    List<MaterialApplicationCustom> findByUserID(String code) throws Exception;
 }

@@ -131,7 +131,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
 
         criteria.andDeptLike("%" + dept + "%");
-        ComputerProblemsExample.setOrderByClause("flag asc");
+        ComputerProblemsExample.setOrderByClause("flag asc, create_time desc");
         List<ComputerProblems> list = computerProblemsMapper.selectByExample(ComputerProblemsExample);
 
         List<ComputerProblemsCustom> ComputerProblemsCustomList = null;
@@ -157,7 +157,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
 
         criteria.andNameLike("%" + name + "%");
-        ComputerProblemsExample.setOrderByClause("flag asc");
+        ComputerProblemsExample.setOrderByClause("flag asc, create_time desc");
 
         List<ComputerProblems> list = computerProblemsMapper.selectByExample(ComputerProblemsExample);
 
@@ -211,7 +211,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
 
         criteria.andUseridEqualTo(code);
-        ComputerProblemsExample.setOrderByClause("flag asc");
+        ComputerProblemsExample.setOrderByClause("flag asc, create_time desc");
 
         List<ComputerProblems> list = computerProblemsMapper.selectByExample(ComputerProblemsExample);
 
@@ -238,7 +238,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
 
         criteria.andLeaderEqualTo(code);
-        ComputerProblemsExample.setOrderByClause("flag asc");
+        ComputerProblemsExample.setOrderByClause("flag asc, create_time desc");
 
         List<ComputerProblems> list = computerProblemsMapper.selectByExample(ComputerProblemsExample);
 

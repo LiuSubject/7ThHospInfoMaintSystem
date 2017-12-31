@@ -27,23 +27,7 @@
 			<div class="col-md-10">
 				<div class="panel panel-default">
 				    <div class="panel-heading">
-						<h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">故障列表</h2>
-						<div class="row" style="text-align: right">
-							<form class="form-horizontal form-inline" role="form" style="margin: 20px 0 10px 0;"
-								  action="/normal/searchComputerProblems" id="searchFunction" method="post">
-								<div class="form-group col-sm-12">
-										<input type="text" class="form-control" placeholder="请输入科室" id="findByDept"
-											   name="findByDept" style="margin-left: 5px">
-										<input type="text" class="form-control" placeholder="请输入申报人" id="findByName"
-											   name="findByName" style="margin-left: 10px">
-										<input type="text" class="form-control" placeholder="请输入状态" id="findByFlag"
-											   name="findByFlag" style="margin-left: 10px">
-										<input type="button" class="btn btn-primary" id="searchBtn" value="搜索"
-												style="margin-left: 10px;margin-right:20px">
-								</div>
-							</form>
-
-						</div>
+						<h2 style="text-align: center;margin-bottom: 20px ">故障列表</h2>
 				    </div>
 				    <table class="table table-bordered">
 					        <thead>
@@ -110,21 +94,21 @@
 						<c:if test="${pagingVO != null}">
 							<nav style="text-align: center">
 								<ul class="pagination">
-									<li><a href="/admin/showComputerProblems?page=${pagingVO.upPageNo}">&laquo;上一页</a></li>
+									<li><a href="/normal/showComputerProblems?page=${pagingVO.upPageNo}">&laquo;上一页</a></li>
 									<li class="active"><a href="">${pagingVO.curentPageNo}</a></li>
 									<c:if test="${pagingVO.curentPageNo+1 <= pagingVO.totalCount}">
-										<li><a href="/admin/showComputerProblems?page=${pagingVO.curentPageNo+1}">${pagingVO.curentPageNo+1}</a></li>
+										<li><a href="/normal/showComputerProblems?page=${pagingVO.curentPageNo+1}">${pagingVO.curentPageNo+1}</a></li>
 									</c:if>
 									<c:if test="${pagingVO.curentPageNo+2 <= pagingVO.totalCount}">
-										<li><a href="/admin/showComputerProblems?page=${pagingVO.curentPageNo+2}">${pagingVO.curentPageNo+2}</a></li>
+										<li><a href="/normal/showComputerProblems?page=${pagingVO.curentPageNo+2}">${pagingVO.curentPageNo+2}</a></li>
 									</c:if>
 									<c:if test="${pagingVO.curentPageNo+3 <= pagingVO.totalCount}">
-										<li><a href="/admin/showComputerProblems?page=${pagingVO.curentPageNo+3}">${pagingVO.curentPageNo+3}</a></li>
+										<li><a href="/normal/showComputerProblems?page=${pagingVO.curentPageNo+3}">${pagingVO.curentPageNo+3}</a></li>
 									</c:if>
 									<c:if test="${pagingVO.curentPageNo+4 <= pagingVO.totalCount}">
-										<li><a href="/admin/showComputerProblems?page=${pagingVO.curentPageNo+4}">${pagingVO.curentPageNo+4}</a></li>
+										<li><a href="/normal/showComputerProblems?page=${pagingVO.curentPageNo+4}">${pagingVO.curentPageNo+4}</a></li>
 									</c:if>
-									<li><a href="/admin/showComputerProblems?page=${pagingVO.totalCount}">最后一页&raquo;</a></li>
+									<li><a href="/normal/showComputerProblems?page=${pagingVO.totalCount}">最后一页&raquo;</a></li>
 								</ul>
 							</nav>
 						</c:if>

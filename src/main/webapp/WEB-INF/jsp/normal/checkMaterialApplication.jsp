@@ -123,7 +123,7 @@
 
     //返回按钮点击
     $('#returnListBtn').on('click', function() {
-        window.location.href = "/admin/showMaterialApplication";
+        window.location.href = "/normal/showMaterialApplication";
     });
 
 
