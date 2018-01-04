@@ -20,15 +20,6 @@
             height: 100%;
         }
 
-
-        #login-box {
-            /*border:1px solid #F00;*/
-            padding: 20px;
-            border-radius: 15px;
-            background: #367fa9;
-            color: #fff;
-        }
-
         .container {
             height: 100%;
         }
@@ -37,6 +28,7 @@
             position: relative;
             top: 15%;
         }
+
 
 
     </style>
@@ -48,20 +40,20 @@
         <div class="col-md-4" id="login-box">
             <form class="form-horizontal" role="form" action="/login" id="loginForm" method="post">
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">工号</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" id="code" placeholder="请输入工号" name="code">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="code" placeholder="工号" name="code">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">密码</label>
-                    <div class="col-sm-9">
-                        <input type="password" class="form-control" id="psd" placeholder="请输入密码" name="psd">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8">
+                        <input type="password" class="form-control" id="psd" placeholder="密码" name="psd">
                     </div>
                 </div>
-                <div class="form-group pull-right" style="margin-right: 15px;">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="button" class="btn btn-default btn-info" id="loginBtn">登录</button>
+                <div class="form-group" style="align-content: center" >
+                    <div class="col-sm-offset-2 col-sm-8" >
+                        <button type="button" class="btn btn-default btn-info btn-block" id="loginBtn">登录</button>
                     </div>
                 </div>
             </form>
