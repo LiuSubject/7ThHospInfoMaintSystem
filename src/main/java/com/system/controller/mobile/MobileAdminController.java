@@ -94,10 +94,30 @@ public class MobileAdminController {
 
             return map;
         }else{
-            String current = (String) subject.getPrincipal();
-            List<ComputerProblemsCustom> listByName = new ArrayList<>();
-            listByName = computerProblemsService.findByUserID(current);
-            map.put("computerProblemsList", listByName);
+            //获取当前操作用户对象
+            //(普通用户只能看到本科室提交的故障报告)
+            ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+            try {
+                //切换数据源至SQLServer
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+                //切换数据源至MySQL
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+            } catch (Exception e) {
+                //切换数据源至MySQL(启用备用库)
+                try{
+                    CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                    viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+                }catch (Exception eSwitch){
+                    eSwitch.printStackTrace();
+                }
+                e.printStackTrace();
+            }
+            String currentDept = viewEmployeeMiPsd.getDeptCode();
+            List<ComputerProblemsCustom> listByDept = new ArrayList<>();
+            listByDept = computerProblemsService.findByDept(currentDept);
+            map.put("computerProblemsList", listByDept);
             return map;
         }
 
@@ -572,10 +592,30 @@ public class MobileAdminController {
 
             return map;
         }else{
-            String current = (String) subject.getPrincipal();
-            List<MaterialApplicationCustom> listByName = new ArrayList<>();
-            listByName = materialApplicationService.findByUserID(current);
-            map.put("materialApplicationList", listByName);
+            //获取当前操作用户对象
+            //(普通用户只能看到本科室提交的故障报告)
+            ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+            try {
+                //切换数据源至SQLServer
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+                //切换数据源至MySQL
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+            } catch (Exception e) {
+                //切换数据源至MySQL(启用备用库)
+                try{
+                    CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                    viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+                }catch (Exception eSwitch){
+                    eSwitch.printStackTrace();
+                }
+                e.printStackTrace();
+            }
+            String currentDept = viewEmployeeMiPsd.getDeptCode();
+            List<MaterialApplicationCustom> listByDept = new ArrayList<>();
+            listByDept = materialApplicationService.findByDept(currentDept);
+            map.put("materialApplicationList", listByDept);
             return map;
         }
 

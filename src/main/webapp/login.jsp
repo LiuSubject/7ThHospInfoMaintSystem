@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
+
 <html>
 <head>
     <title>绍兴市第七人民医院信息维护平台</title>
@@ -33,6 +34,18 @@
 
     </style>
 </head>
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=9" />
+<script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
+<script src="/js/html5shiv.min.js"></script>
+<script src="/js/respond.min.js"></script>
+<script type="text/javascript" src="/js/jquery.placeholder.js"></script>
+<![endif]-->
+<!--[if IE 9]>
+<script type="text/javascript" src="/js/jquery.placeholder.js"></script>
+<![endif]-->
 <body>
 <div class="container" id="top">
     <div class="row" style="margin-top: 280px; ">
@@ -69,6 +82,12 @@
         //密码加密后再传输
         $('#psd').val(Encrypting($('#code').val(), $('#psd').val()));
         $('#loginForm').submit();
+    });
+
+//  使IE8支持 placeholder
+    $(function () {
+        // Invoke the plugin
+        $('input, textarea').placeholder();
     });
 
 </script>
