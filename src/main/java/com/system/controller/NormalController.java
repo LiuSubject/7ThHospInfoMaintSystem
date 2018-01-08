@@ -67,16 +67,35 @@ public class NormalController {
     private MessagePushUtil messagePushUtil;
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
-    // 电脑故障显示(普通用户只能看到自己提交的故障报告)
+    // 电脑故障显示(普通用户只能看到本科室提交的故障报告)
     @RequestMapping("/showComputerProblems")
     public String showComputerProblems(Model model, Integer page) throws Exception {
 
+        //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        String current = (String) subject.getPrincipal();
-        List<ComputerProblemsCustom> listByName = new ArrayList<>();
-        listByName = computerProblemsService.findByUserID(current);
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
 
-        model.addAttribute("computerProblemsList", listByName);
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        String currentDept = viewEmployeeMiPsd.getDeptCode();
+        List<ComputerProblemsCustom> listByDept = new ArrayList<>();
+        listByDept = computerProblemsService.findByDept(currentDept);
+
+        model.addAttribute("computerProblemsList", listByDept);
 
         return "normal/showComputerProblems";
 
@@ -395,12 +414,31 @@ public class NormalController {
     // 物资申购显示(普通用户只能看到自己提交的故障报告)
     @RequestMapping("/showMaterialApplication")
     public String showMaterialApplication(Model model, Integer page) throws Exception {
+        //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        String current = (String) subject.getPrincipal();
-        List<MaterialApplicationCustom> listByName = new ArrayList<>();
-        listByName = materialApplicationService.findByUserID(current);
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
 
-        model.addAttribute("materialApplicationList", listByName);
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        String currentDept = viewEmployeeMiPsd.getDeptCode();
+        List<MaterialApplicationCustom> listByDept = new ArrayList<>();
+        listByDept = materialApplicationService.findByDept(currentDept);
+
+        model.addAttribute("materialApplicationList", listByDept);
 
         return "normal/showMaterialApplication";
 
