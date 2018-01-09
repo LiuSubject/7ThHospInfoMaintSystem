@@ -23,7 +23,8 @@
 <script type="text/javascript" src="/js/jquery.placeholder.js"></script>
 <![endif]-->
 <!--[if IE 9]>
-<script type="text/javascript" src="/js/jquery.placeholder.js"></script><![endif]-->
+<script type="text/javascript" src="/js/jquery.placeholder.js"></script>
+<![endif]-->
 <body>
 <!-- 顶栏 -->
 <jsp:include page="top.jsp"></jsp:include>

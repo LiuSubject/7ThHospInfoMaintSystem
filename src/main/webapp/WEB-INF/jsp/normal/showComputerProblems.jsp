@@ -44,11 +44,10 @@
 				    <table class="table table-bordered">
 					        <thead>
 					            <tr>
-									<th style="text-align: center">标题</th>
+									<th style="text-align: center">故障类型</th>
 									<th style="text-align: center">科室</th>
 									<th style="text-align: center">申报人</th>
 									<th style="text-align: center">电话</th>
-									<th style="text-align: center">故障类型</th>
 									<th style="text-align: center">状态</th>
 									<th style="text-align: center">负责人</th>
 									<th style="text-align: center">创建时间</th>
@@ -62,27 +61,6 @@
 								<td>${item.dept}</td>
 								<td>${item.name}</td>
 								<td>${item.tel}</td>
-								<c:if test="${item.type == 1}">
-									<td>电脑问题</td>
-								</c:if>
-								<c:if test="${item.type == 2}">
-									<td>打印机问题</td>
-								</c:if>
-								<c:if test="${item.type == 3}">
-									<td>监控问题</td>
-								</c:if>
-								<c:if test="${item.type == 4}">
-									<td>网络问题</td>
-								</c:if>
-								<c:if test="${item.type == 5}">
-									<td>病区软件问题</td>
-								</c:if>
-								<c:if test="${item.type == 6}">
-									<td>门诊软件问题</td>
-								</c:if>
-								<c:if test="${item.type == 7}">
-									<td>其它问题</td>
-								</c:if>
 								<c:if test="${item.flag == 0}">
 									<td><button class="btn btn-warning btn-sm" type="button">提交中</button></td>
 								</c:if>
@@ -147,15 +125,6 @@
             $(".pagination li:nth-child(1)").addClass("disabled")
         }
         </c:if>
-
-        function confirmd() {
-            var msg = "您真的确定要删除吗？！";
-            if (confirm(msg)==true){
-                return true;
-            }else{
-                return false;
-            }
-        }
 
         $("#searchBtn").click(function () {
             $("#searchFunction").submit();

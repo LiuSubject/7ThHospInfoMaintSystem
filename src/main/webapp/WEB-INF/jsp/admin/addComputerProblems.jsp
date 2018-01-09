@@ -42,10 +42,18 @@
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" action="/admin/addComputerProblems" id="editfrom"
                           method="post" enctype="multipart/form-data">
-                        <div class="form-group">
+                        <div class="form-group" style="display:none">
+                            <%--隐藏元素--%>
                             <label class="col-sm-2 control-label">标题：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="title" name="title" placeholder="请输入标题">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">故障类型：</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="type" id="type">
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -64,20 +72,6 @@
                             <label class="col-sm-2 control-label">联系方式：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="tel" name="tel" placeholder="请输入联系方式">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">故障类型：</label>
-                            <div class="col-sm-8">
-                                <select class="form-control" name="type" id="type">
-                                    <option value="1">电脑问题</option>
-                                    <option value="2">打印机问题</option>
-                                    <option value="3">监控问题</option>
-                                    <option value="4">网络问题</option>
-                                    <option value="5">病区软件问题</option>
-                                    <option value="6">门诊软件问题</option>
-                                    <option value="7">其它问题</option>
-                                </select>
                             </div>
                         </div>
                         <div id="textareadetail" class="form-group">
@@ -119,5 +113,46 @@
         $(".pagination li:nth-child(1)").addClass("disabled")
     }
     </c:if>
+    //用户信息填入
+    $.ajax({
+        url:"/admin/getApplicantInfo",
+        async:true,
+        success: function(data){
+            document.getElementById("dept").value = data.appliDept;
+            document.getElementById("name").value = data.appliName;
+
+        }
+    });
+
+    //故障列表填入
+    $.ajax({
+        url:"/admin/getProblemsTypeList",
+        async:true,
+        success: function(data){
+            var list = data.computerProblemsTypeList;
+            if(list){                                               //判断
+                for(var i=0; i<list.length; i++){                   //遍历，动态赋值
+                    var optionString = "";
+                    optionString ="<option value=\""
+                                + list[i].typeCode+"\">"
+                                + list[i].typeName+"</option>";     //动态添加数据
+                    $("#type").append(optionString);                // 为当前Id为type的select添加数据。
+                }
+            }
+            //title初始值设置
+            document.getElementById("title").value = $("#type").find("option:selected").text();
+        }
+    });
+
+    $("#type").change(function(){
+        document.getElementById("title").value = $("#type").find("option:selected").text();
+    });
+
+    //使IE8支持 placeholder
+    $(function () {
+        // Invoke the plugin
+        $('input, textarea').placeholder();
+    });
+
 </script>
 </html>
