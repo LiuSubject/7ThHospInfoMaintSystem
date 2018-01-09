@@ -34,12 +34,11 @@
     <if test="name != null and name != ''">
       OR name LIKE concat(concat('%',#{name}),'%')
     </if>
-    <if test="flag != null and flag != ''" >
+    <if test="flag == 0 or flag == 1 or flag == 2" >
       OR flag = #{flag}
     </if>
     </where>
     ORDER by flag asc, create_time desc
-    /*limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}*/
   </select>
 
 </mapper>

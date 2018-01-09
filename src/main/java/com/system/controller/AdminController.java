@@ -406,23 +406,21 @@ public class AdminController {
         Map<String, Object> map =new HashMap<String, Object>();
         map.put("dept",findByDept);
         map.put("name",findByName);
-        map.put("flag",findByFlag);
-        //页码对象
-        PagingVO pagingVO = new PagingVO();
-        //设置总页数
-        pagingVO.setTotalCount(computerProblemsService.getCountOfSearchResults());
-        if (page == null || page == 0) {
-            pagingVO.setToPageNo(1);
-            map.put("pagingVO",pagingVO);
+        int flag = 0;
+        try {
+            flag = Integer.parseInt(findByFlag);
+        } catch (NumberFormatException e) {
+            flag = 3;
+        }
+        map.put("flag",flag);
+        try {
             list = computerProblemsService.paginationOfSearchResults(map);
-        } else {
-            pagingVO.setToPageNo(page);
-            map.put("pagingVO",pagingVO);
-            list = computerProblemsService.paginationOfSearchResults(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
         }
 
         model.addAttribute("computerProblemsList", list);
-        model.addAttribute("pagingVO", pagingVO);
 
         return "admin/showComputerProblems";
     }

@@ -441,7 +441,7 @@ public class NormalController {
             }
             e.printStackTrace();
         }
-        String currentDept = viewEmployeeMiPsd.getDeptCode();
+        String currentDept = viewEmployeeMiPsd.getDeptName();
         List<MaterialApplicationCustom> listByDept = new ArrayList<>();
         listByDept = materialApplicationService.findByDept(currentDept);
 

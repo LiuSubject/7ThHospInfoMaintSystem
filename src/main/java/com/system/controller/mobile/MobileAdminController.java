@@ -489,49 +489,35 @@ public class MobileAdminController {
     public Map<String, Object> searchComputerProblems(String findByDept,String findByName,String findByFlag) throws Exception {
 
         Map<String, Object> map =new HashMap<String, Object>();
-        List<ComputerProblemsCustom> listByDept = new ArrayList<ComputerProblemsCustom>();
-        List<ComputerProblemsCustom> listByName = new ArrayList<ComputerProblemsCustom>();
-        List<ComputerProblemsCustom> listByFlag = new ArrayList<ComputerProblemsCustom>();
-        List<ComputerProblemsCustom> listResult = new ArrayList<ComputerProblemsCustom>();
+        List<ComputerProblemsCustom> list = null;
+        Map<String, Object> condition =new HashMap<String, Object>();
+        condition.put("dept",findByDept);
+        condition.put("name",findByName);
+        int flag = 0;
+        try {
+            flag = Integer.parseInt(findByFlag);
+        } catch (NumberFormatException e) {
+            flag = 3;
+        }
+        condition.put("flag",flag);
 
-        if(!findByDept.equals(""))
-        {
-            listByDept = computerProblemsService.findByDept(findByDept);
+        try {
+            list = computerProblemsService.paginationOfSearchResults(condition);
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", "false");
+            map.put("msg", "搜索出错，请重试");
+            return map;
         }
 
-        if(!findByName.equals(""))
-        {
-            listByName = computerProblemsService.findByName(findByName);
-        }
-
-        if(!findByFlag.equals(""))
-        {
-            try{
-                Integer flag = Integer.parseInt(findByFlag);
-                listByFlag = computerProblemsService.findByFlag(flag);
-
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-
-        }
-
-
-
-        //合并去重
-        listResult.addAll(listByDept);
-        listResult.removeAll(listByFlag);
-        listResult.addAll(listByFlag);
-        listResult.removeAll(listByName);
-        listResult.addAll(listByName);
-
-        if(listResult.size() <= 50){
+        if(list.size() <= 200){
             map.put("success", "true");
-            map.put("computerProblemsList", listResult);
+            map.put("computerProblemsList", list);
         }else{
             map.put("success", "false");
-            map.put("msg", "结果大于50条，请精确查找条件");
+            map.put("msg", "结果大于200条，请精确查找条件");
         }
+
         return map;
     }
 
