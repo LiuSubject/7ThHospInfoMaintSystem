@@ -14,14 +14,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -60,6 +59,14 @@ public class NormalController {
     @Resource(name = "viewEmployeeMiPsdServiceImpl")
     private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "computerProblemsTypeServiceImpl")
+    private ComputerProblemsTypeService computerProblemsTypeService;
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "materialApplicationTypeServiceImpl")
+    private MaterialApplicationTypeService materialApplicationTypeService;
+
     @Autowired
     private CreatePushUtil createPushUtil;
 
@@ -91,7 +98,7 @@ public class NormalController {
             }
             e.printStackTrace();
         }
-        String currentDept = viewEmployeeMiPsd.getDeptCode();
+        String currentDept = viewEmployeeMiPsd.getDeptName();
         List<ComputerProblemsCustom> listByDept = new ArrayList<>();
         listByDept = computerProblemsService.findByDept(currentDept);
 
@@ -956,4 +963,69 @@ public class NormalController {
         return "normal/showEngineRoomInspection";
     }
 
+    //返回操作人相关基本信息JSON
+    @RequestMapping(value = "/getApplicantInfo")
+    @ResponseBody
+    private Map<String, Object> getApplicantInfo() throws Exception {
+
+
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        Map<String, Object> map =new HashMap<String, Object>();
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        map.put("appliName",viewEmployeeMiPsd.getName());
+        map.put("appliDept",viewEmployeeMiPsd.getDeptName());
+        map.put("appliDeptCode",viewEmployeeMiPsd.getDeptCode());
+        return map;
+
+    }
+
+    //返回电脑故障类型列表JSON
+    @RequestMapping(value = "/getProblemsTypeList")
+    @ResponseBody
+    private Map<String, Object> getProblemsTypeList() throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
+        List<ComputerProblemsType> computerProblemsTypeList = new ArrayList<>();
+        try {
+            computerProblemsTypeList = computerProblemsTypeService.getAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        map.put("computerProblemsTypeList",computerProblemsTypeList);
+        return map;
+    }
+
+    //返回物资申购类型列表JSON
+    @RequestMapping(value = "/getMaterialTypeList")
+    @ResponseBody
+    private Map<String, Object> getMaterialTypeList() throws Exception {
+
+        Map<String, Object> map =new HashMap<String, Object>();
+        List<MaterialApplicationType> materialApplicationTypeList = new ArrayList<>();
+        try {
+            materialApplicationTypeList = materialApplicationTypeService.getAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        map.put("materialApplicationTypeList",materialApplicationTypeList);
+        return map;
+
+    }
 }

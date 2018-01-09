@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +54,14 @@ public class AdminController {
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "viewEmployeeMiPsdServiceImpl")
     private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "computerProblemsTypeServiceImpl")
+    private ComputerProblemsTypeService computerProblemsTypeService;
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "materialApplicationTypeServiceImpl")
+    private MaterialApplicationTypeService materialApplicationTypeService;
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "pushMessageServiceImpl")
@@ -150,9 +159,6 @@ public class AdminController {
 
         //设置问题初始化状态
         computerProblemsCustom.setFlag(0);
-
-        //设置问题所属部门
-        computerProblemsCustom.setDept(viewEmployeeMiPsd.getDeptName());
 
         //设置问题所属部门编码
         computerProblemsCustom.setDepartcode(viewEmployeeMiPsd.getDeptCode());
@@ -996,6 +1002,72 @@ public class AdminController {
 
         model.addAttribute("engineRoomInspectionList", listResult);
         return "admin/showEngineRoomInspection";
+    }
+
+    //返回操作人相关基本信息JSON
+    @RequestMapping(value = "/getApplicantInfo")
+    @ResponseBody
+    private Map<String, Object> getApplicantInfo() throws Exception {
+
+
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        Map<String, Object> map =new HashMap<String, Object>();
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        map.put("appliName",viewEmployeeMiPsd.getName());
+        map.put("appliDept",viewEmployeeMiPsd.getDeptName());
+        map.put("appliDeptCode",viewEmployeeMiPsd.getDeptCode());
+        return map;
+
+    }
+
+    //返回电脑故障类型列表JSON
+    @RequestMapping(value = "/getProblemsTypeList")
+    @ResponseBody
+    private Map<String, Object> getProblemsTypeList() throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
+        List<ComputerProblemsType> computerProblemsTypeList = new ArrayList<>();
+        try {
+            computerProblemsTypeList = computerProblemsTypeService.getAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        map.put("computerProblemsTypeList",computerProblemsTypeList);
+        return map;
+    }
+
+    //返回物资申购类型列表JSON
+    @RequestMapping(value = "/getMaterialTypeList")
+    @ResponseBody
+    private Map<String, Object> getMaterialTypeList() throws Exception {
+
+        Map<String, Object> map =new HashMap<String, Object>();
+        List<MaterialApplicationType> materialApplicationTypeList = new ArrayList<>();
+        try {
+            materialApplicationTypeList = materialApplicationTypeService.getAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        map.put("materialApplicationTypeList",materialApplicationTypeList);
+        return map;
+
     }
 
 }

@@ -43,7 +43,7 @@
                     <form class="form-horizontal" role="form" action="/admin/editComputerProblems" id="editfrom"
                           method="post">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">标题：</label>
+                            <label class="col-sm-2 control-label">故障类型：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="title" name="title" readonly="readonly"
                                        value="${computerProblems.title}">
@@ -68,23 +68,6 @@
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="tel" name="tel" readonly="readonly"
                                        value="${computerProblems.tel}">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">故障类型：</label>
-                            <div class="col-sm-8">
-                                <select class="form-control" name="type" id="type"
-                                        onfocus="this.defaultIndex=this.selectedIndex;"
-                                        onchange="this.selectedIndex=this.defaultIndex;"
-                                >
-                                    <option value="1">电脑问题</option>
-                                    <option value="2">打印机问题</option>
-                                    <option value="3">监控问题</option>
-                                    <option value="4">网络问题</option>
-                                    <option value="5">病区软件问题</option>
-                                    <option value="6">门诊软件问题</option>
-                                    <option value="7">其它问题</option>
-                                </select>
                             </div>
                         </div>
                         <div id="textareadetail" class="form-group">
@@ -132,14 +115,6 @@
 </body>
 <script type="text/javascript">
     $("#nav li:nth-child(1)").addClass("active");
-
-    var typeSelect = $("#type option");
-
-    for (var i = 0; i < typeSelect.length; i++) {
-        if (typeSelect[i].value == '${computerProblems.type}') {
-            typeSelect[i].selected = true;
-        }
-    }
 
     //处理按钮点击
     $('#dealBtn').on('click', function () {

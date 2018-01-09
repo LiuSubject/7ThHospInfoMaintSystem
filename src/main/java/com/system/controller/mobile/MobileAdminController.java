@@ -530,7 +530,7 @@ public class MobileAdminController {
             map.put("computerProblemsList", listResult);
         }else{
             map.put("success", "false");
-            map.put("msg", "结果大于50条，请精确查找");
+            map.put("msg", "结果大于50条，请精确查找条件");
         }
         return map;
     }
