@@ -113,6 +113,7 @@
 							</div>
 						</div>
 						<div class="form-group" style="text-align: center">
+							<button class="btn btn-default" id="printBtn" type="button">打印预览</button>
 							<button class="btn btn-default" id="returnListBtn">返回</button>
 						</div>
 					</form>
@@ -134,9 +135,16 @@
 
 
     //返回按钮点击
-    $('#returnListBtn').on('click', function() {
+    $('#returnListBtn').on('click', function () {
         window.location.href = "/normal/showMaterialApplication";
     });
+
+    //打印按钮点击
+    $('#printBtn').on('click', function () {
+        var herf = "/normal/printMaterialApplication?id="+${materialApplication.id};
+        window.location.href = herf;
+    });
+
 
 
 </script>

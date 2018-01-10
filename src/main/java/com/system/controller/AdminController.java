@@ -483,7 +483,7 @@ public class AdminController {
 
 
 
-        //设置问题初始化时间
+        //设置申购初始化时间
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(currentTime);
@@ -494,16 +494,13 @@ public class AdminController {
             materialApplicationCustom.setCreateTime(dateString);
         }
 
-        //设置问题初始化状态
+        //设置申购初始化状态
         materialApplicationCustom.setFlag(0);
 
-        //设置问题所属部门
-        materialApplicationCustom.setDept(viewEmployeeMiPsd.getDeptName());
-
-        //设置问题所属部门编码
+        //设置申购所属部门编码
         materialApplicationCustom.setDepartcode(viewEmployeeMiPsd.getDeptCode());
 
-        //设置问题所属人员ID
+        //设置申购所属人员ID
         materialApplicationCustom.setUserid(viewEmployeeMiPsd.getCode());
 
         //保存该记录相关数据以便产生推送
@@ -585,6 +582,16 @@ public class AdminController {
 
         Integer id = Integer.parseInt(request.getParameter("id"));
         String feedback = request.getParameter("feedback");
+        String brand = request.getParameter("brand");
+        String model = request.getParameter("model");
+        int judge = 0;
+        int total = 0;
+        try {
+            judge = Integer.parseInt(request.getParameter("judge"));
+            total = Integer.parseInt(request.getParameter("total"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
 
 
         if (id == null) {
@@ -622,6 +629,10 @@ public class AdminController {
             materialApplicationCustom.setFlag(1);
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
+            materialApplicationCustom.setBrand(brand);
+            materialApplicationCustom.setModel(model);
+            materialApplicationCustom.setJudge(judge);
+            materialApplicationCustom.setTotal(total);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
             try {
@@ -650,6 +661,16 @@ public class AdminController {
 
         Integer id = Integer.parseInt(request.getParameter("id"));
         String feedback = request.getParameter("feedback");
+        String brand = request.getParameter("brand");
+        String model = request.getParameter("model");
+        int judge = 0;
+        int total = 0;
+        try {
+            judge = Integer.parseInt(request.getParameter("judge"));
+            total = Integer.parseInt(request.getParameter("total"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
 
 
         if (id == null) {
@@ -687,6 +708,10 @@ public class AdminController {
             materialApplicationCustom.setFlag(2);
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
+            materialApplicationCustom.setBrand(brand);
+            materialApplicationCustom.setModel(model);
+            materialApplicationCustom.setJudge(judge);
+            materialApplicationCustom.setTotal(total);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
             try {
@@ -740,39 +765,51 @@ public class AdminController {
     @RequestMapping(value = "/searchMaterialApplication")
     private String searchMaterialApplication(String findByDept,String findByName,String findByFlag, Model model) throws Exception {
 
-
-        List<MaterialApplicationCustom> listByDept = new ArrayList<MaterialApplicationCustom>();
-        List<MaterialApplicationCustom> listByName = new ArrayList<MaterialApplicationCustom>();
-        List<MaterialApplicationCustom> listByFlag = new ArrayList<MaterialApplicationCustom>();
-        List<MaterialApplicationCustom> listResult = new ArrayList<MaterialApplicationCustom>();
-
-        if(!findByDept.equals(""))
-        {
-            listByDept = materialApplicationService.findByDept(findByDept);
+        List<MaterialApplicationCustom> list = null;
+        Map<String, Object> map =new HashMap<String, Object>();
+        map.put("dept",findByDept);
+        map.put("applicant",findByName);
+        int flag = 0;
+        try {
+            flag = Integer.parseInt(findByFlag);
+        } catch (NumberFormatException e) {
+            flag = 3;
+        }
+        map.put("flag",flag);
+        try {
+            list = materialApplicationService.paginationOfSearchResults(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
         }
 
-        if(!findByName.equals(""))
-        {
-            listByName = materialApplicationService.findByName(findByName);
-        }
-
-        if(!findByFlag.equals(""))
-        {
-            Integer flag = Integer.parseInt(findByFlag);
-            listByFlag = materialApplicationService.findByFlag(flag);
-        }
-
-
-
-        //合并去重
-        listResult.addAll(listByDept);
-        listResult.removeAll(listByFlag);
-        listResult.addAll(listByFlag);
-        listResult.removeAll(listByName);
-        listResult.addAll(listByName);
-
-        model.addAttribute("materialApplicationList", listResult);
+        model.addAttribute("materialApplicationList", list);
         return "admin/showMaterialApplication";
+    }
+
+    // 打印物资申购表单
+    @RequestMapping(value = "/printMaterialApplication", method = {RequestMethod.GET})
+    public String printMaterialApplication(Integer id, Model model) throws Exception {
+        if (id == null) {
+            return "redirect:/admin/showMaterialApplication";
+        }
+        MaterialApplication materialApplication = materialApplicationService.findById(id);
+        if (materialApplication == null) {
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
+        }
+
+        model.addAttribute("materialApplication", materialApplication);
+
+
+        return "admin/printMaterialApplication";
+    }
+
+    // 打印物资申购表单
+    @RequestMapping(value = "/printMaterialApplication", method = {RequestMethod.POST})
+    public String printMaterialApplication(MaterialApplicationCustom materialApplicationCustom) throws Exception {
+
+        //重定向
+        return "admin/printMaterialApplication";
     }
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<机房巡检>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/

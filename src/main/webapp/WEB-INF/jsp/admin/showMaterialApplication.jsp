@@ -14,6 +14,11 @@
 	<script src="/js/jquery-3.2.1.min.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
 
+	<style type="text/css">
+		td{
+			text-align: center;
+		}
+	</style>
 	<%--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">--%>
 
 </head>
@@ -65,7 +70,7 @@
 						<th style="text-align: center">参考型号</th>
 						<th style="text-align: center">估价</th>
 						<th style="text-align: center">总价</th>
-						<th style="text-align: center">使用、安装日期</th>
+						<th style="text-align: center">使用/安装日期</th>
 						<th style="text-align: center">申请人</th>
 						<th style="text-align: center">状态</th>
 						<th style="text-align: center">创建时间</th>
@@ -159,6 +164,12 @@
 
     $("#searchBtn").click(function () {
         $("#searchFunction").submit();
+    });
+
+    //  使IE8支持 placeholder
+    $(function () {
+        // Invoke the plugin
+        $('input, textarea').placeholder();
     });
 </script>
 </html>

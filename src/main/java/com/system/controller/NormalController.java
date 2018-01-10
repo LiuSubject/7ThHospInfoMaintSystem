@@ -747,6 +747,31 @@ public class NormalController {
         return "normal/showMaterialApplication";
     }
 
+    // 打印物资申购表单
+    @RequestMapping(value = "/printMaterialApplication", method = {RequestMethod.GET})
+    public String printMaterialApplication(Integer id, Model model) throws Exception {
+        if (id == null) {
+            return "redirect:/normal/showMaterialApplication";
+        }
+        MaterialApplication materialApplication = materialApplicationService.findById(id);
+        if (materialApplication == null) {
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
+        }
+
+        model.addAttribute("materialApplication", materialApplication);
+
+
+        return "normal/printMaterialApplication";
+    }
+
+    // 打印物资申购表单
+    @RequestMapping(value = "/printMaterialApplication", method = {RequestMethod.POST})
+    public String printMaterialApplication(MaterialApplicationCustom materialApplicationCustom) throws Exception {
+
+        //重定向
+        return "normal/printMaterialApplication";
+    }
+
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<机房巡检>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
     // 机房巡检显示
     @RequestMapping("/showEngineRoomInspection")

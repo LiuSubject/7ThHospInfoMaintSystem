@@ -57,34 +57,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">品牌：</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="brand" name="brand"
-                                       value="${materialApplication.brand}" readonly="readonly">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">参考型号：</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="model" name="model"
-                                       value="${materialApplication.model}" readonly="readonly">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">估价：</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="judge" name="judge"
-                                       value="${materialApplication.judge}" readonly="readonly">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">总价：</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="total" name="total"
-                                       value="${materialApplication.total}" readonly="readonly">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-2 control-label">使用日期：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="useDate" name="useDate"
@@ -103,6 +75,34 @@
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="reason" name="reason"
                                        value="${materialApplication.reason}" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">品牌：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="brand" name="brand"
+                                       value="${materialApplication.brand}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">参考型号：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="model" name="model"
+                                       value="${materialApplication.model}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">估价：</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" id="judge" name="judge"
+                                       value="${materialApplication.judge}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">总价：</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" id="total" name="total"
+                                       value="${materialApplication.total}">
                             </div>
                         </div>
                         <div class="form-group">
@@ -138,13 +138,29 @@
     //处理按钮点击
     $('#dealBtn').on('click', function () {
         var reback = document.getElementById("reback").value;
-        window.location.href = "/admin/dealMaterialApplication?id=${materialApplication.id}&feedback=" + reback;
+        var brand = document.getElementById("brand").value;
+        var model = document.getElementById("model").value;
+        var judge = document.getElementById("judge").value;
+        var total = document.getElementById("total").value;
+        window.location.href = "/admin/dealMaterialApplication?id=${materialApplication.id}&feedback=" + reback
+            +"&brand=" + brand
+            +"&model=" + model
+            +"&judge=" + judge
+            +"&total=" + total;
     });
 
     //完成按钮点击
     $('#completeBtn').on('click', function () {
         var reback = document.getElementById("reback").value;
-        window.location.href = "/admin/completeMaterialApplication?id=${materialApplication.id}&feedback=" + reback;
+        var brand = document.getElementById("brand").value;
+        var model = document.getElementById("model").value;
+        var judge = document.getElementById("judge").value;
+        var total = document.getElementById("total").value;
+        window.location.href = "/admin/completeMaterialApplication?id=${materialApplication.id}&feedback=" + reback
+            +"&brand=" + brand
+            +"&model=" + model
+            +"&judge=" + judge
+            +"&total=" + total;
     });
 
     //返回按钮点击
