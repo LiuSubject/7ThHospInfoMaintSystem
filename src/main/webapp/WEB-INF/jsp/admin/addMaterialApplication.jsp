@@ -12,6 +12,8 @@
     <!-- 引入JQuery  bootstrap.js-->
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+
+
 </head>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -25,6 +27,10 @@
 <!--[if IE 9]>
 <script type="text/javascript" src="/js/jquery.placeholder.js"></script>
 <![endif]-->
+<%--引入时间插件--%>
+<link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <body>
 <!-- 顶栏 -->
 <jsp:include page="top.jsp"></jsp:include>
@@ -42,9 +48,25 @@
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" action="/admin/addMaterialApplication" method="post">
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">申请人：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="applicant" name="applicant"
+                                       placeholder="请输入申请人">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">科室：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="dept" name="dept"
+                                       placeholder="请输入申请科室">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">名称：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="请输入名称">
+                                <select class="form-control" name="nameCode" id="nameCode">
+                                </select>
+                                <input type="text" class="form-control" id="name" name="name" style="display:none">
                             </div>
                         </div>
                         <div class="form-group">
@@ -53,25 +75,25 @@
                                 <input type="number" class="form-control" id="number" name="number" placeholder="请输入数量">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="display:none">
                             <label class="col-sm-2 control-label">品牌：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="brand" name="brand" placeholder="请输入品牌">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="display:none">
                             <label class="col-sm-2 control-label">参考型号：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="model" name="model" placeholder="请输入参考型号">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="display:none">
                             <label class="col-sm-2 control-label">估价：</label>
                             <div class="col-sm-8">
                                 <input type="number" class="form-control" id="judge" name="judge" placeholder="请输入估价">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="display:none">
                             <label class="col-sm-2 control-label">总价：</label>
                             <div class="col-sm-8">
                                 <input type="number" class="form-control" id="total" name="total" placeholder="请输入总价">
@@ -80,17 +102,11 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">使用日期：</label>
                             <div class="col-sm-8">
-                                <input type="date" class="form-control" id="useDate" name="useDate"
+                                <input type="text" class="form-control" id="useDate" name="useDate"
                                        placeholder="请输入使用日期">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">申请人：</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="applicant" name="applicant"
-                                       placeholder="请输入申请人">
-                            </div>
-                        </div>
+
                         <div class="form-group">
                             <label class="col-sm-2 control-label">请购理由：</label>
                             <div class="col-sm-8">
@@ -126,5 +142,58 @@
         $(".pagination li:nth-child(1)").addClass("disabled")
     }
     </c:if>
+
+    //  使IE8支持 placeholder
+    $(function () {
+        // Invoke the plugin
+        $('input, textarea').placeholder();
+    });
+
+    //用户信息填入
+    $.ajax({
+        url:"/admin/getApplicantInfo",
+        async:true,
+        success: function(data){
+            document.getElementById("dept").value = data.appliDept;
+            document.getElementById("applicant").value = data.appliName;
+
+        }
+    });
+
+    //物资列表填入
+    $.ajax({
+        url:"/admin/getMaterialTypeList",
+        async:true,
+        success: function(data){
+            var list = data.materialApplicationTypeList;
+            if(list){                                               //判断
+                for(var i=0; i<list.length; i++){                   //遍历，动态赋值
+                    var optionString = "";
+                    optionString ="<option value=\""
+                        + list[i].materialCode+"\">"
+                        + list[i].materialName+"</option>";         //动态添加数据
+                    $("#nameCode").append(optionString);                // 为当前Id为type的select添加数据。
+                }
+            }
+            //申购项目初始值设置
+            document.getElementById("name").value = $("#nameCode").find("option:selected").text();
+        }
+    });
+
+
+    //申购项目保存
+    $("#nameCode").change(function(){
+        document.getElementById("name").value = $("#nameCode").find("option:selected").text();
+    });
+
+    //初始化时间插件
+    $('#useDate').datetimepicker({
+        language:  'zh-CN',
+        format:'yyyy-mm-dd',
+        minView: "month",
+        todayBtn:  1,
+        autoclose: 1
+
+    });
 </script>
 </html>

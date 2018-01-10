@@ -1,9 +1,11 @@
 package com.system.mapper;
 
+import com.system.po.ComputerProblemsCustom;
 import com.system.po.MaterialApplicationCustom;
 import com.system.po.PagingVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
@@ -19,4 +21,7 @@ import java.util.List;
 public interface MaterialApplicationMapperCustom {
     //分页查询物资申购
     List<MaterialApplicationCustom> findByPaging(PagingVO pagingVO) throws Exception;
+
+    //电脑故障信息搜索结果分页
+    List<MaterialApplicationCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception;
 }

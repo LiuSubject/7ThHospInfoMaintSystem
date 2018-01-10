@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
@@ -47,6 +48,13 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
 
     public void removeById(Integer id) throws Exception {
         materialApplicationMapper.deleteByPrimaryKey(id);
+    }
+
+    public List<MaterialApplicationCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception {
+
+        List<MaterialApplicationCustom> list = materialApplicationMapperCustom.paginationOfSearchResults(condition);
+
+        return list;
     }
 
     public List<MaterialApplicationCustom> findByPaging(Integer toPageNo) throws Exception {
@@ -112,7 +120,7 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
         MaterialApplicationExample.Criteria criteria = MaterialApplicationExample.createCriteria();
 
         criteria.andDeptLike("%" + dept + "%");
-
+        MaterialApplicationExample.setOrderByClause("flag asc, use_date desc");
         List<MaterialApplication> list = materialApplicationMapper.selectByExample(MaterialApplicationExample);
 
         List<MaterialApplicationCustom> MaterialApplicationCustomList = null;

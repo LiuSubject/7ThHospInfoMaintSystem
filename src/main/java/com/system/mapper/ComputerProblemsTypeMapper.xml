@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.ComputerProblemsTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.system.po.ComputerProblemsType" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="type_code" property="typeCode" jdbcType="VARCHAR" />
+    <result column="type_code2" property="typeCode2" jdbcType="VARCHAR" />
+    <result column="type_code3" property="typeCode3" jdbcType="VARCHAR" />
+    <result column="type_note" property="typeNote" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id, type_name, type_code, type_code2, type_code3, type_note
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.po.ComputerProblemsTypeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from computer_problems_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from computer_problems_type
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from computer_problems_type
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.system.po.ComputerProblemsTypeExample" >
+    delete from computer_problems_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.system.po.ComputerProblemsType" >
+    insert into computer_problems_type (Id, type_name, type_code, 
+      type_code2, type_code3, type_note
+      )
+    values (#{id,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR}, #{typeCode,jdbcType=VARCHAR}, 
+      #{typeCode2,jdbcType=VARCHAR}, #{typeCode3,jdbcType=VARCHAR}, #{typeNote,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.po.ComputerProblemsType" >
+    insert into computer_problems_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="typeName != null" >
+        type_name,
+      </if>
+      <if test="typeCode != null" >
+        type_code,
+      </if>
+      <if test="typeCode2 != null" >
+        type_code2,
+      </if>
+      <if test="typeCode3 != null" >
+        type_code3,
+      </if>
+      <if test="typeNote != null" >
+        type_note,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeCode != null" >
+        #{typeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="typeCode2 != null" >
+        #{typeCode2,jdbcType=VARCHAR},
+      </if>
+      <if test="typeCode3 != null" >
+        #{typeCode3,jdbcType=VARCHAR},
+      </if>
+      <if test="typeNote != null" >
+        #{typeNote,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.system.po.ComputerProblemsTypeExample" resultType="java.lang.Integer" >
+    select count(*) from computer_problems_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update computer_problems_type
+    <set >
+      <if test="record.id != null" >
+        Id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.typeName != null" >
+        type_name = #{record.typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.typeCode != null" >
+        type_code = #{record.typeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.typeCode2 != null" >
+        type_code2 = #{record.typeCode2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.typeCode3 != null" >
+        type_code3 = #{record.typeCode3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.typeNote != null" >
+        type_note = #{record.typeNote,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update computer_problems_type
+    set Id = #{record.id,jdbcType=INTEGER},
+      type_name = #{record.typeName,jdbcType=VARCHAR},
+      type_code = #{record.typeCode,jdbcType=VARCHAR},
+      type_code2 = #{record.typeCode2,jdbcType=VARCHAR},
+      type_code3 = #{record.typeCode3,jdbcType=VARCHAR},
+      type_note = #{record.typeNote,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.po.ComputerProblemsType" >
+    update computer_problems_type
+    <set >
+      <if test="typeName != null" >
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeCode != null" >
+        type_code = #{typeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="typeCode2 != null" >
+        type_code2 = #{typeCode2,jdbcType=VARCHAR},
+      </if>
+      <if test="typeCode3 != null" >
+        type_code3 = #{typeCode3,jdbcType=VARCHAR},
+      </if>
+      <if test="typeNote != null" >
+        type_note = #{typeNote,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.po.ComputerProblemsType" >
+    update computer_problems_type
+    set type_name = #{typeName,jdbcType=VARCHAR},
+      type_code = #{typeCode,jdbcType=VARCHAR},
+      type_code2 = #{typeCode2,jdbcType=VARCHAR},
+      type_code3 = #{typeCode3,jdbcType=VARCHAR},
+      type_note = #{typeNote,jdbcType=VARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

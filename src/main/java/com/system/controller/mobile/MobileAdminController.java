@@ -53,6 +53,14 @@ public class MobileAdminController {
     private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "computerProblemsTypeServiceImpl")
+    private ComputerProblemsTypeService computerProblemsTypeService;
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "materialApplicationTypeServiceImpl")
+    private MaterialApplicationTypeService materialApplicationTypeService;
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "pushMessageServiceImpl")
     private PushMessageService pushMessageService;
 
@@ -67,7 +75,7 @@ public class MobileAdminController {
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
-    // 电脑故障显示
+    // 电脑故障显示(普通用户只能看到本科室提交的故障报告)
     @RequestMapping("/showComputerProblems")
     @ResponseBody
     public Map<String, Object> showComputerProblems(Model model, Integer page) throws Exception {
@@ -114,7 +122,7 @@ public class MobileAdminController {
                 }
                 e.printStackTrace();
             }
-            String currentDept = viewEmployeeMiPsd.getDeptCode();
+            String currentDept = viewEmployeeMiPsd.getDeptName();
             List<ComputerProblemsCustom> listByDept = new ArrayList<>();
             listByDept = computerProblemsService.findByDept(currentDept);
             map.put("computerProblemsList", listByDept);
@@ -598,7 +606,7 @@ public class MobileAdminController {
                 }
                 e.printStackTrace();
             }
-            String currentDept = viewEmployeeMiPsd.getDeptCode();
+            String currentDept = viewEmployeeMiPsd.getDeptName();
             List<MaterialApplicationCustom> listByDept = new ArrayList<>();
             listByDept = materialApplicationService.findByDept(currentDept);
             map.put("materialApplicationList", listByDept);
@@ -757,6 +765,16 @@ public class MobileAdminController {
 
         Integer id = Integer.parseInt(request.getParameter("id"));
         String feedback = request.getParameter("feedback");
+        String brand = request.getParameter("brand");
+        String model = request.getParameter("model");
+        int judge = 0;
+        int total = 0;
+        try {
+            judge = Integer.parseInt(request.getParameter("judge"));
+            total = Integer.parseInt(request.getParameter("total"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
         Map<String, Object> map =new HashMap<String, Object>();
 
         if (id == null) {
@@ -798,6 +816,10 @@ public class MobileAdminController {
             materialApplicationCustom.setFlag(1);
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
+            materialApplicationCustom.setBrand(brand);
+            materialApplicationCustom.setModel(model);
+            materialApplicationCustom.setJudge(judge);
+            materialApplicationCustom.setTotal(total);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
             try {
@@ -842,6 +864,16 @@ public class MobileAdminController {
 
         Integer id = Integer.parseInt(request.getParameter("id"));
         String feedback = request.getParameter("feedback");
+        String brand = request.getParameter("brand");
+        String model = request.getParameter("model");
+        int judge = 0;
+        int total = 0;
+        try {
+            judge = Integer.parseInt(request.getParameter("judge"));
+            total = Integer.parseInt(request.getParameter("total"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
         Map<String, Object> map =new HashMap<String, Object>();
 
         if (id == null) {
@@ -883,6 +915,10 @@ public class MobileAdminController {
             materialApplicationCustom.setFlag(2);
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
             materialApplicationCustom.setReback(feedback);
+            materialApplicationCustom.setBrand(brand);
+            materialApplicationCustom.setModel(model);
+            materialApplicationCustom.setJudge(judge);
+            materialApplicationCustom.setTotal(total);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
             try {
@@ -965,43 +1001,32 @@ public class MobileAdminController {
     @ResponseBody
     public Map<String, Object> searchMaterialApplication(String findByDept,String findByName,String findByFlag, Model model) throws Exception {
 
+        List<MaterialApplicationCustom> list = null;
         Map<String, Object> map =new HashMap<String, Object>();
-        List<MaterialApplicationCustom> listByDept = new ArrayList<MaterialApplicationCustom>();
-        List<MaterialApplicationCustom> listByName = new ArrayList<MaterialApplicationCustom>();
-        List<MaterialApplicationCustom> listByFlag = new ArrayList<MaterialApplicationCustom>();
-        List<MaterialApplicationCustom> listResult = new ArrayList<MaterialApplicationCustom>();
-
-        if(!findByDept.equals(""))
-        {
-            listByDept = materialApplicationService.findByDept(findByDept);
+        Map<String, Object> condition =new HashMap<String, Object>();
+        condition.put("dept",findByDept);
+        condition.put("applicant",findByName);
+        int flag = 0;
+        try {
+            flag = Integer.parseInt(findByFlag);
+        } catch (NumberFormatException e) {
+            flag = 3;
+        }
+        map.put("flag",flag);
+        try {
+            list = materialApplicationService.paginationOfSearchResults(condition);
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", "false");
+            map.put("msg", "搜索出错，请重试");
         }
 
-        if(!findByName.equals(""))
-        {
-            listByName = materialApplicationService.findByName(findByName);
-        }
-
-        if(!findByFlag.equals(""))
-        {
-            Integer flag = Integer.parseInt(findByFlag);
-            listByFlag = materialApplicationService.findByFlag(flag);
-        }
-
-
-
-        //合并去重
-        listResult.addAll(listByDept);
-        listResult.removeAll(listByFlag);
-        listResult.addAll(listByFlag);
-        listResult.removeAll(listByName);
-        listResult.addAll(listByName);
-
-        if(listResult.size() <= 50){
+        if(list.size() <= 200){
             map.put("success", "true");
-            map.put("materialApplicationList", listResult);
+            map.put("materialApplicationList", list);
         }else{
             map.put("success", "false");
-            map.put("msg", "结果过多，请精确查找");
+            map.put("msg", "结果大于200条，请精确查找条件");
         }
         return map;
     }
@@ -1263,6 +1288,72 @@ public class MobileAdminController {
             map.put("msg", "结果过多，请精确查找");
         }
         return map;
+    }
+
+    //返回操作人相关基本信息JSON
+    @RequestMapping(value = "/getApplicantInfo")
+    @ResponseBody
+    private Map<String, Object> getApplicantInfo() throws Exception {
+
+
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        Map<String, Object> map =new HashMap<String, Object>();
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        map.put("appliName",viewEmployeeMiPsd.getName());
+        map.put("appliDept",viewEmployeeMiPsd.getDeptName());
+        map.put("appliDeptCode",viewEmployeeMiPsd.getDeptCode());
+        return map;
+
+    }
+
+    //返回电脑故障类型列表JSON
+    @RequestMapping(value = "/getProblemsTypeList")
+    @ResponseBody
+    private Map<String, Object> getProblemsTypeList() throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
+        List<ComputerProblemsType> computerProblemsTypeList = new ArrayList<>();
+        try {
+            computerProblemsTypeList = computerProblemsTypeService.getAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        map.put("computerProblemsTypeList",computerProblemsTypeList);
+        return map;
+    }
+
+    //返回物资申购类型列表JSON
+    @RequestMapping(value = "/getMaterialTypeList")
+    @ResponseBody
+    private Map<String, Object> getMaterialTypeList() throws Exception {
+
+        Map<String, Object> map =new HashMap<String, Object>();
+        List<MaterialApplicationType> materialApplicationTypeList = new ArrayList<>();
+        try {
+            materialApplicationTypeList = materialApplicationTypeService.getAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        map.put("materialApplicationTypeList",materialApplicationTypeList);
+        return map;
+
     }
 
 }

@@ -5,6 +5,7 @@ import com.system.po.MaterialApplicationCustom;
 import com.system.po.PushMessage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
@@ -26,6 +27,9 @@ public interface MaterialApplicationService {
 
     //获取分页查询物资申购信息
     List<MaterialApplicationCustom> findByPaging(Integer toPageNo) throws Exception;
+
+    //电脑故障信息搜索结果(分页有缺陷，未分页)
+    List<MaterialApplicationCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception;
 
     //保存物资申购信息
     Boolean save(MaterialApplicationCustom materialApplicationCustom) throws Exception;

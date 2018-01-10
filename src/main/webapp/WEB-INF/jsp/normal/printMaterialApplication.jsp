@@ -124,7 +124,7 @@
         });
         //返回按钮点击
         $('#returnListBtn').on('click', function () {
-            window.location.href = "/admin/checkMaterialApplication?id="+${materialApplication.id};
+            window.location.href = "/normal/checkMaterialApplication?id="+${materialApplication.id};
         });
     });
 </script>

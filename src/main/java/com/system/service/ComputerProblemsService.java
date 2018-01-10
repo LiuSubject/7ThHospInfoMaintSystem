@@ -27,7 +27,7 @@ public interface ComputerProblemsService {
     //获取分页查询电脑故障信息
     List<ComputerProblemsCustom> findByPaging(Integer toPageNo) throws Exception;
 
-    //电脑故障信息搜索结果分页(分页有缺陷，暂未使用)
+    //电脑故障信息搜索结果(分页有缺陷，未分页)
     List<ComputerProblemsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception;
 
     //保存电脑故障信息
