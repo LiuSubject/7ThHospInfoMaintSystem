@@ -267,7 +267,22 @@
                                        value="${engineRoomInspection.ycyy}" readonly="readonly">
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">状态：</label>
+                            <div class="col-sm-8">
+                                <c:if test="${engineRoomInspection.flag == 0}">
+                                    <td><button class="btn btn-warning btn-sm" type="button">提交</button></td>
+                                </c:if>
+                                <c:if test="${engineRoomInspection.flag == 1}">
+                                    <td><button class="btn btn-info btn-sm" type="button">拒绝</button></td>
+                                </c:if>
+                                <c:if test="${engineRoomInspection.flag == 2}">
+                                    <td><button class="btn btn-success btn-sm" type="button">通过</button></td>
+                                </c:if>
+                            </div>
+                        </div>
                         <div class="form-group" style="text-align: center">
+                            <button class="btn btn-default" id="printBtn" type="button">打印预览</button>
                             <button class="btn btn-default" id="returnListBtn" type="button">返回</button>
                         </div>
                     </form>
@@ -318,6 +333,11 @@
         window.location.href = "/admin/showEngineRoomInspection";
     });
 
+    //打印按钮点击
+    $('#printBtn').on('click', function () {
+        var herf = "/admin/printEngineRoomInspection?id="+${engineRoomInspection.id};
+        window.location.href = herf;
+    });
 
 </script>
 </html>

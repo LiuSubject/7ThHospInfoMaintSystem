@@ -71,11 +71,14 @@ public class LoginRealm extends AuthorizingRealm{
             }
             e.printStackTrace();
         }
-        //通过用户名从数据库获取权限/角色信息
+        //通过用户名从数据库获取角色权限集
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Set<String> r = new HashSet<String>();
         if (role != null) {
-            r.add(role.getRolename());
+            String[] roles = role.getRolename().split("\\+");
+            for(int i = 0;i < roles.length; i++){
+                r.add(roles[i].toString());
+            }
             info.setRoles(r);
         }
 

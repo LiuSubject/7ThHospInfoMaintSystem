@@ -816,6 +816,7 @@ public class AdminController {
     // 机房巡检显示
     @RequestMapping("/showEngineRoomInspection")
     public String showEngineRoomInspection(Model model, Integer page) throws Exception {
+
         List<EngineRoomInspectionCustom> list = null;
         //页码对象
         PagingVO pagingVO = new PagingVO();
@@ -827,6 +828,15 @@ public class AdminController {
         } else {
             pagingVO.setToPageNo(page);
             list = engineRoomInspectionService.findByPaging(page);
+        }
+
+        //巡检审核者标识
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        if(subject.hasRole("examiner")){
+            model.addAttribute("examiner", 1);
+        }else {
+            model.addAttribute("examiner", 0);
         }
 
         model.addAttribute("engineRoomInspectionList", list);
@@ -883,6 +893,7 @@ public class AdminController {
 
         //设置问题所属人员ID
         engineRoomInspectionCustom.setUserid(viewEmployeeMiPsd.getCode());
+        engineRoomInspectionCustom.setFlag(0);
 
 
         //保存该记录相关数据以便产生推送
@@ -907,9 +918,19 @@ public class AdminController {
         return "redirect:/admin/showEngineRoomInspection";
     }
 
-/*    // 修改机房巡检页面显示
+    // 修改机房巡检页面显示
     @RequestMapping(value = "/editEngineRoomInspection", method = {RequestMethod.GET})
     public String editEngineRoomInspectionUI(Integer id, Model model) throws Exception {
+
+        //巡检审核者标识
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        if(subject.hasRole("examiner")){
+
+        }else {
+            return "redirect:/admin/showEngineRoomInspection";
+        }
+
         if (id == null) {
             return "redirect:/admin/showEngineRoomInspection";
         }
@@ -918,32 +939,35 @@ public class AdminController {
             throw new CustomException("抱歉，未找到该机房巡检相关信息");
         }
 
+
         model.addAttribute("engineRoomInspection", engineRoomInspection);
 
 
         return "admin/editEngineRoomInspection";
-    }*/
+    }
 
     // 修改机房巡检页面处理
-/*    @RequestMapping(value = "/editEngineRoomInspection", method = {RequestMethod.POST})
+    @RequestMapping(value = "/editEngineRoomInspection", method = {RequestMethod.POST})
     public String editEngineRoomInspection(EngineRoomInspectionCustom engineRoomInspectionCustom) throws Exception {
-
-        //获取当前操作用户对象
-        Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
-
-        engineRoomInspectionService.updataById(engineRoomInspectionCustom.getId(), engineRoomInspectionCustom);
 
         //重定向
         return "redirect:/admin/showEngineRoomInspection";
-    }*/
+    }
 
-/*    // 开始处理机房巡检
-    @RequestMapping(value = "/dealEngineRoomInspection")
+    // 机房巡检审核通过
+    @RequestMapping(value = "/passEngineRoomInspection")
     public String dealEngineRoomInspection(HttpServletRequest request) throws Exception {
 
+        //巡检审核者标识
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        if(subject.hasRole("examiner")){
+
+        }else {
+            return "redirect:/admin/showEngineRoomInspection";
+        }
+
         Integer id = Integer.parseInt(request.getParameter("id"));
-        String feedback = request.getParameter("ycyy");
 
 
         if (id == null) {
@@ -956,21 +980,30 @@ public class AdminController {
             throw new CustomException("抱歉，未找到该机房巡检相关信息");
         }
 
+        if(engineRoomInspectionCustom.getFlag() != 0){
+            return "redirect:checkEngineRoomInspection?id=" + engineRoomInspectionCustom.getId();
+        }
         //获取当前操作用户对象
-        Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
-        engineRoomInspectionCustom.setYcyy(feedback);
+        engineRoomInspectionCustom.setFlag(2);
         engineRoomInspectionService.updataById(engineRoomInspectionCustom.getId(), engineRoomInspectionCustom);
 
-        return "redirect:editEngineRoomInspection?id=" + engineRoomInspectionCustom.getId();
-    }*/
+        return "redirect:checkEngineRoomInspection?id=" + engineRoomInspectionCustom.getId();
+    }
 
-/*    // 机房巡检处理完成
-    @RequestMapping(value = "/completeEngineRoomInspection")
+    // 机房巡检审核拒绝
+    @RequestMapping(value = "/denyEngineRoomInspection")
     public String completeEngineRoomInspection(HttpServletRequest request) throws Exception {
 
+        //巡检审核者标识
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        if(subject.hasRole("examiner")){
+
+        }else {
+            return "redirect:/admin/showEngineRoomInspection";
+        }
+
         Integer id = Integer.parseInt(request.getParameter("id"));
-        String feedback = request.getParameter("feedback");
 
 
         if (id == null) {
@@ -983,15 +1016,15 @@ public class AdminController {
             throw new CustomException("抱歉，未找到该机房巡检相关信息");
         }
 
-        //获取当前操作用户对象
-        Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
-        engineRoomInspectionCustom.setYcyy(feedback);
+        if(engineRoomInspectionCustom.getFlag() != 0){
+            return "redirect:checkEngineRoomInspection?id=" + engineRoomInspectionCustom.getId();
+        }
+        engineRoomInspectionCustom.setFlag(1);
         engineRoomInspectionService.updataById(engineRoomInspectionCustom.getId(), engineRoomInspectionCustom);
 
 
-        return "redirect:editEngineRoomInspection?id=" + engineRoomInspectionCustom.getId();
-    }*/
+        return "redirect:checkEngineRoomInspection?id=" + engineRoomInspectionCustom.getId();
+    }
 
     // 查看机房巡检详情
     @RequestMapping(value = "/checkEngineRoomInspection", method = {RequestMethod.GET})
@@ -1014,7 +1047,6 @@ public class AdminController {
     @RequestMapping(value = "/checkEngineRoomInspection", method = {RequestMethod.POST})
     public String checkEngineRoomInspection(EngineRoomInspectionCustom engineRoomInspectionCustom) throws Exception {
 
-        engineRoomInspectionService.updataById(engineRoomInspectionCustom.getId(), engineRoomInspectionCustom);
 
         //重定向
         return "redirect:/admin/showEngineRoomInspection";
@@ -1038,6 +1070,32 @@ public class AdminController {
         model.addAttribute("engineRoomInspectionList", listResult);
         return "admin/showEngineRoomInspection";
     }
+
+    // 打印物资申购表单
+    @RequestMapping(value = "/printEngineRoomInspection", method = {RequestMethod.GET})
+    public String printEngineRoomInspection(Integer id, Model model) throws Exception {
+        if (id == null) {
+            return "redirect:/admin/showEngineRoomInspection";
+        }
+        EngineRoomInspection engineRoomInspection = engineRoomInspectionService.findById(id);
+        if (engineRoomInspection == null) {
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
+        }
+
+        model.addAttribute("engineRoomInspection", engineRoomInspection);
+
+
+        return "admin/printEngineRoomInspection";
+    }
+
+    // 打印物资申购表单
+    @RequestMapping(value = "/printEngineRoomInspection", method = {RequestMethod.POST})
+    public String printEngineRoomInspection(EngineRoomInspection engineRoomInspection) throws Exception {
+
+        //重定向
+        return "admin/printEngineRoomInspection";
+    }
+    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<JSON数据获取>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
     //返回操作人相关基本信息JSON
     @RequestMapping(value = "/getApplicantInfo")

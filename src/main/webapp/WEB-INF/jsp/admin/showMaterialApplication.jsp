@@ -73,7 +73,6 @@
 						<th style="text-align: center">使用/安装日期</th>
 						<th style="text-align: center">申请人</th>
 						<th style="text-align: center">状态</th>
-						<th style="text-align: center">创建时间</th>
 						<th style="text-align: center"></th>
 					</tr>
 					</thead>
@@ -97,7 +96,6 @@
 							<c:if test="${item.flag == 2}">
 								<td><button class="btn btn-success btn-sm" type="button">已解决</button></td>
 							</c:if>
-							<td>${item.createTime}</td>
 							<td>
 								<button class="btn btn-default btn-xs btn-info" onClick="location.href='/admin/editMaterialApplication?id=${item.id}'">处理申购</button>
 								<button class="btn btn-default btn-xs btn-danger btn-primary" onClick="location.href='/admin/checkMaterialApplication?id=${item.id}'">查看详情</button>

@@ -90,11 +90,18 @@ public class MobileLoginController {
 
 
         if (subject.hasRole("admin")) {
-            map.put("success", "true");
-            map.put("role", "admin");
-            map.put("viewEmployeeMiPsd",viewEmployeeMiPsd);
-            return map;
-        } else if (!subject.hasRole("admin")) {
+            if (subject.hasRole("examiner")) {
+                map.put("success", "true");
+                map.put("role", "admin+examiner");
+                map.put("viewEmployeeMiPsd",viewEmployeeMiPsd);
+                return map;
+            }else{
+                map.put("success", "true");
+                map.put("role", "admin");
+                map.put("viewEmployeeMiPsd",viewEmployeeMiPsd);
+                return map;
+            }
+        }else if (!subject.hasRole("admin")) {
             map.put("success", "true");
             map.put("role", "normal");
             map.put("viewEmployeeMiPsd",viewEmployeeMiPsd);

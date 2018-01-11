@@ -107,7 +107,6 @@
 </table>
 <div class="text-center">
     <button class="btn btn-primary" type="button" id="btnSave">打印</button>
-    <button class="btn btn-primary" type="button" id="returnListBtn">返回</button>
 </div>
 </body>
 <script type="text/javascript">
@@ -121,10 +120,6 @@
             else{
 
             }
-        });
-        //返回按钮点击
-        $('#returnListBtn').on('click', function () {
-            window.location.href = "/admin/checkMaterialApplication?id="+${materialApplication.id};
         });
     });
 </script>

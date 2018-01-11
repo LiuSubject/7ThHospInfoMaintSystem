@@ -3,8 +3,6 @@
 
 <!DOCTYPE html>
 <html>
-<style>
-</style>
 <head>
     <title></title>
 
@@ -27,10 +25,6 @@
 <!--[if IE 9]>
 <script type="text/javascript" src="/js/jquery.placeholder.js"></script>
 <![endif]-->
-<%--引入时间插件--%>
-<link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-<script type="text/javascript" src="/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-<script type="text/javascript" src="/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <body>
 <!-- 顶栏 -->
 <jsp:include page="top.jsp"></jsp:include>
@@ -42,30 +36,32 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">机房巡检</h2>
+                        <h2 style="text-align: center;">${engineRoomInspection.date}</h2>
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" action="/admin/addEngineRoomInspection" id="editfrom"
+                    <form class="form-horizontal" role="form" action="/admin/editEngineRoomInspection" id="editfrom"
                           method="post">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">检查日期：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="date" name="date"
-                                >
+                                <input type="date" class="form-control" id="date" name="date"
+                                       value="${engineRoomInspection.date}" readonly="readonly">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">检查者：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="examiner" name="examiner"
-                                >
+                                       value="${engineRoomInspection.examiner}" readonly="readonly">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">EMR服务器：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="emr" id="emr">
+                                <select class="form-control" name="emr" id="emr"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -75,7 +71,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">HIS服务器：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="his" id="his">
+                                <select class="form-control" name="his" id="his"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -85,7 +83,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">LIS服务器：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="lis" id="lis">
+                                <select class="form-control" name="lis" id="lis"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -95,7 +95,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">PACS服务器：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="pacs" id="pacs">
+                                <select class="form-control" name="pacs" id="pacs"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -105,7 +107,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">云服务器：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="xny" id="xny">
+                                <select class="form-control" name="xny" id="xny"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -115,7 +119,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">OA服务器：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="oa" id="oa">
+                                <select class="form-control" name="oa" id="oa"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -125,7 +131,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">医保前置：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="yb" id="yb">
+                                <select class="form-control" name="yb" id="yb"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -135,7 +143,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">区域网前置：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="qyw" id="qyw">
+                                <select class="form-control" name="qyw" id="qyw"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -145,7 +155,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">应用服务器：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="yy" id="yy">
+                                <select class="form-control" name="yy" id="yy"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -155,7 +167,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">监控服务器：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="jk" id="jk">
+                                <select class="form-control" name="jk" id="jk"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -165,7 +179,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">HIS存储：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="hiscc" id="hiscc">
+                                <select class="form-control" name="hiscc" id="hiscc"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -175,7 +191,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">核心交换机：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="hx" id="hx">
+                                <select class="form-control" name="hx" id="hx"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -185,7 +203,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">汇聚交换机：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="hj" id="hj">
+                                <select class="form-control" name="hj" id="hj"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -195,7 +215,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">安全设备：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="aqsb" id="aqsb">
+                                <select class="form-control" name="aqsb" id="aqsb"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -205,7 +227,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">UPS供电：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="ups" id="ups">
+                                <select class="form-control" name="ups" id="ups"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -215,7 +239,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">气体灭火：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="qtmh" id="qtmh">
+                                <select class="form-control" name="qtmh" id="qtmh"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -225,7 +251,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">空调：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="kt" id="kt">
+                                <select class="form-control" name="kt" id="kt"
+                                        onfocus="this.defaultIndex=this.selectedIndex;"
+                                        onchange="this.selectedIndex=this.defaultIndex;">
                                     <option value="0">未检查</option>
                                     <option value="1">正常</option>
                                     <option value="2">异常</option>
@@ -235,12 +263,14 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">原因/结果：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="ycyy" name="ycyy">
+                                <input type="text" class="form-control" id="ycyy" name="ycyy"
+                                       value="${engineRoomInspection.ycyy}" readonly="readonly">
                             </div>
                         </div>
                         <div class="form-group" style="text-align: center">
-                            <button class="btn btn-default" type="submit">提交</button>
-                            <button class="btn btn-default" type="reset">重置</button>
+                            <button class="btn btn-default btn-success" id="passBtn" type="button">通过</button>
+                            <button class="btn btn-default btn-info" id="denyBtn" type="button">拒绝</button>
+                            <button class="btn btn-default" id="returnListBtn" type="button">返回</button>
                         </div>
                     </form>
                 </div>
@@ -257,40 +287,33 @@
 </div>
 </body>
 <script type="text/javascript">
-    <%--设置菜单中--%>
+    //改变菜单状态
     $("#nav li:nth-child(5)").addClass("active");
-    <c:if test="${pagingVO != null}">
-    if (${pagingVO.curentPageNo} == ${pagingVO.totalCount}) {
-        $(".pagination li:last-child").addClass("disabled")
-    }
-    if (${pagingVO.curentPageNo} == ${1}) {
-        $(".pagination li:nth-child(1)").addClass("disabled")
-    }
-    </c:if>
 
-    //用户信息填入
-    $.ajax({
-        url:"/admin/getApplicantInfo",
-        async:true,
-        success: function(data){
-            document.getElementById("examiner").value = data.appliName;
-        }
-    });
+    //选项调整
+    /*	等同于：
+         for (var i=0; i<typeSelect.length; i++) {
+             if (typeSelect[i].value == engineRoomInspection.emr) {
+                 typeSelect[i].selected = true;
+             }
+         }*/
+
 
     //返回按钮点击
     $('#returnListBtn').on('click', function () {
         window.location.href = "/admin/showEngineRoomInspection";
     });
 
-    //初始化时间插件
-    $('#date').datetimepicker({
-        language:  'zh-CN',
-        format:'yyyy-mm-dd',
-        minView: "month",
-        todayBtn:  1,
-        autoclose: 1
-
+    //通过按钮点击
+    $('#passBtn').on('click', function () {
+        window.location.href = "/admin/passEngineRoomInspection?id=${engineRoomInspection.id}";
     });
+
+    //拒绝按钮点击
+    $('#denyBtn').on('click', function () {
+        window.location.href = "/admin/denyEngineRoomInspection?id=${engineRoomInspection.id}";
+    });
+
 
 </script>
 </html>
