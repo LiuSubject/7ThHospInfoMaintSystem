@@ -31,8 +31,9 @@
   <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select engine_room_inspection.*
     from engine_room_inspection
-    ORDER by date desc
+    ORDER by flag asc,date desc
     limit #{toPageNo}, #{pageSize}
+
   </select>
 
 </mapper>

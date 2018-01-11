@@ -1,7 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
     <title>绍兴市第七人民医院</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- 引入bootstrap -->
@@ -63,134 +65,134 @@
         <tbody>
         <tr>
             <td class="title">检查日期</td>
-            <td colspan="2">{$info.date}</td>
+            <td colspan="2">${engineRoomInspection.date}</td>
         </tr>
         <tr class="tr_height">
             <td rowspan="10" class="title">服务器</td>
             <td class="text">EMR服务器</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.emr?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.emr?"checked":""}>异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">HIS服务器</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.his?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.his?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">LIS服务器</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.lis?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.lis?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">PACS服务器</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.pacs?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.pacs?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">虚拟云服务器</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.xny?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.xny?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">OA服务器</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.oa?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.oa?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">医保前置机</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.yb?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.yb?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">区域网前置机</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.qyw?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.qyw?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">应用服务器</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.yy?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.yy?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">监控服务器</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.jk?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.jk?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="title">存储</td>
             <td class="text">HIS存储</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.hiscc?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.hiscc?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td rowspan="6" class="title">交换机</td>
             <td class="text">核心交换机</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.hx?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.hx?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">汇聚交换机</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.hj?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.hj?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">安全设备</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.aqsb?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.aqsb?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">UPS供电</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.ups?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.ups?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">气体灭火</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.qtmh?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.qtmh?"checked":""} >异常</span>
             </td>
         </tr>
         <tr class="tr_height">
             <td class="text">空调</td>
             <td class="text">
-                <span class="checkbox first"><input type="checkbox" >正常</span>
-                <span class="checkbox"><input type="checkbox" >异常</span>
+                <span class="checkbox first"><input type="checkbox" ${1 eq engineRoomInspection.kt?"checked":""} >正常</span>
+                <span class="checkbox"><input type="checkbox" ${2 eq engineRoomInspection.kt?"checked":""} >异常</span>
             </td>
         </tr>
         <tr style="height:120px">
             <td class="title">异常原因<br/>解决结果</td>
-            <td style="text-align: left;vertical-align: top;">{$info.ycyy}</td>
-            <td style="text-align: left;vertical-align: top;">检查者：</td>
+            <td style="text-align: left;vertical-align: top;">${engineRoomInspection.ycyy}</td>
+            <td style="text-align: left;vertical-align: top;">检查者：${engineRoomInspection.examiner}</td>
         </tr>
         </tbody>
     </table>
@@ -202,7 +204,7 @@
 
     $(function() {
         $("#btnSave").click(function(){
-            if (confirm("确定打印？（友情提示：打印前请先将浏览器打印设置为去掉页眉页脚。）")){
+            if (confirm("（友情提示：打印前请先将浏览器打印设置为去掉页眉页脚。）确定打印？")){
                 $(this).hide();
                 window.print();
             }
@@ -210,6 +212,7 @@
 
             }
         });
+
     });
 </script>
 </html>

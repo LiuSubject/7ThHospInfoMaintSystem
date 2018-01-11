@@ -47,6 +47,8 @@ public class EngineRoomInspection {
 
     private String createTime;
 
+    private Integer flag;
+
     public Integer getId() {
         return id;
     }
@@ -229,5 +231,13 @@ public class EngineRoomInspection {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime == null ? null : createTime.trim();
+    }
+
+    public Integer getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Integer flag) {
+        this.flag = flag;
     }
 }

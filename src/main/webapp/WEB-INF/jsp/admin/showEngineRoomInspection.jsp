@@ -64,6 +64,7 @@
                         <th style="text-align: center">检查日期</th>
                         <th style="text-align: center">检查者</th>
                         <th style="text-align: center">创建日期</th>
+                        <th style="text-align: center">状态</th>
                         <th style="text-align: center"></th>
                     </tr>
                     </thead>
@@ -73,8 +74,22 @@
                             <td style="text-align: center">${item.date}</td>
                             <td style="text-align: center">${item.examiner}</td>
                             <td style="text-align: center">${item.createTime}</td>
+                            <c:if test="${item.flag == 0}">
+                                <td><button class="btn btn-warning btn-sm" type="button">提交</button></td>
+                            </c:if>
+                            <c:if test="${item.flag == 1}">
+                                <td><button class="btn btn-info btn-sm" type="button">拒绝</button></td>
+                            </c:if>
+                            <c:if test="${item.flag == 2}">
+                                <td><button class="btn btn-success btn-sm" type="button">通过</button></td>
+                            </c:if>
                             <td style="text-align: center">
-                                <button class="btn btn-default btn-info btn-primary"
+                                <c:if test="${examiner == 1}">
+                                    <button class="btn btn-default btn-primary btn-info"
+                                            onClick="location.href='/admin/editEngineRoomInspection?id=${item.id}'">巡检审核
+                                    </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </c:if>
+                                <button class="btn btn-default btn-primary btn-danger"
                                         onClick="location.href='/admin/checkEngineRoomInspection?id=${item.id}'">查看详情
                                 </button>
                                 <!--弹出框-->

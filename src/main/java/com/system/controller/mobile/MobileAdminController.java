@@ -231,56 +231,6 @@ public class MobileAdminController {
         return map;
     }
 
-    // 修改电脑故障页面显示
-    @RequestMapping(value = "/editComputerProblems", method = {RequestMethod.GET})
-    public String editComputerProblemsUI(Integer id, Model model) throws Exception {
-        if (id == null) {
-            return "redirect:/admin/showComputerProblems";
-        }
-        ComputerProblems computerProblems = computerProblemsService.findById(id);
-        if (computerProblems == null) {
-            throw new CustomException("抱歉，未找到该故障相关信息");
-        }
-
-        model.addAttribute("computerProblems", computerProblems);
-
-
-        return "admin/editComputerProblems";
-    }
-
-    // 修改电脑故障页面处理
-    @RequestMapping(value = "/editComputerProblems", method = {RequestMethod.POST})
-    public String editComputerProblems(ComputerProblemsCustom computerProblemsCustom) throws Exception {
-
-        //获取当前操作用户对象
-        Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
-
-        computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
-
-        computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
-
-        //重定向
-        return "redirect:/admin/showComputerProblems";
-    }
-
     // 开始处理电脑故障
     @RequestMapping(value = "/dealComputerProblems")
     @ResponseBody
@@ -707,56 +657,8 @@ public class MobileAdminController {
         return map;
     }
 
-    // 修改物资申购页面显示
-    @RequestMapping(value = "/editMaterialApplication", method = {RequestMethod.GET})
-    public String editMaterialApplicationUI(Integer id, Model model) throws Exception {
-        if (id == null) {
-            return "redirect:/admin/showMaterialApplication";
-        }
-        MaterialApplication materialApplication = materialApplicationService.findById(id);
-        if (materialApplication == null) {
-            throw new CustomException("抱歉，未找到该物资申购相关信息");
-        }
-
-        model.addAttribute("materialApplication", materialApplication);
 
 
-        return "admin/editMaterialApplication";
-    }
-
-    // 修改物资申购页面处理
-    @RequestMapping(value = "/editMaterialApplication", method = {RequestMethod.POST})
-    public String editMaterialApplication(MaterialApplicationCustom materialApplicationCustom) throws Exception {
-
-        //获取当前操作用户对象
-        Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
-
-
-        materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
-
-        materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
-
-        //重定向
-        return "redirect:/admin/showMaterialApplication";
-    }
 
     // 开始处理物资申购
     @RequestMapping(value = "/dealMaterialApplication")
@@ -1143,91 +1045,131 @@ public class MobileAdminController {
         return map;
     }
 
-/*    // 修改机房巡检页面显示
-    @RequestMapping(value = "/editEngineRoomInspection", method = {RequestMethod.GET})
-    public String editEngineRoomInspectionUI(Integer id, Model model) throws Exception {
+    // 机房巡检审核页面
+    @RequestMapping(value = "/dealEngineRoomInspection", method = {RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Object> dealEngineRoomInspection(Integer id) throws Exception {
+
+        Map<String, Object> map =new HashMap<String, Object>();
+
+        //巡检审核者标识
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        if(subject.hasRole("examiner")){
+
+        }else {
+            map.put("success", "false");
+            map.put("msg", "抱歉，你没有该权限");
+            return map;
+        }
+
         if (id == null) {
-            return "redirect:/admin/showEngineRoomInspection";
+            map.put("success", "false");
+            map.put("msg", "数据异常");
+            return map;
         }
         EngineRoomInspection engineRoomInspection = engineRoomInspectionService.findById(id);
         if (engineRoomInspection == null) {
-            throw new CustomException("抱歉，未找到该机房巡检相关信息");
+            map.put("success", "false");
+            map.put("msg", "未找到该机房巡检相关信息");
+            return map;
         }
 
-        model.addAttribute("engineRoomInspection", engineRoomInspection);
+        map.put("success", "true");
+        map.put("msg", "success");
+        map.put("engineRoomInspection", engineRoomInspection);
 
 
-        return "admin/editEngineRoomInspection";
-    }*/
+        return map;
+    }
 
-    // 修改机房巡检页面处理
-/*    @RequestMapping(value = "/editEngineRoomInspection", method = {RequestMethod.POST})
-    public String editEngineRoomInspection(EngineRoomInspectionCustom engineRoomInspectionCustom) throws Exception {
+    // 机房巡检审核通过
+    @RequestMapping(value = "/passEngineRoomInspection")
+    @ResponseBody
+    public Map<String, Object> passEngineRoomInspection(Integer id) throws Exception {
 
+        Map<String, Object> map =new HashMap<String, Object>();
+
+        //巡检审核者标识
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
+        if(subject.hasRole("examiner")){
 
-        engineRoomInspectionService.updataById(engineRoomInspectionCustom.getId(), engineRoomInspectionCustom);
-
-        //重定向
-        return "redirect:/admin/showEngineRoomInspection";
-    }*/
-
-/*    // 开始处理机房巡检
-    @RequestMapping(value = "/dealEngineRoomInspection")
-    public String dealEngineRoomInspection(HttpServletRequest request) throws Exception {
-
-        Integer id = Integer.parseInt(request.getParameter("id"));
-        String feedback = request.getParameter("ycyy");
-
+        }else {
+            map.put("success", "false");
+            map.put("msg", "抱歉，你没有该权限");
+            return map;
+        }
 
         if (id == null) {
-            return "redirect:/admin/showEngineRoomInspection";
+            map.put("success", "false");
+            map.put("msg", "数据异常");
+            return map;
         }
-
-        //获取当前机房巡检问题
         EngineRoomInspectionCustom engineRoomInspectionCustom = engineRoomInspectionService.findById(id);
         if (engineRoomInspectionCustom == null) {
-            throw new CustomException("抱歉，未找到该机房巡检相关信息");
+            map.put("success", "false");
+            map.put("msg", "未找到该机房巡检相关信息");
+            return map;
         }
 
+        if(engineRoomInspectionCustom.getFlag() != 0){
+            map.put("success", "false");
+            map.put("msg", "该机房巡检已经审核过");
+            return map;
+        }
         //获取当前操作用户对象
-        Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
-        engineRoomInspectionCustom.setYcyy(feedback);
+        engineRoomInspectionCustom.setFlag(2);
         engineRoomInspectionService.updataById(engineRoomInspectionCustom.getId(), engineRoomInspectionCustom);
 
-        return "redirect:editEngineRoomInspection?id=" + engineRoomInspectionCustom.getId();
-    }*/
+        map.put("success", "true");
+        map.put("msg", "审核完成");
+        return map;
+    }
 
-/*    // 机房巡检处理完成
-    @RequestMapping(value = "/completeEngineRoomInspection")
-    public String completeEngineRoomInspection(HttpServletRequest request) throws Exception {
+    // 机房巡检审核拒绝
+    @RequestMapping(value = "/denyEngineRoomInspection")
+    @ResponseBody
+    public Map<String, Object> denyEngineRoomInspection(Integer id) throws Exception {
 
-        Integer id = Integer.parseInt(request.getParameter("id"));
-        String feedback = request.getParameter("feedback");
+        Map<String, Object> map =new HashMap<String, Object>();
 
+        //巡检审核者标识
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        if(subject.hasRole("examiner")){
+
+        }else {
+            map.put("success", "false");
+            map.put("msg", "抱歉，你没有该权限");
+            return map;
+        }
 
         if (id == null) {
-            return "redirect:/admin/showEngineRoomInspection";
+            map.put("success", "false");
+            map.put("msg", "数据异常");
+            return map;
         }
-
-        //获取当前机房巡检信息
         EngineRoomInspectionCustom engineRoomInspectionCustom = engineRoomInspectionService.findById(id);
         if (engineRoomInspectionCustom == null) {
-            throw new CustomException("抱歉，未找到该机房巡检相关信息");
+            map.put("success", "false");
+            map.put("msg", "未找到该机房巡检相关信息");
+            return map;
         }
 
+        if(engineRoomInspectionCustom.getFlag() != 0){
+            map.put("success", "false");
+            map.put("msg", "该机房巡检已经审核过");
+            return map;
+        }
         //获取当前操作用户对象
-        Subject subject = SecurityUtils.getSubject();
-        Userlogin userlogin = userloginService.findByName((String) subject.getPrincipal());
-        engineRoomInspectionCustom.setYcyy(feedback);
+        engineRoomInspectionCustom.setFlag(1);
         engineRoomInspectionService.updataById(engineRoomInspectionCustom.getId(), engineRoomInspectionCustom);
 
-
-        return "redirect:editEngineRoomInspection?id=" + engineRoomInspectionCustom.getId();
-    }*/
+        map.put("success", "true");
+        map.put("msg", "审核完成");
+        return map;
+    }
 
     // 查看机房巡检详情
     @RequestMapping(value = "/checkEngineRoomInspection", method = {RequestMethod.GET})
@@ -1254,15 +1196,6 @@ public class MobileAdminController {
         return map;
     }
 
-    // 查看机房巡检详情
-    @RequestMapping(value = "/checkEngineRoomInspection", method = {RequestMethod.POST})
-    public String checkEngineRoomInspection(EngineRoomInspectionCustom engineRoomInspectionCustom) throws Exception {
-
-        engineRoomInspectionService.updataById(engineRoomInspectionCustom.getId(), engineRoomInspectionCustom);
-
-        //重定向
-        return "redirect:/admin/showEngineRoomInspection";
-    }
 
     //搜索机房巡检
     @RequestMapping(value = "/searchEngineRoomInspection")

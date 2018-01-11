@@ -109,6 +109,7 @@ public class EngineRoomInspectionServiceImpl implements EngineRoomInspectionServ
         EngineRoomInspectionExample.Criteria criteria = EngineRoomInspectionExample.createCriteria();
 
         criteria.andExaminerLike("%" + examiner + "%");
+        EngineRoomInspectionExample.setOrderByClause("flag asc, date desc");
 
         List<EngineRoomInspection> list = engineRoomInspectionMapper.selectByExample(EngineRoomInspectionExample);
 
