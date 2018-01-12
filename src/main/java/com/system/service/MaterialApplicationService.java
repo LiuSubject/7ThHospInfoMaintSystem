@@ -28,6 +28,9 @@ public interface MaterialApplicationService {
     //获取分页查询物资申购信息
     List<MaterialApplicationCustom> findByPaging(Integer toPageNo) throws Exception;
 
+    //获取分页查询部门物资申购信息
+    List<MaterialApplicationCustom> deptFindByPaging(Integer toPageNo,String deptName) throws Exception;
+
     //电脑故障信息搜索结果(分页有缺陷，未分页)
     List<MaterialApplicationCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception;
 
@@ -39,6 +42,9 @@ public interface MaterialApplicationService {
 
     //获取物资申购总数
     int getCountMaterialApplication() throws Exception;
+
+    //获取物资申购总数
+    int getCountDeptMaterialApplication(String currentDept) throws Exception;
 
     //根据id获取物资申购信息
     MaterialApplicationCustom findById(Integer id) throws Exception;

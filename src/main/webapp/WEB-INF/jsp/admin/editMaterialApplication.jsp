@@ -142,11 +142,11 @@
         var model = document.getElementById("model").value;
         var judge = document.getElementById("judge").value;
         var total = document.getElementById("total").value;
-        window.location.href = "/admin/dealMaterialApplication?id=${materialApplication.id}&feedback=" + reback
+        window.location.href =encodeURI( "/admin/dealMaterialApplication?id=${materialApplication.id}&feedback=" + reback
             +"&brand=" + brand
             +"&model=" + model
             +"&judge=" + judge
-            +"&total=" + total;
+            +"&total=" + total);
     });
 
     //完成按钮点击
@@ -156,11 +156,11 @@
         var model = document.getElementById("model").value;
         var judge = document.getElementById("judge").value;
         var total = document.getElementById("total").value;
-        window.location.href = "/admin/completeMaterialApplication?id=${materialApplication.id}&feedback=" + reback
+        window.location.href =encodeURI( "/admin/completeMaterialApplication?id=${materialApplication.id}&feedback=" + reback
             +"&brand=" + brand
             +"&model=" + model
             +"&judge=" + judge
-            +"&total=" + total;
+            +"&total=" + total);
     });
 
     //返回按钮点击

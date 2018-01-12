@@ -82,15 +82,37 @@
 								<td><button class="btn btn-success btn-sm" type="button">已解决</button></td>
 							</c:if>
 							<td style="text-align: center">
-								<button class="btn btn-default btn-xs btn-danger btn-primary" onClick="location.href='/normal/checkMaterialApplication?id=${item.id}'">查看详情</button>
+								<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/normal/checkMaterialApplication?id=${item.id}'">查看详情</button>
 								<!--弹出框-->
 							</td>
 						</tr>
 					</c:forEach>
 					</tbody>
 				</table>
+				<div class="panel-footer">
+					<c:if test="${pagingVO != null}">
+						<nav style="text-align: center">
+							<ul class="pagination">
+								<li><a href="/normal/showMaterialApplication?page=${pagingVO.upPageNo}">&laquo;上一页</a></li>
+								<li class="active"><a href="javascript:location.reload();">${pagingVO.curentPageNo}</a></li>
+								<c:if test="${pagingVO.curentPageNo+1 <= pagingVO.totalCount}">
+									<li><a href="/normal/showMaterialApplication?page=${pagingVO.curentPageNo+1}">${pagingVO.curentPageNo+1}</a></li>
+								</c:if>
+								<c:if test="${pagingVO.curentPageNo+2 <= pagingVO.totalCount}">
+									<li><a href="/normal/showMaterialApplication?page=${pagingVO.curentPageNo+2}">${pagingVO.curentPageNo+2}</a></li>
+								</c:if>
+								<c:if test="${pagingVO.curentPageNo+3 <= pagingVO.totalCount}">
+									<li><a href="/normal/showMaterialApplication?page=${pagingVO.curentPageNo+3}">${pagingVO.curentPageNo+3}</a></li>
+								</c:if>
+								<c:if test="${pagingVO.curentPageNo+4 <= pagingVO.totalCount}">
+									<li><a href="/normal/showMaterialApplication?page=${pagingVO.curentPageNo+4}">${pagingVO.curentPageNo+4}</a></li>
+								</c:if>
+								<li><a href="/normal/showMaterialApplication?page=${pagingVO.totalCount}">最后一页&raquo;</a></li>
+							</ul>
+						</nav>
+					</c:if>
+				</div>
 			</div>
-
 		</div>
 	</div>
 </div>

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +59,19 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         return list;
     }
 
+    public List<ComputerProblemsCustom> deptFindByPaging(Integer toPageNo,String deptName) throws Exception {
+        PagingVO pagingVO = new PagingVO();
+        pagingVO.setToPageNo(toPageNo);
+        Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("pagingVO",pagingVO);
+        condition.put("deptName",deptName);
+
+        List<ComputerProblemsCustom> list = computerProblemsMapperCustom.deptFindByPaging(condition);
+
+        return list;
+    }
+
+
     public List<ComputerProblemsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception {
 
         List<ComputerProblemsCustom> list = computerProblemsMapperCustom.paginationOfSearchResults(condition);
@@ -95,6 +109,17 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         //通过criteria构造查询条件
         ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
         criteria.andUseridIsNotNull();
+
+        return computerProblemsMapper.countByExample(ComputerProblemsExample);
+    }
+
+    //返回部门总数
+    public int getCountDeptComputerProblems(String currentDept) throws Exception {
+        //自定义查询对象
+        ComputerProblemsExample ComputerProblemsExample = new ComputerProblemsExample();
+        //通过criteria构造查询条件
+        ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
+        criteria.andUseridIsNotNull().andDeptLike(currentDept);
 
         return computerProblemsMapper.countByExample(ComputerProblemsExample);
     }

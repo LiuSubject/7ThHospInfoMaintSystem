@@ -95,8 +95,8 @@
 									<td>${item.leader}</td>
 									<td>${item.createTime}</td>
 									<td>
-										<button class="btn btn-default btn-xs btn-info" onClick="location.href='/admin/editComputerProblems?id=${item.id}'">处理问题</button>
-										<button class="btn btn-default btn-xs btn-danger btn-primary" onClick="location.href='/admin/checkComputerProblems?id=${item.id}'">查看详情</button>
+										<button class="btn btn-default btn-xs btn-info" type="button" onClick="location.href='/admin/editComputerProblems?id=${item.id}'">处理问题</button>
+										<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/admin/checkComputerProblems?id=${item.id}'">查看详情</button>
 										<!--弹出框-->
 									</td>
 								</tr>
@@ -108,7 +108,7 @@
 							<nav style="text-align: center">
 								<ul class="pagination">
 									<li><a href="/admin/showComputerProblems?page=${pagingVO.upPageNo}">&laquo;上一页</a></li>
-									<li class="active"><a href="">${pagingVO.curentPageNo}</a></li>
+									<li class="active"><a href="javascript:location.reload();">${pagingVO.curentPageNo}</a></li>
 									<c:if test="${pagingVO.curentPageNo+1 <= pagingVO.totalCount}">
 										<li><a href="/admin/showComputerProblems?page=${pagingVO.curentPageNo+1}">${pagingVO.curentPageNo+1}</a></li>
 									</c:if>

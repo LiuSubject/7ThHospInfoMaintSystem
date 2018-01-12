@@ -78,7 +78,7 @@
 								<td>${item.leader}</td>
 								<td>${item.createTime}</td>
 									<td style="text-align: center">
-										<button class="btn btn-default btn-xs btn-danger btn-primary" onClick="location.href='/normal/checkComputerProblems?id=${item.id}'">查看详情</button>
+										<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/normal/checkComputerProblems?id=${item.id}'">查看详情</button>
 										<!--弹出框-->
 									</td>
 								</tr>
@@ -90,7 +90,7 @@
 							<nav style="text-align: center">
 								<ul class="pagination">
 									<li><a href="/normal/showComputerProblems?page=${pagingVO.upPageNo}">&laquo;上一页</a></li>
-									<li class="active"><a href="">${pagingVO.curentPageNo}</a></li>
+									<li class="active"><a href="javascript:location.reload();">${pagingVO.curentPageNo}</a></li>
 									<c:if test="${pagingVO.curentPageNo+1 <= pagingVO.totalCount}">
 										<li><a href="/normal/showComputerProblems?page=${pagingVO.curentPageNo+1}">${pagingVO.curentPageNo+1}</a></li>
 									</c:if>

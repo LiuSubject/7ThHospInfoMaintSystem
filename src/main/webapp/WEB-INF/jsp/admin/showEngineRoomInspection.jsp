@@ -85,11 +85,11 @@
                             </c:if>
                             <td style="text-align: center">
                                 <c:if test="${examiner == 1}">
-                                    <button class="btn btn-default btn-primary btn-info"
+                                    <button class="btn btn-default btn-primary btn-info" type="button"
                                             onClick="location.href='/admin/editEngineRoomInspection?id=${item.id}'">巡检审核
                                     </button>&nbsp;&nbsp;&nbsp;&nbsp;
                                 </c:if>
-                                <button class="btn btn-default btn-primary btn-danger"
+                                <button class="btn btn-default btn-primary btn-danger" type="button"
                                         onClick="location.href='/admin/checkEngineRoomInspection?id=${item.id}'">查看详情
                                 </button>
                                 <!--弹出框-->
@@ -104,7 +104,7 @@
                             <ul class="pagination">
                                 <li><a href="/admin/showEngineRoomInspection?page=${pagingVO.upPageNo}">&laquo;上一页</a>
                                 </li>
-                                <li class="active"><a href="">${pagingVO.curentPageNo}</a></li>
+                                <li class="active"><a href="javascript:location.reload();">${pagingVO.curentPageNo}</a></li>
                                 <c:if test="${pagingVO.curentPageNo+1 <= pagingVO.totalCount}">
                                     <li>
                                         <a href="/admin/showEngineRoomInspection?page=${pagingVO.curentPageNo+1}">${pagingVO.curentPageNo+1}</a>
