@@ -124,8 +124,19 @@ public class MobileAdminController {
             }
             String currentDept = viewEmployeeMiPsd.getDeptName();
             List<ComputerProblemsCustom> listByDept = new ArrayList<>();
-            listByDept = computerProblemsService.findByDept(currentDept);
+            //页码对象
+            PagingVO pagingVO = new PagingVO();
+            //设置总页数
+            pagingVO.setTotalCount(computerProblemsService.getCountDeptComputerProblems(currentDept));
+            if (page == null || page == 0) {
+                pagingVO.setToPageNo(1);
+                listByDept = computerProblemsService.deptFindByPaging(1,currentDept);
+            } else {
+                pagingVO.setToPageNo(page);
+                listByDept = computerProblemsService.deptFindByPaging(page,currentDept);
+            }
             map.put("computerProblemsList", listByDept);
+            map.put("pagingVO", pagingVO);
             return map;
         }
 
@@ -558,8 +569,19 @@ public class MobileAdminController {
             }
             String currentDept = viewEmployeeMiPsd.getDeptName();
             List<MaterialApplicationCustom> listByDept = new ArrayList<>();
-            listByDept = materialApplicationService.findByDept(currentDept);
+            //页码对象
+            PagingVO pagingVO = new PagingVO();
+            //设置总页数
+            pagingVO.setTotalCount(materialApplicationService.getCountDeptMaterialApplication(currentDept));
+            if (page == null || page == 0) {
+                pagingVO.setToPageNo(1);
+                listByDept = materialApplicationService.deptFindByPaging(1,currentDept);
+            } else {
+                pagingVO.setToPageNo(page);
+                listByDept = materialApplicationService.deptFindByPaging(page,currentDept);
+            }
             map.put("materialApplicationList", listByDept);
+            model.addAttribute("pagingVO", pagingVO);
             return map;
         }
 

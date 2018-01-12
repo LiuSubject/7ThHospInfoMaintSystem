@@ -29,8 +29,15 @@
   <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select material_application.*
     from material_application
-    ORDER by flag asc, create_time desc
+    ORDER by flag asc, use_date desc
     limit #{toPageNo}, #{pageSize}
+  </select>
+  <select id="deptFindByPaging" parameterType="map" resultMap="BaseResultMap">
+    select material_application.*
+    from material_application
+    WHERE dept LIKE concat(concat('%',#{deptName}),'%')
+    ORDER by flag asc, use_date desc
+    limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
   </select>
   <select id="paginationOfSearchResults" parameterType="map" resultMap="BaseResultMap">
     select material_application.* from material_application
@@ -45,7 +52,7 @@
         OR flag = #{flag}
       </if>
     </where>
-    ORDER by flag asc, create_time desc
+    ORDER by flag asc, use_date desc
   </select>
 
 </mapper>

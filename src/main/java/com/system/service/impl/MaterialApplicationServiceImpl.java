@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +67,18 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
         return list;
     }
 
+    public List<MaterialApplicationCustom> deptFindByPaging(Integer toPageNo,String deptName) throws Exception {
+        PagingVO pagingVO = new PagingVO();
+        pagingVO.setToPageNo(toPageNo);
+        Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("pagingVO",pagingVO);
+        condition.put("deptName",deptName);
+
+        List<MaterialApplicationCustom> list = materialApplicationMapperCustom.deptFindByPaging(condition);
+
+        return list;
+    }
+
     public Boolean save(MaterialApplicationCustom MaterialApplicationCustoms) throws Exception {
         MaterialApplication stu = materialApplicationMapper.selectByPrimaryKey(MaterialApplicationCustoms.getId());
         if (stu == null) {
@@ -95,6 +108,17 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
         //通过criteria构造查询条件
         MaterialApplicationExample.Criteria criteria = MaterialApplicationExample.createCriteria();
         criteria.andUseridIsNotNull();
+
+        return materialApplicationMapper.countByExample(MaterialApplicationExample);
+    }
+
+    //返回部门物资申购总数
+    public int getCountDeptMaterialApplication(String currentDept) throws Exception {
+        //自定义查询对象
+        MaterialApplicationExample MaterialApplicationExample = new MaterialApplicationExample();
+        //通过criteria构造查询条件
+        MaterialApplicationExample.Criteria criteria = MaterialApplicationExample.createCriteria();
+        criteria.andUseridIsNotNull().andDeptLike(currentDept);
 
         return materialApplicationMapper.countByExample(MaterialApplicationExample);
     }

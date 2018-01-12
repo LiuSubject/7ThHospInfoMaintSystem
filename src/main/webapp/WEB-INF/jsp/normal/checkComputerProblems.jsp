@@ -92,7 +92,7 @@
 							</div>
 						</div>
 						<div class="form-group" style="text-align: center">
-							<button class="btn btn-default" id="returnListBtn">返回</button>
+							<button class="btn btn-default" id="returnListBtn" type="button">返回</button>
 						</div>
 					</form>
 				</div>

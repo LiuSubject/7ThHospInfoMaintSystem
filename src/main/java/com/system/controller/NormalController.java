@@ -81,6 +81,7 @@ public class NormalController {
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
         ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+
         try {
             //切换数据源至SQLServer
             CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
@@ -100,9 +101,19 @@ public class NormalController {
         }
         String currentDept = viewEmployeeMiPsd.getDeptName();
         List<ComputerProblemsCustom> listByDept = new ArrayList<>();
-        listByDept = computerProblemsService.findByDept(currentDept);
-
+        //页码对象
+        PagingVO pagingVO = new PagingVO();
+        //设置总页数
+        pagingVO.setTotalCount(computerProblemsService.getCountDeptComputerProblems(currentDept));
+        if (page == null || page == 0) {
+            pagingVO.setToPageNo(1);
+            listByDept = computerProblemsService.deptFindByPaging(1,currentDept);
+        } else {
+            pagingVO.setToPageNo(page);
+            listByDept = computerProblemsService.deptFindByPaging(page,currentDept);
+        }
         model.addAttribute("computerProblemsList", listByDept);
+        model.addAttribute("pagingVO", pagingVO);
 
         return "normal/showComputerProblems";
 
@@ -443,9 +454,19 @@ public class NormalController {
         }
         String currentDept = viewEmployeeMiPsd.getDeptName();
         List<MaterialApplicationCustom> listByDept = new ArrayList<>();
-        listByDept = materialApplicationService.findByDept(currentDept);
-
+        //页码对象
+        PagingVO pagingVO = new PagingVO();
+        //设置总页数
+        pagingVO.setTotalCount(materialApplicationService.getCountDeptMaterialApplication(currentDept));
+        if (page == null || page == 0) {
+            pagingVO.setToPageNo(1);
+            listByDept = materialApplicationService.deptFindByPaging(1,currentDept);
+        } else {
+            pagingVO.setToPageNo(page);
+            listByDept = materialApplicationService.deptFindByPaging(page,currentDept);
+        }
         model.addAttribute("materialApplicationList", listByDept);
+        model.addAttribute("pagingVO", pagingVO);
 
         return "normal/showMaterialApplication";
 

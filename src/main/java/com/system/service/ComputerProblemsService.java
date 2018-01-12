@@ -27,6 +27,9 @@ public interface ComputerProblemsService {
     //获取分页查询电脑故障信息
     List<ComputerProblemsCustom> findByPaging(Integer toPageNo) throws Exception;
 
+    //获取分页查询部门电脑故障信息
+    List<ComputerProblemsCustom> deptFindByPaging(Integer toPageNo,String deptName) throws Exception;
+
     //电脑故障信息搜索结果(分页有缺陷，未分页)
     List<ComputerProblemsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception;
 
@@ -38,6 +41,9 @@ public interface ComputerProblemsService {
 
     //获取电脑故障总数
     int getCountComputerProblems() throws Exception;
+
+    //获取部门电脑故障总数
+    int getCountDeptComputerProblems(String currentDept) throws Exception;
 
     //获取电脑电脑故障信息搜索结果总数
     int getCountOfSearchResults() throws Exception;
