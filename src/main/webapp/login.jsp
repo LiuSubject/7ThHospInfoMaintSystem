@@ -12,31 +12,13 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/pwd-encryption.js"></script>
     <style type="text/css">
-        body {
-            margin: 0;
-            background-image: url(images/background.jpg);
-            background-repeat:no-repeat;
-            background-size:cover;
-            _background:none;
-        }
 
-        html,body{
-            height: 100%;
-        }
-
-        .container {
-            height: 100%;
-        }
 
         .row{
             position: relative;
             top: 15%;
         }
 
-        img{
-            width:100%;
-            height:100%;
-        }
 
 
 
@@ -54,8 +36,9 @@
 <!--[if IE 9]>
 <script type="text/javascript" src="/js/jquery.placeholder.js"></script>
 <![endif]-->
-<body>
-<div class="container" id="top">
+<body style="overflow: hidden">
+<div class="container" id="top" style="position:absolute; width:100%; height:100%; z-index:-1 ;padding: 0;">
+    <img src="images/background.png" style="position:fixed;" height="100%" width="100%"/>
     <div class="row" style="margin-top: 280px; ">
         <div class="col-md-4"></div>
         <div class="col-md-4" id="login-box">
