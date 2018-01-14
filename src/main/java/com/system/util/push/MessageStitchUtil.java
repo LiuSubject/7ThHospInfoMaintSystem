@@ -29,15 +29,13 @@ public class MessageStitchUtil {
     private PushMessageTemplateService pushMessageTemplateService;
 
     //自动拼接推送消息表内标识为未推送的第一条消息
-    public PushMessage MessageStitch(){
+    public PushMessage MessageStitch(PushMessage prePushMessage){
 
-        PushMessage pushMessage = null;
+        PushMessage pushMessage = prePushMessage;
         PushMessageTemplate pushMessageTemplate = null;
         int pushMessageTemplateId = 0;
 
         try {
-            //只读操作
-            pushMessage = pushMessageService.findByStatus("0");
             pushMessageTemplateId = Integer.parseInt(pushMessage.getMsgContent1());
             //只读操作
             pushMessageTemplate = pushMessageTemplateService.findById(pushMessageTemplateId);
@@ -52,26 +50,5 @@ public class MessageStitchUtil {
         return pushMessage;
     }
 
-    //自动拼接推送消息表内指定用户的标识为未推送的第一条消息
-    public PushMessage MessageStitch(String code){
-
-        PushMessage pushMessage = null;
-        PushMessageTemplate pushMessageTemplate = null;
-        int pushMessageTemplateId = 0;
-
-        try {
-            pushMessage = pushMessageService.findSpecifiedByStatus("0",code);
-            pushMessageTemplateId = Integer.parseInt(pushMessage.getMsgContent1());
-            pushMessageTemplate = pushMessageTemplateService.findById(pushMessageTemplateId);
-            //导入消息模板
-            pushMessage.setMsgContent1(pushMessageTemplate.getContent());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-
-        return pushMessage;
-    }
 
 }

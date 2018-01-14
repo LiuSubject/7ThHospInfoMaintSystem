@@ -202,7 +202,7 @@ public class NormalController {
                 return "error";
             }
             //向管理组推送消息
-            messagePushUtil.GroupPushSingle("admin");
+           messagePushUtil.GroupPushSingle(preMessage,"admin");
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
@@ -543,7 +543,7 @@ public class NormalController {
                 return "error";
             }
             //向管理组推送消息
-            messagePushUtil.GroupPushSingle("admin");
+           messagePushUtil.GroupPushSingle(pushMessage,"admin");
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
