@@ -13,8 +13,11 @@
     <script src="/js/pwd-encryption.js"></script>
     <style type="text/css">
         body {
-            background: url(images/a.jpg) repeat;
-            background-size: 100%;
+            margin: 0;
+            background-image: url(images/background.jpg);
+            background-repeat:no-repeat;
+            background-size:cover;
+            _background:none;
         }
 
         html,body{
@@ -28,6 +31,11 @@
         .row{
             position: relative;
             top: 15%;
+        }
+
+        img{
+            width:100%;
+            height:100%;
         }
 
 

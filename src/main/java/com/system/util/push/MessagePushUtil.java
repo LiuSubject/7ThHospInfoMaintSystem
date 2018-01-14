@@ -45,9 +45,9 @@ public class MessagePushUtil {
     private MessageStitchUtil messageStitchUtil;
 
     //以单个用户方式为指定用户组推送简单消息
-    public boolean GroupPushSingle(String userGroup) throws Exception{
-        //拼接推送消息表内标识为未推送的第一条消息
-        PushMessage pushMessage = messageStitchUtil.MessageStitch();
+    public boolean GroupPushSingle(PushMessage prePushMessage,String userGroup) throws Exception{
+        //拼接推送消息
+        PushMessage pushMessage = messageStitchUtil.MessageStitch(prePushMessage);
         List<String> clientIds = new ArrayList<String>();
         clientIds = GetPushIds(userGroup);
         if(clientIds.size()>0){
@@ -108,9 +108,9 @@ public class MessagePushUtil {
     }
 
     //为指定用户推送简单消息
-    public boolean SpecifiedPushSingle(String code) throws Exception{
+    public boolean SpecifiedPushSingle(PushMessage prePushMessage,String code) throws Exception{
         //拼接推送消息表内标识为未推送的第一条消息
-        PushMessage pushMessage = messageStitchUtil.MessageStitch(code);
+        PushMessage pushMessage = messageStitchUtil.MessageStitch(prePushMessage);
         String clientId = GetPushId(code);
         try {
             PushSingleUtil.push(clientId, pushMessage);

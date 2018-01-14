@@ -177,7 +177,7 @@ public class AdminController {
                 return "error";
             }
             //向管理组推送消息
-            messagePushUtil.GroupPushSingle("admin");
+            messagePushUtil.GroupPushSingle(preMessage,"admin");
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
@@ -294,7 +294,7 @@ public class AdminController {
                     return "error";
                 }
                 //向申报人推送消息
-                messagePushUtil.SpecifiedPushSingle(computerProblemsCustom.getUserid());
+                messagePushUtil.SpecifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -361,7 +361,7 @@ public class AdminController {
                     return "error";
                 }
                 //向申报人推送消息
-                messagePushUtil.SpecifiedPushSingle(computerProblemsCustom.getUserid());
+                messagePushUtil.SpecifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -515,7 +515,7 @@ public class AdminController {
                 return "error";
             }
             //向管理组推送消息
-            messagePushUtil.GroupPushSingle("admin");
+           messagePushUtil.GroupPushSingle(pushMessage,"admin");
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
@@ -646,7 +646,7 @@ public class AdminController {
                     return "error";
                 }
                 //向申报人推送消息
-                messagePushUtil.SpecifiedPushSingle(materialApplicationCustom.getUserid());
+                messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -725,7 +725,7 @@ public class AdminController {
                     return "error";
                 }
                 //向申报人推送消息
-                messagePushUtil.SpecifiedPushSingle(materialApplicationCustom.getUserid());
+                messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -907,7 +907,7 @@ public class AdminController {
                 return "error";
             }
             //向管理组推送消息
-            messagePushUtil.GroupPushSingle("admin");
+           messagePushUtil.GroupPushSingle(pushMessage,"examiner");
         } catch (Exception e) {
             e.printStackTrace();
             return "error";

@@ -43,7 +43,7 @@ public class RoleServiceImpl implements RoleService {
         RoleExample roleExample = new RoleExample();
 
         RoleExample.Criteria criteria = roleExample.createCriteria();
-        criteria.andRolenameEqualTo(roleName);
+        criteria.andRolenameLike("%" + roleName + "%");
 
         List<Role> list = roleMapper.selectByExample(roleExample);
 
