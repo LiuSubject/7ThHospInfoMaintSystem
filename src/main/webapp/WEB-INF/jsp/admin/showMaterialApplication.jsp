@@ -52,8 +52,12 @@
 									   name="findByDept" style="margin-left: 5px">
 								<input type="text" class="form-control" placeholder="请输入申报人" id="findByName"
 									   name="findByName" style="margin-left: 10px">
-								<input type="text" class="form-control" placeholder="请输入状态" id="findByFlag"
-									   name="findByFlag" style="margin-left: 10px">
+								<select class="form-control" name="findByFlag" id="findByFlag" style="margin-left: 10px">
+									<option value="-1">选择状态：</option>
+									<option value="0">提交中</option>
+									<option value="1">处理中</option>
+									<option value="2">已解决</option>
+								</select>
 								<input type="button" class="btn btn-primary" id="searchBtn" value="搜索"
 									   style="margin-left: 10px;margin-right:20px">
 							</div>
