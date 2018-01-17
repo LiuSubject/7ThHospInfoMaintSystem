@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.ExternalAccessMapper" >
+  <resultMap id="BaseResultMap" type="com.system.po.ExternalAccess" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="access_type" property="accessType" jdbcType="INTEGER" />
+    <result column="dept_code" property="deptCode" jdbcType="VARCHAR" />
+    <result column="dept" property="dept" jdbcType="VARCHAR" />
+    <result column="access_address" property="accessAddress" jdbcType="VARCHAR" />
+    <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
+    <result column="contact_tel" property="contactTel" jdbcType="VARCHAR" />
+    <result column="cable_type" property="cableType" jdbcType="INTEGER" />
+    <result column="way_type" property="wayType" jdbcType="INTEGER" />
+    <result column="lan_points" property="lanPoints" jdbcType="INTEGER" />
+    <result column="lan_equipment" property="lanEquipment" jdbcType="VARCHAR" />
+    <result column="dedicated_room" property="dedicatedRoom" jdbcType="INTEGER" />
+    <result column="air_conditioning" property="airConditioning" jdbcType="INTEGER" />
+    <result column="ups" property="ups" jdbcType="INTEGER" />
+    <result column="wiring" property="wiring" jdbcType="INTEGER" />
+    <result column="open_website" property="openWebsite" jdbcType="VARCHAR" />
+    <result column="communication_tools" property="communicationTools" jdbcType="VARCHAR" />
+    <result column="dept_principal" property="deptPrincipal" jdbcType="VARCHAR" />
+    <result column="principal_tel" property="principalTel" jdbcType="VARCHAR" />
+    <result column="opinion" property="opinion" jdbcType="VARCHAR" />
+    <result column="chief_dean" property="chiefDean" jdbcType="VARCHAR" />
+    <result column="other_1" property="other1" jdbcType="VARCHAR" />
+    <result column="other_2" property="other2" jdbcType="VARCHAR" />
+    <result column="other_3" property="other3" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, access_type, dept_code, dept, access_address, contact_name, contact_tel, cable_type, 
+    way_type, lan_points, lan_equipment, dedicated_room, air_conditioning, ups, wiring, 
+    open_website, communication_tools, dept_principal, principal_tel, opinion, chief_dean, 
+    other_1, other_2, other_3
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.po.ExternalAccessExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from external_access
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from external_access
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from external_access
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.system.po.ExternalAccessExample" >
+    delete from external_access
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.system.po.ExternalAccess" >
+    insert into external_access (id, access_type, dept_code, 
+      dept, access_address, contact_name, 
+      contact_tel, cable_type, way_type, 
+      lan_points, lan_equipment, dedicated_room, 
+      air_conditioning, ups, wiring, 
+      open_website, communication_tools, dept_principal, 
+      principal_tel, opinion, chief_dean, 
+      other_1, other_2, other_3
+      )
+    values (#{id,jdbcType=INTEGER}, #{accessType,jdbcType=INTEGER}, #{deptCode,jdbcType=VARCHAR}, 
+      #{dept,jdbcType=VARCHAR}, #{accessAddress,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
+      #{contactTel,jdbcType=VARCHAR}, #{cableType,jdbcType=INTEGER}, #{wayType,jdbcType=INTEGER}, 
+      #{lanPoints,jdbcType=INTEGER}, #{lanEquipment,jdbcType=VARCHAR}, #{dedicatedRoom,jdbcType=INTEGER}, 
+      #{airConditioning,jdbcType=INTEGER}, #{ups,jdbcType=INTEGER}, #{wiring,jdbcType=INTEGER}, 
+      #{openWebsite,jdbcType=VARCHAR}, #{communicationTools,jdbcType=VARCHAR}, #{deptPrincipal,jdbcType=VARCHAR}, 
+      #{principalTel,jdbcType=VARCHAR}, #{opinion,jdbcType=VARCHAR}, #{chiefDean,jdbcType=VARCHAR}, 
+      #{other1,jdbcType=VARCHAR}, #{other2,jdbcType=VARCHAR}, #{other3,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.po.ExternalAccess" >
+    insert into external_access
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="accessType != null" >
+        access_type,
+      </if>
+      <if test="deptCode != null" >
+        dept_code,
+      </if>
+      <if test="dept != null" >
+        dept,
+      </if>
+      <if test="accessAddress != null" >
+        access_address,
+      </if>
+      <if test="contactName != null" >
+        contact_name,
+      </if>
+      <if test="contactTel != null" >
+        contact_tel,
+      </if>
+      <if test="cableType != null" >
+        cable_type,
+      </if>
+      <if test="wayType != null" >
+        way_type,
+      </if>
+      <if test="lanPoints != null" >
+        lan_points,
+      </if>
+      <if test="lanEquipment != null" >
+        lan_equipment,
+      </if>
+      <if test="dedicatedRoom != null" >
+        dedicated_room,
+      </if>
+      <if test="airConditioning != null" >
+        air_conditioning,
+      </if>
+      <if test="ups != null" >
+        ups,
+      </if>
+      <if test="wiring != null" >
+        wiring,
+      </if>
+      <if test="openWebsite != null" >
+        open_website,
+      </if>
+      <if test="communicationTools != null" >
+        communication_tools,
+      </if>
+      <if test="deptPrincipal != null" >
+        dept_principal,
+      </if>
+      <if test="principalTel != null" >
+        principal_tel,
+      </if>
+      <if test="opinion != null" >
+        opinion,
+      </if>
+      <if test="chiefDean != null" >
+        chief_dean,
+      </if>
+      <if test="other1 != null" >
+        other_1,
+      </if>
+      <if test="other2 != null" >
+        other_2,
+      </if>
+      <if test="other3 != null" >
+        other_3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="accessType != null" >
+        #{accessType,jdbcType=INTEGER},
+      </if>
+      <if test="deptCode != null" >
+        #{deptCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dept != null" >
+        #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="accessAddress != null" >
+        #{accessAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null" >
+        #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="cableType != null" >
+        #{cableType,jdbcType=INTEGER},
+      </if>
+      <if test="wayType != null" >
+        #{wayType,jdbcType=INTEGER},
+      </if>
+      <if test="lanPoints != null" >
+        #{lanPoints,jdbcType=INTEGER},
+      </if>
+      <if test="lanEquipment != null" >
+        #{lanEquipment,jdbcType=VARCHAR},
+      </if>
+      <if test="dedicatedRoom != null" >
+        #{dedicatedRoom,jdbcType=INTEGER},
+      </if>
+      <if test="airConditioning != null" >
+        #{airConditioning,jdbcType=INTEGER},
+      </if>
+      <if test="ups != null" >
+        #{ups,jdbcType=INTEGER},
+      </if>
+      <if test="wiring != null" >
+        #{wiring,jdbcType=INTEGER},
+      </if>
+      <if test="openWebsite != null" >
+        #{openWebsite,jdbcType=VARCHAR},
+      </if>
+      <if test="communicationTools != null" >
+        #{communicationTools,jdbcType=VARCHAR},
+      </if>
+      <if test="deptPrincipal != null" >
+        #{deptPrincipal,jdbcType=VARCHAR},
+      </if>
+      <if test="principalTel != null" >
+        #{principalTel,jdbcType=VARCHAR},
+      </if>
+      <if test="opinion != null" >
+        #{opinion,jdbcType=VARCHAR},
+      </if>
+      <if test="chiefDean != null" >
+        #{chiefDean,jdbcType=VARCHAR},
+      </if>
+      <if test="other1 != null" >
+        #{other1,jdbcType=VARCHAR},
+      </if>
+      <if test="other2 != null" >
+        #{other2,jdbcType=VARCHAR},
+      </if>
+      <if test="other3 != null" >
+        #{other3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.system.po.ExternalAccessExample" resultType="java.lang.Integer" >
+    select count(*) from external_access
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update external_access
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.accessType != null" >
+        access_type = #{record.accessType,jdbcType=INTEGER},
+      </if>
+      <if test="record.deptCode != null" >
+        dept_code = #{record.deptCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dept != null" >
+        dept = #{record.dept,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accessAddress != null" >
+        access_address = #{record.accessAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactName != null" >
+        contact_name = #{record.contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactTel != null" >
+        contact_tel = #{record.contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cableType != null" >
+        cable_type = #{record.cableType,jdbcType=INTEGER},
+      </if>
+      <if test="record.wayType != null" >
+        way_type = #{record.wayType,jdbcType=INTEGER},
+      </if>
+      <if test="record.lanPoints != null" >
+        lan_points = #{record.lanPoints,jdbcType=INTEGER},
+      </if>
+      <if test="record.lanEquipment != null" >
+        lan_equipment = #{record.lanEquipment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dedicatedRoom != null" >
+        dedicated_room = #{record.dedicatedRoom,jdbcType=INTEGER},
+      </if>
+      <if test="record.airConditioning != null" >
+        air_conditioning = #{record.airConditioning,jdbcType=INTEGER},
+      </if>
+      <if test="record.ups != null" >
+        ups = #{record.ups,jdbcType=INTEGER},
+      </if>
+      <if test="record.wiring != null" >
+        wiring = #{record.wiring,jdbcType=INTEGER},
+      </if>
+      <if test="record.openWebsite != null" >
+        open_website = #{record.openWebsite,jdbcType=VARCHAR},
+      </if>
+      <if test="record.communicationTools != null" >
+        communication_tools = #{record.communicationTools,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptPrincipal != null" >
+        dept_principal = #{record.deptPrincipal,jdbcType=VARCHAR},
+      </if>
+      <if test="record.principalTel != null" >
+        principal_tel = #{record.principalTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.opinion != null" >
+        opinion = #{record.opinion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chiefDean != null" >
+        chief_dean = #{record.chiefDean,jdbcType=VARCHAR},
+      </if>
+      <if test="record.other1 != null" >
+        other_1 = #{record.other1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.other2 != null" >
+        other_2 = #{record.other2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.other3 != null" >
+        other_3 = #{record.other3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update external_access
+    set id = #{record.id,jdbcType=INTEGER},
+      access_type = #{record.accessType,jdbcType=INTEGER},
+      dept_code = #{record.deptCode,jdbcType=VARCHAR},
+      dept = #{record.dept,jdbcType=VARCHAR},
+      access_address = #{record.accessAddress,jdbcType=VARCHAR},
+      contact_name = #{record.contactName,jdbcType=VARCHAR},
+      contact_tel = #{record.contactTel,jdbcType=VARCHAR},
+      cable_type = #{record.cableType,jdbcType=INTEGER},
+      way_type = #{record.wayType,jdbcType=INTEGER},
+      lan_points = #{record.lanPoints,jdbcType=INTEGER},
+      lan_equipment = #{record.lanEquipment,jdbcType=VARCHAR},
+      dedicated_room = #{record.dedicatedRoom,jdbcType=INTEGER},
+      air_conditioning = #{record.airConditioning,jdbcType=INTEGER},
+      ups = #{record.ups,jdbcType=INTEGER},
+      wiring = #{record.wiring,jdbcType=INTEGER},
+      open_website = #{record.openWebsite,jdbcType=VARCHAR},
+      communication_tools = #{record.communicationTools,jdbcType=VARCHAR},
+      dept_principal = #{record.deptPrincipal,jdbcType=VARCHAR},
+      principal_tel = #{record.principalTel,jdbcType=VARCHAR},
+      opinion = #{record.opinion,jdbcType=VARCHAR},
+      chief_dean = #{record.chiefDean,jdbcType=VARCHAR},
+      other_1 = #{record.other1,jdbcType=VARCHAR},
+      other_2 = #{record.other2,jdbcType=VARCHAR},
+      other_3 = #{record.other3,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.po.ExternalAccess" >
+    update external_access
+    <set >
+      <if test="accessType != null" >
+        access_type = #{accessType,jdbcType=INTEGER},
+      </if>
+      <if test="deptCode != null" >
+        dept_code = #{deptCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dept != null" >
+        dept = #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="accessAddress != null" >
+        access_address = #{accessAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null" >
+        contact_tel = #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="cableType != null" >
+        cable_type = #{cableType,jdbcType=INTEGER},
+      </if>
+      <if test="wayType != null" >
+        way_type = #{wayType,jdbcType=INTEGER},
+      </if>
+      <if test="lanPoints != null" >
+        lan_points = #{lanPoints,jdbcType=INTEGER},
+      </if>
+      <if test="lanEquipment != null" >
+        lan_equipment = #{lanEquipment,jdbcType=VARCHAR},
+      </if>
+      <if test="dedicatedRoom != null" >
+        dedicated_room = #{dedicatedRoom,jdbcType=INTEGER},
+      </if>
+      <if test="airConditioning != null" >
+        air_conditioning = #{airConditioning,jdbcType=INTEGER},
+      </if>
+      <if test="ups != null" >
+        ups = #{ups,jdbcType=INTEGER},
+      </if>
+      <if test="wiring != null" >
+        wiring = #{wiring,jdbcType=INTEGER},
+      </if>
+      <if test="openWebsite != null" >
+        open_website = #{openWebsite,jdbcType=VARCHAR},
+      </if>
+      <if test="communicationTools != null" >
+        communication_tools = #{communicationTools,jdbcType=VARCHAR},
+      </if>
+      <if test="deptPrincipal != null" >
+        dept_principal = #{deptPrincipal,jdbcType=VARCHAR},
+      </if>
+      <if test="principalTel != null" >
+        principal_tel = #{principalTel,jdbcType=VARCHAR},
+      </if>
+      <if test="opinion != null" >
+        opinion = #{opinion,jdbcType=VARCHAR},
+      </if>
+      <if test="chiefDean != null" >
+        chief_dean = #{chiefDean,jdbcType=VARCHAR},
+      </if>
+      <if test="other1 != null" >
+        other_1 = #{other1,jdbcType=VARCHAR},
+      </if>
+      <if test="other2 != null" >
+        other_2 = #{other2,jdbcType=VARCHAR},
+      </if>
+      <if test="other3 != null" >
+        other_3 = #{other3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.po.ExternalAccess" >
+    update external_access
+    set access_type = #{accessType,jdbcType=INTEGER},
+      dept_code = #{deptCode,jdbcType=VARCHAR},
+      dept = #{dept,jdbcType=VARCHAR},
+      access_address = #{accessAddress,jdbcType=VARCHAR},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      contact_tel = #{contactTel,jdbcType=VARCHAR},
+      cable_type = #{cableType,jdbcType=INTEGER},
+      way_type = #{wayType,jdbcType=INTEGER},
+      lan_points = #{lanPoints,jdbcType=INTEGER},
+      lan_equipment = #{lanEquipment,jdbcType=VARCHAR},
+      dedicated_room = #{dedicatedRoom,jdbcType=INTEGER},
+      air_conditioning = #{airConditioning,jdbcType=INTEGER},
+      ups = #{ups,jdbcType=INTEGER},
+      wiring = #{wiring,jdbcType=INTEGER},
+      open_website = #{openWebsite,jdbcType=VARCHAR},
+      communication_tools = #{communicationTools,jdbcType=VARCHAR},
+      dept_principal = #{deptPrincipal,jdbcType=VARCHAR},
+      principal_tel = #{principalTel,jdbcType=VARCHAR},
+      opinion = #{opinion,jdbcType=VARCHAR},
+      chief_dean = #{chiefDean,jdbcType=VARCHAR},
+      other_1 = #{other1,jdbcType=VARCHAR},
+      other_2 = #{other2,jdbcType=VARCHAR},
+      other_3 = #{other3,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
