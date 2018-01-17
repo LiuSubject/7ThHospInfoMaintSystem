@@ -168,5 +168,11 @@
     $("#searchBtn").click(function () {
         $("#searchFunction").submit();
     });
+
+    //  使IE8支持 placeholder
+    $(function () {
+        // Invoke the plugin
+        $('input, textarea').placeholder();
+    });
 </script>
 </html>

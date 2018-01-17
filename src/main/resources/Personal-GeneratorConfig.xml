@@ -58,7 +58,7 @@
             去除自动生成的例子
         -->
 
-        <table schema="" tableName="engine_room_inspection">
+        <table schema="" tableName="software_requirements">
         </table>
 
 

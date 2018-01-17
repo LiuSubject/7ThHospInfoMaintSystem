@@ -56,3 +56,5 @@ target/
 *.iml
 out
 gen
+/src/main/webapp/photo/
+/src/main/webapp/update/

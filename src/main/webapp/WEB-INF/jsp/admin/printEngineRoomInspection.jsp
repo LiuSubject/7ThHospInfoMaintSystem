@@ -58,7 +58,7 @@
     </style>
 </head>
 <body>
-<h1 class="text-center" style="margin-bottom:30px;">绍兴市第七人民医院信息中心机房检查日志</h1>
+<h3 class="text-center" style="margin-bottom:30px;">绍兴市第七人民医院信息中心机房检查日志</h3>
     <table>
         <thead>
         </thead>
