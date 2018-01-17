@@ -34,7 +34,7 @@ public class PushMessageServiceImpl implements PushMessageService {
     private PushMessageMapperCustom pushMessageMapperCustom;
 
     //查找未发送个推消息(指定用户)
-    public PushMessage findSpecifiedByStatus(String status,String code) throws Exception{
+    public PushMessage findSpecifiedByStatus(String status, String code) throws Exception{
         Map<String,Object> params=new HashMap<String, Object>();
         params.put("status", status);
         params.put("code", code);
@@ -77,6 +77,22 @@ public class PushMessageServiceImpl implements PushMessageService {
         criteria.andIdEqualTo(id);
 
         pushMessageMapper.updateByExample(pushMessage, pushMessageExample);
+    }
+
+    public void updateByCreateCode(String createCode, PushMessage pushMessage) {
+        PushMessageExample prePushMessageExample = new PushMessageExample();
+        PushMessageExample.Criteria preCriteria = prePushMessageExample.createCriteria();
+        preCriteria.andCreateCodeEqualTo(createCode);
+        List<PushMessage> list = pushMessageMapper.selectByExample(prePushMessageExample);
+        if(list.size() > 0){
+            PushMessage prePushMessage = list.get(0);
+            prePushMessage.setMsgContent1(pushMessage.getMsgContent1());
+            PushMessageExample pushMessageExample = new PushMessageExample();
+            PushMessageExample.Criteria criteria = pushMessageExample.createCriteria();
+            criteria.andIdEqualTo(prePushMessage.getId());
+            int i = pushMessageMapper.updateByExample(prePushMessage, pushMessageExample);
+            System.out.println(i);
+        }
     }
 
 }

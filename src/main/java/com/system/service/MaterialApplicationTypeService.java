@@ -1,9 +1,6 @@
 package com.system.service;
 
-import com.system.po.ComputerProblemsType;
-import com.system.po.MaterialApplicationCustom;
 import com.system.po.MaterialApplicationType;
-import com.system.po.PushMessage;
 
 import java.util.List;
 

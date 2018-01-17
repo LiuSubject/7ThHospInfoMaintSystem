@@ -3,6 +3,7 @@
 <mapper namespace="com.system.mapper.PushMessageMapperCustom" >
   <resultMap id="BaseResultMap" type="com.system.po.PushMessage" >
     <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="create_code" property="createCode" jdbcType="CHAR" />
     <result column="founder" property="founder" jdbcType="CHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="push_status" property="pushStatus" jdbcType="CHAR" />

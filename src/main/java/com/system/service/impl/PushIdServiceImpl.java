@@ -37,11 +37,16 @@ public class PushIdServiceImpl implements PushIdService {
         criteria.andCodeEqualTo(code);
 
         List<PushId> list = pushIdMapper.selectByExample(pushIdExample);
-        if(list.size() > 0){
-            return list.get(0);
-        }else
-        {
-            return null;
+        try {
+            if(list.size() > 0){
+                return list.get(0);
+            }else
+            {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 

@@ -1,16 +1,5 @@
 package com.system.po;
 
-/**
- * 项目名称：7ThHospInfoMaintSystem
- * 类名称：ComputerProblems
- * 类描述：电脑故障（pojo）
- * 创建人：lxk
- * 创建时间：2017-12-3 14:21:41
- * 修改人：
- * 修改时间：
- * 修改备注：
- **/
-
 public class ComputerProblems {
     private Integer id;
 
@@ -34,11 +23,45 @@ public class ComputerProblems {
 
     private Integer type;
 
+    private Integer typeSecondary;
+
     private String leader;
 
     private String reback;
 
     private String createTime;
+
+    private String feedbackContent1;
+
+    private String feedbackId1;
+
+    private String feedbackName1;
+
+    private String feedbackContent2;
+
+    private String feedbackId2;
+
+    private String feedbackName2;
+
+    private String feedbackContent3;
+
+    private String feedbackId3;
+
+    private String feedbackName3;
+
+    private String feedbackContent4;
+
+    private String feedbackId4;
+
+    private String feedbackName4;
+
+    private String feedbackContent5;
+
+    private String feedbackId5;
+
+    private String feedbackName5;
+
+    private Integer faultUrgent;
 
     public Integer getId() {
         return id;
@@ -128,6 +151,14 @@ public class ComputerProblems {
         this.type = type;
     }
 
+    public Integer getTypeSecondary() {
+        return typeSecondary;
+    }
+
+    public void setTypeSecondary(Integer typeSecondary) {
+        this.typeSecondary = typeSecondary;
+    }
+
     public String getLeader() {
         return leader;
     }
@@ -152,46 +183,131 @@ public class ComputerProblems {
         this.createTime = createTime == null ? null : createTime.trim();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ComputerProblems)) return false;
-
-        ComputerProblems that = (ComputerProblems) o;
-
-        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
-        if (getTitle() != null ? !getTitle().equals(that.getTitle()) : that.getTitle() != null) return false;
-        if (getUserid() != null ? !getUserid().equals(that.getUserid()) : that.getUserid() != null) return false;
-        if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) return false;
-        if (getDept() != null ? !getDept().equals(that.getDept()) : that.getDept() != null) return false;
-        if (getDepartcode() != null ? !getDepartcode().equals(that.getDepartcode()) : that.getDepartcode() != null)
-            return false;
-        if (getTel() != null ? !getTel().equals(that.getTel()) : that.getTel() != null) return false;
-        if (getDetail() != null ? !getDetail().equals(that.getDetail()) : that.getDetail() != null) return false;
-        if (getImg() != null ? !getImg().equals(that.getImg()) : that.getImg() != null) return false;
-        if (getFlag() != null ? !getFlag().equals(that.getFlag()) : that.getFlag() != null) return false;
-        if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) return false;
-        if (getLeader() != null ? !getLeader().equals(that.getLeader()) : that.getLeader() != null) return false;
-        if (getReback() != null ? !getReback().equals(that.getReback()) : that.getReback() != null) return false;
-        return getCreateTime() != null ? getCreateTime().equals(that.getCreateTime()) : that.getCreateTime() == null;
+    public String getFeedbackContent1() {
+        return feedbackContent1;
     }
 
-    @Override
-    public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
-        result = 31 * result + (getUserid() != null ? getUserid().hashCode() : 0);
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
-        result = 31 * result + (getDept() != null ? getDept().hashCode() : 0);
-        result = 31 * result + (getDepartcode() != null ? getDepartcode().hashCode() : 0);
-        result = 31 * result + (getTel() != null ? getTel().hashCode() : 0);
-        result = 31 * result + (getDetail() != null ? getDetail().hashCode() : 0);
-        result = 31 * result + (getImg() != null ? getImg().hashCode() : 0);
-        result = 31 * result + (getFlag() != null ? getFlag().hashCode() : 0);
-        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
-        result = 31 * result + (getLeader() != null ? getLeader().hashCode() : 0);
-        result = 31 * result + (getReback() != null ? getReback().hashCode() : 0);
-        result = 31 * result + (getCreateTime() != null ? getCreateTime().hashCode() : 0);
-        return result;
+    public void setFeedbackContent1(String feedbackContent1) {
+        this.feedbackContent1 = feedbackContent1 == null ? null : feedbackContent1.trim();
+    }
+
+    public String getFeedbackId1() {
+        return feedbackId1;
+    }
+
+    public void setFeedbackId1(String feedbackId1) {
+        this.feedbackId1 = feedbackId1 == null ? null : feedbackId1.trim();
+    }
+
+    public String getFeedbackName1() {
+        return feedbackName1;
+    }
+
+    public void setFeedbackName1(String feedbackName1) {
+        this.feedbackName1 = feedbackName1 == null ? null : feedbackName1.trim();
+    }
+
+    public String getFeedbackContent2() {
+        return feedbackContent2;
+    }
+
+    public void setFeedbackContent2(String feedbackContent2) {
+        this.feedbackContent2 = feedbackContent2 == null ? null : feedbackContent2.trim();
+    }
+
+    public String getFeedbackId2() {
+        return feedbackId2;
+    }
+
+    public void setFeedbackId2(String feedbackId2) {
+        this.feedbackId2 = feedbackId2 == null ? null : feedbackId2.trim();
+    }
+
+    public String getFeedbackName2() {
+        return feedbackName2;
+    }
+
+    public void setFeedbackName2(String feedbackName2) {
+        this.feedbackName2 = feedbackName2 == null ? null : feedbackName2.trim();
+    }
+
+    public String getFeedbackContent3() {
+        return feedbackContent3;
+    }
+
+    public void setFeedbackContent3(String feedbackContent3) {
+        this.feedbackContent3 = feedbackContent3 == null ? null : feedbackContent3.trim();
+    }
+
+    public String getFeedbackId3() {
+        return feedbackId3;
+    }
+
+    public void setFeedbackId3(String feedbackId3) {
+        this.feedbackId3 = feedbackId3 == null ? null : feedbackId3.trim();
+    }
+
+    public String getFeedbackName3() {
+        return feedbackName3;
+    }
+
+    public void setFeedbackName3(String feedbackName3) {
+        this.feedbackName3 = feedbackName3 == null ? null : feedbackName3.trim();
+    }
+
+    public String getFeedbackContent4() {
+        return feedbackContent4;
+    }
+
+    public void setFeedbackContent4(String feedbackContent4) {
+        this.feedbackContent4 = feedbackContent4 == null ? null : feedbackContent4.trim();
+    }
+
+    public String getFeedbackId4() {
+        return feedbackId4;
+    }
+
+    public void setFeedbackId4(String feedbackId4) {
+        this.feedbackId4 = feedbackId4 == null ? null : feedbackId4.trim();
+    }
+
+    public String getFeedbackName4() {
+        return feedbackName4;
+    }
+
+    public void setFeedbackName4(String feedbackName4) {
+        this.feedbackName4 = feedbackName4 == null ? null : feedbackName4.trim();
+    }
+
+    public String getFeedbackContent5() {
+        return feedbackContent5;
+    }
+
+    public void setFeedbackContent5(String feedbackContent5) {
+        this.feedbackContent5 = feedbackContent5 == null ? null : feedbackContent5.trim();
+    }
+
+    public String getFeedbackId5() {
+        return feedbackId5;
+    }
+
+    public void setFeedbackId5(String feedbackId5) {
+        this.feedbackId5 = feedbackId5 == null ? null : feedbackId5.trim();
+    }
+
+    public String getFeedbackName5() {
+        return feedbackName5;
+    }
+
+    public void setFeedbackName5(String feedbackName5) {
+        this.feedbackName5 = feedbackName5 == null ? null : feedbackName5.trim();
+    }
+
+    public Integer getFaultUrgent() {
+        return faultUrgent;
+    }
+
+    public void setFaultUrgent(Integer faultUrgent) {
+        this.faultUrgent = faultUrgent;
     }
 }

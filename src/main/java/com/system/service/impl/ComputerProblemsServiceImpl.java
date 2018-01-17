@@ -71,6 +71,19 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         return list;
     }
 
+    public List<ComputerProblemsCustom> findGroupByPaging(Integer toPageNo,int groupType) throws Exception {
+        PagingVO pagingVO = new PagingVO();
+        pagingVO.setToPageNo(toPageNo);
+        Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("pagingVO",pagingVO);
+        condition.put("groupType",groupType);
+
+        List<ComputerProblemsCustom> list = computerProblemsMapperCustom.findGroupByPaging(condition);
+
+        return list;
+    }
+
+
 
     public List<ComputerProblemsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception {
 
@@ -109,6 +122,17 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         //通过criteria构造查询条件
         ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
         criteria.andUseridIsNotNull();
+
+        return computerProblemsMapper.countByExample(ComputerProblemsExample);
+    }
+
+    //返回负责组总数
+    public int  getCountGroupComputerProblems(int groupType) throws Exception {
+        //自定义查询对象
+        ComputerProblemsExample ComputerProblemsExample = new ComputerProblemsExample();
+        //通过criteria构造查询条件
+        ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
+        criteria.andUseridIsNotNull().andTypeEqualTo(groupType);
 
         return computerProblemsMapper.countByExample(ComputerProblemsExample);
     }

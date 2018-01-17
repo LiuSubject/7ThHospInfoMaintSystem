@@ -12,6 +12,11 @@
     <!-- 引入JQuery  bootstrap.js-->
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        .Urgent{
+            color:#c9302c ;
+        }
+    </style>
 </head>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -36,7 +41,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <h2 style="text-align: center;">${computerProblems.title}</h2>
+                        <h2 id="faultUrgentTitle" style="text-align: center;">${computerProblems.title}</h2>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -111,6 +116,10 @@
 <script type="text/javascript">
     $("#nav li:nth-child(1)").addClass("active");
 
+    //标红处理
+    if(${computerProblems.faultUrgent == 1}){
+        $("#faultUrgentTitle").addClass("Urgent");
+    }
     //返回按钮点击
     $('#returnListBtn').on('click', function () {
         window.location.href = "/admin/showComputerProblems";

@@ -38,4 +38,13 @@ public class ComputerProblemsTypeServiceImpl implements ComputerProblemsTypeServ
         return computerProblemsTypeList;
     }
 
+    public List<ComputerProblemsType> getSecondaryList(String mainType){
+        List<ComputerProblemsType> computerProblemsTypeList = new ArrayList<>();
+        ComputerProblemsTypeExample computerProblemsTypeExample = new ComputerProblemsTypeExample();
+        ComputerProblemsTypeExample.Criteria criteria = computerProblemsTypeExample.createCriteria();
+        criteria.andIdIsNotNull().andTypeCodeEqualTo(mainType);
+        computerProblemsTypeList = computerProblemsTypeMapper.selectByExample(computerProblemsTypeExample);
+        return computerProblemsTypeList;
+    }
+
 }

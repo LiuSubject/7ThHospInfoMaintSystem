@@ -2,25 +2,27 @@ package com.system.po;
 
 public class PushMessage {
     private Integer id;
-    //创建人工号
+
+    private String createCode;
+
     private String founder;
-    //创建时间
+
     private String createTime;
-    //推送状态："0"为未发送,"1"为已发送
+
     private String pushStatus;
-    //推送方式："0"为透传
+
     private String pushWay;
-    //消息类型："0"为电脑故障，"1"为物资申购，"2"为机房巡检
+
     private String msgType;
-    //消息目标："0"为管理用户组，"1"为普通用户组
+
     private String msgTarget;
-    //消息部分1
+
     private String msgContent1;
-    //消息部分2
+
     private String msgContent2;
-    //消息部分3
+
     private String msgContent3;
-    //发送时间
+
     private String pushTime;
 
     public Integer getId() {
@@ -29,6 +31,14 @@ public class PushMessage {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getCreateCode() {
+        return createCode;
+    }
+
+    public void setCreateCode(String createCode) {
+        this.createCode = createCode == null ? null : createCode.trim();
     }
 
     public String getFounder() {

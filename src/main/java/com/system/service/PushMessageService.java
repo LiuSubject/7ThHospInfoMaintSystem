@@ -18,7 +18,7 @@ public interface PushMessageService {
     PushMessage findByStatus(String status) throws Exception;
 
     //查找未发送个推消息(指定用户)
-    PushMessage findSpecifiedByStatus(String status,String code) throws Exception;
+    PushMessage findSpecifiedByStatus(String status, String code) throws Exception;
 
     //新增个推消息
     void save(PushMessage pushMessage) throws Exception;
@@ -28,6 +28,9 @@ public interface PushMessageService {
 
     //根据主键更新指定个推消息
     void updateById(int id, PushMessage pushMessage);
+
+    //根据创建标识更新指定个推消息
+    void updateByCreateCode(String createCode, PushMessage pushMessage);
 
 
 
