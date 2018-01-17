@@ -164,6 +164,66 @@ public class IntranetAccessExample {
             return (Criteria) this;
         }
 
+        public Criteria andCpLinkIdIsNull() {
+            addCriterion("cp_link_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCpLinkIdIsNotNull() {
+            addCriterion("cp_link_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCpLinkIdEqualTo(Integer value) {
+            addCriterion("cp_link_id =", value, "cpLinkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCpLinkIdNotEqualTo(Integer value) {
+            addCriterion("cp_link_id <>", value, "cpLinkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCpLinkIdGreaterThan(Integer value) {
+            addCriterion("cp_link_id >", value, "cpLinkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCpLinkIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("cp_link_id >=", value, "cpLinkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCpLinkIdLessThan(Integer value) {
+            addCriterion("cp_link_id <", value, "cpLinkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCpLinkIdLessThanOrEqualTo(Integer value) {
+            addCriterion("cp_link_id <=", value, "cpLinkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCpLinkIdIn(List<Integer> values) {
+            addCriterion("cp_link_id in", values, "cpLinkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCpLinkIdNotIn(List<Integer> values) {
+            addCriterion("cp_link_id not in", values, "cpLinkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCpLinkIdBetween(Integer value1, Integer value2) {
+            addCriterion("cp_link_id between", value1, value2, "cpLinkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCpLinkIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("cp_link_id not between", value1, value2, "cpLinkId");
+            return (Criteria) this;
+        }
+
         public Criteria andAccessTypeIsNull() {
             addCriterion("access_type is null");
             return (Criteria) this;

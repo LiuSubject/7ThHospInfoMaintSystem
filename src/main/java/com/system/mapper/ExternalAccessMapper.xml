@@ -3,6 +3,7 @@
 <mapper namespace="com.system.mapper.ExternalAccessMapper" >
   <resultMap id="BaseResultMap" type="com.system.po.ExternalAccess" >
     <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cp_link_id" property="cpLinkId" jdbcType="INTEGER" />
     <result column="access_type" property="accessType" jdbcType="INTEGER" />
     <result column="dept_code" property="deptCode" jdbcType="VARCHAR" />
     <result column="dept" property="dept" jdbcType="VARCHAR" />
@@ -86,10 +87,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, access_type, dept_code, dept, access_address, contact_name, contact_tel, cable_type, 
-    way_type, lan_points, lan_equipment, dedicated_room, air_conditioning, ups, wiring, 
-    open_website, communication_tools, dept_principal, principal_tel, opinion, chief_dean, 
-    other_1, other_2, other_3
+    id, cp_link_id, access_type, dept_code, dept, access_address, contact_name, contact_tel, 
+    cable_type, way_type, lan_points, lan_equipment, dedicated_room, air_conditioning, 
+    ups, wiring, open_website, communication_tools, dept_principal, principal_tel, opinion, 
+    chief_dean, other_1, other_2, other_3
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.po.ExternalAccessExample" >
     select
@@ -122,30 +123,33 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.system.po.ExternalAccess" >
-    insert into external_access (id, access_type, dept_code, 
-      dept, access_address, contact_name, 
-      contact_tel, cable_type, way_type, 
-      lan_points, lan_equipment, dedicated_room, 
-      air_conditioning, ups, wiring, 
-      open_website, communication_tools, dept_principal, 
-      principal_tel, opinion, chief_dean, 
-      other_1, other_2, other_3
-      )
-    values (#{id,jdbcType=INTEGER}, #{accessType,jdbcType=INTEGER}, #{deptCode,jdbcType=VARCHAR}, 
-      #{dept,jdbcType=VARCHAR}, #{accessAddress,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
-      #{contactTel,jdbcType=VARCHAR}, #{cableType,jdbcType=INTEGER}, #{wayType,jdbcType=INTEGER}, 
-      #{lanPoints,jdbcType=INTEGER}, #{lanEquipment,jdbcType=VARCHAR}, #{dedicatedRoom,jdbcType=INTEGER}, 
-      #{airConditioning,jdbcType=INTEGER}, #{ups,jdbcType=INTEGER}, #{wiring,jdbcType=INTEGER}, 
-      #{openWebsite,jdbcType=VARCHAR}, #{communicationTools,jdbcType=VARCHAR}, #{deptPrincipal,jdbcType=VARCHAR}, 
-      #{principalTel,jdbcType=VARCHAR}, #{opinion,jdbcType=VARCHAR}, #{chiefDean,jdbcType=VARCHAR}, 
-      #{other1,jdbcType=VARCHAR}, #{other2,jdbcType=VARCHAR}, #{other3,jdbcType=VARCHAR}
-      )
+    insert into external_access (id, cp_link_id, access_type, 
+      dept_code, dept, access_address, 
+      contact_name, contact_tel, cable_type, 
+      way_type, lan_points, lan_equipment, 
+      dedicated_room, air_conditioning, ups, 
+      wiring, open_website, communication_tools, 
+      dept_principal, principal_tel, opinion, 
+      chief_dean, other_1, other_2, 
+      other_3)
+    values (#{id,jdbcType=INTEGER}, #{cpLinkId,jdbcType=INTEGER}, #{accessType,jdbcType=INTEGER}, 
+      #{deptCode,jdbcType=VARCHAR}, #{dept,jdbcType=VARCHAR}, #{accessAddress,jdbcType=VARCHAR}, 
+      #{contactName,jdbcType=VARCHAR}, #{contactTel,jdbcType=VARCHAR}, #{cableType,jdbcType=INTEGER}, 
+      #{wayType,jdbcType=INTEGER}, #{lanPoints,jdbcType=INTEGER}, #{lanEquipment,jdbcType=VARCHAR}, 
+      #{dedicatedRoom,jdbcType=INTEGER}, #{airConditioning,jdbcType=INTEGER}, #{ups,jdbcType=INTEGER}, 
+      #{wiring,jdbcType=INTEGER}, #{openWebsite,jdbcType=VARCHAR}, #{communicationTools,jdbcType=VARCHAR}, 
+      #{deptPrincipal,jdbcType=VARCHAR}, #{principalTel,jdbcType=VARCHAR}, #{opinion,jdbcType=VARCHAR}, 
+      #{chiefDean,jdbcType=VARCHAR}, #{other1,jdbcType=VARCHAR}, #{other2,jdbcType=VARCHAR}, 
+      #{other3,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.system.po.ExternalAccess" >
     insert into external_access
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
+      </if>
+      <if test="cpLinkId != null" >
+        cp_link_id,
       </if>
       <if test="accessType != null" >
         access_type,
@@ -220,6 +224,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
+      </if>
+      <if test="cpLinkId != null" >
+        #{cpLinkId,jdbcType=INTEGER},
       </if>
       <if test="accessType != null" >
         #{accessType,jdbcType=INTEGER},
@@ -304,6 +311,9 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
+      <if test="record.cpLinkId != null" >
+        cp_link_id = #{record.cpLinkId,jdbcType=INTEGER},
+      </if>
       <if test="record.accessType != null" >
         access_type = #{record.accessType,jdbcType=INTEGER},
       </if>
@@ -381,6 +391,7 @@
   <update id="updateByExample" parameterType="map" >
     update external_access
     set id = #{record.id,jdbcType=INTEGER},
+      cp_link_id = #{record.cpLinkId,jdbcType=INTEGER},
       access_type = #{record.accessType,jdbcType=INTEGER},
       dept_code = #{record.deptCode,jdbcType=VARCHAR},
       dept = #{record.dept,jdbcType=VARCHAR},
@@ -411,6 +422,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.system.po.ExternalAccess" >
     update external_access
     <set >
+      <if test="cpLinkId != null" >
+        cp_link_id = #{cpLinkId,jdbcType=INTEGER},
+      </if>
       <if test="accessType != null" >
         access_type = #{accessType,jdbcType=INTEGER},
       </if>
@@ -485,7 +499,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.system.po.ExternalAccess" >
     update external_access
-    set access_type = #{accessType,jdbcType=INTEGER},
+    set cp_link_id = #{cpLinkId,jdbcType=INTEGER},
+      access_type = #{accessType,jdbcType=INTEGER},
       dept_code = #{deptCode,jdbcType=VARCHAR},
       dept = #{dept,jdbcType=VARCHAR},
       access_address = #{accessAddress,jdbcType=VARCHAR},
