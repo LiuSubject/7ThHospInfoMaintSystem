@@ -1,6 +1,5 @@
 package com.system.service;
 
-import com.system.po.PushMessage;
 import com.system.po.PushMessageTemplate;
 
 /**

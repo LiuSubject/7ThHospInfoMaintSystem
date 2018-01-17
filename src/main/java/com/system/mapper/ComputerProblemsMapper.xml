@@ -13,9 +13,26 @@
     <result column="img" property="img" jdbcType="VARCHAR" />
     <result column="flag" property="flag" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="type_secondary" property="typeSecondary" jdbcType="INTEGER" />
     <result column="leader" property="leader" jdbcType="VARCHAR" />
     <result column="reback" property="reback" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="feedback_content_1" property="feedbackContent1" jdbcType="VARCHAR" />
+    <result column="feedback_id_1" property="feedbackId1" jdbcType="CHAR" />
+    <result column="feedback_name_1" property="feedbackName1" jdbcType="VARCHAR" />
+    <result column="feedback_content_2" property="feedbackContent2" jdbcType="VARCHAR" />
+    <result column="feedback_id_2" property="feedbackId2" jdbcType="CHAR" />
+    <result column="feedback_name_2" property="feedbackName2" jdbcType="VARCHAR" />
+    <result column="feedback_content_3" property="feedbackContent3" jdbcType="VARCHAR" />
+    <result column="feedback_id_3" property="feedbackId3" jdbcType="CHAR" />
+    <result column="feedback_name_3" property="feedbackName3" jdbcType="VARCHAR" />
+    <result column="feedback_content_4" property="feedbackContent4" jdbcType="VARCHAR" />
+    <result column="feedback_id_4" property="feedbackId4" jdbcType="CHAR" />
+    <result column="feedback_name_4" property="feedbackName4" jdbcType="VARCHAR" />
+    <result column="feedback_content_5" property="feedbackContent5" jdbcType="VARCHAR" />
+    <result column="feedback_id_5" property="feedbackId5" jdbcType="CHAR" />
+    <result column="feedback_name_5" property="feedbackName5" jdbcType="VARCHAR" />
+    <result column="fault_urgent" property="faultUrgent" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -76,8 +93,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, title, userId, name, dept, departCode, tel, detail, img, flag, type, leader, 
-    reback, create_time
+    id, title, userId, name, dept, departCode, tel, detail, img, flag, type, type_secondary, 
+    leader, reback, create_time, feedback_content_1, feedback_id_1, feedback_name_1, 
+    feedback_content_2, feedback_id_2, feedback_name_2, feedback_content_3, feedback_id_3, 
+    feedback_name_3, feedback_content_4, feedback_id_4, feedback_name_4, feedback_content_5, 
+    feedback_id_5, feedback_name_5, fault_urgent
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.po.ComputerProblemsExample" >
     select
@@ -113,13 +133,25 @@
     insert into computer_problems (id, title, userId, 
       name, dept, departCode, 
       tel, detail, img, flag, 
-      type, leader, reback, 
-      create_time)
+      type, type_secondary, leader, 
+      reback, create_time, feedback_content_1, 
+      feedback_id_1, feedback_name_1, feedback_content_2, 
+      feedback_id_2, feedback_name_2, feedback_content_3, 
+      feedback_id_3, feedback_name_3, feedback_content_4, 
+      feedback_id_4, feedback_name_4, feedback_content_5, 
+      feedback_id_5, feedback_name_5, fault_urgent
+      )
     values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{dept,jdbcType=VARCHAR}, #{departcode,jdbcType=VARCHAR}, 
       #{tel,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER}, 
-      #{type,jdbcType=INTEGER}, #{leader,jdbcType=VARCHAR}, #{reback,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=VARCHAR})
+      #{type,jdbcType=INTEGER}, #{typeSecondary,jdbcType=INTEGER}, #{leader,jdbcType=VARCHAR}, 
+      #{reback,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, #{feedbackContent1,jdbcType=VARCHAR}, 
+      #{feedbackId1,jdbcType=CHAR}, #{feedbackName1,jdbcType=VARCHAR}, #{feedbackContent2,jdbcType=VARCHAR}, 
+      #{feedbackId2,jdbcType=CHAR}, #{feedbackName2,jdbcType=VARCHAR}, #{feedbackContent3,jdbcType=VARCHAR}, 
+      #{feedbackId3,jdbcType=CHAR}, #{feedbackName3,jdbcType=VARCHAR}, #{feedbackContent4,jdbcType=VARCHAR}, 
+      #{feedbackId4,jdbcType=CHAR}, #{feedbackName4,jdbcType=VARCHAR}, #{feedbackContent5,jdbcType=VARCHAR}, 
+      #{feedbackId5,jdbcType=CHAR}, #{feedbackName5,jdbcType=VARCHAR}, #{faultUrgent,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.system.po.ComputerProblems" >
     insert into computer_problems
@@ -157,6 +189,9 @@
       <if test="type != null" >
         type,
       </if>
+      <if test="typeSecondary != null" >
+        type_secondary,
+      </if>
       <if test="leader != null" >
         leader,
       </if>
@@ -165,6 +200,54 @@
       </if>
       <if test="createTime != null" >
         create_time,
+      </if>
+      <if test="feedbackContent1 != null" >
+        feedback_content_1,
+      </if>
+      <if test="feedbackId1 != null" >
+        feedback_id_1,
+      </if>
+      <if test="feedbackName1 != null" >
+        feedback_name_1,
+      </if>
+      <if test="feedbackContent2 != null" >
+        feedback_content_2,
+      </if>
+      <if test="feedbackId2 != null" >
+        feedback_id_2,
+      </if>
+      <if test="feedbackName2 != null" >
+        feedback_name_2,
+      </if>
+      <if test="feedbackContent3 != null" >
+        feedback_content_3,
+      </if>
+      <if test="feedbackId3 != null" >
+        feedback_id_3,
+      </if>
+      <if test="feedbackName3 != null" >
+        feedback_name_3,
+      </if>
+      <if test="feedbackContent4 != null" >
+        feedback_content_4,
+      </if>
+      <if test="feedbackId4 != null" >
+        feedback_id_4,
+      </if>
+      <if test="feedbackName4 != null" >
+        feedback_name_4,
+      </if>
+      <if test="feedbackContent5 != null" >
+        feedback_content_5,
+      </if>
+      <if test="feedbackId5 != null" >
+        feedback_id_5,
+      </if>
+      <if test="feedbackName5 != null" >
+        feedback_name_5,
+      </if>
+      <if test="faultUrgent != null" >
+        fault_urgent,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -201,6 +284,9 @@
       <if test="type != null" >
         #{type,jdbcType=INTEGER},
       </if>
+      <if test="typeSecondary != null" >
+        #{typeSecondary,jdbcType=INTEGER},
+      </if>
       <if test="leader != null" >
         #{leader,jdbcType=VARCHAR},
       </if>
@@ -209,6 +295,54 @@
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent1 != null" >
+        #{feedbackContent1,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId1 != null" >
+        #{feedbackId1,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName1 != null" >
+        #{feedbackName1,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent2 != null" >
+        #{feedbackContent2,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId2 != null" >
+        #{feedbackId2,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName2 != null" >
+        #{feedbackName2,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent3 != null" >
+        #{feedbackContent3,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId3 != null" >
+        #{feedbackId3,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName3 != null" >
+        #{feedbackName3,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent4 != null" >
+        #{feedbackContent4,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId4 != null" >
+        #{feedbackId4,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName4 != null" >
+        #{feedbackName4,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent5 != null" >
+        #{feedbackContent5,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId5 != null" >
+        #{feedbackId5,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName5 != null" >
+        #{feedbackName5,jdbcType=VARCHAR},
+      </if>
+      <if test="faultUrgent != null" >
+        #{faultUrgent,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -254,6 +388,9 @@
       <if test="record.type != null" >
         type = #{record.type,jdbcType=INTEGER},
       </if>
+      <if test="record.typeSecondary != null" >
+        type_secondary = #{record.typeSecondary,jdbcType=INTEGER},
+      </if>
       <if test="record.leader != null" >
         leader = #{record.leader,jdbcType=VARCHAR},
       </if>
@@ -262,6 +399,54 @@
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackContent1 != null" >
+        feedback_content_1 = #{record.feedbackContent1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackId1 != null" >
+        feedback_id_1 = #{record.feedbackId1,jdbcType=CHAR},
+      </if>
+      <if test="record.feedbackName1 != null" >
+        feedback_name_1 = #{record.feedbackName1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackContent2 != null" >
+        feedback_content_2 = #{record.feedbackContent2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackId2 != null" >
+        feedback_id_2 = #{record.feedbackId2,jdbcType=CHAR},
+      </if>
+      <if test="record.feedbackName2 != null" >
+        feedback_name_2 = #{record.feedbackName2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackContent3 != null" >
+        feedback_content_3 = #{record.feedbackContent3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackId3 != null" >
+        feedback_id_3 = #{record.feedbackId3,jdbcType=CHAR},
+      </if>
+      <if test="record.feedbackName3 != null" >
+        feedback_name_3 = #{record.feedbackName3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackContent4 != null" >
+        feedback_content_4 = #{record.feedbackContent4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackId4 != null" >
+        feedback_id_4 = #{record.feedbackId4,jdbcType=CHAR},
+      </if>
+      <if test="record.feedbackName4 != null" >
+        feedback_name_4 = #{record.feedbackName4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackContent5 != null" >
+        feedback_content_5 = #{record.feedbackContent5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackId5 != null" >
+        feedback_id_5 = #{record.feedbackId5,jdbcType=CHAR},
+      </if>
+      <if test="record.feedbackName5 != null" >
+        feedback_name_5 = #{record.feedbackName5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.faultUrgent != null" >
+        fault_urgent = #{record.faultUrgent,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -281,9 +466,26 @@
       img = #{record.img,jdbcType=VARCHAR},
       flag = #{record.flag,jdbcType=INTEGER},
       type = #{record.type,jdbcType=INTEGER},
+      type_secondary = #{record.typeSecondary,jdbcType=INTEGER},
       leader = #{record.leader,jdbcType=VARCHAR},
       reback = #{record.reback,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=VARCHAR}
+      create_time = #{record.createTime,jdbcType=VARCHAR},
+      feedback_content_1 = #{record.feedbackContent1,jdbcType=VARCHAR},
+      feedback_id_1 = #{record.feedbackId1,jdbcType=CHAR},
+      feedback_name_1 = #{record.feedbackName1,jdbcType=VARCHAR},
+      feedback_content_2 = #{record.feedbackContent2,jdbcType=VARCHAR},
+      feedback_id_2 = #{record.feedbackId2,jdbcType=CHAR},
+      feedback_name_2 = #{record.feedbackName2,jdbcType=VARCHAR},
+      feedback_content_3 = #{record.feedbackContent3,jdbcType=VARCHAR},
+      feedback_id_3 = #{record.feedbackId3,jdbcType=CHAR},
+      feedback_name_3 = #{record.feedbackName3,jdbcType=VARCHAR},
+      feedback_content_4 = #{record.feedbackContent4,jdbcType=VARCHAR},
+      feedback_id_4 = #{record.feedbackId4,jdbcType=CHAR},
+      feedback_name_4 = #{record.feedbackName4,jdbcType=VARCHAR},
+      feedback_content_5 = #{record.feedbackContent5,jdbcType=VARCHAR},
+      feedback_id_5 = #{record.feedbackId5,jdbcType=CHAR},
+      feedback_name_5 = #{record.feedbackName5,jdbcType=VARCHAR},
+      fault_urgent = #{record.faultUrgent,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -321,6 +523,9 @@
       <if test="type != null" >
         type = #{type,jdbcType=INTEGER},
       </if>
+      <if test="typeSecondary != null" >
+        type_secondary = #{typeSecondary,jdbcType=INTEGER},
+      </if>
       <if test="leader != null" >
         leader = #{leader,jdbcType=VARCHAR},
       </if>
@@ -329,6 +534,54 @@
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent1 != null" >
+        feedback_content_1 = #{feedbackContent1,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId1 != null" >
+        feedback_id_1 = #{feedbackId1,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName1 != null" >
+        feedback_name_1 = #{feedbackName1,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent2 != null" >
+        feedback_content_2 = #{feedbackContent2,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId2 != null" >
+        feedback_id_2 = #{feedbackId2,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName2 != null" >
+        feedback_name_2 = #{feedbackName2,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent3 != null" >
+        feedback_content_3 = #{feedbackContent3,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId3 != null" >
+        feedback_id_3 = #{feedbackId3,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName3 != null" >
+        feedback_name_3 = #{feedbackName3,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent4 != null" >
+        feedback_content_4 = #{feedbackContent4,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId4 != null" >
+        feedback_id_4 = #{feedbackId4,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName4 != null" >
+        feedback_name_4 = #{feedbackName4,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent5 != null" >
+        feedback_content_5 = #{feedbackContent5,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId5 != null" >
+        feedback_id_5 = #{feedbackId5,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName5 != null" >
+        feedback_name_5 = #{feedbackName5,jdbcType=VARCHAR},
+      </if>
+      <if test="faultUrgent != null" >
+        fault_urgent = #{faultUrgent,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -345,9 +598,26 @@
       img = #{img,jdbcType=VARCHAR},
       flag = #{flag,jdbcType=INTEGER},
       type = #{type,jdbcType=INTEGER},
+      type_secondary = #{typeSecondary,jdbcType=INTEGER},
       leader = #{leader,jdbcType=VARCHAR},
       reback = #{reback,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=VARCHAR}
+      create_time = #{createTime,jdbcType=VARCHAR},
+      feedback_content_1 = #{feedbackContent1,jdbcType=VARCHAR},
+      feedback_id_1 = #{feedbackId1,jdbcType=CHAR},
+      feedback_name_1 = #{feedbackName1,jdbcType=VARCHAR},
+      feedback_content_2 = #{feedbackContent2,jdbcType=VARCHAR},
+      feedback_id_2 = #{feedbackId2,jdbcType=CHAR},
+      feedback_name_2 = #{feedbackName2,jdbcType=VARCHAR},
+      feedback_content_3 = #{feedbackContent3,jdbcType=VARCHAR},
+      feedback_id_3 = #{feedbackId3,jdbcType=CHAR},
+      feedback_name_3 = #{feedbackName3,jdbcType=VARCHAR},
+      feedback_content_4 = #{feedbackContent4,jdbcType=VARCHAR},
+      feedback_id_4 = #{feedbackId4,jdbcType=CHAR},
+      feedback_name_4 = #{feedbackName4,jdbcType=VARCHAR},
+      feedback_content_5 = #{feedbackContent5,jdbcType=VARCHAR},
+      feedback_id_5 = #{feedbackId5,jdbcType=CHAR},
+      feedback_name_5 = #{feedbackName5,jdbcType=VARCHAR},
+      fault_urgent = #{faultUrgent,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

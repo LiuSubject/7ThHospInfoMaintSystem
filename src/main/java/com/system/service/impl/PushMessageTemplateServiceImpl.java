@@ -1,10 +1,7 @@
 package com.system.service.impl;
 
-import com.system.mapper.PushIdMapper;
-import com.system.mapper.PushMessageMapper;
 import com.system.mapper.PushMessageTemplateMapper;
 import com.system.po.*;
-import com.system.service.PushIdService;
 import com.system.service.PushMessageTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

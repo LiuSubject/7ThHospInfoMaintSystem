@@ -6,7 +6,6 @@ import com.system.po.Role;
 import com.system.service.PushIdService;
 import com.system.service.PushMessageService;
 import com.system.service.RoleService;
-import com.system.service.ViewEmployeeMiPsdService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
@@ -44,8 +43,8 @@ public class MessagePushUtil {
     @Autowired
     private MessageStitchUtil messageStitchUtil;
 
-    //以单个用户方式为指定用户组推送简单消息
-    public boolean GroupPushSingle(PushMessage prePushMessage,String userGroup) throws Exception{
+    //以单个推送方式为指定单个用户组循环推送简单消息
+    public boolean GroupPushSingle(PushMessage prePushMessage, String userGroup) throws Exception{
         //拼接推送消息
         PushMessage pushMessage = messageStitchUtil.MessageStitch(prePushMessage);
         List<String> clientIds = new ArrayList<String>();
@@ -62,7 +61,8 @@ public class MessagePushUtil {
             try {
                 pushMessage.setPushStatus("1");
                 //写操作
-                pushMessageService.updateById(pushMessage.getId(),pushMessage);
+                pushMessageService.updateByCreateCode(pushMessage.getCreateCode(),pushMessage);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -72,7 +72,35 @@ public class MessagePushUtil {
         return true;
     }
 
-    //获取用户组推送标识集合
+    //以单个推送方式为指定多个用户组循环推送简单消息
+    public boolean GroupsPushSingle(PushMessage prePushMessage,String[] userGroups) throws Exception{
+        //拼接推送消息
+        PushMessage pushMessage = messageStitchUtil.MessageStitch(prePushMessage);
+        List<String> clientIds = new ArrayList<String>();
+        clientIds = GetPushIds(userGroups);
+        if(clientIds.size()>0){
+            for(int i = 0; i < clientIds.size(); i++){
+                String clientId = clientIds.get(i);
+                try {
+                    PushSingleUtil.push(clientId, pushMessage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                pushMessage.setPushStatus("1");
+                //写操作
+                pushMessageService.updateByCreateCode(pushMessage.getCreateCode(),pushMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+        return true;
+    }
+
+    //获取单个用户组推送标识集合
     public List<String> GetPushIds(String userGroup) throws Exception{
         List<Role> pushGroup = new ArrayList<Role>();
         List<String> clientIds = new ArrayList<>();
@@ -81,18 +109,37 @@ public class MessagePushUtil {
 
             if (pushGroup.size() > 0){
                 for(int i = 0; i < pushGroup.size(); i++){
-                    PushId pushId = pushIdService.findByCode(pushGroup.get(i).getRoleid());
-                    clientIds.add(pushId.getClientId().toString());
+                    try {
+                        PushId pushId = pushIdService.findByCode(pushGroup.get(i).getRoleid());
+                        clientIds.add(pushId.getClientId().toString());
+                    } catch (Exception e) {
+                        System.out.println("This user never use mobile :" + pushGroup.get(i).getRoleid());
+                    }
                 }
                 return clientIds;
             }else{
-                return null;
+                return clientIds;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return clientIds;
         }
+    }
+
+    //获取多个用户组推送标识集合
+    public List<String> GetPushIds(String[] userGroups) throws Exception{
+        List<Role> pushGroup = new ArrayList<Role>();
+        List<String> clientIds = new ArrayList<>();
+        try {
+            for(int i = 0;i < userGroups.length; i++){
+                clientIds.addAll(GetPushIds(userGroups[i]));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return clientIds;
+        }
+        return clientIds;
     }
 
     //获取用户组推送标识集合
@@ -115,7 +162,8 @@ public class MessagePushUtil {
         try {
             PushSingleUtil.push(clientId, pushMessage);
             pushMessage.setPushStatus("1");
-            pushMessageService.updateById(pushMessage.getId(),pushMessage);
+            //写操作
+            pushMessageService.updateByCreateCode(pushMessage.getCreateCode(),pushMessage);
         } catch (IOException e) {
             e.printStackTrace();
         }

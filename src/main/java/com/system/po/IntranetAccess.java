@@ -3,6 +3,8 @@ package com.system.po;
 public class IntranetAccess {
     private Integer id;
 
+    private Integer cpLinkId;
+
     private Integer accessType;
 
     private String deptCode;
@@ -55,6 +57,14 @@ public class IntranetAccess {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getCpLinkId() {
+        return cpLinkId;
+    }
+
+    public void setCpLinkId(Integer cpLinkId) {
+        this.cpLinkId = cpLinkId;
     }
 
     public Integer getAccessType() {

@@ -164,6 +164,76 @@ public class PushMessageExample {
             return (Criteria) this;
         }
 
+        public Criteria andCreateCodeIsNull() {
+            addCriterion("create_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeIsNotNull() {
+            addCriterion("create_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeEqualTo(String value) {
+            addCriterion("create_code =", value, "createCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeNotEqualTo(String value) {
+            addCriterion("create_code <>", value, "createCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeGreaterThan(String value) {
+            addCriterion("create_code >", value, "createCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("create_code >=", value, "createCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeLessThan(String value) {
+            addCriterion("create_code <", value, "createCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeLessThanOrEqualTo(String value) {
+            addCriterion("create_code <=", value, "createCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeLike(String value) {
+            addCriterion("create_code like", value, "createCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeNotLike(String value) {
+            addCriterion("create_code not like", value, "createCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeIn(List<String> values) {
+            addCriterion("create_code in", values, "createCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeNotIn(List<String> values) {
+            addCriterion("create_code not in", values, "createCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeBetween(String value1, String value2) {
+            addCriterion("create_code between", value1, value2, "createCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateCodeNotBetween(String value1, String value2) {
+            addCriterion("create_code not between", value1, value2, "createCode");
+            return (Criteria) this;
+        }
+
         public Criteria andFounderIsNull() {
             addCriterion("founder is null");
             return (Criteria) this;

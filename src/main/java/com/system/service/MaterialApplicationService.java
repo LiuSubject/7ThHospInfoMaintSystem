@@ -1,6 +1,5 @@
 package com.system.service;
 
-import com.system.po.ComputerProblemsCustom;
 import com.system.po.MaterialApplicationCustom;
 import com.system.po.PushMessage;
 

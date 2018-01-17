@@ -27,6 +27,9 @@ public interface ComputerProblemsService {
     //获取分页查询电脑故障信息
     List<ComputerProblemsCustom> findByPaging(Integer toPageNo) throws Exception;
 
+    //获取分页查询负责组电脑故障信息
+    List<ComputerProblemsCustom> findGroupByPaging(Integer toPageNo,int groupType) throws Exception;
+
     //获取分页查询部门电脑故障信息
     List<ComputerProblemsCustom> deptFindByPaging(Integer toPageNo,String deptName) throws Exception;
 
@@ -43,6 +46,9 @@ public interface ComputerProblemsService {
     int getCountComputerProblems() throws Exception;
 
     //获取部门电脑故障总数
+    int getCountGroupComputerProblems(int groupType) throws Exception;
+
+    //获取负责组电脑故障总数
     int getCountDeptComputerProblems(String currentDept) throws Exception;
 
     //获取电脑电脑故障信息搜索结果总数

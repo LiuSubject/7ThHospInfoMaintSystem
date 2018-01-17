@@ -32,6 +32,13 @@
     ORDER by flag asc, create_time desc
     limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
   </select>
+  <select id="findGroupByPaging" parameterType="map" resultMap="BaseResultMap">
+    select computer_problems.*
+    from computer_problems
+    WHERE type = #{groupType}
+    ORDER by flag asc, create_time desc
+    limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
+  </select>
   <select id="paginationOfSearchResults" parameterType="map" resultMap="BaseResultMap">
     select computer_problems.* from computer_problems
     <where>

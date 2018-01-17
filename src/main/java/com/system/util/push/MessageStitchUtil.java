@@ -2,7 +2,6 @@ package com.system.util.push;
 
 import com.system.po.PushMessage;
 import com.system.po.PushMessageTemplate;
-import com.system.service.EngineRoomInspectionService;
 import com.system.service.PushMessageService;
 import com.system.service.PushMessageTemplateService;
 

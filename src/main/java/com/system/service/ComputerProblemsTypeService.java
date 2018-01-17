@@ -1,11 +1,8 @@
 package com.system.service;
 
-import com.system.po.ComputerProblemsCustom;
 import com.system.po.ComputerProblemsType;
-import com.system.po.PushMessage;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
@@ -21,4 +18,7 @@ import java.util.Map;
 public interface ComputerProblemsTypeService {
     //获取可选电脑故障
     List<ComputerProblemsType> getAll();
+
+    //获取可选电脑故障
+    List<ComputerProblemsType> getSecondaryList(String mainType);
 }

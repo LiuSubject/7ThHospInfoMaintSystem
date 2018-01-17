@@ -53,6 +53,16 @@
                             <label class="col-sm-2 control-label">故障类型：</label>
                             <div class="col-sm-8">
                                 <select class="form-control" name="type" id="type">
+                                    <option value="1">硬件故障</option>
+                                    <option value="2">软件故障</option>
+                                    <option value="3">费用故障</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">故障细类：</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="typeSecondary" id="typeSecondary">
                                 </select>
                             </div>
                         </div>
@@ -124,28 +134,62 @@
         }
     });
 
-    //故障列表填入
+    //网页打开时故障次级列表动态填入
+    var mainType = document.getElementById("type").value;
     $.ajax({
         url:"/admin/getProblemsTypeList",
         async:true,
+        data: {
+            mainType:mainType
+        },
         success: function(data){
+            $("#typeSecondary").find("option").remove();
             var list = data.computerProblemsTypeList;
             if(list){                                               //判断
                 for(var i=0; i<list.length; i++){                   //遍历，动态赋值
                     var optionString = "";
                     optionString ="<option value=\""
-                                + list[i].typeCode+"\">"
-                                + list[i].typeName+"</option>";     //动态添加数据
-                    $("#type").append(optionString);                // 为当前Id为type的select添加数据。
+                        + list[i].typeCode+"\">"
+                        + list[i].typeName+"</option>";     //动态添加数据
+                    $("#typeSecondary").append(optionString);       // 为当前Id为typeSecondary的select添加数据。
                 }
             }
             //title初始值设置
-            document.getElementById("title").value = $("#type").find("option:selected").text();
+            document.getElementById("title").value = $("#typeSecondary").find("option:selected").text();
         }
     });
 
+
+
     $("#type").change(function(){
-        document.getElementById("title").value = $("#type").find("option:selected").text();
+        var mainType = document.getElementById("type").value;
+        //故障次级列表动态填入
+        $.ajax({
+            url:"/admin/getProblemsTypeList",
+            async:true,
+            data: {
+                mainType:mainType
+            },
+            success: function(data){
+                $("#typeSecondary").find("option").remove();
+                var list = data.computerProblemsTypeList;
+                if(list){                                               //判断
+                    for(var i=0; i<list.length; i++){                   //遍历，动态赋值
+                        var optionString = "";
+                        optionString ="<option value=\""
+                            + list[i].typeCode+"\">"
+                            + list[i].typeName+"</option>";     //动态添加数据
+                        $("#typeSecondary").append(optionString);       // 为当前Id为typeSecondary的select添加数据。
+                    }
+                }
+                //title初始值设置
+                document.getElementById("title").value = $("#typeSecondary").find("option:selected").text();
+            }
+        });
+    });
+
+    $("#typeSecondary").change(function(){
+        document.getElementById("title").value = $("#typeSecondary").find("option:selected").text();
     });
 
     //使IE8支持 placeholder

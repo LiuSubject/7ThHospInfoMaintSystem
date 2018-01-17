@@ -3,6 +3,7 @@
 <mapper namespace="com.system.mapper.SoftwareRequirementsMapper" >
   <resultMap id="BaseResultMap" type="com.system.po.SoftwareRequirements" >
     <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cp_link_id" property="cpLinkId" jdbcType="INTEGER" />
     <result column="require_no" property="requireNo" jdbcType="INTEGER" />
     <result column="dept_code" property="deptCode" jdbcType="VARCHAR" />
     <result column="dept" property="dept" jdbcType="VARCHAR" />
@@ -82,9 +83,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, require_no, dept_code, dept, applicant_name, applicant_id, applicant_time, applicant_module, 
-    require_type, details, proposer, handling_comments, developer, acceptance_type, acceptance_description, 
-    management_leader, hospital_leader, other_1, other_2, other_3
+    id, cp_link_id, require_no, dept_code, dept, applicant_name, applicant_id, applicant_time, 
+    applicant_module, require_type, details, proposer, handling_comments, developer, 
+    acceptance_type, acceptance_description, management_leader, hospital_leader, other_1, 
+    other_2, other_3
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.po.SoftwareRequirementsExample" >
     select
@@ -117,26 +119,31 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.system.po.SoftwareRequirements" >
-    insert into software_requirements (id, require_no, dept_code, 
-      dept, applicant_name, applicant_id, 
-      applicant_time, applicant_module, require_type, 
-      details, proposer, handling_comments, 
-      developer, acceptance_type, acceptance_description, 
-      management_leader, hospital_leader, other_1, 
-      other_2, other_3)
-    values (#{id,jdbcType=INTEGER}, #{requireNo,jdbcType=INTEGER}, #{deptCode,jdbcType=VARCHAR}, 
-      #{dept,jdbcType=VARCHAR}, #{applicantName,jdbcType=VARCHAR}, #{applicantId,jdbcType=VARCHAR}, 
-      #{applicantTime,jdbcType=VARCHAR}, #{applicantModule,jdbcType=VARCHAR}, #{requireType,jdbcType=INTEGER}, 
-      #{details,jdbcType=VARCHAR}, #{proposer,jdbcType=VARCHAR}, #{handlingComments,jdbcType=VARCHAR}, 
-      #{developer,jdbcType=VARCHAR}, #{acceptanceType,jdbcType=INTEGER}, #{acceptanceDescription,jdbcType=VARCHAR}, 
-      #{managementLeader,jdbcType=VARCHAR}, #{hospitalLeader,jdbcType=VARCHAR}, #{other1,jdbcType=VARCHAR}, 
-      #{other2,jdbcType=VARCHAR}, #{other3,jdbcType=VARCHAR})
+    insert into software_requirements (id, cp_link_id, require_no, 
+      dept_code, dept, applicant_name, 
+      applicant_id, applicant_time, applicant_module, 
+      require_type, details, proposer, 
+      handling_comments, developer, acceptance_type, 
+      acceptance_description, management_leader, 
+      hospital_leader, other_1, other_2, 
+      other_3)
+    values (#{id,jdbcType=INTEGER}, #{cpLinkId,jdbcType=INTEGER}, #{requireNo,jdbcType=INTEGER}, 
+      #{deptCode,jdbcType=VARCHAR}, #{dept,jdbcType=VARCHAR}, #{applicantName,jdbcType=VARCHAR}, 
+      #{applicantId,jdbcType=VARCHAR}, #{applicantTime,jdbcType=VARCHAR}, #{applicantModule,jdbcType=VARCHAR}, 
+      #{requireType,jdbcType=INTEGER}, #{details,jdbcType=VARCHAR}, #{proposer,jdbcType=VARCHAR}, 
+      #{handlingComments,jdbcType=VARCHAR}, #{developer,jdbcType=VARCHAR}, #{acceptanceType,jdbcType=INTEGER}, 
+      #{acceptanceDescription,jdbcType=VARCHAR}, #{managementLeader,jdbcType=VARCHAR}, 
+      #{hospitalLeader,jdbcType=VARCHAR}, #{other1,jdbcType=VARCHAR}, #{other2,jdbcType=VARCHAR}, 
+      #{other3,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.system.po.SoftwareRequirements" >
     insert into software_requirements
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
+      </if>
+      <if test="cpLinkId != null" >
+        cp_link_id,
       </if>
       <if test="requireNo != null" >
         require_no,
@@ -199,6 +206,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
+      </if>
+      <if test="cpLinkId != null" >
+        #{cpLinkId,jdbcType=INTEGER},
       </if>
       <if test="requireNo != null" >
         #{requireNo,jdbcType=INTEGER},
@@ -271,6 +281,9 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
+      <if test="record.cpLinkId != null" >
+        cp_link_id = #{record.cpLinkId,jdbcType=INTEGER},
+      </if>
       <if test="record.requireNo != null" >
         require_no = #{record.requireNo,jdbcType=INTEGER},
       </if>
@@ -336,6 +349,7 @@
   <update id="updateByExample" parameterType="map" >
     update software_requirements
     set id = #{record.id,jdbcType=INTEGER},
+      cp_link_id = #{record.cpLinkId,jdbcType=INTEGER},
       require_no = #{record.requireNo,jdbcType=INTEGER},
       dept_code = #{record.deptCode,jdbcType=VARCHAR},
       dept = #{record.dept,jdbcType=VARCHAR},
@@ -362,6 +376,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.system.po.SoftwareRequirements" >
     update software_requirements
     <set >
+      <if test="cpLinkId != null" >
+        cp_link_id = #{cpLinkId,jdbcType=INTEGER},
+      </if>
       <if test="requireNo != null" >
         require_no = #{requireNo,jdbcType=INTEGER},
       </if>
@@ -424,7 +441,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.system.po.SoftwareRequirements" >
     update software_requirements
-    set require_no = #{requireNo,jdbcType=INTEGER},
+    set cp_link_id = #{cpLinkId,jdbcType=INTEGER},
+      require_no = #{requireNo,jdbcType=INTEGER},
       dept_code = #{deptCode,jdbcType=VARCHAR},
       dept = #{dept,jdbcType=VARCHAR},
       applicant_name = #{applicantName,jdbcType=VARCHAR},

@@ -3,6 +3,8 @@ package com.system.po;
 public class SoftwareRequirements {
     private Integer id;
 
+    private Integer cpLinkId;
+
     private Integer requireNo;
 
     private String deptCode;
@@ -47,6 +49,14 @@ public class SoftwareRequirements {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getCpLinkId() {
+        return cpLinkId;
+    }
+
+    public void setCpLinkId(Integer cpLinkId) {
+        this.cpLinkId = cpLinkId;
     }
 
     public Integer getRequireNo() {

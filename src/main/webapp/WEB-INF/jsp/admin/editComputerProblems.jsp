@@ -12,6 +12,12 @@
     <!-- 引入JQuery  bootstrap.js-->
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/pwd-encryption.js"></script>
+    <style type="text/css">
+        .Urgent{
+            color:#c9302c ;
+        }
+    </style>
 </head>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -36,7 +42,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <h2 style="text-align: center;">${computerProblems.title}</h2>
+                        <h2 id="faultUrgentTitle" style="text-align: center;">${computerProblems.title}</h2>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -96,6 +102,9 @@
 
                     </form>
                     <div class="form-group" style="text-align: center">
+                        <c:if test="${examiner == true}">
+                            <button class="btn btn-danger" type="button" id="urgentBtn">标红</button>
+                        </c:if>
                         <button class="btn btn-default" type="button" id="dealBtn">处理</button>
                         <button class="btn btn-default" type="button" id="completeBtn">完成</button>
                         <button class="btn btn-default" type="button" id="returnListBtn">返回</button>
@@ -115,6 +124,17 @@
 </body>
 <script type="text/javascript">
     $("#nav li:nth-child(1)").addClass("active");
+
+    //标红处理
+    if(${computerProblems.faultUrgent == 1}){
+        $("#faultUrgentTitle").addClass("Urgent");
+    }
+
+
+    //标红处理按钮点击
+    $('#urgentBtn').on('click', function () {
+        window.location.href = encodeURI("/admin/urgentComputerProblems?id=${computerProblems.id}");
+    });
 
     //处理按钮点击
     $('#dealBtn').on('click', function () {
