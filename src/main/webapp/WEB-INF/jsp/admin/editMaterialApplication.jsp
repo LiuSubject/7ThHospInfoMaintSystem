@@ -113,8 +113,13 @@
                             </div>
                         </div>
                         <div class="form-group" style="text-align: center">
-                            <button class="btn btn-default" type="button" id="dealBtn">处理</button>
-                            <button class="btn btn-default" type="button" id="completeBtn">完成</button>
+                            <c:if test="${materialApplication.flag != 2}">
+                                <c:if test="${examiner == true && materialApplication.flag == 0}">
+                                    <button class="btn btn-danger" type="button" id="pushBtn">推送</button>
+                                </c:if>
+                                <button class="btn btn-default" type="button" id="dealBtn">处理</button>
+                                <button class="btn btn-default" type="button" id="completeBtn">完成</button>
+                            </c:if>
                             <button class="btn btn-default" type="button" id="returnListBtn">返回</button>
                         </div>
                     </form>
@@ -135,6 +140,21 @@
     $("#nav li:nth-child(3)").addClass("active");
 
 
+    //推送处理按钮点击
+    $('#urgentBtn').on('click', function () {
+        var reback = document.getElementById("reback").value;
+        var brand = document.getElementById("brand").value;
+        var model = document.getElementById("model").value;
+        var judge = document.getElementById("judge").value;
+        var total = document.getElementById("total").value;
+        window.location.href =encodeURI( "/admin/pushMaterialApplication?id=${materialApplication.id}&feedback=" + reback
+            +"&brand=" + brand
+            +"&model=" + model
+            +"&judge=" + judge
+            +"&total=" + total);
+    });
+
+
     //处理按钮点击
     $('#dealBtn').on('click', function () {
         var reback = document.getElementById("reback").value;
@@ -148,6 +168,8 @@
             +"&judge=" + judge
             +"&total=" + total);
     });
+
+
 
     //完成按钮点击
     $('#completeBtn').on('click', function () {

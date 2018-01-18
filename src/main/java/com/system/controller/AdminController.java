@@ -584,9 +584,30 @@ public class AdminController {
     // 物资申购显示
     @RequestMapping("/showMaterialApplication")
     public String showMaterialApplication(Model model, Integer page) throws Exception {
+        Subject subject = SecurityUtils.getSubject();
+
         List<MaterialApplicationCustom> list = null;
         //页码对象
         PagingVO pagingVO = new PagingVO();
+        //物资组处理可处理列表
+        if (subject.hasRole("material")) {
+            //设置总页数
+            pagingVO.setTotalCount(materialApplicationService.getCountApprovedMaterialApplication());
+            if (page == null || page == 0) {
+                pagingVO.setToPageNo(1);
+                list = materialApplicationService.findByApprovedPaging(1);
+            } else {
+                pagingVO.setToPageNo(page);
+                list = materialApplicationService.findByApprovedPaging(page);
+            }
+
+            model.addAttribute("materialApplicationList", list);
+            model.addAttribute("pagingVO", pagingVO);
+
+            return "admin/showMaterialApplication";
+        }
+
+        //非物资组
         //设置总页数
         pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
         if (page == null || page == 0) {
@@ -651,6 +672,17 @@ public class AdminController {
 
         //设置申购初始化状态
         materialApplicationCustom.setFlag(0);
+        materialApplicationCustom.setFaultUrgent(0);
+        materialApplicationCustom.setGroupVisible(0);
+        materialApplicationCustom.setHighApproved(0);
+        materialApplicationCustom.setApprovedFlag(0);
+        materialApplicationCustom.setHighLeaderFlag1(0);
+        materialApplicationCustom.setHighLeaderFlag2(0);
+        materialApplicationCustom.setHighLeaderFlag3(0);
+        materialApplicationCustom.setHighLeaderApproved1(0);
+        materialApplicationCustom.setHighLeaderApproved2(0);
+        materialApplicationCustom.setHighLeaderApproved3(0);
+
 
         //设置申购所属部门编码
         materialApplicationCustom.setDepartcode(viewEmployeeMiPsd.getDeptCode());
@@ -669,13 +701,12 @@ public class AdminController {
                 model.addAttribute("message", "抱歉，故障信息保存失败");
                 return "error";
             }
-            //向管理组推送消息
-           messagePushUtil.GroupPushSingle(pushMessage,"admin");
+            //向指定组推送消息
+           messagePushUtil.GroupPushSingle(pushMessage,"examiner");
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
         }
-
 
         //重定向
         return "redirect:/admin/showMaterialApplication";
@@ -686,6 +717,13 @@ public class AdminController {
     public String editMaterialApplicationUI(Integer id, Model model) throws Exception {
         if (id == null) {
             return "redirect:/admin/showMaterialApplication";
+        }
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        if(subject.hasRole("examiner")){
+            model.addAttribute("examiner", true);
+        }else{
+            model.addAttribute("examiner", false);
         }
         MaterialApplication materialApplication = materialApplicationService.findById(id);
         if (materialApplication == null) {
@@ -729,6 +767,13 @@ public class AdminController {
 
         //重定向
         return "redirect:/admin/showMaterialApplication";
+    }
+
+    // 推送物资申购页面显示
+    @RequestMapping(value = "/pushMaterialApplication", method = {RequestMethod.GET})
+    public String pushMaterialApplication(HttpServletRequest request) throws Exception {
+
+        return "admin/editMaterialApplication";
     }
 
     // 开始处理物资申购
@@ -779,15 +824,63 @@ public class AdminController {
             }
             e.printStackTrace();
         }
-        if(materialApplicationCustom.getFlag() == 0){
+        if(materialApplicationCustom.getFlag() == 0 || materialApplicationCustom.getFlag() == 1){
             //更新该物资申购问题数据
-            materialApplicationCustom.setFlag(1);
-            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
-            materialApplicationCustom.setReback(feedback);
             materialApplicationCustom.setBrand(brand);
             materialApplicationCustom.setModel(model);
             materialApplicationCustom.setJudge(judge);
             materialApplicationCustom.setTotal(total);
+            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
+
+            //审查组审查后使处理组可见,并保留审查组意见,并向处理组推送消息
+            if(subject.hasRole("examiner") && materialApplicationCustom.getFlag() == 0){
+                materialApplicationCustom.setFlag(1);
+                materialApplicationCustom.setGroupVisible(1);
+                materialApplicationCustom.setXxkyj(feedback);
+                materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                //保存该记录相关数据以便产生推送
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "0","21");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return "error";
+                    }
+                    //向处理组推送消息
+                    messagePushUtil.GroupPushSingle(pushMessage,"material");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+            }else{
+                materialApplicationCustom.setFlag(1);
+            }
+            //将反馈插入空白反馈字段
+            if(materialApplicationCustom.getFeedbackId1() == null){
+                materialApplicationCustom.setFeedbackContent1(feedback);
+                materialApplicationCustom.setFeedbackId1(viewEmployeeMiPsd.getCode());
+                materialApplicationCustom.setFeedbackName1(viewEmployeeMiPsd.getName());
+            }else if(materialApplicationCustom.getFeedbackId2() == null){
+                materialApplicationCustom.setFeedbackContent2(feedback);
+                materialApplicationCustom.setFeedbackId2(viewEmployeeMiPsd.getCode());
+                materialApplicationCustom.setFeedbackName2(viewEmployeeMiPsd.getName());
+            }else if(materialApplicationCustom.getFeedbackId3() == null){
+                materialApplicationCustom.setFeedbackContent3(feedback);
+                materialApplicationCustom.setFeedbackId3(viewEmployeeMiPsd.getCode());
+                materialApplicationCustom.setFeedbackName3(viewEmployeeMiPsd.getName());
+            }else if(materialApplicationCustom.getFeedbackId4() == null){
+                materialApplicationCustom.setFeedbackContent4(feedback);
+                materialApplicationCustom.setFeedbackId4(viewEmployeeMiPsd.getCode());
+                materialApplicationCustom.setFeedbackName4(viewEmployeeMiPsd.getName());
+            }else if(materialApplicationCustom.getFeedbackId5() == null){
+                materialApplicationCustom.setFeedbackContent5(feedback);
+                materialApplicationCustom.setFeedbackId5(viewEmployeeMiPsd.getCode());
+                materialApplicationCustom.setFeedbackName5(viewEmployeeMiPsd.getName());
+            }
+
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
             try {
@@ -858,7 +951,7 @@ public class AdminController {
             }
             e.printStackTrace();
         }
-        if(materialApplicationCustom.getFlag() == 1){
+        if(materialApplicationCustom.getFlag() == 1 || subject.hasRole("examiner")){
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(2);
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());

@@ -67,6 +67,15 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
         return list;
     }
 
+    public List<MaterialApplicationCustom> findByApprovedPaging(Integer toPageNo) throws Exception {
+        PagingVO pagingVO = new PagingVO();
+        pagingVO.setToPageNo(toPageNo);
+
+        List<MaterialApplicationCustom> list = materialApplicationMapperCustom.findByApprovedPaging(pagingVO);
+
+        return list;
+    }
+
     public List<MaterialApplicationCustom> deptFindByPaging(Integer toPageNo,String deptName) throws Exception {
         PagingVO pagingVO = new PagingVO();
         pagingVO.setToPageNo(toPageNo);
@@ -108,6 +117,17 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
         //通过criteria构造查询条件
         MaterialApplicationExample.Criteria criteria = MaterialApplicationExample.createCriteria();
         criteria.andUseridIsNotNull();
+
+        return materialApplicationMapper.countByExample(MaterialApplicationExample);
+    }
+
+    //返回可处理物资申购总数
+    public int getCountApprovedMaterialApplication() throws Exception {
+        //自定义查询对象
+        MaterialApplicationExample MaterialApplicationExample = new MaterialApplicationExample();
+        //通过criteria构造查询条件
+        MaterialApplicationExample.Criteria criteria = MaterialApplicationExample.createCriteria();
+        criteria.andUseridIsNotNull().andGroupVisibleEqualTo(1);
 
         return materialApplicationMapper.countByExample(MaterialApplicationExample);
     }

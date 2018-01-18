@@ -16,13 +16,45 @@
     <result column="applicant" property="applicant" jdbcType="VARCHAR" />
     <result column="reason" property="reason" jdbcType="VARCHAR" />
     <result column="bmYj" property="bmyj" jdbcType="VARCHAR" />
-    <result column="fgyzYj" property="fgyzyj" jdbcType="VARCHAR" />
     <result column="xxkYj" property="xxkyj" jdbcType="VARCHAR" />
-    <result column="yzYj" property="yzyj" jdbcType="VARCHAR" />
     <result column="flag" property="flag" jdbcType="INTEGER" />
     <result column="leader" property="leader" jdbcType="VARCHAR" />
     <result column="reback" property="reback" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="fault_urgent" property="faultUrgent" jdbcType="INTEGER" />
+    <result column="group_visible" property="groupVisible" jdbcType="INTEGER" />
+    <result column="high_approved" property="highApproved" jdbcType="INTEGER" />
+    <result column="approved_flag" property="approvedFlag" jdbcType="INTEGER" />
+    <result column="high_leader_approved_1" property="highLeaderApproved1" jdbcType="INTEGER" />
+    <result column="high_leader_reback_1" property="highLeaderReback1" jdbcType="VARCHAR" />
+    <result column="high_leader_id_1" property="highLeaderId1" jdbcType="CHAR" />
+    <result column="high_leader_name_1" property="highLeaderName1" jdbcType="VARCHAR" />
+    <result column="high_leader_flag_1" property="highLeaderFlag1" jdbcType="INTEGER" />
+    <result column="high_leader_approved_2" property="highLeaderApproved2" jdbcType="INTEGER" />
+    <result column="high_leader_reback_2" property="highLeaderReback2" jdbcType="VARCHAR" />
+    <result column="high_leader_id_2" property="highLeaderId2" jdbcType="CHAR" />
+    <result column="high_leader_name_2" property="highLeaderName2" jdbcType="VARCHAR" />
+    <result column="high_leader_flag_2" property="highLeaderFlag2" jdbcType="INTEGER" />
+    <result column="high_leader_approved_3" property="highLeaderApproved3" jdbcType="INTEGER" />
+    <result column="high_leader_reback_3" property="highLeaderReback3" jdbcType="VARCHAR" />
+    <result column="high_leader_id_3" property="highLeaderId3" jdbcType="CHAR" />
+    <result column="high_leader_name_3" property="highLeaderName3" jdbcType="VARCHAR" />
+    <result column="high_leader_flag_3" property="highLeaderFlag3" jdbcType="INTEGER" />
+    <result column="feedback_content_1" property="feedbackContent1" jdbcType="VARCHAR" />
+    <result column="feedback_id_1" property="feedbackId1" jdbcType="CHAR" />
+    <result column="feedback_name_1" property="feedbackName1" jdbcType="VARCHAR" />
+    <result column="feedback_content_2" property="feedbackContent2" jdbcType="VARCHAR" />
+    <result column="feedback_id_2" property="feedbackId2" jdbcType="CHAR" />
+    <result column="feedback_name_2" property="feedbackName2" jdbcType="VARCHAR" />
+    <result column="feedback_content_3" property="feedbackContent3" jdbcType="VARCHAR" />
+    <result column="feedback_id_3" property="feedbackId3" jdbcType="CHAR" />
+    <result column="feedback_name_3" property="feedbackName3" jdbcType="VARCHAR" />
+    <result column="feedback_content_4" property="feedbackContent4" jdbcType="VARCHAR" />
+    <result column="feedback_id_4" property="feedbackId4" jdbcType="CHAR" />
+    <result column="feedback_name_4" property="feedbackName4" jdbcType="VARCHAR" />
+    <result column="feedback_content_5" property="feedbackContent5" jdbcType="VARCHAR" />
+    <result column="feedback_id_5" property="feedbackId5" jdbcType="CHAR" />
+    <result column="feedback_name_5" property="feedbackName5" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -84,7 +116,14 @@
   </sql>
   <sql id="Base_Column_List" >
     id, userId, name, dept, departCode, number, brand, model, judge, total, use_date, 
-    applicant, reason, bmYj, fgyzYj, xxkYj, yzYj, flag, leader, reback, create_time
+    applicant, reason, bmYj, xxkYj, flag, leader, reback, create_time, fault_urgent, 
+    group_visible, high_approved, approved_flag, high_leader_approved_1, high_leader_reback_1, 
+    high_leader_id_1, high_leader_name_1, high_leader_flag_1, high_leader_approved_2, 
+    high_leader_reback_2, high_leader_id_2, high_leader_name_2, high_leader_flag_2, high_leader_approved_3, 
+    high_leader_reback_3, high_leader_id_3, high_leader_name_3, high_leader_flag_3, feedback_content_1, 
+    feedback_id_1, feedback_name_1, feedback_content_2, feedback_id_2, feedback_name_2, 
+    feedback_content_3, feedback_id_3, feedback_name_3, feedback_content_4, feedback_id_4, 
+    feedback_name_4, feedback_content_5, feedback_id_5, feedback_name_5
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.po.MaterialApplicationExample" >
     select
@@ -121,17 +160,39 @@
       dept, departCode, number, 
       brand, model, judge, 
       total, use_date, applicant, 
-      reason, bmYj, fgyzYj, 
-      xxkYj, yzYj, flag, 
-      leader, reback, create_time
+      reason, bmYj, xxkYj, 
+      flag, leader, reback, 
+      create_time, fault_urgent, group_visible, 
+      high_approved, approved_flag, high_leader_approved_1, 
+      high_leader_reback_1, high_leader_id_1, high_leader_name_1, 
+      high_leader_flag_1, high_leader_approved_2, high_leader_reback_2, 
+      high_leader_id_2, high_leader_name_2, high_leader_flag_2, 
+      high_leader_approved_3, high_leader_reback_3, 
+      high_leader_id_3, high_leader_name_3, high_leader_flag_3, 
+      feedback_content_1, feedback_id_1, feedback_name_1, 
+      feedback_content_2, feedback_id_2, feedback_name_2, 
+      feedback_content_3, feedback_id_3, feedback_name_3, 
+      feedback_content_4, feedback_id_4, feedback_name_4, 
+      feedback_content_5, feedback_id_5, feedback_name_5
       )
     values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{dept,jdbcType=VARCHAR}, #{departcode,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
       #{brand,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{judge,jdbcType=INTEGER}, 
       #{total,jdbcType=INTEGER}, #{useDate,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, 
-      #{reason,jdbcType=VARCHAR}, #{bmyj,jdbcType=VARCHAR}, #{fgyzyj,jdbcType=VARCHAR}, 
-      #{xxkyj,jdbcType=VARCHAR}, #{yzyj,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER}, 
-      #{leader,jdbcType=VARCHAR}, #{reback,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}
+      #{reason,jdbcType=VARCHAR}, #{bmyj,jdbcType=VARCHAR}, #{xxkyj,jdbcType=VARCHAR}, 
+      #{flag,jdbcType=INTEGER}, #{leader,jdbcType=VARCHAR}, #{reback,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{faultUrgent,jdbcType=INTEGER}, #{groupVisible,jdbcType=INTEGER}, 
+      #{highApproved,jdbcType=INTEGER}, #{approvedFlag,jdbcType=INTEGER}, #{highLeaderApproved1,jdbcType=INTEGER}, 
+      #{highLeaderReback1,jdbcType=VARCHAR}, #{highLeaderId1,jdbcType=CHAR}, #{highLeaderName1,jdbcType=VARCHAR}, 
+      #{highLeaderFlag1,jdbcType=INTEGER}, #{highLeaderApproved2,jdbcType=INTEGER}, #{highLeaderReback2,jdbcType=VARCHAR}, 
+      #{highLeaderId2,jdbcType=CHAR}, #{highLeaderName2,jdbcType=VARCHAR}, #{highLeaderFlag2,jdbcType=INTEGER}, 
+      #{highLeaderApproved3,jdbcType=INTEGER}, #{highLeaderReback3,jdbcType=VARCHAR}, 
+      #{highLeaderId3,jdbcType=CHAR}, #{highLeaderName3,jdbcType=VARCHAR}, #{highLeaderFlag3,jdbcType=INTEGER}, 
+      #{feedbackContent1,jdbcType=VARCHAR}, #{feedbackId1,jdbcType=CHAR}, #{feedbackName1,jdbcType=VARCHAR}, 
+      #{feedbackContent2,jdbcType=VARCHAR}, #{feedbackId2,jdbcType=CHAR}, #{feedbackName2,jdbcType=VARCHAR}, 
+      #{feedbackContent3,jdbcType=VARCHAR}, #{feedbackId3,jdbcType=CHAR}, #{feedbackName3,jdbcType=VARCHAR}, 
+      #{feedbackContent4,jdbcType=VARCHAR}, #{feedbackId4,jdbcType=CHAR}, #{feedbackName4,jdbcType=VARCHAR}, 
+      #{feedbackContent5,jdbcType=VARCHAR}, #{feedbackId5,jdbcType=CHAR}, #{feedbackName5,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.system.po.MaterialApplication" >
@@ -179,14 +240,8 @@
       <if test="bmyj != null" >
         bmYj,
       </if>
-      <if test="fgyzyj != null" >
-        fgyzYj,
-      </if>
       <if test="xxkyj != null" >
         xxkYj,
-      </if>
-      <if test="yzyj != null" >
-        yzYj,
       </if>
       <if test="flag != null" >
         flag,
@@ -199,6 +254,108 @@
       </if>
       <if test="createTime != null" >
         create_time,
+      </if>
+      <if test="faultUrgent != null" >
+        fault_urgent,
+      </if>
+      <if test="groupVisible != null" >
+        group_visible,
+      </if>
+      <if test="highApproved != null" >
+        high_approved,
+      </if>
+      <if test="approvedFlag != null" >
+        approved_flag,
+      </if>
+      <if test="highLeaderApproved1 != null" >
+        high_leader_approved_1,
+      </if>
+      <if test="highLeaderReback1 != null" >
+        high_leader_reback_1,
+      </if>
+      <if test="highLeaderId1 != null" >
+        high_leader_id_1,
+      </if>
+      <if test="highLeaderName1 != null" >
+        high_leader_name_1,
+      </if>
+      <if test="highLeaderFlag1 != null" >
+        high_leader_flag_1,
+      </if>
+      <if test="highLeaderApproved2 != null" >
+        high_leader_approved_2,
+      </if>
+      <if test="highLeaderReback2 != null" >
+        high_leader_reback_2,
+      </if>
+      <if test="highLeaderId2 != null" >
+        high_leader_id_2,
+      </if>
+      <if test="highLeaderName2 != null" >
+        high_leader_name_2,
+      </if>
+      <if test="highLeaderFlag2 != null" >
+        high_leader_flag_2,
+      </if>
+      <if test="highLeaderApproved3 != null" >
+        high_leader_approved_3,
+      </if>
+      <if test="highLeaderReback3 != null" >
+        high_leader_reback_3,
+      </if>
+      <if test="highLeaderId3 != null" >
+        high_leader_id_3,
+      </if>
+      <if test="highLeaderName3 != null" >
+        high_leader_name_3,
+      </if>
+      <if test="highLeaderFlag3 != null" >
+        high_leader_flag_3,
+      </if>
+      <if test="feedbackContent1 != null" >
+        feedback_content_1,
+      </if>
+      <if test="feedbackId1 != null" >
+        feedback_id_1,
+      </if>
+      <if test="feedbackName1 != null" >
+        feedback_name_1,
+      </if>
+      <if test="feedbackContent2 != null" >
+        feedback_content_2,
+      </if>
+      <if test="feedbackId2 != null" >
+        feedback_id_2,
+      </if>
+      <if test="feedbackName2 != null" >
+        feedback_name_2,
+      </if>
+      <if test="feedbackContent3 != null" >
+        feedback_content_3,
+      </if>
+      <if test="feedbackId3 != null" >
+        feedback_id_3,
+      </if>
+      <if test="feedbackName3 != null" >
+        feedback_name_3,
+      </if>
+      <if test="feedbackContent4 != null" >
+        feedback_content_4,
+      </if>
+      <if test="feedbackId4 != null" >
+        feedback_id_4,
+      </if>
+      <if test="feedbackName4 != null" >
+        feedback_name_4,
+      </if>
+      <if test="feedbackContent5 != null" >
+        feedback_content_5,
+      </if>
+      <if test="feedbackId5 != null" >
+        feedback_id_5,
+      </if>
+      <if test="feedbackName5 != null" >
+        feedback_name_5,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -244,14 +401,8 @@
       <if test="bmyj != null" >
         #{bmyj,jdbcType=VARCHAR},
       </if>
-      <if test="fgyzyj != null" >
-        #{fgyzyj,jdbcType=VARCHAR},
-      </if>
       <if test="xxkyj != null" >
         #{xxkyj,jdbcType=VARCHAR},
-      </if>
-      <if test="yzyj != null" >
-        #{yzyj,jdbcType=VARCHAR},
       </if>
       <if test="flag != null" >
         #{flag,jdbcType=INTEGER},
@@ -264,6 +415,108 @@
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="faultUrgent != null" >
+        #{faultUrgent,jdbcType=INTEGER},
+      </if>
+      <if test="groupVisible != null" >
+        #{groupVisible,jdbcType=INTEGER},
+      </if>
+      <if test="highApproved != null" >
+        #{highApproved,jdbcType=INTEGER},
+      </if>
+      <if test="approvedFlag != null" >
+        #{approvedFlag,jdbcType=INTEGER},
+      </if>
+      <if test="highLeaderApproved1 != null" >
+        #{highLeaderApproved1,jdbcType=INTEGER},
+      </if>
+      <if test="highLeaderReback1 != null" >
+        #{highLeaderReback1,jdbcType=VARCHAR},
+      </if>
+      <if test="highLeaderId1 != null" >
+        #{highLeaderId1,jdbcType=CHAR},
+      </if>
+      <if test="highLeaderName1 != null" >
+        #{highLeaderName1,jdbcType=VARCHAR},
+      </if>
+      <if test="highLeaderFlag1 != null" >
+        #{highLeaderFlag1,jdbcType=INTEGER},
+      </if>
+      <if test="highLeaderApproved2 != null" >
+        #{highLeaderApproved2,jdbcType=INTEGER},
+      </if>
+      <if test="highLeaderReback2 != null" >
+        #{highLeaderReback2,jdbcType=VARCHAR},
+      </if>
+      <if test="highLeaderId2 != null" >
+        #{highLeaderId2,jdbcType=CHAR},
+      </if>
+      <if test="highLeaderName2 != null" >
+        #{highLeaderName2,jdbcType=VARCHAR},
+      </if>
+      <if test="highLeaderFlag2 != null" >
+        #{highLeaderFlag2,jdbcType=INTEGER},
+      </if>
+      <if test="highLeaderApproved3 != null" >
+        #{highLeaderApproved3,jdbcType=INTEGER},
+      </if>
+      <if test="highLeaderReback3 != null" >
+        #{highLeaderReback3,jdbcType=VARCHAR},
+      </if>
+      <if test="highLeaderId3 != null" >
+        #{highLeaderId3,jdbcType=CHAR},
+      </if>
+      <if test="highLeaderName3 != null" >
+        #{highLeaderName3,jdbcType=VARCHAR},
+      </if>
+      <if test="highLeaderFlag3 != null" >
+        #{highLeaderFlag3,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackContent1 != null" >
+        #{feedbackContent1,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId1 != null" >
+        #{feedbackId1,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName1 != null" >
+        #{feedbackName1,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent2 != null" >
+        #{feedbackContent2,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId2 != null" >
+        #{feedbackId2,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName2 != null" >
+        #{feedbackName2,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent3 != null" >
+        #{feedbackContent3,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId3 != null" >
+        #{feedbackId3,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName3 != null" >
+        #{feedbackName3,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent4 != null" >
+        #{feedbackContent4,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId4 != null" >
+        #{feedbackId4,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName4 != null" >
+        #{feedbackName4,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent5 != null" >
+        #{feedbackContent5,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId5 != null" >
+        #{feedbackId5,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName5 != null" >
+        #{feedbackName5,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -318,14 +571,8 @@
       <if test="record.bmyj != null" >
         bmYj = #{record.bmyj,jdbcType=VARCHAR},
       </if>
-      <if test="record.fgyzyj != null" >
-        fgyzYj = #{record.fgyzyj,jdbcType=VARCHAR},
-      </if>
       <if test="record.xxkyj != null" >
         xxkYj = #{record.xxkyj,jdbcType=VARCHAR},
-      </if>
-      <if test="record.yzyj != null" >
-        yzYj = #{record.yzyj,jdbcType=VARCHAR},
       </if>
       <if test="record.flag != null" >
         flag = #{record.flag,jdbcType=INTEGER},
@@ -338,6 +585,108 @@
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.faultUrgent != null" >
+        fault_urgent = #{record.faultUrgent,jdbcType=INTEGER},
+      </if>
+      <if test="record.groupVisible != null" >
+        group_visible = #{record.groupVisible,jdbcType=INTEGER},
+      </if>
+      <if test="record.highApproved != null" >
+        high_approved = #{record.highApproved,jdbcType=INTEGER},
+      </if>
+      <if test="record.approvedFlag != null" >
+        approved_flag = #{record.approvedFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.highLeaderApproved1 != null" >
+        high_leader_approved_1 = #{record.highLeaderApproved1,jdbcType=INTEGER},
+      </if>
+      <if test="record.highLeaderReback1 != null" >
+        high_leader_reback_1 = #{record.highLeaderReback1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.highLeaderId1 != null" >
+        high_leader_id_1 = #{record.highLeaderId1,jdbcType=CHAR},
+      </if>
+      <if test="record.highLeaderName1 != null" >
+        high_leader_name_1 = #{record.highLeaderName1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.highLeaderFlag1 != null" >
+        high_leader_flag_1 = #{record.highLeaderFlag1,jdbcType=INTEGER},
+      </if>
+      <if test="record.highLeaderApproved2 != null" >
+        high_leader_approved_2 = #{record.highLeaderApproved2,jdbcType=INTEGER},
+      </if>
+      <if test="record.highLeaderReback2 != null" >
+        high_leader_reback_2 = #{record.highLeaderReback2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.highLeaderId2 != null" >
+        high_leader_id_2 = #{record.highLeaderId2,jdbcType=CHAR},
+      </if>
+      <if test="record.highLeaderName2 != null" >
+        high_leader_name_2 = #{record.highLeaderName2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.highLeaderFlag2 != null" >
+        high_leader_flag_2 = #{record.highLeaderFlag2,jdbcType=INTEGER},
+      </if>
+      <if test="record.highLeaderApproved3 != null" >
+        high_leader_approved_3 = #{record.highLeaderApproved3,jdbcType=INTEGER},
+      </if>
+      <if test="record.highLeaderReback3 != null" >
+        high_leader_reback_3 = #{record.highLeaderReback3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.highLeaderId3 != null" >
+        high_leader_id_3 = #{record.highLeaderId3,jdbcType=CHAR},
+      </if>
+      <if test="record.highLeaderName3 != null" >
+        high_leader_name_3 = #{record.highLeaderName3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.highLeaderFlag3 != null" >
+        high_leader_flag_3 = #{record.highLeaderFlag3,jdbcType=INTEGER},
+      </if>
+      <if test="record.feedbackContent1 != null" >
+        feedback_content_1 = #{record.feedbackContent1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackId1 != null" >
+        feedback_id_1 = #{record.feedbackId1,jdbcType=CHAR},
+      </if>
+      <if test="record.feedbackName1 != null" >
+        feedback_name_1 = #{record.feedbackName1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackContent2 != null" >
+        feedback_content_2 = #{record.feedbackContent2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackId2 != null" >
+        feedback_id_2 = #{record.feedbackId2,jdbcType=CHAR},
+      </if>
+      <if test="record.feedbackName2 != null" >
+        feedback_name_2 = #{record.feedbackName2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackContent3 != null" >
+        feedback_content_3 = #{record.feedbackContent3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackId3 != null" >
+        feedback_id_3 = #{record.feedbackId3,jdbcType=CHAR},
+      </if>
+      <if test="record.feedbackName3 != null" >
+        feedback_name_3 = #{record.feedbackName3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackContent4 != null" >
+        feedback_content_4 = #{record.feedbackContent4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackId4 != null" >
+        feedback_id_4 = #{record.feedbackId4,jdbcType=CHAR},
+      </if>
+      <if test="record.feedbackName4 != null" >
+        feedback_name_4 = #{record.feedbackName4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackContent5 != null" >
+        feedback_content_5 = #{record.feedbackContent5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackId5 != null" >
+        feedback_id_5 = #{record.feedbackId5,jdbcType=CHAR},
+      </if>
+      <if test="record.feedbackName5 != null" >
+        feedback_name_5 = #{record.feedbackName5,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -360,13 +709,45 @@
       applicant = #{record.applicant,jdbcType=VARCHAR},
       reason = #{record.reason,jdbcType=VARCHAR},
       bmYj = #{record.bmyj,jdbcType=VARCHAR},
-      fgyzYj = #{record.fgyzyj,jdbcType=VARCHAR},
       xxkYj = #{record.xxkyj,jdbcType=VARCHAR},
-      yzYj = #{record.yzyj,jdbcType=VARCHAR},
       flag = #{record.flag,jdbcType=INTEGER},
       leader = #{record.leader,jdbcType=VARCHAR},
       reback = #{record.reback,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=VARCHAR}
+      create_time = #{record.createTime,jdbcType=VARCHAR},
+      fault_urgent = #{record.faultUrgent,jdbcType=INTEGER},
+      group_visible = #{record.groupVisible,jdbcType=INTEGER},
+      high_approved = #{record.highApproved,jdbcType=INTEGER},
+      approved_flag = #{record.approvedFlag,jdbcType=INTEGER},
+      high_leader_approved_1 = #{record.highLeaderApproved1,jdbcType=INTEGER},
+      high_leader_reback_1 = #{record.highLeaderReback1,jdbcType=VARCHAR},
+      high_leader_id_1 = #{record.highLeaderId1,jdbcType=CHAR},
+      high_leader_name_1 = #{record.highLeaderName1,jdbcType=VARCHAR},
+      high_leader_flag_1 = #{record.highLeaderFlag1,jdbcType=INTEGER},
+      high_leader_approved_2 = #{record.highLeaderApproved2,jdbcType=INTEGER},
+      high_leader_reback_2 = #{record.highLeaderReback2,jdbcType=VARCHAR},
+      high_leader_id_2 = #{record.highLeaderId2,jdbcType=CHAR},
+      high_leader_name_2 = #{record.highLeaderName2,jdbcType=VARCHAR},
+      high_leader_flag_2 = #{record.highLeaderFlag2,jdbcType=INTEGER},
+      high_leader_approved_3 = #{record.highLeaderApproved3,jdbcType=INTEGER},
+      high_leader_reback_3 = #{record.highLeaderReback3,jdbcType=VARCHAR},
+      high_leader_id_3 = #{record.highLeaderId3,jdbcType=CHAR},
+      high_leader_name_3 = #{record.highLeaderName3,jdbcType=VARCHAR},
+      high_leader_flag_3 = #{record.highLeaderFlag3,jdbcType=INTEGER},
+      feedback_content_1 = #{record.feedbackContent1,jdbcType=VARCHAR},
+      feedback_id_1 = #{record.feedbackId1,jdbcType=CHAR},
+      feedback_name_1 = #{record.feedbackName1,jdbcType=VARCHAR},
+      feedback_content_2 = #{record.feedbackContent2,jdbcType=VARCHAR},
+      feedback_id_2 = #{record.feedbackId2,jdbcType=CHAR},
+      feedback_name_2 = #{record.feedbackName2,jdbcType=VARCHAR},
+      feedback_content_3 = #{record.feedbackContent3,jdbcType=VARCHAR},
+      feedback_id_3 = #{record.feedbackId3,jdbcType=CHAR},
+      feedback_name_3 = #{record.feedbackName3,jdbcType=VARCHAR},
+      feedback_content_4 = #{record.feedbackContent4,jdbcType=VARCHAR},
+      feedback_id_4 = #{record.feedbackId4,jdbcType=CHAR},
+      feedback_name_4 = #{record.feedbackName4,jdbcType=VARCHAR},
+      feedback_content_5 = #{record.feedbackContent5,jdbcType=VARCHAR},
+      feedback_id_5 = #{record.feedbackId5,jdbcType=CHAR},
+      feedback_name_5 = #{record.feedbackName5,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -413,14 +794,8 @@
       <if test="bmyj != null" >
         bmYj = #{bmyj,jdbcType=VARCHAR},
       </if>
-      <if test="fgyzyj != null" >
-        fgyzYj = #{fgyzyj,jdbcType=VARCHAR},
-      </if>
       <if test="xxkyj != null" >
         xxkYj = #{xxkyj,jdbcType=VARCHAR},
-      </if>
-      <if test="yzyj != null" >
-        yzYj = #{yzyj,jdbcType=VARCHAR},
       </if>
       <if test="flag != null" >
         flag = #{flag,jdbcType=INTEGER},
@@ -433,6 +808,108 @@
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="faultUrgent != null" >
+        fault_urgent = #{faultUrgent,jdbcType=INTEGER},
+      </if>
+      <if test="groupVisible != null" >
+        group_visible = #{groupVisible,jdbcType=INTEGER},
+      </if>
+      <if test="highApproved != null" >
+        high_approved = #{highApproved,jdbcType=INTEGER},
+      </if>
+      <if test="approvedFlag != null" >
+        approved_flag = #{approvedFlag,jdbcType=INTEGER},
+      </if>
+      <if test="highLeaderApproved1 != null" >
+        high_leader_approved_1 = #{highLeaderApproved1,jdbcType=INTEGER},
+      </if>
+      <if test="highLeaderReback1 != null" >
+        high_leader_reback_1 = #{highLeaderReback1,jdbcType=VARCHAR},
+      </if>
+      <if test="highLeaderId1 != null" >
+        high_leader_id_1 = #{highLeaderId1,jdbcType=CHAR},
+      </if>
+      <if test="highLeaderName1 != null" >
+        high_leader_name_1 = #{highLeaderName1,jdbcType=VARCHAR},
+      </if>
+      <if test="highLeaderFlag1 != null" >
+        high_leader_flag_1 = #{highLeaderFlag1,jdbcType=INTEGER},
+      </if>
+      <if test="highLeaderApproved2 != null" >
+        high_leader_approved_2 = #{highLeaderApproved2,jdbcType=INTEGER},
+      </if>
+      <if test="highLeaderReback2 != null" >
+        high_leader_reback_2 = #{highLeaderReback2,jdbcType=VARCHAR},
+      </if>
+      <if test="highLeaderId2 != null" >
+        high_leader_id_2 = #{highLeaderId2,jdbcType=CHAR},
+      </if>
+      <if test="highLeaderName2 != null" >
+        high_leader_name_2 = #{highLeaderName2,jdbcType=VARCHAR},
+      </if>
+      <if test="highLeaderFlag2 != null" >
+        high_leader_flag_2 = #{highLeaderFlag2,jdbcType=INTEGER},
+      </if>
+      <if test="highLeaderApproved3 != null" >
+        high_leader_approved_3 = #{highLeaderApproved3,jdbcType=INTEGER},
+      </if>
+      <if test="highLeaderReback3 != null" >
+        high_leader_reback_3 = #{highLeaderReback3,jdbcType=VARCHAR},
+      </if>
+      <if test="highLeaderId3 != null" >
+        high_leader_id_3 = #{highLeaderId3,jdbcType=CHAR},
+      </if>
+      <if test="highLeaderName3 != null" >
+        high_leader_name_3 = #{highLeaderName3,jdbcType=VARCHAR},
+      </if>
+      <if test="highLeaderFlag3 != null" >
+        high_leader_flag_3 = #{highLeaderFlag3,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackContent1 != null" >
+        feedback_content_1 = #{feedbackContent1,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId1 != null" >
+        feedback_id_1 = #{feedbackId1,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName1 != null" >
+        feedback_name_1 = #{feedbackName1,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent2 != null" >
+        feedback_content_2 = #{feedbackContent2,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId2 != null" >
+        feedback_id_2 = #{feedbackId2,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName2 != null" >
+        feedback_name_2 = #{feedbackName2,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent3 != null" >
+        feedback_content_3 = #{feedbackContent3,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId3 != null" >
+        feedback_id_3 = #{feedbackId3,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName3 != null" >
+        feedback_name_3 = #{feedbackName3,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent4 != null" >
+        feedback_content_4 = #{feedbackContent4,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId4 != null" >
+        feedback_id_4 = #{feedbackId4,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName4 != null" >
+        feedback_name_4 = #{feedbackName4,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackContent5 != null" >
+        feedback_content_5 = #{feedbackContent5,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackId5 != null" >
+        feedback_id_5 = #{feedbackId5,jdbcType=CHAR},
+      </if>
+      <if test="feedbackName5 != null" >
+        feedback_name_5 = #{feedbackName5,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -452,13 +929,45 @@
       applicant = #{applicant,jdbcType=VARCHAR},
       reason = #{reason,jdbcType=VARCHAR},
       bmYj = #{bmyj,jdbcType=VARCHAR},
-      fgyzYj = #{fgyzyj,jdbcType=VARCHAR},
       xxkYj = #{xxkyj,jdbcType=VARCHAR},
-      yzYj = #{yzyj,jdbcType=VARCHAR},
       flag = #{flag,jdbcType=INTEGER},
       leader = #{leader,jdbcType=VARCHAR},
       reback = #{reback,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=VARCHAR}
+      create_time = #{createTime,jdbcType=VARCHAR},
+      fault_urgent = #{faultUrgent,jdbcType=INTEGER},
+      group_visible = #{groupVisible,jdbcType=INTEGER},
+      high_approved = #{highApproved,jdbcType=INTEGER},
+      approved_flag = #{approvedFlag,jdbcType=INTEGER},
+      high_leader_approved_1 = #{highLeaderApproved1,jdbcType=INTEGER},
+      high_leader_reback_1 = #{highLeaderReback1,jdbcType=VARCHAR},
+      high_leader_id_1 = #{highLeaderId1,jdbcType=CHAR},
+      high_leader_name_1 = #{highLeaderName1,jdbcType=VARCHAR},
+      high_leader_flag_1 = #{highLeaderFlag1,jdbcType=INTEGER},
+      high_leader_approved_2 = #{highLeaderApproved2,jdbcType=INTEGER},
+      high_leader_reback_2 = #{highLeaderReback2,jdbcType=VARCHAR},
+      high_leader_id_2 = #{highLeaderId2,jdbcType=CHAR},
+      high_leader_name_2 = #{highLeaderName2,jdbcType=VARCHAR},
+      high_leader_flag_2 = #{highLeaderFlag2,jdbcType=INTEGER},
+      high_leader_approved_3 = #{highLeaderApproved3,jdbcType=INTEGER},
+      high_leader_reback_3 = #{highLeaderReback3,jdbcType=VARCHAR},
+      high_leader_id_3 = #{highLeaderId3,jdbcType=CHAR},
+      high_leader_name_3 = #{highLeaderName3,jdbcType=VARCHAR},
+      high_leader_flag_3 = #{highLeaderFlag3,jdbcType=INTEGER},
+      feedback_content_1 = #{feedbackContent1,jdbcType=VARCHAR},
+      feedback_id_1 = #{feedbackId1,jdbcType=CHAR},
+      feedback_name_1 = #{feedbackName1,jdbcType=VARCHAR},
+      feedback_content_2 = #{feedbackContent2,jdbcType=VARCHAR},
+      feedback_id_2 = #{feedbackId2,jdbcType=CHAR},
+      feedback_name_2 = #{feedbackName2,jdbcType=VARCHAR},
+      feedback_content_3 = #{feedbackContent3,jdbcType=VARCHAR},
+      feedback_id_3 = #{feedbackId3,jdbcType=CHAR},
+      feedback_name_3 = #{feedbackName3,jdbcType=VARCHAR},
+      feedback_content_4 = #{feedbackContent4,jdbcType=VARCHAR},
+      feedback_id_4 = #{feedbackId4,jdbcType=CHAR},
+      feedback_name_4 = #{feedbackName4,jdbcType=VARCHAR},
+      feedback_content_5 = #{feedbackContent5,jdbcType=VARCHAR},
+      feedback_id_5 = #{feedbackId5,jdbcType=CHAR},
+      feedback_name_5 = #{feedbackName5,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

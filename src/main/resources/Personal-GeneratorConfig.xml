@@ -58,7 +58,7 @@
             去除自动生成的例子
         -->
 
-        <table schema="" tableName="push_message">
+        <table schema="" tableName="material_application">
         </table>
 
 
