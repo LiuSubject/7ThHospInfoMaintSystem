@@ -59,7 +59,6 @@ public class MessagePushUtil {
                 }
             }
             try {
-                pushMessage.setPushStatus("1");
                 //写操作
                 pushMessageService.updateByCreateCode(pushMessage.getCreateCode(),pushMessage);
 
@@ -88,7 +87,6 @@ public class MessagePushUtil {
                 }
             }
             try {
-                pushMessage.setPushStatus("1");
                 //写操作
                 pushMessageService.updateByCreateCode(pushMessage.getCreateCode(),pushMessage);
             } catch (Exception e) {
@@ -161,7 +159,6 @@ public class MessagePushUtil {
         String clientId = GetPushId(code);
         try {
             PushSingleUtil.push(clientId, pushMessage);
-            pushMessage.setPushStatus("1");
             //写操作
             pushMessageService.updateByCreateCode(pushMessage.getCreateCode(),pushMessage);
         } catch (IOException e) {

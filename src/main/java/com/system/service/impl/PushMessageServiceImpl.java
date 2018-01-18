@@ -87,6 +87,7 @@ public class PushMessageServiceImpl implements PushMessageService {
         if(list.size() > 0){
             PushMessage prePushMessage = list.get(0);
             prePushMessage.setMsgContent1(pushMessage.getMsgContent1());
+            prePushMessage.setPushStatus("1");
             PushMessageExample pushMessageExample = new PushMessageExample();
             PushMessageExample.Criteria criteria = pushMessageExample.createCriteria();
             criteria.andIdEqualTo(prePushMessage.getId());
