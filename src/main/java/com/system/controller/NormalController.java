@@ -195,14 +195,29 @@ public class NormalController {
         try {
 
             PushMessage preMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
-                    "0","11");
+                    "3","11");
             Boolean result = computerProblemsService.saveAndPre(computerProblemsCustom, preMessage);
             if (!result) {
                 model.addAttribute("message", "抱歉，故障信息保存失败");
                 return "error";
             }
-            //向管理组推送消息
-           messagePushUtil.GroupPushSingle(preMessage,"admin");
+            //向指定管理组推送消息
+            switch(computerProblemsCustom.getType()){
+                case 1:
+                    String[] userGroups1 = new String[]{"hardware","examiner"};
+                    messagePushUtil.GroupsPushSingle(preMessage,userGroups1);
+                    break;
+                case 2:
+                    String[] userGroups2 = new String[]{"software","examiner"};
+                    messagePushUtil.GroupsPushSingle(preMessage,userGroups2);
+                    break;
+                case 3:
+                    String[] userGroups3 = new String[]{"fee","examiner"};
+                    messagePushUtil.GroupsPushSingle(preMessage,userGroups3);
+                    break;
+                default:
+                    break;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
@@ -1046,11 +1061,11 @@ public class NormalController {
     //返回电脑故障类型列表JSON
     @RequestMapping(value = "/getProblemsTypeList")
     @ResponseBody
-    private Map<String, Object> getProblemsTypeList() throws Exception {
+    private Map<String, Object> getProblemsTypeList(String mainType) throws Exception {
         Map<String, Object> map =new HashMap<String, Object>();
         List<ComputerProblemsType> computerProblemsTypeList = new ArrayList<>();
         try {
-            computerProblemsTypeList = computerProblemsTypeService.getAll();
+            computerProblemsTypeList = computerProblemsTypeService.getSecondaryList(mainType);
         } catch (Exception e) {
             e.printStackTrace();
         }

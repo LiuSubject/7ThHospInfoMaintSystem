@@ -18,17 +18,56 @@
     <result column="applicant" property="applicant" jdbcType="VARCHAR" />
     <result column="reason" property="reason" jdbcType="VARCHAR" />
     <result column="bmYj" property="bmyj" jdbcType="VARCHAR" />
-    <result column="fgyzYj" property="fgyzyj" jdbcType="VARCHAR" />
     <result column="xxkYj" property="xxkyj" jdbcType="VARCHAR" />
-    <result column="yzYj" property="yzyj" jdbcType="VARCHAR" />
     <result column="flag" property="flag" jdbcType="INTEGER" />
     <result column="leader" property="leader" jdbcType="VARCHAR" />
     <result column="reback" property="reback" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="fault_urgent" property="faultUrgent" jdbcType="INTEGER" />
+    <result column="group_visible" property="groupVisible" jdbcType="INTEGER" />
+    <result column="high_approved" property="highApproved" jdbcType="INTEGER" />
+    <result column="approved_flag" property="approvedFlag" jdbcType="INTEGER" />
+    <result column="high_leader_approved_1" property="highLeaderApproved1" jdbcType="INTEGER" />
+    <result column="high_leader_reback_1" property="highLeaderReback1" jdbcType="VARCHAR" />
+    <result column="high_leader_id_1" property="highLeaderId1" jdbcType="CHAR" />
+    <result column="high_leader_name_1" property="highLeaderName1" jdbcType="VARCHAR" />
+    <result column="high_leader_flag_1" property="highLeaderFlag1" jdbcType="INTEGER" />
+    <result column="high_leader_approved_2" property="highLeaderApproved2" jdbcType="INTEGER" />
+    <result column="high_leader_reback_2" property="highLeaderReback2" jdbcType="VARCHAR" />
+    <result column="high_leader_id_2" property="highLeaderId2" jdbcType="CHAR" />
+    <result column="high_leader_name_2" property="highLeaderName2" jdbcType="VARCHAR" />
+    <result column="high_leader_flag_2" property="highLeaderFlag2" jdbcType="INTEGER" />
+    <result column="high_leader_approved_3" property="highLeaderApproved3" jdbcType="INTEGER" />
+    <result column="high_leader_reback_3" property="highLeaderReback3" jdbcType="VARCHAR" />
+    <result column="high_leader_id_3" property="highLeaderId3" jdbcType="CHAR" />
+    <result column="high_leader_name_3" property="highLeaderName3" jdbcType="VARCHAR" />
+    <result column="high_leader_flag_3" property="highLeaderFlag3" jdbcType="INTEGER" />
+    <result column="feedback_content_1" property="feedbackContent1" jdbcType="VARCHAR" />
+    <result column="feedback_id_1" property="feedbackId1" jdbcType="CHAR" />
+    <result column="feedback_name_1" property="feedbackName1" jdbcType="VARCHAR" />
+    <result column="feedback_content_2" property="feedbackContent2" jdbcType="VARCHAR" />
+    <result column="feedback_id_2" property="feedbackId2" jdbcType="CHAR" />
+    <result column="feedback_name_2" property="feedbackName2" jdbcType="VARCHAR" />
+    <result column="feedback_content_3" property="feedbackContent3" jdbcType="VARCHAR" />
+    <result column="feedback_id_3" property="feedbackId3" jdbcType="CHAR" />
+    <result column="feedback_name_3" property="feedbackName3" jdbcType="VARCHAR" />
+    <result column="feedback_content_4" property="feedbackContent4" jdbcType="VARCHAR" />
+    <result column="feedback_id_4" property="feedbackId4" jdbcType="CHAR" />
+    <result column="feedback_name_4" property="feedbackName4" jdbcType="VARCHAR" />
+    <result column="feedback_content_5" property="feedbackContent5" jdbcType="VARCHAR" />
+    <result column="feedback_id_5" property="feedbackId5" jdbcType="CHAR" />
+    <result column="feedback_name_5" property="feedbackName5" jdbcType="VARCHAR" />
   </resultMap>
   <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select material_application.*
     from material_application
+    ORDER by flag asc, use_date desc
+    limit #{toPageNo}, #{pageSize}
+  </select>
+  <select id="findByApprovedPaging" parameterType="PagingVO" resultMap="BaseResultMap">
+    select material_application.*
+    from material_application
+    WHERE group_visible = 1
     ORDER by flag asc, use_date desc
     limit #{toPageNo}, #{pageSize}
   </select>

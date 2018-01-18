@@ -1,7 +1,7 @@
-nt_1 VARCHAR(255) NULL;
-ALTER TABLE computer_problems ADD feedback_id_1 INT(11) NULL;
-ALTER TABLE computer_problems ADD feedback_name_1 VARCHAR(20) NULL;
-feedback_content_1
+ALTER TABLE computer_problems ADD feedback_content_1 VARCHAR(255) NULL COMMENT '反馈内容1';
+ALTER TABLE computer_problems ADD feedback_id_1 CHAR (5) NULL COMMENT '反馈人1ID';
+ALTER TABLE computer_problems ADD feedback_name_1 VARCHAR(20) NULL COMMENT '反馈人1姓名';
+
 故障反馈内容_1
 故障反馈人ID_1
 故障反馈人姓名_1

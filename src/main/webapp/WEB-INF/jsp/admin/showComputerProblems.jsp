@@ -55,13 +55,13 @@
 										<input type="text" class="form-control" placeholder="请输入申报人" id="findByName"
 											   name="findByName" style="margin-left: 10px">
 										<select class="form-control" name="findByFlag" id="findByFlag" style="margin-left: 10px">
-											<option value="-1">选择状态：</option>
+											<option value="-1">状态：</option>
 											<option value="0">提交中</option>
 											<option value="1">处理中</option>
 											<option value="2">已解决</option>
 										</select>
 										<input type="button" class="btn btn-primary" id="searchBtn" value="搜索"
-												style="margin-left: 10px;margin-right:20px">
+												style="margin-left: 10px;margin-right:0px">
 								</div>
 							</form>
 
@@ -75,7 +75,6 @@
 									<th style="text-align: center">申报人</th>
 									<th style="text-align: center">联系方式</th>
 									<th style="text-align: center">状态</th>
-									<th style="text-align: center">负责人</th>
 									<th style="text-align: center">创建时间</th>
 									<th style="text-align: center">操作</th>
 					            </tr>
@@ -83,7 +82,9 @@
 					        <tbody>
 							<c:forEach  items="${computerProblemsList}" var="item">
 								<tr>
-									<td>${item.title}</td>
+									<td><c:if test="${item.faultUrgent == 1}">#</c:if>
+											${item.title}
+										<c:if test="${item.faultUrgent == 1}">#</c:if></td>
 									<td>${item.dept}</td>
 									<td>${item.name}</td>
 									<td>${item.tel}</td>
@@ -96,7 +97,6 @@
 									<c:if test="${item.flag == 2}">
 										<td><button class="btn btn-success btn-sm" type="button">已解决</button></td>
 									</c:if>
-									<td>${item.leader}</td>
 									<td>${item.createTime}</td>
 									<td>
 										<button class="btn btn-default btn-xs btn-info" type="button" onClick="location.href='/admin/editComputerProblems?id=${item.id}'">处理问题</button>

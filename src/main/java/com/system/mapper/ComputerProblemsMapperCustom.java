@@ -28,4 +28,7 @@ public interface ComputerProblemsMapperCustom {
 
     //电脑故障信息搜索结果分页
     List<ComputerProblemsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception;
+
+    //电脑故障信息分组搜索结果分页
+    List<ComputerProblemsCustom> paginationOfgGroupSearchResults(Map<String, Object> condition) throws Exception;
 }
