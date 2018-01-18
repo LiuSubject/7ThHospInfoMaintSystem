@@ -27,6 +27,7 @@
     <result column="examiner" property="examiner" jdbcType="VARCHAR" />
     <result column="userId" property="userid" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
   </resultMap>
   <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select engine_room_inspection.*

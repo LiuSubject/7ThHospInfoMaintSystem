@@ -36,6 +36,9 @@ public interface ComputerProblemsService {
     //电脑故障信息搜索结果(分页有缺陷，未分页)
     List<ComputerProblemsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception;
 
+    //电脑故障信息分组搜索结果(分页有缺陷，未分页)
+    List<ComputerProblemsCustom> paginationOfgGroupSearchResults(Map<String, Object> condition) throws Exception;
+
     //保存电脑故障信息
     Boolean save(ComputerProblemsCustom computerProblemsCustom) throws Exception;
 

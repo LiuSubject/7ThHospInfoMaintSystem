@@ -92,6 +92,13 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         return list;
     }
 
+    public List<ComputerProblemsCustom> paginationOfgGroupSearchResults(Map<String, Object> condition) throws Exception {
+
+        List<ComputerProblemsCustom> list = computerProblemsMapperCustom.paginationOfgGroupSearchResults(condition);
+
+        return list;
+    }
+
     public Boolean save(ComputerProblemsCustom ComputerProblemsCustoms) throws Exception {
         ComputerProblems stu = computerProblemsMapper.selectByPrimaryKey(ComputerProblemsCustoms.getId());
         if (stu == null) {

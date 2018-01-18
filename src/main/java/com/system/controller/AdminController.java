@@ -483,6 +483,7 @@ public class AdminController {
         if(computerProblemsCustom.getFlag() == 1){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(2);
+            computerProblemsCustom.setFaultUrgent(0);
             computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
@@ -552,7 +553,23 @@ public class AdminController {
         }
         map.put("flag",flag);
         try {
-            list = computerProblemsService.paginationOfSearchResults(map);
+            Subject subject = SecurityUtils.getSubject();
+            int groupType = 0;
+            if (subject.hasRole("hardware")) {
+                groupType = 1;
+                map.put("groupType",groupType);
+                list = computerProblemsService.paginationOfgGroupSearchResults(map);
+            }else if(subject.hasRole("software")){
+                groupType = 2;
+                map.put("groupType",groupType);
+                list = computerProblemsService.paginationOfgGroupSearchResults(map);
+            }else if(subject.hasRole("fee")){
+                groupType = 3;
+                map.put("groupType",groupType);
+                list = computerProblemsService.paginationOfgGroupSearchResults(map);
+            }else {
+                list = computerProblemsService.paginationOfSearchResults(map);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return "error";

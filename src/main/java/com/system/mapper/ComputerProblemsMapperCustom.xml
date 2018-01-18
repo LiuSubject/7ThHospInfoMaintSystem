@@ -15,9 +15,26 @@
     <result column="img" property="img" jdbcType="VARCHAR" />
     <result column="flag" property="flag" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="type_secondary" property="typeSecondary" jdbcType="INTEGER" />
     <result column="leader" property="leader" jdbcType="VARCHAR" />
     <result column="reback" property="reback" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="feedback_content_1" property="feedbackContent1" jdbcType="VARCHAR" />
+    <result column="feedback_id_1" property="feedbackId1" jdbcType="CHAR" />
+    <result column="feedback_name_1" property="feedbackName1" jdbcType="VARCHAR" />
+    <result column="feedback_content_2" property="feedbackContent2" jdbcType="VARCHAR" />
+    <result column="feedback_id_2" property="feedbackId2" jdbcType="CHAR" />
+    <result column="feedback_name_2" property="feedbackName2" jdbcType="VARCHAR" />
+    <result column="feedback_content_3" property="feedbackContent3" jdbcType="VARCHAR" />
+    <result column="feedback_id_3" property="feedbackId3" jdbcType="CHAR" />
+    <result column="feedback_name_3" property="feedbackName3" jdbcType="VARCHAR" />
+    <result column="feedback_content_4" property="feedbackContent4" jdbcType="VARCHAR" />
+    <result column="feedback_id_4" property="feedbackId4" jdbcType="CHAR" />
+    <result column="feedback_name_4" property="feedbackName4" jdbcType="VARCHAR" />
+    <result column="feedback_content_5" property="feedbackContent5" jdbcType="VARCHAR" />
+    <result column="feedback_id_5" property="feedbackId5" jdbcType="CHAR" />
+    <result column="feedback_name_5" property="feedbackName5" jdbcType="VARCHAR" />
+    <result column="fault_urgent" property="faultUrgent" jdbcType="INTEGER" />
   </resultMap>
   <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select computer_problems.*
@@ -40,18 +57,36 @@
     limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
   </select>
   <select id="paginationOfSearchResults" parameterType="map" resultMap="BaseResultMap">
-    select computer_problems.* from computer_problems
+  select computer_problems.* from computer_problems
     <where>
     <if test="dept != null and dept != ''">
       AND dept LIKE concat(concat('%',#{dept}),'%')
     </if>
     <if test="name != null and name != ''">
-      OR name LIKE concat(concat('%',#{name}),'%')
+      AND name LIKE concat(concat('%',#{name}),'%')
     </if>
     <if test="flag == 0 or flag == 1 or flag == 2" >
-      OR flag = #{flag}
+      AND flag = #{flag}
     </if>
-    </where>
+  </where>
+  ORDER by flag asc, create_time desc
+  </select>
+  <select id="paginationOfgGroupSearchResults" parameterType="map" resultMap="BaseResultMap">
+    select computer_problems.* from computer_problems
+      <where>
+        <if test="flag == 0 or flag == 1 or flag == 2">
+          AND flag = #{flag}
+        </if>
+        <if test="dept != null and dept != ''">
+          AND dept LIKE concat(concat('%',#{dept}),'%')
+        </if>
+        <if test="name != null and name != ''">
+          AND name LIKE concat(concat('%',#{name}),'%')
+        </if>
+        <if test="groupType == 1 or groupType == 2 or groupType == 3" >
+          AND type = #{groupType}
+        </if>
+      </where>
     ORDER by flag asc, create_time desc
   </select>
 
