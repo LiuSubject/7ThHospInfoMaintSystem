@@ -64,6 +64,7 @@
 							<div class="col-sm-8">
 								<select class="form-control" name="nameCode" id="nameCode">
 								</select>
+								<%--存入故障名称--%>
 								<input type="text" class="form-control" id="name" name="name" style="display:none">
 							</div>
 						</div>

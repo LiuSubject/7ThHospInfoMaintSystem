@@ -109,12 +109,12 @@
                             <label class="col-sm-2 control-label">回复：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="reback" name="reback"
-                                       value="${materialApplication.reback}">
+                                       value="${materialApplication.xxkyj}">
                             </div>
                         </div>
                         <div class="form-group" style="text-align: center">
                             <c:if test="${materialApplication.flag != 2}">
-                                <c:if test="${examiner == true && materialApplication.flag == 0}">
+                                <c:if test="${examiner == true && materialApplication.highApproved == 0}">
                                     <button class="btn btn-danger" type="button" id="pushBtn">推送</button>
                                 </c:if>
                                 <button class="btn btn-default" type="button" id="dealBtn">处理</button>
@@ -141,13 +141,13 @@
 
 
     //推送处理按钮点击
-    $('#urgentBtn').on('click', function () {
+    $('#pushBtn').on('click', function () {
         var reback = document.getElementById("reback").value;
         var brand = document.getElementById("brand").value;
         var model = document.getElementById("model").value;
         var judge = document.getElementById("judge").value;
         var total = document.getElementById("total").value;
-        window.location.href =encodeURI( "/admin/pushMaterialApplication?id=${materialApplication.id}&feedback=" + reback
+        window.location.href =encodeURI( "/admin/prePushMaterialApplication?id=${materialApplication.id}&feedback=" + reback
             +"&brand=" + brand
             +"&model=" + model
             +"&judge=" + judge

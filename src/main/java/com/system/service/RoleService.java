@@ -20,4 +20,7 @@ public interface RoleService {
     List<Role> findByRoleId(String roleId) throws Exception;
 
     List<Role> findByRoleName(String roleName) throws Exception;
+    //查找院领导列表
+    List<Role> findByDean() throws Exception;
+
 }

@@ -49,4 +49,20 @@ public class RoleServiceImpl implements RoleService {
 
         return list;
     }
+
+    public List<Role> findByDean() throws Exception {
+        try {
+            RoleExample roleExample = new RoleExample();
+
+            RoleExample.Criteria criteria = roleExample.createCriteria();
+            criteria.andRolenameLike("%dean%");
+
+            List<Role> list = roleMapper.selectByExample(roleExample);
+
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
