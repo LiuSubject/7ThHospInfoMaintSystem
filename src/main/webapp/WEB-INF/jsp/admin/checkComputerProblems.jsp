@@ -127,7 +127,7 @@
 
 
     //设置图片最大尺寸
-    function setImgMaxSize() {
+    function setImgMaxSize(){
         var uploadImg = document.getElementById('uploadImg');
         if (uploadImg.width > 600) {
             uploadImg.height = uploadImg.height * 600 / uploadImg.width;

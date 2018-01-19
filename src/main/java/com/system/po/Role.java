@@ -5,6 +5,8 @@ public class Role {
 
     private String roleid;
 
+    private String realName;
+
     private String rolename;
 
     private String permissions;
@@ -23,6 +25,14 @@ public class Role {
 
     public void setRoleid(String roleid) {
         this.roleid = roleid == null ? null : roleid.trim();
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName == null ? null : realName.trim();
     }
 
     public String getRolename() {

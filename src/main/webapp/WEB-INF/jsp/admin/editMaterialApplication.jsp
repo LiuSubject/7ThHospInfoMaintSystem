@@ -109,16 +109,25 @@
                             <label class="col-sm-2 control-label">回复：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="reback" name="reback"
-                                       value="${materialApplication.reback}">
+                                       value="${materialApplication.xxkyj}">
                             </div>
                         </div>
                         <div class="form-group" style="text-align: center">
                             <c:if test="${materialApplication.flag != 2}">
-                                <c:if test="${examiner == true && materialApplication.flag == 0}">
+                                <c:if test="${examiner == true && materialApplication.highApproved == 0}">
+                                    <%--信息科长推送上级按钮--%>
                                     <button class="btn btn-danger" type="button" id="pushBtn">推送</button>
                                 </c:if>
-                                <button class="btn btn-default" type="button" id="dealBtn">处理</button>
-                                <button class="btn btn-default" type="button" id="completeBtn">完成</button>
+                                <c:if test="${dpdean == true || infodean == true || alldean == true}">
+                                    <%--院领导审批按钮--%>
+                                    <button class="btn btn-danger" type="button" id="denyBtn">拒绝</button>
+                                    <button class="btn btn-success" type="button" id="denyBtn">通过</button>
+                                </c:if>
+                                <c:if test="${!(dpdean == true || infodean == true || alldean == true)}">
+                                    <%--非院领导处理申购按钮--%>
+                                    <button class="btn btn-default" type="button" id="dealBtn">处理</button>
+                                    <button class="btn btn-default" type="button" id="completeBtn">完成</button>
+                                </c:if>
                             </c:if>
                             <button class="btn btn-default" type="button" id="returnListBtn">返回</button>
                         </div>
@@ -141,17 +150,33 @@
 
 
     //推送处理按钮点击
-    $('#urgentBtn').on('click', function () {
+    $('#pushBtn').on('click', function () {
         var reback = document.getElementById("reback").value;
         var brand = document.getElementById("brand").value;
         var model = document.getElementById("model").value;
         var judge = document.getElementById("judge").value;
         var total = document.getElementById("total").value;
-        window.location.href =encodeURI( "/admin/pushMaterialApplication?id=${materialApplication.id}&feedback=" + reback
+        window.location.href =encodeURI( "/admin/prePushMaterialApplication?id=${materialApplication.id}&feedback=" + reback
             +"&brand=" + brand
             +"&model=" + model
             +"&judge=" + judge
             +"&total=" + total);
+    });
+
+
+    //拒绝按钮点击
+    $('#denyBtn').on('click', function () {
+        var reback = document.getElementById("reback").value;
+        window.location.href =encodeURI( "/admin/denyMaterialApplication?id=${materialApplication.id}&feedback="
+            + reback);
+    });
+
+
+    //通过按钮点击
+    $('#passBtn').on('click', function () {
+        var reback = document.getElementById("reback").value;
+        window.location.href =encodeURI( "/admin/passMaterialApplication?id=${materialApplication.id}&feedback="
+            + reback);
     });
 
 

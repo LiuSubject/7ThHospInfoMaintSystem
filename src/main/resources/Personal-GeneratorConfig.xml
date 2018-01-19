@@ -58,7 +58,7 @@
             去除自动生成的例子
         -->
 
-        <table schema="" tableName="material_application">
+        <table schema="" tableName="role">
         </table>
 
 
