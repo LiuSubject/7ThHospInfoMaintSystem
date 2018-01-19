@@ -724,10 +724,29 @@ public class AdminController {
         }
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
+        //返回审核组标识
         if(subject.hasRole("examiner")){
             model.addAttribute("examiner", true);
         }else{
             model.addAttribute("examiner", false);
+        }
+        //返回分管院长标识
+        if(subject.hasRole("dpdean")){
+            model.addAttribute("dpdean", true);
+        }else{
+            model.addAttribute("dpdean", false);
+        }
+        //返回信息主管副院长标识
+        if(subject.hasRole("infodean")){
+            model.addAttribute("infodean", true);
+        }else{
+            model.addAttribute("infodean", false);
+        }
+        //返回院长标识
+        if(subject.hasRole("alldean")){
+            model.addAttribute("alldean", true);
+        }else{
+            model.addAttribute("alldean", false);
         }
         MaterialApplication materialApplication = materialApplicationService.findById(id);
         if (materialApplication == null) {
@@ -773,7 +792,7 @@ public class AdminController {
         return "redirect:/admin/showMaterialApplication";
     }
 
-    // 推送物资申购页面显示
+    // 预推送物资申购页面显示
     @RequestMapping(value = "/prePushMaterialApplication", method = {RequestMethod.GET})
     public String prePushMaterialApplication(HttpServletRequest request, Model modelV) throws Exception {
 
@@ -988,7 +1007,90 @@ public class AdminController {
     }
 
 
-    // 开始处理物资申购
+    // 物资申购审批拒绝
+    @RequestMapping(value = "/denyMaterialApplication", method = {RequestMethod.GET})
+    public String denyMaterialApplication(HttpServletRequest request) throws Exception {
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        String feedback = request.getParameter("feedback");
+        if (id == null) {
+            return "redirect:/admin/showMaterialApplication";
+        }
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
+        if (materialApplicationCustom == null) {
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
+        }
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+
+        //保存意见至对应位，保存姓名，单个审批结果标识置2-拒绝，最终审批结果标识置2-拒绝
+        //处理状态置2-已完成，
+        if(subject.hasRole("dpdean")){
+            materialApplicationCustom.setApprovedFlag(2);
+            materialApplicationCustom.setHighLeaderReback1(feedback);
+            materialApplicationCustom.setHighLeaderName1(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setHighLeaderFlag1(2);
+            materialApplicationCustom.setFlag(2);
+        }else if(subject.hasRole("infodean")){
+            materialApplicationCustom.setApprovedFlag(2);
+            materialApplicationCustom.setHighLeaderReback2(feedback);
+            materialApplicationCustom.setHighLeaderName2(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setHighLeaderFlag2(2);
+            materialApplicationCustom.setFlag(2);
+        }else if(subject.hasRole("alldean")){
+            materialApplicationCustom.setApprovedFlag(2);
+            materialApplicationCustom.setHighLeaderReback3(feedback);
+            materialApplicationCustom.setHighLeaderName3(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setHighLeaderFlag3(2);
+            materialApplicationCustom.setFlag(2);
+        }else{
+            return "admin/showMaterialApplication";
+        }
+        materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+        //保存该记录相关数据以便产生推送
+        try {
+            //创建推送消息
+            PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                    "2","23");
+            try {
+                pushMessageService.save(pushMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "error";
+            }
+            //向申报人推送消息
+            messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+    }
+
+    // 物资申购审批通过
+    @RequestMapping(value = "/passMaterialApplication", method = {RequestMethod.GET})
+    public String passMaterialApplication(HttpServletRequest request) throws Exception {
+        return "redirect:editMaterialApplication";
+    }
+
+
+    // 处理物资申购
     @RequestMapping(value = "/dealMaterialApplication")
     public String dealMaterialApplication(HttpServletRequest request) throws Exception {
 

@@ -58,6 +58,7 @@
 						<th style="text-align: center">使用/安装日期</th>
 						<th style="text-align: center">申请人</th>
 						<th style="text-align: center">状态</th>
+						<th style="text-align: center">需审批</th>
 						<th style="text-align: center"></th>
 					</tr>
 					</thead>
@@ -80,6 +81,12 @@
 							</c:if>
 							<c:if test="${item.flag == 2}">
 								<td><button class="btn btn-success btn-sm" type="button">已解决</button></td>
+							</c:if>
+							<c:if test="${item.highApproved == 0}">
+								<td><button class="btn btn-info btn-sm" type="button">否</button></td>
+							</c:if>
+							<c:if test="${item.highApproved == 1}">
+								<td><button class="btn btn-warning btn-sm" type="button">是</button></td>
 							</c:if>
 							<td style="text-align: center">
 								<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/normal/checkMaterialApplication?id=${item.id}'">查看详情</button>
