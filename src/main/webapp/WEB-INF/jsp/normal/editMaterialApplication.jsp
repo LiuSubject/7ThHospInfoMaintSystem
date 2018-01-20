@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" action="/admin/editMaterialApplication" id="editfrom"
+                    <form class="form-horizontal" role="form" action="/normal/editMaterialApplication" id="editfrom"
                           method="post">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">名称：</label>
@@ -114,22 +114,13 @@
                         </div>
                         <div class="form-group" style="text-align: center">
                             <c:if test="${materialApplication.flag != 2}">
-                                <c:if test="${examiner == true && materialApplication.highApproved == 0}">
-                                    <%--信息科长推送上级按钮--%>
-                                    <button class="btn btn-danger" type="button" id="pushBtn">推送</button>
-                                </c:if>
-                                <c:if test="${dpdean == true || infodean == true || alldean == true}">
+                                <c:if test="${dpdean == true}">
                                     <%--院领导审批按钮--%>
                                     <c:if test="${materialApplication.highApproved == 1
 									    && materialApplication.approvedFlag == 0}">
                                         <button class="btn btn-danger" type="button" id="denyBtn">拒绝</button>
                                         <button class="btn btn-success" type="button" id="passBtn">通过</button>
                                     </c:if>
-                                </c:if>
-                                <c:if test="${!(dpdean == true || infodean == true || alldean == true)}">
-                                    <%--非院领导处理申购按钮--%>
-                                    <button class="btn btn-default" type="button" id="dealBtn">处理</button>
-                                    <button class="btn btn-default" type="button" id="completeBtn">完成</button>
                                 </c:if>
                             </c:if>
                             <button class="btn btn-default" type="button" id="returnListBtn">返回</button>
@@ -152,25 +143,11 @@
     $("#nav li:nth-child(3)").addClass("active");
 
 
-    //推送处理按钮点击
-    $('#pushBtn').on('click', function () {
-        var reback = document.getElementById("reback").value;
-        var brand = document.getElementById("brand").value;
-        var model = document.getElementById("model").value;
-        var judge = document.getElementById("judge").value;
-        var total = document.getElementById("total").value;
-        window.location.href =encodeURI( "/admin/prePushMaterialApplication?id=${materialApplication.id}&feedback=" + reback
-            +"&brand=" + brand
-            +"&model=" + model
-            +"&judge=" + judge
-            +"&total=" + total);
-    });
-
 
     //拒绝按钮点击
     $('#denyBtn').on('click', function () {
         var reback = document.getElementById("reback").value;
-        window.location.href =encodeURI( "/admin/denyMaterialApplication?id=${materialApplication.id}&feedback="
+        window.location.href =encodeURI( "/normal/denyMaterialApplication?id=${materialApplication.id}&feedback="
             + reback);
     });
 
@@ -178,44 +155,15 @@
     //通过按钮点击
     $('#passBtn').on('click', function () {
         var reback = document.getElementById("reback").value;
-        window.location.href =encodeURI( "/admin/passMaterialApplication?id=${materialApplication.id}&feedback="
+        window.location.href =encodeURI( "/normal/passMaterialApplication?id=${materialApplication.id}&feedback="
             + reback);
     });
 
 
-    //处理按钮点击
-    $('#dealBtn').on('click', function () {
-        var reback = document.getElementById("reback").value;
-        var brand = document.getElementById("brand").value;
-        var model = document.getElementById("model").value;
-        var judge = document.getElementById("judge").value;
-        var total = document.getElementById("total").value;
-        window.location.href =encodeURI( "/admin/dealMaterialApplication?id=${materialApplication.id}&feedback=" + reback
-            +"&brand=" + brand
-            +"&model=" + model
-            +"&judge=" + judge
-            +"&total=" + total);
-    });
-
-
-
-    //完成按钮点击
-    $('#completeBtn').on('click', function () {
-        var reback = document.getElementById("reback").value;
-        var brand = document.getElementById("brand").value;
-        var model = document.getElementById("model").value;
-        var judge = document.getElementById("judge").value;
-        var total = document.getElementById("total").value;
-        window.location.href =encodeURI( "/admin/completeMaterialApplication?id=${materialApplication.id}&feedback=" + reback
-            +"&brand=" + brand
-            +"&model=" + model
-            +"&judge=" + judge
-            +"&total=" + total);
-    });
 
     //返回按钮点击
     $('#returnListBtn').on('click', function () {
-        window.location.href = "/admin/showMaterialApplication";
+        window.location.href = "/normal/showMaterialApplication";
     });
 
 </script>

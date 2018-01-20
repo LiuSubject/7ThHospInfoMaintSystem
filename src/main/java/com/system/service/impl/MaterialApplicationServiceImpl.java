@@ -88,6 +88,19 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
         return list;
     }
 
+    public List<MaterialApplicationCustom> deptAndApproveFindByPaging(Integer toPageNo,String deptName,String dpCode) throws Exception {
+        PagingVO pagingVO = new PagingVO();
+        pagingVO.setToPageNo(toPageNo);
+        Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("pagingVO",pagingVO);
+        condition.put("deptName",deptName);
+        condition.put("dpCode",dpCode);
+
+        List<MaterialApplicationCustom> list = materialApplicationMapperCustom.deptAndApproveFindByPaging(condition);
+
+        return list;
+    }
+
     public Boolean save(MaterialApplicationCustom MaterialApplicationCustoms) throws Exception {
         MaterialApplication stu = materialApplicationMapper.selectByPrimaryKey(MaterialApplicationCustoms.getId());
         if (stu == null) {
@@ -140,6 +153,21 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
         MaterialApplicationExample.Criteria criteria = MaterialApplicationExample.createCriteria();
         criteria.andUseridIsNotNull().andDeptLike(currentDept);
 
+        return materialApplicationMapper.countByExample(MaterialApplicationExample);
+    }
+
+    //获取分管院长相关（本部门及待其审批）物资申购总数
+    public int getDeptAndApproveMaterialApplication(String currentDept,String dpCode) throws Exception {
+        //自定义查询对象
+        MaterialApplicationExample MaterialApplicationExample = new MaterialApplicationExample();
+        //通过criteria构造查询条件
+        MaterialApplicationExample.Criteria criteria = MaterialApplicationExample.createCriteria();
+        criteria.andUseridIsNotNull().andDeptLike(currentDept);
+
+        MaterialApplicationExample.Criteria criteria2 = MaterialApplicationExample.createCriteria();
+        criteria2.andUseridIsNotNull().andHighLeaderApproved1EqualTo(1).andHighLeaderId1EqualTo(dpCode);
+
+        MaterialApplicationExample.or(criteria2);
         return materialApplicationMapper.countByExample(MaterialApplicationExample);
     }
 

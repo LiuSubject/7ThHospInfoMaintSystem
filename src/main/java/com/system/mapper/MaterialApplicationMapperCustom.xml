@@ -78,6 +78,14 @@
     ORDER by flag asc, use_date desc
     limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
   </select>
+  <select id="deptAndApproveFindByPaging" parameterType="map" resultMap="BaseResultMap">
+    select material_application.*
+    from material_application
+    WHERE dept LIKE concat(concat('%',#{deptName}),'%')
+    OR high_leader_id_1 LIKE concat(concat('%',#{dpCode}),'%')
+    ORDER by flag asc, use_date desc
+    limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
+  </select>
   <select id="paginationOfSearchResults" parameterType="map" resultMap="BaseResultMap">
     select material_application.* from material_application
     <where>

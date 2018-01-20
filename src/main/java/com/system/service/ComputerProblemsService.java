@@ -48,10 +48,10 @@ public interface ComputerProblemsService {
     //获取电脑故障总数
     int getCountComputerProblems() throws Exception;
 
-    //获取部门电脑故障总数
+    //获取负责组电脑故障总数
     int getCountGroupComputerProblems(int groupType) throws Exception;
 
-    //获取负责组电脑故障总数
+    //获取部门电脑故障总数
     int getCountDeptComputerProblems(String currentDept) throws Exception;
 
     //获取电脑电脑故障信息搜索结果总数

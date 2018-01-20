@@ -112,6 +112,49 @@
 									   value="${materialApplication.reback}" readonly="readonly">
 							</div>
 						</div>
+						<c:if test="${materialApplication.highLeaderApproved1 == 1}">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" style="text-align: center">分管院长审查意见：</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="highLeaderReback1" name="highLeaderReback1"
+										   value="${materialApplication.highLeaderReback1}" readonly="readonly">
+								</div>
+							</div>
+						</c:if>
+						<c:if test="${materialApplication.highLeaderApproved2 == 1}">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" style="text-align: center">信息主管副院长审批：</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="highLeaderReback2" name="highLeaderReback2"
+										   value="${materialApplication.highLeaderReback2}" readonly="readonly">
+								</div>
+							</div>
+						</c:if>
+						<c:if test="${materialApplication.highLeaderApproved3 == 1}">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">院长审批：</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="highLeaderReback3" name="highLeaderReback3"
+										   value="${materialApplication.highLeaderReback3}" readonly="readonly">
+								</div>
+							</div>
+						</c:if>
+						<c:if test="${materialApplication.highApproved == 1}">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">审批结果：</label>
+								<div class="col-sm-8">
+									<c:if test="${materialApplication.approvedFlag == 0}">
+										<td><button class="btn btn-warning btn-sm" type="button">审批中</button></td>
+									</c:if>
+									<c:if test="${materialApplication.approvedFlag == 1}">
+										<td><button class="btn btn-success btn-sm" type="button">通过</button></td>
+									</c:if>
+									<c:if test="${materialApplication.approvedFlag == 2}">
+										<td><button class="btn btn-info btn-sm" type="button">否定</button></td>
+									</c:if>
+								</div>
+							</div>
+						</c:if>
 						<div class="form-group" style="text-align: center">
 							<button class="btn btn-default" id="printBtn" type="button">打印预览</button>
 							<button class="btn btn-default" id="returnListBtn" type="button">返回</button>
@@ -144,7 +187,6 @@
         var herf = "/normal/printMaterialApplication?id="+${materialApplication.id};
         window.location.href = herf;
     });
-
 
 
 </script>
