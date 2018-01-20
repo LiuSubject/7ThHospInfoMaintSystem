@@ -24,11 +24,14 @@ public interface MaterialApplicationService {
     //根据id删除物资申购信息
     void removeById(Integer id) throws Exception;
 
-    //获取分页查询物资申购信息
+    //分页查询物资申购信息
     List<MaterialApplicationCustom> findByPaging(Integer toPageNo) throws Exception;
 
     //分页查询可处理物资申购信息
     List<MaterialApplicationCustom> findByApprovedPaging(Integer toPageNo) throws Exception;
+
+    //分页查询分管院长相关（本部门及待其审批）物资申购信息
+    List<MaterialApplicationCustom> deptAndApproveFindByPaging(Integer toPageNo,String deptName,String dpCode) throws Exception;
 
     //获取分页查询部门物资申购信息
     List<MaterialApplicationCustom> deptFindByPaging(Integer toPageNo,String deptName) throws Exception;
@@ -44,6 +47,9 @@ public interface MaterialApplicationService {
 
     //获取物资申购总数
     int getCountMaterialApplication() throws Exception;
+
+    //获取分管院长相关（本部门及待其审批）物资申购总数
+    int getDeptAndApproveMaterialApplication(String currentDept,String dpCode) throws Exception;
 
     //获取部门物资申购总数
     int getCountDeptMaterialApplication(String currentDept) throws Exception;

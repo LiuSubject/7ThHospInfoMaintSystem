@@ -25,8 +25,12 @@ public interface MaterialApplicationMapperCustom {
     //分页查询可处理物资申购
     List<MaterialApplicationCustom> findByApprovedPaging(PagingVO pagingVO) throws Exception;
 
-    //分页查询物资申购
+    //分页查询部门物资申购
     List<MaterialApplicationCustom> deptFindByPaging(Map<String, Object> condition) throws Exception;
+
+    //分页查询分管院长相关（本部门及待其审批）物资申购信息
+    List<MaterialApplicationCustom> deptAndApproveFindByPaging(Map<String, Object> condition) throws Exception;
+
 
     //电脑故障信息搜索结果分页
     List<MaterialApplicationCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception;
