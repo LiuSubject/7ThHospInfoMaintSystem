@@ -405,22 +405,47 @@ public class AdminController {
                 computerProblemsCustom.setFeedbackContent1(feedback);
                 computerProblemsCustom.setFeedbackId1(viewEmployeeMiPsd.getCode());
                 computerProblemsCustom.setFeedbackName1(viewEmployeeMiPsd.getName());
+                //设置反馈时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                computerProblemsCustom.setFeedbackTime1(dateString);
             }else if(computerProblemsCustom.getFeedbackId2() == null){
                 computerProblemsCustom.setFeedbackContent2(feedback);
                 computerProblemsCustom.setFeedbackId2(viewEmployeeMiPsd.getCode());
                 computerProblemsCustom.setFeedbackName2(viewEmployeeMiPsd.getName());
+                //设置反馈时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                computerProblemsCustom.setFeedbackTime2(dateString);
             }else if(computerProblemsCustom.getFeedbackId3() == null){
                 computerProblemsCustom.setFeedbackContent3(feedback);
                 computerProblemsCustom.setFeedbackId3(viewEmployeeMiPsd.getCode());
                 computerProblemsCustom.setFeedbackName3(viewEmployeeMiPsd.getName());
+                //设置反馈时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                computerProblemsCustom.setFeedbackTime3(dateString);
             }else if(computerProblemsCustom.getFeedbackId4() == null){
                 computerProblemsCustom.setFeedbackContent4(feedback);
                 computerProblemsCustom.setFeedbackId4(viewEmployeeMiPsd.getCode());
                 computerProblemsCustom.setFeedbackName4(viewEmployeeMiPsd.getName());
+                //设置反馈时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                computerProblemsCustom.setFeedbackTime4(dateString);
             }else if(computerProblemsCustom.getFeedbackId5() == null){
                 computerProblemsCustom.setFeedbackContent5(feedback);
                 computerProblemsCustom.setFeedbackId5(viewEmployeeMiPsd.getCode());
                 computerProblemsCustom.setFeedbackName5(viewEmployeeMiPsd.getName());
+                //设置反馈时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                computerProblemsCustom.setFeedbackTime5(dateString);
             }
             //更新故障对象
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
@@ -487,8 +512,16 @@ public class AdminController {
         if(computerProblemsCustom.getFlag() == 1){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(2);
+            //设置完成时间
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = formatter.format(currentTime);
+            computerProblemsCustom.setDoneTime(dateString);
+
+            computerProblemsCustom.setLeaderName(viewEmployeeMiPsd.getName());
             computerProblemsCustom.setFaultUrgent(0);
             computerProblemsCustom.setLeader(viewEmployeeMiPsd. getCode());
+            computerProblemsCustom.setLeader(viewEmployeeMiPsd. getName());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
 
@@ -1052,18 +1085,33 @@ public class AdminController {
             materialApplicationCustom.setHighLeaderName1(viewEmployeeMiPsd.getName());
             materialApplicationCustom.setHighLeaderFlag1(2);
             materialApplicationCustom.setFlag(2);
+            //设置完成时间
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = formatter.format(currentTime);
+            materialApplicationCustom.setDoneTime(dateString);
         }else if(subject.hasRole("infodean") && materialApplicationCustom.getHighLeaderApproved2() == 1){
             materialApplicationCustom.setApprovedFlag(2);
             materialApplicationCustom.setHighLeaderReback2(feedback);
             materialApplicationCustom.setHighLeaderName2(viewEmployeeMiPsd.getName());
             materialApplicationCustom.setHighLeaderFlag2(2);
             materialApplicationCustom.setFlag(2);
+            //设置完成时间
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = formatter.format(currentTime);
+            materialApplicationCustom.setDoneTime(dateString);
         }else if(subject.hasRole("alldean") && materialApplicationCustom.getHighLeaderApproved3() == 1){
             materialApplicationCustom.setApprovedFlag(2);
             materialApplicationCustom.setHighLeaderReback3(feedback);
             materialApplicationCustom.setHighLeaderName3(viewEmployeeMiPsd.getName());
             materialApplicationCustom.setHighLeaderFlag3(2);
             materialApplicationCustom.setFlag(2);
+            //设置完成时间
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = formatter.format(currentTime);
+            materialApplicationCustom.setDoneTime(dateString);
         }else{
             return "admin/showMaterialApplication";
         }
@@ -1072,7 +1120,7 @@ public class AdminController {
         try {
             //创建推送消息
             PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                    "2","23");
+                    "2","27");
             try {
                 pushMessageService.save(pushMessage);
             } catch (Exception e) {
@@ -1651,7 +1699,7 @@ public class AdminController {
                 try {
                     //创建推送消息
                     PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                            "2","22");
+                            "2","28");
                     try {
                         pushMessageService.save(pushMessage);
                     } catch (Exception e) {
@@ -1672,22 +1720,47 @@ public class AdminController {
                 materialApplicationCustom.setFeedbackContent1(feedback);
                 materialApplicationCustom.setFeedbackId1(viewEmployeeMiPsd.getCode());
                 materialApplicationCustom.setFeedbackName1(viewEmployeeMiPsd.getName());
+                //设置反馈时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                materialApplicationCustom.setFeedbackTime1(dateString);
             }else if(materialApplicationCustom.getFeedbackId2() == null){
                 materialApplicationCustom.setFeedbackContent2(feedback);
                 materialApplicationCustom.setFeedbackId2(viewEmployeeMiPsd.getCode());
                 materialApplicationCustom.setFeedbackName2(viewEmployeeMiPsd.getName());
+                //设置反馈时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                materialApplicationCustom.setFeedbackTime2(dateString);
             }else if(materialApplicationCustom.getFeedbackId3() == null){
                 materialApplicationCustom.setFeedbackContent3(feedback);
                 materialApplicationCustom.setFeedbackId3(viewEmployeeMiPsd.getCode());
                 materialApplicationCustom.setFeedbackName3(viewEmployeeMiPsd.getName());
+                //设置反馈时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                materialApplicationCustom.setFeedbackTime3(dateString);
             }else if(materialApplicationCustom.getFeedbackId4() == null){
                 materialApplicationCustom.setFeedbackContent4(feedback);
                 materialApplicationCustom.setFeedbackId4(viewEmployeeMiPsd.getCode());
                 materialApplicationCustom.setFeedbackName4(viewEmployeeMiPsd.getName());
+                //设置反馈时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                materialApplicationCustom.setFeedbackTime4(dateString);
             }else if(materialApplicationCustom.getFeedbackId5() == null){
                 materialApplicationCustom.setFeedbackContent5(feedback);
                 materialApplicationCustom.setFeedbackId5(viewEmployeeMiPsd.getCode());
                 materialApplicationCustom.setFeedbackName5(viewEmployeeMiPsd.getName());
+                //设置反馈时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                materialApplicationCustom.setFeedbackTime5(dateString);
             }
 
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
@@ -1695,7 +1768,7 @@ public class AdminController {
             try {
                 //创建推送消息
                 PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                        "2","22");
+                        "2","28");
                 try {
                     pushMessageService.save(pushMessage);
                 } catch (Exception e) {
@@ -1769,6 +1842,11 @@ public class AdminController {
             materialApplicationCustom.setModel(model);
             materialApplicationCustom.setJudge(judge);
             materialApplicationCustom.setTotal(total);
+            //设置完成时间
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = formatter.format(currentTime);
+            materialApplicationCustom.setDoneTime(dateString);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
             try {
