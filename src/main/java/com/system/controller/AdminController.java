@@ -1072,7 +1072,7 @@ public class AdminController {
         try {
             //创建推送消息
             PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                    "2","23");
+                    "2","27");
             try {
                 pushMessageService.save(pushMessage);
             } catch (Exception e) {

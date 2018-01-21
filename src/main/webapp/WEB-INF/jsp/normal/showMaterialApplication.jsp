@@ -90,7 +90,8 @@
 							</c:if>
 							<td style="text-align: center">
 								<c:if test="${item.flag != 2 && item.highApproved == 1
-									&& item.approvedFlag == 0 && item.highLeaderApproved1 == 1}">
+									&& item.approvedFlag == 0 && item.highLeaderApproved1 == 1
+									&& item.groupVisible == 0}">
 								<button class="btn btn-info btn-xs" type="button" onClick="location.href='/normal/editMaterialApplication?id=${item.id}'">审批</button>
 								</c:if>
 								<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/normal/checkMaterialApplication?id=${item.id}'">查看详情</button>

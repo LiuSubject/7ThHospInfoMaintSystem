@@ -121,7 +121,8 @@
                                 <c:if test="${dpdean == true || infodean == true || alldean == true}">
                                     <%--院领导审批按钮--%>
                                     <c:if test="${materialApplication.highApproved == 1
-									    && materialApplication.approvedFlag == 0}">
+									    && materialApplication.approvedFlag == 0
+									    && materialApplication.groupVisible == 0}">
                                         <button class="btn btn-danger" type="button" id="denyBtn">拒绝</button>
                                         <button class="btn btn-success" type="button" id="passBtn">通过</button>
                                     </c:if>
