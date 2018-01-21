@@ -35,6 +35,8 @@ public class MaterialApplication {
 
     private String leader;
 
+    private String leaderName;
+
     private String reback;
 
     private String createTime;
@@ -106,6 +108,18 @@ public class MaterialApplication {
     private String feedbackId5;
 
     private String feedbackName5;
+
+    private String feedbackTime1;
+
+    private String feedbackTime2;
+
+    private String feedbackTime3;
+
+    private String feedbackTime4;
+
+    private String feedbackTime5;
+
+    private String doneTime;
 
     public Integer getId() {
         return id;
@@ -241,6 +255,14 @@ public class MaterialApplication {
 
     public void setLeader(String leader) {
         this.leader = leader == null ? null : leader.trim();
+    }
+
+    public String getLeaderName() {
+        return leaderName;
+    }
+
+    public void setLeaderName(String leaderName) {
+        this.leaderName = leaderName == null ? null : leaderName.trim();
     }
 
     public String getReback() {
@@ -529,5 +551,53 @@ public class MaterialApplication {
 
     public void setFeedbackName5(String feedbackName5) {
         this.feedbackName5 = feedbackName5 == null ? null : feedbackName5.trim();
+    }
+
+    public String getFeedbackTime1() {
+        return feedbackTime1;
+    }
+
+    public void setFeedbackTime1(String feedbackTime1) {
+        this.feedbackTime1 = feedbackTime1 == null ? null : feedbackTime1.trim();
+    }
+
+    public String getFeedbackTime2() {
+        return feedbackTime2;
+    }
+
+    public void setFeedbackTime2(String feedbackTime2) {
+        this.feedbackTime2 = feedbackTime2 == null ? null : feedbackTime2.trim();
+    }
+
+    public String getFeedbackTime3() {
+        return feedbackTime3;
+    }
+
+    public void setFeedbackTime3(String feedbackTime3) {
+        this.feedbackTime3 = feedbackTime3 == null ? null : feedbackTime3.trim();
+    }
+
+    public String getFeedbackTime4() {
+        return feedbackTime4;
+    }
+
+    public void setFeedbackTime4(String feedbackTime4) {
+        this.feedbackTime4 = feedbackTime4 == null ? null : feedbackTime4.trim();
+    }
+
+    public String getFeedbackTime5() {
+        return feedbackTime5;
+    }
+
+    public void setFeedbackTime5(String feedbackTime5) {
+        this.feedbackTime5 = feedbackTime5 == null ? null : feedbackTime5.trim();
+    }
+
+    public String getDoneTime() {
+        return doneTime;
+    }
+
+    public void setDoneTime(String doneTime) {
+        this.doneTime = doneTime == null ? null : doneTime.trim();
     }
 }

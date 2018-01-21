@@ -1244,6 +1244,76 @@ public class MaterialApplicationExample {
             return (Criteria) this;
         }
 
+        public Criteria andLeaderNameIsNull() {
+            addCriterion("leader_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameIsNotNull() {
+            addCriterion("leader_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameEqualTo(String value) {
+            addCriterion("leader_name =", value, "leaderName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameNotEqualTo(String value) {
+            addCriterion("leader_name <>", value, "leaderName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameGreaterThan(String value) {
+            addCriterion("leader_name >", value, "leaderName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameGreaterThanOrEqualTo(String value) {
+            addCriterion("leader_name >=", value, "leaderName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameLessThan(String value) {
+            addCriterion("leader_name <", value, "leaderName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameLessThanOrEqualTo(String value) {
+            addCriterion("leader_name <=", value, "leaderName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameLike(String value) {
+            addCriterion("leader_name like", value, "leaderName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameNotLike(String value) {
+            addCriterion("leader_name not like", value, "leaderName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameIn(List<String> values) {
+            addCriterion("leader_name in", values, "leaderName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameNotIn(List<String> values) {
+            addCriterion("leader_name not in", values, "leaderName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameBetween(String value1, String value2) {
+            addCriterion("leader_name between", value1, value2, "leaderName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaderNameNotBetween(String value1, String value2) {
+            addCriterion("leader_name not between", value1, value2, "leaderName");
+            return (Criteria) this;
+        }
+
         public Criteria andRebackIsNull() {
             addCriterion("reback is null");
             return (Criteria) this;
@@ -3661,6 +3731,426 @@ public class MaterialApplicationExample {
 
         public Criteria andFeedbackName5NotBetween(String value1, String value2) {
             addCriterion("feedback_name_5 not between", value1, value2, "feedbackName5");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1IsNull() {
+            addCriterion("feedback_time_1 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1IsNotNull() {
+            addCriterion("feedback_time_1 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1EqualTo(String value) {
+            addCriterion("feedback_time_1 =", value, "feedbackTime1");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1NotEqualTo(String value) {
+            addCriterion("feedback_time_1 <>", value, "feedbackTime1");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1GreaterThan(String value) {
+            addCriterion("feedback_time_1 >", value, "feedbackTime1");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1GreaterThanOrEqualTo(String value) {
+            addCriterion("feedback_time_1 >=", value, "feedbackTime1");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1LessThan(String value) {
+            addCriterion("feedback_time_1 <", value, "feedbackTime1");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1LessThanOrEqualTo(String value) {
+            addCriterion("feedback_time_1 <=", value, "feedbackTime1");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1Like(String value) {
+            addCriterion("feedback_time_1 like", value, "feedbackTime1");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1NotLike(String value) {
+            addCriterion("feedback_time_1 not like", value, "feedbackTime1");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1In(List<String> values) {
+            addCriterion("feedback_time_1 in", values, "feedbackTime1");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1NotIn(List<String> values) {
+            addCriterion("feedback_time_1 not in", values, "feedbackTime1");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1Between(String value1, String value2) {
+            addCriterion("feedback_time_1 between", value1, value2, "feedbackTime1");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime1NotBetween(String value1, String value2) {
+            addCriterion("feedback_time_1 not between", value1, value2, "feedbackTime1");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2IsNull() {
+            addCriterion("feedback_time_2 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2IsNotNull() {
+            addCriterion("feedback_time_2 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2EqualTo(String value) {
+            addCriterion("feedback_time_2 =", value, "feedbackTime2");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2NotEqualTo(String value) {
+            addCriterion("feedback_time_2 <>", value, "feedbackTime2");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2GreaterThan(String value) {
+            addCriterion("feedback_time_2 >", value, "feedbackTime2");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2GreaterThanOrEqualTo(String value) {
+            addCriterion("feedback_time_2 >=", value, "feedbackTime2");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2LessThan(String value) {
+            addCriterion("feedback_time_2 <", value, "feedbackTime2");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2LessThanOrEqualTo(String value) {
+            addCriterion("feedback_time_2 <=", value, "feedbackTime2");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2Like(String value) {
+            addCriterion("feedback_time_2 like", value, "feedbackTime2");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2NotLike(String value) {
+            addCriterion("feedback_time_2 not like", value, "feedbackTime2");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2In(List<String> values) {
+            addCriterion("feedback_time_2 in", values, "feedbackTime2");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2NotIn(List<String> values) {
+            addCriterion("feedback_time_2 not in", values, "feedbackTime2");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2Between(String value1, String value2) {
+            addCriterion("feedback_time_2 between", value1, value2, "feedbackTime2");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime2NotBetween(String value1, String value2) {
+            addCriterion("feedback_time_2 not between", value1, value2, "feedbackTime2");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3IsNull() {
+            addCriterion("feedback_time_3 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3IsNotNull() {
+            addCriterion("feedback_time_3 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3EqualTo(String value) {
+            addCriterion("feedback_time_3 =", value, "feedbackTime3");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3NotEqualTo(String value) {
+            addCriterion("feedback_time_3 <>", value, "feedbackTime3");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3GreaterThan(String value) {
+            addCriterion("feedback_time_3 >", value, "feedbackTime3");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3GreaterThanOrEqualTo(String value) {
+            addCriterion("feedback_time_3 >=", value, "feedbackTime3");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3LessThan(String value) {
+            addCriterion("feedback_time_3 <", value, "feedbackTime3");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3LessThanOrEqualTo(String value) {
+            addCriterion("feedback_time_3 <=", value, "feedbackTime3");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3Like(String value) {
+            addCriterion("feedback_time_3 like", value, "feedbackTime3");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3NotLike(String value) {
+            addCriterion("feedback_time_3 not like", value, "feedbackTime3");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3In(List<String> values) {
+            addCriterion("feedback_time_3 in", values, "feedbackTime3");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3NotIn(List<String> values) {
+            addCriterion("feedback_time_3 not in", values, "feedbackTime3");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3Between(String value1, String value2) {
+            addCriterion("feedback_time_3 between", value1, value2, "feedbackTime3");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime3NotBetween(String value1, String value2) {
+            addCriterion("feedback_time_3 not between", value1, value2, "feedbackTime3");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4IsNull() {
+            addCriterion("feedback_time_4 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4IsNotNull() {
+            addCriterion("feedback_time_4 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4EqualTo(String value) {
+            addCriterion("feedback_time_4 =", value, "feedbackTime4");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4NotEqualTo(String value) {
+            addCriterion("feedback_time_4 <>", value, "feedbackTime4");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4GreaterThan(String value) {
+            addCriterion("feedback_time_4 >", value, "feedbackTime4");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4GreaterThanOrEqualTo(String value) {
+            addCriterion("feedback_time_4 >=", value, "feedbackTime4");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4LessThan(String value) {
+            addCriterion("feedback_time_4 <", value, "feedbackTime4");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4LessThanOrEqualTo(String value) {
+            addCriterion("feedback_time_4 <=", value, "feedbackTime4");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4Like(String value) {
+            addCriterion("feedback_time_4 like", value, "feedbackTime4");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4NotLike(String value) {
+            addCriterion("feedback_time_4 not like", value, "feedbackTime4");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4In(List<String> values) {
+            addCriterion("feedback_time_4 in", values, "feedbackTime4");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4NotIn(List<String> values) {
+            addCriterion("feedback_time_4 not in", values, "feedbackTime4");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4Between(String value1, String value2) {
+            addCriterion("feedback_time_4 between", value1, value2, "feedbackTime4");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime4NotBetween(String value1, String value2) {
+            addCriterion("feedback_time_4 not between", value1, value2, "feedbackTime4");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5IsNull() {
+            addCriterion("feedback_time_5 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5IsNotNull() {
+            addCriterion("feedback_time_5 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5EqualTo(String value) {
+            addCriterion("feedback_time_5 =", value, "feedbackTime5");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5NotEqualTo(String value) {
+            addCriterion("feedback_time_5 <>", value, "feedbackTime5");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5GreaterThan(String value) {
+            addCriterion("feedback_time_5 >", value, "feedbackTime5");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5GreaterThanOrEqualTo(String value) {
+            addCriterion("feedback_time_5 >=", value, "feedbackTime5");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5LessThan(String value) {
+            addCriterion("feedback_time_5 <", value, "feedbackTime5");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5LessThanOrEqualTo(String value) {
+            addCriterion("feedback_time_5 <=", value, "feedbackTime5");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5Like(String value) {
+            addCriterion("feedback_time_5 like", value, "feedbackTime5");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5NotLike(String value) {
+            addCriterion("feedback_time_5 not like", value, "feedbackTime5");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5In(List<String> values) {
+            addCriterion("feedback_time_5 in", values, "feedbackTime5");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5NotIn(List<String> values) {
+            addCriterion("feedback_time_5 not in", values, "feedbackTime5");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5Between(String value1, String value2) {
+            addCriterion("feedback_time_5 between", value1, value2, "feedbackTime5");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTime5NotBetween(String value1, String value2) {
+            addCriterion("feedback_time_5 not between", value1, value2, "feedbackTime5");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeIsNull() {
+            addCriterion("done_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeIsNotNull() {
+            addCriterion("done_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeEqualTo(String value) {
+            addCriterion("done_time =", value, "doneTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeNotEqualTo(String value) {
+            addCriterion("done_time <>", value, "doneTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeGreaterThan(String value) {
+            addCriterion("done_time >", value, "doneTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("done_time >=", value, "doneTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeLessThan(String value) {
+            addCriterion("done_time <", value, "doneTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeLessThanOrEqualTo(String value) {
+            addCriterion("done_time <=", value, "doneTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeLike(String value) {
+            addCriterion("done_time like", value, "doneTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeNotLike(String value) {
+            addCriterion("done_time not like", value, "doneTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeIn(List<String> values) {
+            addCriterion("done_time in", values, "doneTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeNotIn(List<String> values) {
+            addCriterion("done_time not in", values, "doneTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeBetween(String value1, String value2) {
+            addCriterion("done_time between", value1, value2, "doneTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoneTimeNotBetween(String value1, String value2) {
+            addCriterion("done_time not between", value1, value2, "doneTime");
             return (Criteria) this;
         }
     }

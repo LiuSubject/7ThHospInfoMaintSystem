@@ -17,8 +17,10 @@
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="type_secondary" property="typeSecondary" jdbcType="INTEGER" />
     <result column="leader" property="leader" jdbcType="VARCHAR" />
+    <result column="leader_name" property="leaderName" jdbcType="VARCHAR" />
     <result column="reback" property="reback" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="done_time" property="doneTime" jdbcType="VARCHAR" />
     <result column="feedback_content_1" property="feedbackContent1" jdbcType="VARCHAR" />
     <result column="feedback_id_1" property="feedbackId1" jdbcType="CHAR" />
     <result column="feedback_name_1" property="feedbackName1" jdbcType="VARCHAR" />
@@ -35,6 +37,11 @@
     <result column="feedback_id_5" property="feedbackId5" jdbcType="CHAR" />
     <result column="feedback_name_5" property="feedbackName5" jdbcType="VARCHAR" />
     <result column="fault_urgent" property="faultUrgent" jdbcType="INTEGER" />
+    <result column="feedback_time_1" property="feedbackTime1" jdbcType="VARCHAR" />
+    <result column="feedback_time_2" property="feedbackTime2" jdbcType="VARCHAR" />
+    <result column="feedback_time_3" property="feedbackTime3" jdbcType="VARCHAR" />
+    <result column="feedback_time_4" property="feedbackTime4" jdbcType="VARCHAR" />
+    <result column="feedback_time_5" property="feedbackTime5" jdbcType="VARCHAR" />
   </resultMap>
   <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select computer_problems.*

@@ -600,18 +600,33 @@ public class NormalController {
             materialApplicationCustom.setHighLeaderName1(viewEmployeeMiPsd.getName());
             materialApplicationCustom.setHighLeaderFlag1(2);
             materialApplicationCustom.setFlag(2);
+            //设置完成时间
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = formatter.format(currentTime);
+            materialApplicationCustom.setDoneTime(dateString);
         }else if(subject.hasRole("infodean") && materialApplicationCustom.getHighLeaderApproved2() == 1){
             materialApplicationCustom.setApprovedFlag(2);
             materialApplicationCustom.setHighLeaderReback2(feedback);
             materialApplicationCustom.setHighLeaderName2(viewEmployeeMiPsd.getName());
             materialApplicationCustom.setHighLeaderFlag2(2);
             materialApplicationCustom.setFlag(2);
+            //设置完成时间
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = formatter.format(currentTime);
+            materialApplicationCustom.setDoneTime(dateString);
         }else if(subject.hasRole("alldean") && materialApplicationCustom.getHighLeaderApproved3() == 1){
             materialApplicationCustom.setApprovedFlag(2);
             materialApplicationCustom.setHighLeaderReback3(feedback);
             materialApplicationCustom.setHighLeaderName3(viewEmployeeMiPsd.getName());
             materialApplicationCustom.setHighLeaderFlag3(2);
             materialApplicationCustom.setFlag(2);
+            //设置完成时间
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = formatter.format(currentTime);
+            materialApplicationCustom.setDoneTime(dateString);
         }else{
             return "normal/showMaterialApplication";
         }
@@ -620,7 +635,7 @@ public class NormalController {
         try {
             //创建推送消息
             PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                    "2","23");
+                    "2","27");
             try {
                 pushMessageService.save(pushMessage);
             } catch (Exception e) {
