@@ -90,8 +90,7 @@
                         <div id="textareadetail" class="form-group">
                             <label class="col-sm-2 control-label">详情描述：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="detail" readonly="readonly"
-                                       value="${computerProblems.detail}">
+                                <textarea  type="text" class="form-control" rows="5" id="detail" name="detail"  readonly="readonly">${computerProblems.detail}</textarea>
                             </div>
                         </div>
                         <div id="textareareback" class="form-group">
@@ -223,7 +222,7 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(1)").addClass("active");
+    $("#nav li:nth-child(2)").addClass("active");
 
     //标红处理
     if(${computerProblems.faultUrgent == 1}){

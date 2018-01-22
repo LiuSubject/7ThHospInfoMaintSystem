@@ -55,6 +55,20 @@
 					<form class="form-horizontal" role="form" action="/normal/editMaterialApplication" id="editfrom"
 						  method="post">
 						<div class="form-group">
+							<label  class="col-sm-2 control-label">使用日期：</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="useDate" name="useDate"
+									   value="${materialApplication.useDate}" readonly="readonly">
+							</div>
+						</div>
+						<div class="form-group">
+							<label  class="col-sm-2 control-label">申请人：</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="applicant" name="applicant"
+									   value="${materialApplication.applicant}" readonly="readonly">
+							</div>
+						</div>
+						<div class="form-group">
 							<label  class="col-sm-2 control-label">名称：</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="name" name="name"
@@ -66,6 +80,12 @@
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="number" name="number"
 									   value="${materialApplication.number}" readonly="readonly">
+							</div>
+						</div>
+						<div class="form-group">
+							<label  class="col-sm-2 control-label">请购理由：</label>
+							<div class="col-sm-8">
+								<textarea  type="text" class="form-control" rows="5" id="reason" name="reason" readonly="readonly">${materialApplication.reason}</textarea>
 							</div>
 						</div>
 						<div class="form-group">
@@ -94,27 +114,6 @@
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="total" name="total"
 									   value="${materialApplication.total}" readonly="readonly">
-							</div>
-						</div>
-						<div class="form-group">
-							<label  class="col-sm-2 control-label">使用日期：</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="useDate" name="useDate"
-									   value="${materialApplication.useDate}" readonly="readonly">
-							</div>
-						</div>
-						<div class="form-group">
-							<label  class="col-sm-2 control-label">申请人：</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="applicant" name="applicant"
-									   value="${materialApplication.applicant}" readonly="readonly">
-							</div>
-						</div>
-						<div class="form-group">
-							<label  class="col-sm-2 control-label">请购理由：</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="reason" name="reason"
-									   value="${materialApplication.reason}" readonly="readonly">
 							</div>
 						</div>
 						<div class="form-group">
@@ -193,8 +192,17 @@
 									<div class="number">
 										审批
 									</div>
-									<div class="content_wait">
-										<pre><c:if test='${materialApplication.approvedFlag == 0 }'>审批中</c:if><c:if test='${materialApplication.approvedFlag == 1 }'>审批通过</c:if><c:if test='${materialApplication.approvedFlag == 2 }'>审批不通过</c:if></pre>
+									<div class="content">
+										<c:if test="${materialApplication.approvedFlag == 0 }">
+											<pre>审批中</pre>
+										</c:if>
+										<c:if test="${materialApplication.approvedFlag == 1 }">
+											<pre>审批通过</pre>
+										</c:if>
+										<c:if test="${materialApplication.approvedFlag == 2 }">
+											<pre>审批不通过</pre>
+										</c:if>
+
 									</div>
 								</li>
 							</c:if>
@@ -284,7 +292,7 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(3)").addClass("active");
+    $("#nav li:nth-child(4)").addClass("active");
 
 
     //返回按钮点击

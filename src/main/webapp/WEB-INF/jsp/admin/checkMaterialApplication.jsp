@@ -56,6 +56,20 @@
                     <form class="form-horizontal" role="form" action="/admin/editMaterialApplication" id="editfrom"
                           method="post">
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">申请人：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="applicant" name="applicant"
+                                       value="${materialApplication.applicant}" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">使用日期：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="useDate" name="useDate"
+                                       value="${materialApplication.useDate}" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">名称：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="name" name="name"
@@ -68,6 +82,11 @@
                                 <input type="text" class="form-control" id="number" name="number"
                                        value="${materialApplication.number}" readonly="readonly">
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">请购理由：</label>
+                            <div class="col-sm-8">
+                                </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">品牌：</label>
@@ -98,31 +117,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">使用日期：</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="useDate" name="useDate"
-                                       value="${materialApplication.useDate}" readonly="readonly">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">申请人：</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="applicant" name="applicant"
-                                       value="${materialApplication.applicant}" readonly="readonly">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">请购理由：</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="reason" name="reason"
-                                       value="${materialApplication.reason}" readonly="readonly">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-2 control-label">信息科意见：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="xxkyj" name="xxkyj"
-                                       value="${materialApplication.xxkyj}" readonly="readonly">
+                                <textarea  type="text" class="form-control" rows="5" id="xxkyj" name="xxkyj" readonly="readonly">${materialApplication.xxkyj}</textarea>
                             </div>
                         </div>
                         <c:if test="${materialApplication.highLeaderApproved1 == 1}">
@@ -194,8 +191,17 @@
                                     <div class="number">
                                         审批
                                     </div>
-                                    <div class="content_wait">
-                                        <pre><c:if test="${materialApplication.approvedFlag == 0 }">审批中</c:if><c:if test="${materialApplication.approvedFlag == 1 }">审批通过</c:if><c:if test="${materialApplication.approvedFlag == 2 }">审批不通过</c:if></pre>
+                                    <div class="content">
+                                        <c:if test="${materialApplication.approvedFlag == 0 }">
+                                            <pre>审批中</pre>
+                                        </c:if>
+                                        <c:if test="${materialApplication.approvedFlag == 1 }">
+                                            <pre>审批通过</pre>
+                                        </c:if>
+                                        <c:if test="${materialApplication.approvedFlag == 2 }">
+                                            <pre>审批不通过</pre>
+                                        </c:if>
+
                                     </div>
                                 </li>
                             </c:if>
@@ -280,7 +286,7 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(3)").addClass("active");
+    $("#nav li:nth-child(4)").addClass("active");
 
 
     //返回按钮点击

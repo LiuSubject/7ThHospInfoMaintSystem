@@ -654,6 +654,13 @@ public class AdminController {
             pagingVO.setToPageNo(page);
             list = materialApplicationService.findByPaging(page);
         }
+        //管理员权限下返回物资处理权限组识别
+        if(subject.hasRole("material") || subject.hasRole("examiner")
+                || subject.hasRole("infodean") || subject.hasRole("alldean")){
+            model.addAttribute("materials", true);
+        }else{
+            model.addAttribute("materials", false);
+        }
 
         model.addAttribute("materialApplicationList", list);
         model.addAttribute("pagingVO", pagingVO);
@@ -735,7 +742,7 @@ public class AdminController {
             Boolean result = materialApplicationService.saveAndPre(materialApplicationCustom, pushMessage);
 
             if (!result) {
-                model.addAttribute("message", "抱歉，故障信息保存失败");
+                model.addAttribute("message", "抱歉，物资申购提交失败");
                 return "error";
             }
             //向指定组推送消息

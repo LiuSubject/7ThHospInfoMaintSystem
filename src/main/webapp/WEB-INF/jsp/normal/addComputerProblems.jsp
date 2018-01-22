@@ -92,7 +92,7 @@
 						<div id="textareadetail" class="form-group">
 							<label class="col-sm-2 control-label">详情描述：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="detail" name="detail" placeholder="请输入描述">
+								<textarea  type="text" class="form-control" rows="5" id="detail" name="detail" placeholder="请输入描述"></textarea>
 							</div>
 						</div>
 						<div class="form-group">
@@ -119,13 +119,13 @@
 </body>
 <script type="text/javascript">
     <%--设置菜单中--%>
-    $("#nav li:nth-child(1)").addClass("active");
+    $("#nav li:nth-child(2)").addClass("active");
     <c:if test="${pagingVO != null}">
     if (${pagingVO.curentPageNo} == ${pagingVO.totalCount}) {
         $(".pagination li:last-child").addClass("disabled")
     }
     if (${pagingVO.curentPageNo} == ${1}) {
-        $(".pagination li:nth-child(1)").addClass("disabled")
+        $(".pagination li:nth-child(2)").addClass("disabled")
     }
     </c:if>
 

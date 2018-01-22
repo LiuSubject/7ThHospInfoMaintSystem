@@ -112,7 +112,9 @@
 								<td><button class="btn btn-warning btn-sm" type="button">是</button></td>
 							</c:if>
 							<td>
-								<button class="btn btn-default btn-xs btn-info" type="button" onClick="location.href='/admin/editMaterialApplication?id=${item.id}'">处理申购</button>
+								<c:if test="${materials == true}">
+									<button class="btn btn-default btn-xs btn-info" type="button" onClick="location.href='/admin/editMaterialApplication?id=${item.id}'">处理申购</button>
+								</c:if>
 								<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/admin/checkMaterialApplication?id=${item.id}'">查看详情</button>
 								<!--弹出框-->
 							</td>
@@ -156,13 +158,13 @@
 </body>
 <script type="text/javascript">
     <%--设置菜单中--%>
-    $("#nav li:nth-child(4)").addClass("active");
+    $("#nav li:nth-child(3)").addClass("active");
     <c:if test="${pagingVO != null}">
     if (${pagingVO.curentPageNo} == ${pagingVO.totalCount}) {
         $(".pagination li:last-child").addClass("disabled")
     }
     if (${pagingVO.curentPageNo} == ${1}) {
-        $(".pagination li:nth-child(1)").addClass("disabled")
+        $(".pagination li:nth-child(2)").addClass("disabled")
     }
     </c:if>
 

@@ -1181,7 +1181,16 @@ public class NormalController {
 
         //设置问题初始化状态
         materialApplicationCustom.setFlag(0);
-
+        materialApplicationCustom.setFaultUrgent(0);
+        materialApplicationCustom.setGroupVisible(0);
+        materialApplicationCustom.setHighApproved(0);
+        materialApplicationCustom.setApprovedFlag(0);
+        materialApplicationCustom.setHighLeaderFlag1(0);
+        materialApplicationCustom.setHighLeaderFlag2(0);
+        materialApplicationCustom.setHighLeaderFlag3(0);
+        materialApplicationCustom.setHighLeaderApproved1(0);
+        materialApplicationCustom.setHighLeaderApproved2(0);
+        materialApplicationCustom.setHighLeaderApproved3(0);
         //设置问题所属部门
         materialApplicationCustom.setDept(viewEmployeeMiPsd.getDeptName());
 
@@ -1204,8 +1213,8 @@ public class NormalController {
                 model.addAttribute("message", "抱歉，物资申购提交失败");
                 return "error";
             }
-            //向管理组推送消息
-           messagePushUtil.GroupPushSingle(pushMessage,"admin");
+            //向指定组推送消息
+           messagePushUtil.GroupPushSingle(pushMessage,"examiner");
         } catch (Exception e) {
             e.printStackTrace();
             return "error";

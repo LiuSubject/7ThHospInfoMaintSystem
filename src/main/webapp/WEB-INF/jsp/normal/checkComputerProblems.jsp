@@ -83,14 +83,13 @@
 							</div>
 						</div>
 						<div id="textareadetail" class="form-group">
-							<label  class="col-sm-2 control-label">详情描述：</label>
+							<label class="col-sm-2 control-label">详情描述：</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" name="detail"
-									   value="${computerProblems.detail}" readonly="readonly">
+								<textarea  type="text" class="form-control" rows="5" id="detail" name="detail"  readonly="readonly">${computerProblems.detail}</textarea>
 							</div>
 						</div>
 						<div id="textareareback" class="form-group">
-							<label  class="col-sm-2 control-label">反馈：</label>
+							<label class="col-sm-2 control-label">反馈：</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="feedback" name="feedback"
 									   value="${computerProblems.reback}" readonly="readonly">
@@ -207,7 +206,7 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(1)").addClass("active");
+    $("#nav li:nth-child(2)").addClass("active");
 
     //返回按钮点击
     $('#returnListBtn').on('click', function() {

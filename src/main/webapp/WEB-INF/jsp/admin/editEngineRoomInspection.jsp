@@ -268,8 +268,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">原因/结果：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="ycyy" name="ycyy"
-                                       value="${engineRoomInspection.ycyy}" readonly="readonly">
+                                <textarea  type="text" class="form-control" rows="5" id="ycyy" name="ycyy" readonly="readonly">${engineRoomInspection.ycyy}</textarea>
                             </div>
                         </div>
                         <div class="form-group" style="text-align: center">
@@ -293,7 +292,7 @@
 </body>
 <script type="text/javascript">
     //改变菜单状态
-    $("#nav li:nth-child(5)").addClass("active");
+    $("#nav li:nth-child(6)").addClass("active");
 
     //选项调整
     /*	等同于：

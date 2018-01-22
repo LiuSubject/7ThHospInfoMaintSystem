@@ -81,5 +81,15 @@
         $('input, textarea').placeholder();
     });
 
+    //回车提交
+    $('#psd').bind('keypress',function(event){
+        if(event.keyCode == "13")
+        {
+            //密码加密后再传输
+            $('#psd').val(Encrypting($('#code').val(), $('#psd').val()));
+            $('#loginForm').submit();
+        }
+    });
+
 </script>
 </html>

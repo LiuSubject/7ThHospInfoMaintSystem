@@ -103,6 +103,9 @@
 									</c:if>
 									<td>${item.createTime}</td>
 									<td>
+										<c:if test="${item.flag == 2}">
+										<td><button class="btn btn-success btn-sm" type="button">已解决</button></td>
+										</c:if>
 										<button class="btn btn-default btn-xs btn-info" type="button" onClick="location.href='/admin/editComputerProblems?id=${item.id}'">处理问题</button>
 										<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/admin/checkComputerProblems?id=${item.id}'">查看详情</button>
 										<!--弹出框-->
@@ -147,13 +150,13 @@
 </body>
 	<script type="text/javascript">
 		<%--设置菜单中--%>
-		$("#nav li:nth-child(2)").addClass("active");
+		$("#nav li:nth-child(1)").addClass("active");
         <c:if test="${pagingVO != null}">
         if (${pagingVO.curentPageNo} == ${pagingVO.totalCount}) {
             $(".pagination li:last-child").addClass("disabled")
         }
         if (${pagingVO.curentPageNo} == ${1}) {
-            $(".pagination li:nth-child(1)").addClass("disabled")
+            $(".pagination li:nth-child(2)").addClass("disabled")
         }
         </c:if>
 
