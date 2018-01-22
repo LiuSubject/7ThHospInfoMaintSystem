@@ -16,9 +16,15 @@
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <style type="text/css">
+        .Urgent {
+            color: #c9302c;
+        }
         /*分割线*/
         .hr0{
             height:1px;border:none;border-top:1px dashed #cccccc;
+        }
+        body{
+            overflow-y:scroll;
         }
     </style>
 </head>
@@ -45,7 +51,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <h2 style="text-align: center;">${materialApplication.name}</h2>
+                        <h2 id="materialApplicationName" style="text-align: center;">${materialApplication.name}</h2>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -82,8 +88,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">请购理由：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="reason" name="reason"
-                                       value="${materialApplication.reason}" readonly="readonly">
+                                <textarea  type="text" class="form-control" rows="5" id="reason" name="reason"  readonly="readonly">${materialApplication.reason}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -117,8 +122,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">回复：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="reback" name="reback"
-                                       value="${materialApplication.reback}">
+                                <textarea  type="text" class="form-control" rows="5" id="reback" name="reback" >${computerProblems.reback}</textarea>
                             </div>
                         </div>
                         <div class="form-group" style="text-align: center">
@@ -166,8 +170,17 @@
                                     <div class="number">
                                         审批
                                     </div>
-                                    <div class="content_wait">
-                                        <pre></pre>
+                                    <div class="content">
+                                        <c:if test="${materialApplication.approvedFlag == 0 }">
+                                            <pre>审批中</pre>
+                                        </c:if>
+                                        <c:if test="${materialApplication.approvedFlag == 1 }">
+                                            <pre>审批通过</pre>
+                                        </c:if>
+                                        <c:if test="${materialApplication.approvedFlag == 2 }">
+                                            <pre>审批不通过</pre>
+                                        </c:if>
+
                                     </div>
                                 </li>
                             </c:if>
@@ -257,8 +270,12 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(3)").addClass("active");
+    $("#nav li:nth-child(4)").addClass("active");
 
+    //可处理标识
+    if (${materialApplication.groupVisible == 1}) {
+        $("#materialApplicationName").addClass("Urgent");
+    }
 
     //推送处理按钮点击
     $('#pushBtn').on('click', function () {

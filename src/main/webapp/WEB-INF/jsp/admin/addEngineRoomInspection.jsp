@@ -14,6 +14,11 @@
     <!-- 引入JQuery  bootstrap.js-->
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        body {
+            overflow-y: scroll;
+        }
+    </style>
 </head>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -235,7 +240,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">原因/结果：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="ycyy" name="ycyy">
+                                <textarea  type="text" class="form-control" rows="5" id="ycyy" name="ycyy" placeholder="请输入原因/结果"></textarea>
                             </div>
                         </div>
                         <div class="form-group" style="text-align: center">
@@ -258,13 +263,13 @@
 </body>
 <script type="text/javascript">
     <%--设置菜单中--%>
-    $("#nav li:nth-child(5)").addClass("active");
+    $("#nav li:nth-child(6)").addClass("active");
     <c:if test="${pagingVO != null}">
     if (${pagingVO.curentPageNo} == ${pagingVO.totalCount}) {
         $(".pagination li:last-child").addClass("disabled")
     }
     if (${pagingVO.curentPageNo} == ${1}) {
-        $(".pagination li:nth-child(1)").addClass("disabled")
+        $(".pagination li:nth-child(2)").addClass("disabled")
     }
     </c:if>
 
@@ -290,6 +295,12 @@
         todayBtn:  1,
         autoclose: 1
 
+    });
+
+    //使IE8支持 placeholder
+    $(function () {
+        // Invoke the plugin
+        $('input,textarea').placeholder();
     });
 
 </script>

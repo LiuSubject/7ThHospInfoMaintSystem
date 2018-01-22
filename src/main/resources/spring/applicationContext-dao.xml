@@ -23,13 +23,16 @@
         <property name="jdbcUrl" value="${jdbc.mysql.url}" />
         <property name="user" value="${jdbc.mysql.username}" />
         <property name="password" value="${jdbc.mysql.password}" />
-        <property name="maxPoolSize" value="200" />
         <property name="minPoolSize" value="10" />
+        <!-- 这个必须写在minPoolSize和maxPoolSize之间，表示初始化时获取的连接数，这个值一般设置为minPoolSize，缺省时默认为3 -->
+        <property name="initialPoolSize" value="10"></property>
+        <property name="maxPoolSize" value="30" />
+        <property name="maxIdleTime" value="1800" />
         <property name="checkoutTimeout" value="60" />
         <property name="unreturnedConnectionTimeout" value="25" />
         <property name="maxIdleTimeExcessConnections" value="20" />
         <property name="maxConnectionAge" value="20" />
-        <property name="idleConnectionTestPeriod" value="50" />
+        <property name="idleConnectionTestPeriod" value="1800" />
         <property name="maxStatements" value="0" />
 
     </bean>
@@ -42,13 +45,16 @@
         <property name="jdbcUrl" value="${jdbc.sqlserver.url}" />
         <property name="user" value="${jdbc.sqlserver.username}" />
         <property name="password" value="${jdbc.sqlserver.password}" />
-        <property name="maxPoolSize" value="200" />
         <property name="minPoolSize" value="10" />
+        <!-- 这个必须写在minPoolSize和maxPoolSize之间，表示初始化时获取的连接数，这个值一般设置为minPoolSize，缺省时默认为3 -->
+        <property name="initialPoolSize" value="10"></property>
+        <property name="maxPoolSize" value="30" />
+        <property name="maxIdleTime" value="1800" />
         <property name="checkoutTimeout" value="60" />
         <property name="unreturnedConnectionTimeout" value="25" />
         <property name="maxIdleTimeExcessConnections" value="20" />
         <property name="maxConnectionAge" value="20" />
-        <property name="idleConnectionTestPeriod" value="50" />
+        <property name="idleConnectionTestPeriod" value="1800" />
         <property name="maxStatements" value="0" />
     </bean>
 

@@ -19,9 +19,9 @@
             top: 15%;
         }
 
-
-
-
+        body {
+            overflow-y: scroll;
+        }
     </style>
 </head>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -79,6 +79,16 @@
     $(function () {
         // Invoke the plugin
         $('input, textarea').placeholder();
+    });
+
+    //回车提交
+    $('#psd').bind('keypress',function(event){
+        if(event.keyCode == "13")
+        {
+            //密码加密后再传输
+            $('#psd').val(Encrypting($('#code').val(), $('#psd').val()));
+            $('#loginForm').submit();
+        }
     });
 
 </script>

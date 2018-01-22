@@ -18,6 +18,10 @@
 		td{
 			text-align: center;
 		}
+
+		body {
+			overflow-y: scroll;
+		}
 	</style>
 
 	<%--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">--%>
@@ -82,9 +86,11 @@
 					        <tbody>
 							<c:forEach  items="${computerProblemsList}" var="item">
 								<tr>
-									<td><c:if test="${item.faultUrgent == 1}">#</c:if>
+									<td>
+										<c:if test="${item.faultUrgent == 1}">#</c:if>
 											${item.title}
-										<c:if test="${item.faultUrgent == 1}">#</c:if></td>
+										<c:if test="${item.faultUrgent == 1}">#</c:if>
+									</td>
 									<td>${item.dept}</td>
 									<td>${item.name}</td>
 									<td>${item.tel}</td>
@@ -101,7 +107,6 @@
 									<td>
 										<button class="btn btn-default btn-xs btn-info" type="button" onClick="location.href='/admin/editComputerProblems?id=${item.id}'">处理问题</button>
 										<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/admin/checkComputerProblems?id=${item.id}'">查看详情</button>
-										<!--弹出框-->
 									</td>
 								</tr>
 							</c:forEach>
@@ -143,13 +148,13 @@
 </body>
 	<script type="text/javascript">
 		<%--设置菜单中--%>
-		$("#nav li:nth-child(2)").addClass("active");
+		$("#nav li:nth-child(1)").addClass("active");
         <c:if test="${pagingVO != null}">
         if (${pagingVO.curentPageNo} == ${pagingVO.totalCount}) {
             $(".pagination li:last-child").addClass("disabled")
         }
         if (${pagingVO.curentPageNo} == ${1}) {
-            $(".pagination li:nth-child(1)").addClass("disabled")
+            $(".pagination li:nth-child(2)").addClass("disabled")
         }
         </c:if>
 

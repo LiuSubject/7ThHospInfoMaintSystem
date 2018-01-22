@@ -624,8 +624,11 @@ public class AdminController {
         Subject subject = SecurityUtils.getSubject();
 
         List<MaterialApplicationCustom> list = null;
-        //页码对象
         PagingVO pagingVO = new PagingVO();
+        // region
+/*      //流程修改,暂时弃用
+
+        //页码对象
         //物资组处理可处理列表
         if (subject.hasRole("material")) {
             //设置总页数
@@ -643,7 +646,8 @@ public class AdminController {
 
             return "admin/showMaterialApplication";
         }
-
+*/
+        // endregion
         //非物资组
         //设置总页数
         pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
@@ -653,6 +657,13 @@ public class AdminController {
         } else {
             pagingVO.setToPageNo(page);
             list = materialApplicationService.findByPaging(page);
+        }
+        //管理员权限下返回物资处理权限组识别
+        if(subject.hasRole("material") || subject.hasRole("examiner")
+                || subject.hasRole("infodean") || subject.hasRole("alldean")){
+            model.addAttribute("materials", true);
+        }else{
+            model.addAttribute("materials", false);
         }
 
         model.addAttribute("materialApplicationList", list);
@@ -735,11 +746,11 @@ public class AdminController {
             Boolean result = materialApplicationService.saveAndPre(materialApplicationCustom, pushMessage);
 
             if (!result) {
-                model.addAttribute("message", "抱歉，故障信息保存失败");
+                model.addAttribute("message", "抱歉，物资申购提交失败");
                 return "error";
             }
             //向指定组推送消息
-           messagePushUtil.GroupPushSingle(pushMessage,"examiner");
+           messagePushUtil.GroupPushSingle(pushMessage,"material");
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
@@ -784,6 +795,14 @@ public class AdminController {
         MaterialApplication materialApplication = materialApplicationService.findById(id);
         if (materialApplication == null) {
             throw new CustomException("抱歉，未找到该物资申购相关信息");
+        }
+
+        //管理员权限下返回物资处理权限组识别
+        if(subject.hasRole("material") || subject.hasRole("examiner")
+                || subject.hasRole("infodean") || subject.hasRole("alldean")){
+            model.addAttribute("materials", true);
+        }else{
+            model.addAttribute("materials", false);
         }
 
         model.addAttribute("materialApplication", materialApplication);
@@ -934,11 +953,6 @@ public class AdminController {
 
 
         //更新该物资申购问题数据
-        materialApplicationCustom.setBrand(brand);
-        materialApplicationCustom.setModel(model);
-        materialApplicationCustom.setJudge(judge);
-        materialApplicationCustom.setTotal(total);
-        materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
         materialApplicationCustom.setXxkyj(feedback);
         materialApplicationCustom.setFlag(1);
 
@@ -1202,7 +1216,7 @@ public class AdminController {
                 try {
                     //创建推送消息
                     PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                            "0","21");
+                            "0","29");
                     try {
                         pushMessageService.save(pushMessage);
                     } catch (Exception e) {
@@ -1253,7 +1267,7 @@ public class AdminController {
                     try {
                         //创建推送消息
                         PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                                "0","21");
+                                "0","29");
                         try {
                             pushMessageService.save(pushMessage);
                         } catch (Exception e) {
@@ -1296,7 +1310,7 @@ public class AdminController {
                     try {
                         //创建推送消息
                         PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                                "0","21");
+                                "0","29");
                         try {
                             pushMessageService.save(pushMessage);
                         } catch (Exception e) {
@@ -1347,7 +1361,7 @@ public class AdminController {
                 try {
                     //创建推送消息
                     PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                            "0","21");
+                            "0","29");
                     try {
                         pushMessageService.save(pushMessage);
                     } catch (Exception e) {
@@ -1398,7 +1412,7 @@ public class AdminController {
                     try {
                         //创建推送消息
                         PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                                "0","21");
+                                "0","29");
                         try {
                             pushMessageService.save(pushMessage);
                         } catch (Exception e) {
@@ -1441,7 +1455,7 @@ public class AdminController {
                     try {
                         //创建推送消息
                         PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                                "0","21");
+                                "0","29");
                         try {
                             pushMessageService.save(pushMessage);
                         } catch (Exception e) {
@@ -1493,7 +1507,7 @@ public class AdminController {
                 try {
                     //创建推送消息
                     PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                            "0","21");
+                            "0","29");
                     try {
                         pushMessageService.save(pushMessage);
                     } catch (Exception e) {
@@ -1544,7 +1558,7 @@ public class AdminController {
                     try {
                         //创建推送消息
                         PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                                "0","21");
+                                "0","29");
                         try {
                             pushMessageService.save(pushMessage);
                         } catch (Exception e) {
@@ -1587,7 +1601,7 @@ public class AdminController {
                     try {
                         //创建推送消息
                         PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                                "0","21");
+                                "0","29");
                         try {
                             pushMessageService.save(pushMessage);
                         } catch (Exception e) {
@@ -1673,9 +1687,50 @@ public class AdminController {
             materialApplicationCustom.setJudge(judge);
             materialApplicationCustom.setTotal(total);
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
+            materialApplicationCustom.setLeaderName(viewEmployeeMiPsd.getName());
+
+            //处理组预处理
+            if(subject.hasRole("material") && materialApplicationCustom.getFlag() == 0){
+                materialApplicationCustom.setFlag(1);
+                materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                //保存该记录相关数据以便产生推送
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "0","21");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return "error";
+                    }
+                    //向下一流程组推送消息
+                    messagePushUtil.GroupPushSingle(pushMessage,"examiner");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "2","28");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return "error";
+                    }
+                    //向申报人推送消息
+                    messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+            }else{
+                materialApplicationCustom.setFlag(1);
+            }
 
             //审查组审查后使处理组可见,并保留审查组意见,并向处理组及用户推送消息
-            if(subject.hasRole("examiner") && materialApplicationCustom.getFlag() == 0){
+            if(subject.hasRole("examiner") && materialApplicationCustom.getFlag() == 1){
                 materialApplicationCustom.setFlag(1);
                 materialApplicationCustom.setGroupVisible(1);
                 materialApplicationCustom.setXxkyj(feedback);
@@ -1684,7 +1739,7 @@ public class AdminController {
                 try {
                     //创建推送消息
                     PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                            "0","21");
+                            "0","29");
                     try {
                         pushMessageService.save(pushMessage);
                     } catch (Exception e) {
@@ -1715,53 +1770,58 @@ public class AdminController {
             }else{
                 materialApplicationCustom.setFlag(1);
             }
-            //将反馈插入空白反馈字段
-            if(materialApplicationCustom.getFeedbackId1() == null){
-                materialApplicationCustom.setFeedbackContent1(feedback);
-                materialApplicationCustom.setFeedbackId1(viewEmployeeMiPsd.getCode());
-                materialApplicationCustom.setFeedbackName1(viewEmployeeMiPsd.getName());
-                //设置反馈时间
-                Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateString = formatter.format(currentTime);
-                materialApplicationCustom.setFeedbackTime1(dateString);
-            }else if(materialApplicationCustom.getFeedbackId2() == null){
-                materialApplicationCustom.setFeedbackContent2(feedback);
-                materialApplicationCustom.setFeedbackId2(viewEmployeeMiPsd.getCode());
-                materialApplicationCustom.setFeedbackName2(viewEmployeeMiPsd.getName());
-                //设置反馈时间
-                Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateString = formatter.format(currentTime);
-                materialApplicationCustom.setFeedbackTime2(dateString);
-            }else if(materialApplicationCustom.getFeedbackId3() == null){
-                materialApplicationCustom.setFeedbackContent3(feedback);
-                materialApplicationCustom.setFeedbackId3(viewEmployeeMiPsd.getCode());
-                materialApplicationCustom.setFeedbackName3(viewEmployeeMiPsd.getName());
-                //设置反馈时间
-                Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateString = formatter.format(currentTime);
-                materialApplicationCustom.setFeedbackTime3(dateString);
-            }else if(materialApplicationCustom.getFeedbackId4() == null){
-                materialApplicationCustom.setFeedbackContent4(feedback);
-                materialApplicationCustom.setFeedbackId4(viewEmployeeMiPsd.getCode());
-                materialApplicationCustom.setFeedbackName4(viewEmployeeMiPsd.getName());
-                //设置反馈时间
-                Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateString = formatter.format(currentTime);
-                materialApplicationCustom.setFeedbackTime4(dateString);
-            }else if(materialApplicationCustom.getFeedbackId5() == null){
-                materialApplicationCustom.setFeedbackContent5(feedback);
-                materialApplicationCustom.setFeedbackId5(viewEmployeeMiPsd.getCode());
-                materialApplicationCustom.setFeedbackName5(viewEmployeeMiPsd.getName());
-                //设置反馈时间
-                Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateString = formatter.format(currentTime);
-                materialApplicationCustom.setFeedbackTime5(dateString);
+
+            if(materialApplicationCustom.getGroupVisible() == 1){
+                //将反馈插入空白反馈字段
+                if(materialApplicationCustom.getFeedbackId1() == null){
+                    materialApplicationCustom.setFeedbackContent1(feedback);
+                    materialApplicationCustom.setFeedbackId1(viewEmployeeMiPsd.getCode());
+                    materialApplicationCustom.setFeedbackName1(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    materialApplicationCustom.setFeedbackTime1(dateString);
+                }else if(materialApplicationCustom.getFeedbackId2() == null){
+                    materialApplicationCustom.setFeedbackContent2(feedback);
+                    materialApplicationCustom.setFeedbackId2(viewEmployeeMiPsd.getCode());
+                    materialApplicationCustom.setFeedbackName2(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    materialApplicationCustom.setFeedbackTime2(dateString);
+                }else if(materialApplicationCustom.getFeedbackId3() == null){
+                    materialApplicationCustom.setFeedbackContent3(feedback);
+                    materialApplicationCustom.setFeedbackId3(viewEmployeeMiPsd.getCode());
+                    materialApplicationCustom.setFeedbackName3(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    materialApplicationCustom.setFeedbackTime3(dateString);
+                }else if(materialApplicationCustom.getFeedbackId4() == null){
+                    materialApplicationCustom.setFeedbackContent4(feedback);
+                    materialApplicationCustom.setFeedbackId4(viewEmployeeMiPsd.getCode());
+                    materialApplicationCustom.setFeedbackName4(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    materialApplicationCustom.setFeedbackTime4(dateString);
+                }else if(materialApplicationCustom.getFeedbackId5() == null){
+                    materialApplicationCustom.setFeedbackContent5(feedback);
+                    materialApplicationCustom.setFeedbackId5(viewEmployeeMiPsd.getCode());
+                    materialApplicationCustom.setFeedbackName5(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    materialApplicationCustom.setFeedbackTime5(dateString);
+                }
             }
+
+
 
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
@@ -1833,7 +1893,8 @@ public class AdminController {
             }
             e.printStackTrace();
         }
-        if(materialApplicationCustom.getFlag() == 1 || subject.hasRole("examiner")){
+        if(subject.hasRole("examiner")
+                || (subject.hasRole("material") && materialApplicationCustom.getGroupVisible() == 1)){
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(2);
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
@@ -1878,6 +1939,15 @@ public class AdminController {
         MaterialApplication materialApplication = materialApplicationService.findById(id);
         if (materialApplication == null) {
             throw new CustomException("抱歉，未找到该物资申购相关信息");
+        }
+
+        //管理员权限下返回物资处理权限组识别
+        Subject subject = SecurityUtils.getSubject();
+        if(subject.hasRole("material") || subject.hasRole("examiner")
+                || subject.hasRole("infodean") || subject.hasRole("alldean")){
+            model.addAttribute("materials", true);
+        }else{
+            model.addAttribute("materials", false);
         }
 
         model.addAttribute("materialApplication", materialApplication);

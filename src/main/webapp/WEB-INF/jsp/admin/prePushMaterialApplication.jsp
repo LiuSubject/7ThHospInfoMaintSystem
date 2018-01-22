@@ -12,7 +12,11 @@
     <!-- 引入JQuery  bootstrap.js-->
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-
+    <style type="text/css">
+        body {
+            overflow-y: scroll;
+        }
+    </style>
 
 </head>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -113,7 +117,7 @@
 </body>
 <script type="text/javascript">
     <%--设置菜单中--%>
-    $("#nav li:nth-child(3)").addClass("active");
+    $("#nav li:nth-child(4)").addClass("active");
 
 </script>
 </html>

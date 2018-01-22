@@ -20,6 +20,10 @@
         .hr0{
             height:1px;border:none;border-top:1px dashed #cccccc;
         }
+
+        body {
+            overflow-y: scroll;
+        }
     </style>
 </head>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -156,8 +160,17 @@
                                     <div class="number">
                                         审批
                                     </div>
-                                    <div class="content_wait">
-                                        <pre><c:if test='${materialApplication.approvedFlag == 0 }'>审批中</c:if><c:if test='${materialApplication.approvedFlag == 1 }'>审批通过</c:if><c:if test='${materialApplication.approvedFlag == 2 }'>审批不通过</c:if></pre>
+                                    <div class="content">
+                                        <c:if test="${materialApplication.approvedFlag == 0 }">
+                                            <pre>审批中</pre>
+                                        </c:if>
+                                        <c:if test="${materialApplication.approvedFlag == 1 }">
+                                            <pre>审批通过</pre>
+                                        </c:if>
+                                        <c:if test="${materialApplication.approvedFlag == 2 }">
+                                            <pre>审批不通过</pre>
+                                        </c:if>
+
                                     </div>
                                 </li>
                             </c:if>
@@ -247,7 +260,7 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(3)").addClass("active");
+    $("#nav li:nth-child(4)").addClass("active");
 
 
 

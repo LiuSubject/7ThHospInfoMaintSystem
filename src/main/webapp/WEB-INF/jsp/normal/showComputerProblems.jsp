@@ -18,6 +18,9 @@
 		td{
 			text-align: center;
 		}
+		body {
+			overflow-y: scroll;
+		}
 	</style>
 	<%--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">--%>
 
@@ -119,13 +122,13 @@
 </body>
 	<script type="text/javascript">
 		<%--设置菜单中--%>
-		$("#nav li:nth-child(2)").addClass("active");
+		$("#nav li:nth-child(1)").addClass("active");
         <c:if test="${pagingVO != null}">
         if (${pagingVO.curentPageNo} == ${pagingVO.totalCount}) {
             $(".pagination li:last-child").addClass("disabled")
         }
         if (${pagingVO.curentPageNo} == ${1}) {
-            $(".pagination li:nth-child(1)").addClass("disabled")
+            $(".pagination li:nth-child(2)").addClass("disabled")
         }
         </c:if>
 

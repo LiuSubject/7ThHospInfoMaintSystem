@@ -23,7 +23,10 @@
         .hr0{
             height:1px;border:none;border-top:1px dashed #cccccc;
         }
-    </style>
+
+        body {
+            overflow-y: scroll;
+        }    </style>
 </head>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -85,8 +88,7 @@
                         <div id="textareadetail" class="form-group">
                             <label class="col-sm-2 control-label">详情描述：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="detail"
-                                       value="${computerProblems.detail}" readonly="readonly">
+                                <textarea  type="text" class="form-control" rows="5" id="detail" name="detail"  readonly="readonly">${computerProblems.detail}</textarea>
                             </div>
                         </div>
                         <div id="textareareback" class="form-group">
@@ -203,7 +205,7 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(1)").addClass("active");
+    $("#nav li:nth-child(2)").addClass("active");
 
     //标红处理
     if (${computerProblems.faultUrgent == 1}) {
