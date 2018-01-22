@@ -23,7 +23,10 @@
         .hr0{
             height:1px;border:none;border-top:1px dashed #cccccc;
         }
-    </style>
+
+        body {
+            overflow-y: scroll;
+        }    </style>
 </head>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>

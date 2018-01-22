@@ -50,7 +50,7 @@
         @page {
             margin: 0;
         }
-    </style>
+body{            overflow-y:scroll;        }    </style>
 </head>
 <body>
 <h3 class="text-center" style="margin-bottom:30px;">绍兴市第七人民医院信息物资请购表</h3>
