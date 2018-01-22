@@ -1771,53 +1771,57 @@ public class AdminController {
                 materialApplicationCustom.setFlag(1);
             }
 
-            //将反馈插入空白反馈字段
-            if(materialApplicationCustom.getFeedbackId1() == null){
-                materialApplicationCustom.setFeedbackContent1(feedback);
-                materialApplicationCustom.setFeedbackId1(viewEmployeeMiPsd.getCode());
-                materialApplicationCustom.setFeedbackName1(viewEmployeeMiPsd.getName());
-                //设置反馈时间
-                Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateString = formatter.format(currentTime);
-                materialApplicationCustom.setFeedbackTime1(dateString);
-            }else if(materialApplicationCustom.getFeedbackId2() == null){
-                materialApplicationCustom.setFeedbackContent2(feedback);
-                materialApplicationCustom.setFeedbackId2(viewEmployeeMiPsd.getCode());
-                materialApplicationCustom.setFeedbackName2(viewEmployeeMiPsd.getName());
-                //设置反馈时间
-                Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateString = formatter.format(currentTime);
-                materialApplicationCustom.setFeedbackTime2(dateString);
-            }else if(materialApplicationCustom.getFeedbackId3() == null){
-                materialApplicationCustom.setFeedbackContent3(feedback);
-                materialApplicationCustom.setFeedbackId3(viewEmployeeMiPsd.getCode());
-                materialApplicationCustom.setFeedbackName3(viewEmployeeMiPsd.getName());
-                //设置反馈时间
-                Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateString = formatter.format(currentTime);
-                materialApplicationCustom.setFeedbackTime3(dateString);
-            }else if(materialApplicationCustom.getFeedbackId4() == null){
-                materialApplicationCustom.setFeedbackContent4(feedback);
-                materialApplicationCustom.setFeedbackId4(viewEmployeeMiPsd.getCode());
-                materialApplicationCustom.setFeedbackName4(viewEmployeeMiPsd.getName());
-                //设置反馈时间
-                Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateString = formatter.format(currentTime);
-                materialApplicationCustom.setFeedbackTime4(dateString);
-            }else if(materialApplicationCustom.getFeedbackId5() == null){
-                materialApplicationCustom.setFeedbackContent5(feedback);
-                materialApplicationCustom.setFeedbackId5(viewEmployeeMiPsd.getCode());
-                materialApplicationCustom.setFeedbackName5(viewEmployeeMiPsd.getName());
-                //设置反馈时间
-                Date currentTime = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateString = formatter.format(currentTime);
-                materialApplicationCustom.setFeedbackTime5(dateString);
+            if(materialApplicationCustom.getGroupVisible() == 1){
+                //将反馈插入空白反馈字段
+                if(materialApplicationCustom.getFeedbackId1() == null){
+                    materialApplicationCustom.setFeedbackContent1(feedback);
+                    materialApplicationCustom.setFeedbackId1(viewEmployeeMiPsd.getCode());
+                    materialApplicationCustom.setFeedbackName1(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    materialApplicationCustom.setFeedbackTime1(dateString);
+                }else if(materialApplicationCustom.getFeedbackId2() == null){
+                    materialApplicationCustom.setFeedbackContent2(feedback);
+                    materialApplicationCustom.setFeedbackId2(viewEmployeeMiPsd.getCode());
+                    materialApplicationCustom.setFeedbackName2(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    materialApplicationCustom.setFeedbackTime2(dateString);
+                }else if(materialApplicationCustom.getFeedbackId3() == null){
+                    materialApplicationCustom.setFeedbackContent3(feedback);
+                    materialApplicationCustom.setFeedbackId3(viewEmployeeMiPsd.getCode());
+                    materialApplicationCustom.setFeedbackName3(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    materialApplicationCustom.setFeedbackTime3(dateString);
+                }else if(materialApplicationCustom.getFeedbackId4() == null){
+                    materialApplicationCustom.setFeedbackContent4(feedback);
+                    materialApplicationCustom.setFeedbackId4(viewEmployeeMiPsd.getCode());
+                    materialApplicationCustom.setFeedbackName4(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    materialApplicationCustom.setFeedbackTime4(dateString);
+                }else if(materialApplicationCustom.getFeedbackId5() == null){
+                    materialApplicationCustom.setFeedbackContent5(feedback);
+                    materialApplicationCustom.setFeedbackId5(viewEmployeeMiPsd.getCode());
+                    materialApplicationCustom.setFeedbackName5(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    materialApplicationCustom.setFeedbackTime5(dateString);
+                }
             }
+
+
 
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
@@ -1889,7 +1893,8 @@ public class AdminController {
             }
             e.printStackTrace();
         }
-        if(materialApplicationCustom.getFlag() == 1 || subject.hasRole("examiner")){
+        if(subject.hasRole("examiner")
+                || (subject.hasRole("material") && materialApplicationCustom.getGroupVisible() == 1)){
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(2);
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
