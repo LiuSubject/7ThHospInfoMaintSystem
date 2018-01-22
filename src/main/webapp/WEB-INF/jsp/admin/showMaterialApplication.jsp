@@ -88,7 +88,15 @@
 					<tbody>
 					<c:forEach  items="${materialApplicationList}" var="item">
 						<tr>
-							<td>${item.applicant}</td>
+							<td>
+								<c:if test="${item.groupVisible == 1
+									&& item.flag != 2
+									&& materials == true}">#</c:if>
+									${item.applicant}
+								<c:if test="${item.groupVisible == 1
+									&& item.flag != 2
+									&& materials == true}">#</c:if>
+							</td>
 							<td>${item.name}</td>
 							<td>${item.number}</td>
 							<td>${item.brand}</td>

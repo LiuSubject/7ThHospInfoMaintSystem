@@ -16,6 +16,9 @@
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <style type="text/css">
+        .Urgent {
+            color: #c9302c;
+        }
         /*分割线*/
         .hr0{
             height:1px;border:none;border-top:1px dashed #cccccc;
@@ -48,7 +51,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <h2 style="text-align: center;">${materialApplication.name}</h2>
+                        <h2 id="materialApplicationName" style="text-align: center;">${materialApplication.name}</h2>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -269,6 +272,10 @@
 <script type="text/javascript">
     $("#nav li:nth-child(4)").addClass("active");
 
+    //可处理标识
+    if (${materialApplication.groupVisible == 1}) {
+        $("#materialApplicationName").addClass("Urgent");
+    }
 
     //推送处理按钮点击
     $('#pushBtn').on('click', function () {
