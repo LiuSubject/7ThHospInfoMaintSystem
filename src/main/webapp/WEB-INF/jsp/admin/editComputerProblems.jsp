@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" action="/admin/editComputerProblems" id="editfrom"
+                    <form class="form-horizontal" role="form" action="" id="editfrom"
                           method="post">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">故障类型：</label>

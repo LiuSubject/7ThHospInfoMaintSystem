@@ -35,7 +35,7 @@ function Encrypting(account,pwd) {
             x_temp_int1 = x_temp_int1 - 75;
         }
         x_temp_str2 = pw_string.substring(0,1);
-        x_temp_int2 = x_temp_str1.charCodeAt(0);
+        x_temp_int2 = x_temp_str2.charCodeAt(0);
         x_temp_int1 = x_temp_int1 + x_temp_int2;
 
         if(x_temp_int1 > 122 && x_temp_int1 < 198){

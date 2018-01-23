@@ -8,6 +8,7 @@ import com.system.service.*;
 import com.system.util.CustomerContextHolder;
 import com.system.util.push.MessagePushUtil;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,34 +180,14 @@ public class AdminController {
     @Transactional
     public String addComputerProblemsCustom(ComputerProblemsCustom computerProblemsCustom, Model model,HttpServletRequest request,UploadedImageFile file) throws Exception {
 
-        //获取当前操作用户对象
+        //获取当前用户
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
-
-
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
 
         //设置问题初始化时间
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(currentTime);
-
         //无初始时间时设置初始时间
         if(computerProblemsCustom.getCreateTime() == null || computerProblemsCustom.getCreateTime().length() == 0)
         {
@@ -227,13 +208,10 @@ public class AdminController {
 
         //设置问题初始化状态
         computerProblemsCustom.setFlag(0);
-
         //设置问题所属部门编码
         computerProblemsCustom.setDepartcode(viewEmployeeMiPsd.getDeptCode());
-
         //设置问题所属人员ID
         computerProblemsCustom.setUserid(viewEmployeeMiPsd.getCode());
-
         //设置标红标识
         computerProblemsCustom.setFaultUrgent(0);
 
@@ -247,7 +225,7 @@ public class AdminController {
                 model.addAttribute("message", "抱歉，故障信息保存失败");
                 return "error";
             }
-            //向指定管理组推送消息
+            //向指定管理组群推送消息
             switch(computerProblemsCustom.getType()){
                 case 1:
                     String[] userGroups1 = new String[]{"hardware","examiner"};
@@ -264,14 +242,42 @@ public class AdminController {
                 default:
                     break;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
-
         }
         //重定向
         return "redirect:/admin/showComputerProblems";
+    }
+
+    //获取当前用户
+    public ViewEmployeeMiPsd subjectToViewEmployeeMiPsd(Subject subject){
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+                e.printStackTrace();
+                //获取日志记录器，这个记录器将负责控制日志信息
+                Logger logger = Logger.getLogger(AdminController.class.getName());
+                logger.error("用户获取失败：可能是本地库连接失败",e);
+            }
+            e.printStackTrace();
+            //获取日志记录器，这个记录器将负责控制日志信息
+            Logger logger = Logger.getLogger(AdminController.class.getName());
+            logger.error("用户获取失败：可能是HIS库连接失败，将切换到备用库",e);
+        }
+        return viewEmployeeMiPsd;
     }
 
     // 修改电脑故障页面显示
@@ -298,38 +304,6 @@ public class AdminController {
         return "admin/editComputerProblems";
     }
 
-    // 修改电脑故障页面处理
-    @RequestMapping(value = "/editComputerProblems", method = {RequestMethod.POST})
-    public String editComputerProblems(ComputerProblemsCustom computerProblemsCustom) throws Exception {
-
-        //获取当前操作用户对象
-        Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
-
-        computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
-
-        computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
-
-        //重定向
-        return "redirect:/admin/showComputerProblems";
-    }
 
     // 标红指定电脑故障
     @RequestMapping(value = "/urgentComputerProblems", method = {RequestMethod.GET})
@@ -1933,6 +1907,7 @@ public class AdminController {
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(2);
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
+            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getName());
             materialApplicationCustom.setReback(feedback);
             materialApplicationCustom.setBrand(brand);
             materialApplicationCustom.setModel(model);
