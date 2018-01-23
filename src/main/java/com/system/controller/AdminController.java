@@ -1,6 +1,7 @@
 package com.system.controller;
 
 import com.system.exception.CustomException;
+import com.system.operate.ComputerProblemsList;
 import com.system.po.*;
 import com.system.util.push.CreatePushUtil;
 import com.system.service.*;
@@ -82,54 +83,88 @@ public class AdminController {
     // 电脑故障显示
     @RequestMapping("/showComputerProblems")
     public String showComputerProblems(Model model, Integer page) throws Exception {
-
+        //当前操作对象
         Subject subject = SecurityUtils.getSubject();
-        int groupType = 0;
-        if (subject.hasRole("hardware")) {
-            groupType = 1;
-        }else if(subject.hasRole("software")){
-            groupType = 2;
-        }else if(subject.hasRole("fee")){
-            groupType = 3;
-        }else{
-
-            List<ComputerProblemsCustom> list = null;
-            //页码对象
-            PagingVO pagingVO = new PagingVO();
-            //设置总页数
-            pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
-            if (page == null || page == 0) {
-                pagingVO.setToPageNo(1);
-                list = computerProblemsService.findByPaging(1);
-            } else {
-                pagingVO.setToPageNo(page);
-                list = computerProblemsService.findByPaging(page);
-            }
-
-            model.addAttribute("computerProblemsList", list);
-            model.addAttribute("pagingVO", pagingVO);
-
-            return "admin/showComputerProblems";
-
-        }
-        List<ComputerProblemsCustom> list = null;
-        //页码对象
+        //页码对象初始化
         PagingVO pagingVO = new PagingVO();
-        //设置总页数
-        pagingVO.setTotalCount(computerProblemsService.getCountGroupComputerProblems(groupType));
         if (page == null || page == 0) {
             pagingVO.setToPageNo(1);
-            list = computerProblemsService.findGroupByPaging(1, groupType);
         } else {
             pagingVO.setToPageNo(page);
-            list = computerProblemsService.findGroupByPaging(page, groupType);
         }
-
-        model.addAttribute("computerProblemsList", list);
-        model.addAttribute("pagingVO", pagingVO);
+        ComputerProblemsList computerProblemsList = new ComputerProblemsList();
+        computerProblemsList.setSubject(subject);
+        computerProblemsList.setPagingVO(pagingVO);
+        ComputerProblemsList result = this.getComputerProblemsList(computerProblemsList);
+        model.addAttribute("computerProblemsList", result.getComputerProblemsList());
+        model.addAttribute("pagingVO", result.getPagingVO());
 
         return "admin/showComputerProblems";
+    }
 
+    //获取电脑故障列表
+    public ComputerProblemsList getComputerProblemsList(ComputerProblemsList computerProblemsList) throws Exception{
+
+        //获取当前操作对象
+        Subject subject = computerProblemsList.getSubject();
+        //获取当前页码对象
+        PagingVO pagingVO = computerProblemsList.getPagingVO();
+        //初始化结果对象
+        List<ComputerProblemsCustom> list;
+
+        if (subject.hasRole("hardware")) {
+            //硬件组
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(computerProblemsService.getCountGroupComputerProblems(1));
+                //获取结果
+                list = computerProblemsService.findGroupByPaging(pagingVO.getCurentPageNo(),1);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            computerProblemsList.setPagingVO(pagingVO);
+            computerProblemsList.setComputerProblemsList(list);
+        }else if(subject.hasRole("software")){
+            //软件组
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(computerProblemsService.getCountGroupComputerProblems(2));
+                //获取结果
+                list = computerProblemsService.findGroupByPaging(pagingVO.getCurentPageNo(),2);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            computerProblemsList.setPagingVO(pagingVO);
+            computerProblemsList.setComputerProblemsList(list);
+        }else if(subject.hasRole("fee")){
+            //物资组
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(computerProblemsService.getCountGroupComputerProblems(3));
+                //获取结果
+                list = computerProblemsService.findGroupByPaging(pagingVO.getCurentPageNo(),3);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            computerProblemsList.setPagingVO(pagingVO);
+            computerProblemsList.setComputerProblemsList(list);
+        }else{
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
+                list = computerProblemsService.findByPaging(pagingVO.getCurentPageNo());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            computerProblemsList.setPagingVO(pagingVO);
+            computerProblemsList.setComputerProblemsList(list);
+
+        }
+        return computerProblemsList;
     }
 
     //添加电脑故障
