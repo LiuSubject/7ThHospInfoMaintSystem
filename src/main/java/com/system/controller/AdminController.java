@@ -388,24 +388,7 @@ public class AdminController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
         if(computerProblemsCustom.getFlag() == 0 || computerProblemsCustom.getFlag() == 1){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(1);
@@ -500,24 +483,7 @@ public class AdminController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
         if(computerProblemsCustom.getFlag() == 1){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(2);
@@ -527,10 +493,10 @@ public class AdminController {
             String dateString = formatter.format(currentTime);
             computerProblemsCustom.setDoneTime(dateString);
 
-            computerProblemsCustom.setLeaderName(viewEmployeeMiPsd.getName());
+
             computerProblemsCustom.setFaultUrgent(0);
             computerProblemsCustom.setLeader(viewEmployeeMiPsd. getCode());
-            computerProblemsCustom.setLeader(viewEmployeeMiPsd. getName());
+            computerProblemsCustom.setLeaderName(viewEmployeeMiPsd.getName());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
 
@@ -695,24 +661,7 @@ public class AdminController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
 
 
 
@@ -820,39 +769,6 @@ public class AdminController {
         return "admin/editMaterialApplication";
     }
 
-    // 修改物资申购页面处理
-    @RequestMapping(value = "/editMaterialApplication", method = {RequestMethod.POST})
-    public String editMaterialApplication(MaterialApplicationCustom materialApplicationCustom) throws Exception {
-
-        //获取当前操作用户对象
-        Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
-
-        materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
-
-        materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
-
-        //重定向
-        return "redirect:/admin/showMaterialApplication";
-    }
-
     // 预推送物资申购页面显示
     @RequestMapping(value = "/prePushMaterialApplication", method = {RequestMethod.GET})
     public String prePushMaterialApplication(HttpServletRequest request, Model modelV) throws Exception {
@@ -940,24 +856,7 @@ public class AdminController {
         if(!subject.hasRole("examiner")){
             return "redirect:/admin/showMaterialApplication";
         }
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
 
 
 
@@ -1081,24 +980,7 @@ public class AdminController {
         if(!subject.hasRole("dpdean") && !subject.hasRole("infodean") && !subject.hasRole("alldean")){
             return "redirect:/admin/showMaterialApplication";
         }
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
 
         //保存意见至对应位，保存姓名，单个审批结果标识置2-拒绝，最终审批结果标识置2-拒绝
         //处理状态置2-已完成，
@@ -1176,24 +1058,7 @@ public class AdminController {
         if(!subject.hasRole("dpdean") && !subject.hasRole("infodean") && !subject.hasRole("alldean")){
             return "redirect:/admin/showMaterialApplication";
         }
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
 
         //保存意见至对应位，保存姓名，单个审批结果标识置1-通过
         if(subject.hasRole("dpdean")){
@@ -1671,24 +1536,7 @@ public class AdminController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
         if(materialApplicationCustom.getFlag() == 0 || materialApplicationCustom.getFlag() == 1){
             //更新该物资申购问题数据
             materialApplicationCustom.setBrand(brand);
@@ -1884,30 +1732,13 @@ public class AdminController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
         if(subject.hasRole("examiner")
                 || (subject.hasRole("material") && materialApplicationCustom.getGroupVisible() == 1)){
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(2);
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
-            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setLeaderName(viewEmployeeMiPsd.getName());
             materialApplicationCustom.setReback(feedback);
             materialApplicationCustom.setBrand(brand);
             materialApplicationCustom.setModel(model);
@@ -2074,24 +1905,7 @@ public class AdminController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
 
 
 
@@ -2320,25 +2134,8 @@ public class AdminController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
         Map<String, Object> map =new HashMap<String, Object>();
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
         map.put("appliName",viewEmployeeMiPsd.getName());
         map.put("appliDept",viewEmployeeMiPsd.getDeptName());
         map.put("appliDeptCode",viewEmployeeMiPsd.getDeptCode());
