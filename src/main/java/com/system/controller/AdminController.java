@@ -81,8 +81,57 @@ public class AdminController {
     @Autowired
     private MessagePushUtil messagePushUtil;
 
-    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
+    //获取角色集合
+    public String getRoles(Subject subject) throws Exception{
+        ViewEmployeeMiPsd viewEmployeeMiPsd = subjectToViewEmployeeMiPsd(subject);
+        Role role = null;
+        //获取角色对象
+        try {
+            role = roleService.findByRoleId(viewEmployeeMiPsd.getCode()).get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //获取日志记录器，这个记录器将负责控制日志信息
+            Logger logger = Logger.getLogger(AdminController.class.getName());
+            logger.error("角色获取失败：可能是本地库连接失败",e);
+        }
+
+        return role.getRolename();
+    }
+
+    // 获取当前用户
+    public ViewEmployeeMiPsd subjectToViewEmployeeMiPsd(Subject subject) throws Exception{
+        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        try {
+            //切换数据源至SQLServer
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
+            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+            //切换数据源至MySQL
+            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+        } catch (Exception e) {
+            //切换数据源至MySQL(启用备用库)
+            try{
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
+                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
+
+            }catch (Exception eSwitch){
+                eSwitch.printStackTrace();
+                e.printStackTrace();
+                //获取日志记录器，这个记录器将负责控制日志信息
+                Logger logger = Logger.getLogger(AdminController.class.getName());
+                logger.error("用户获取失败：可能是本地库连接失败",e);
+            }
+            e.printStackTrace();
+            //获取日志记录器，这个记录器将负责控制日志信息
+            Logger logger = Logger.getLogger(AdminController.class.getName());
+            logger.error("用户获取失败：可能是HIS库连接失败，将切换到备用库",e);
+        }
+        return viewEmployeeMiPsd;
+    }
+
+
+    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    //region
     // 电脑故障显示
     @RequestMapping("/showComputerProblems")
     public String showComputerProblems(Model model, Integer page) throws Exception {
@@ -101,6 +150,8 @@ public class AdminController {
         ComputerProblemsList result = this.getComputerProblemsList(computerProblemsList);
         model.addAttribute("computerProblemsList", result.getComputerProblemsList());
         model.addAttribute("pagingVO", result.getPagingVO());
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
 
         return "admin/showComputerProblems";
     }
@@ -245,35 +296,15 @@ public class AdminController {
         return "redirect:/admin/showComputerProblems";
     }
 
-    // 获取当前用户
-    public ViewEmployeeMiPsd subjectToViewEmployeeMiPsd(Subject subject){
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-                e.printStackTrace();
-                //获取日志记录器，这个记录器将负责控制日志信息
-                Logger logger = Logger.getLogger(AdminController.class.getName());
-                logger.error("用户获取失败：可能是本地库连接失败",e);
-            }
-            e.printStackTrace();
-            //获取日志记录器，这个记录器将负责控制日志信息
-            Logger logger = Logger.getLogger(AdminController.class.getName());
-            logger.error("用户获取失败：可能是HIS库连接失败，将切换到备用库",e);
-        }
-        return viewEmployeeMiPsd;
+    @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.GET})
+    @Transactional
+    public String addComputerProblemsCustomUI(Model model) throws Exception {
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
+        return "admin/addComputerProblems";
     }
+
 
     // 修改电脑故障页面显示
     @RequestMapping(value = "/editComputerProblems", method = {RequestMethod.GET})
@@ -294,7 +325,8 @@ public class AdminController {
         }
 
         model.addAttribute("computerProblems", computerProblems);
-
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
 
         return "admin/editComputerProblems";
     }
@@ -320,6 +352,8 @@ public class AdminController {
         //指定电脑故障记录标红
         ComputerProblemUrgent result = this.computerProblemUrgent(computerProblemUrgent);
         model.addAttribute("computerProblems", result.getComputerProblemsCustom());
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
         return "admin/editComputerProblems";
     }
     // 指定电脑故障记录标红
@@ -507,6 +541,21 @@ public class AdminController {
                 }
                 //向申报人推送消息
                 messagePushUtil.SpecifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
+
+                //如果该故障记录标识为重要，则向 examiner 推送消息
+                if(computerProblemsCustom.getFaultUrgent() == 1){
+                    //创建推送消息
+                    PushMessage pushMessageUrgent = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
+                            "2","13");
+                    try {
+                        pushMessageService.save(pushMessageUrgent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return "error";
+                    }
+                    //向 examiner 推送消息
+                    messagePushUtil.GroupPushSingle(pushMessageUrgent,"examiner");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -528,7 +577,9 @@ public class AdminController {
         }
 
         model.addAttribute("computerProblems", computerProblems);
-
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
 
         return "admin/checkComputerProblems";
     }
@@ -557,6 +608,8 @@ public class AdminController {
 
         ComputerProblemsSearch result = this.computerProblemsSearch(computerProblemsSearch);
         model.addAttribute("computerProblemsList", result.getComputerProblemsList());
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
 
         return "admin/showComputerProblems";
     }
@@ -599,7 +652,8 @@ public class AdminController {
         return computerProblemsSearch;
     }
 
-    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    //endregion
+    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
     // 物资申购显示
     @RequestMapping("/showMaterialApplication")
     public String showMaterialApplication(Model model, Integer page) throws Exception {
@@ -607,29 +661,6 @@ public class AdminController {
 
         List<MaterialApplicationCustom> list = null;
         PagingVO pagingVO = new PagingVO();
-        // region
-/*      //流程修改,暂时弃用
-
-        //页码对象
-        //物资组处理可处理列表
-        if (subject.hasRole("material")) {
-            //设置总页数
-            pagingVO.setTotalCount(materialApplicationService.getCountApprovedMaterialApplication());
-            if (page == null || page == 0) {
-                pagingVO.setToPageNo(1);
-                list = materialApplicationService.findByApprovedPaging(1);
-            } else {
-                pagingVO.setToPageNo(page);
-                list = materialApplicationService.findByApprovedPaging(page);
-            }
-
-            model.addAttribute("materialApplicationList", list);
-            model.addAttribute("pagingVO", pagingVO);
-
-            return "admin/showMaterialApplication";
-        }
-*/
-        // endregion
         //非物资组
         //设置总页数
         pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
@@ -650,6 +681,9 @@ public class AdminController {
 
         model.addAttribute("materialApplicationList", list);
         model.addAttribute("pagingVO", pagingVO);
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
+
 
         return "admin/showMaterialApplication";
 
@@ -658,7 +692,9 @@ public class AdminController {
     //添加物资申购
     @RequestMapping(value = "/addMaterialApplication", method = {RequestMethod.GET})
     public String addMaterialApplicationUI(Model model) throws Exception {
-
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
         return "admin/addMaterialApplication";
     }
 
@@ -771,6 +807,9 @@ public class AdminController {
         }
 
         model.addAttribute("materialApplication", materialApplication);
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
+
 
 
         return "admin/editMaterialApplication";
@@ -816,6 +855,9 @@ public class AdminController {
         modelV.addAttribute("material_judge",material_judge);
         modelV.addAttribute("material_total",material_total);
         modelV.addAttribute("deans", deans);
+        //返回角色对象
+        modelV.addAttribute("roles",this.getRoles(subject));
+
         return "admin/prePushMaterialApplication";
     }
 
@@ -1509,7 +1551,7 @@ public class AdminController {
         }
 
 
-        return "admin/showMaterialApplication";
+        return "redirect: admin/showMaterialApplication";
     }
 
 
@@ -1799,6 +1841,8 @@ public class AdminController {
         }
 
         model.addAttribute("materialApplication", materialApplication);
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
 
 
         return "admin/checkMaterialApplication";
@@ -1837,6 +1881,10 @@ public class AdminController {
         }
 
         model.addAttribute("materialApplicationList", list);
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
+
         return "admin/showMaterialApplication";
     }
 
@@ -1852,6 +1900,9 @@ public class AdminController {
         }
 
         model.addAttribute("materialApplication", materialApplication);
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
 
 
         return "admin/printMaterialApplication";
@@ -1894,6 +1945,9 @@ public class AdminController {
 
         model.addAttribute("engineRoomInspectionList", list);
         model.addAttribute("pagingVO", pagingVO);
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
+
 
         return "admin/showEngineRoomInspection";
 
@@ -1977,6 +2031,8 @@ public class AdminController {
 
 
         model.addAttribute("engineRoomInspection", engineRoomInspection);
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
 
 
         return "admin/editEngineRoomInspection";
@@ -2074,6 +2130,9 @@ public class AdminController {
         }
 
         model.addAttribute("engineRoomInspection", engineRoomInspection);
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
 
 
         return "admin/checkEngineRoomInspection";
@@ -2104,6 +2163,10 @@ public class AdminController {
         listResult.addAll(listByExaminer);
 
         model.addAttribute("engineRoomInspectionList", listResult);
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
+
         return "admin/showEngineRoomInspection";
     }
 
@@ -2120,6 +2183,9 @@ public class AdminController {
 
         model.addAttribute("engineRoomInspection", engineRoomInspection);
 
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
 
         return "admin/printEngineRoomInspection";
     }

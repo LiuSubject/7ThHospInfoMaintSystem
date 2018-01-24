@@ -32,7 +32,7 @@ ul.timeline li .number {
     position: absolute;
     background: url("../images/version_info_dot.png") no-repeat scroll 0 0 transparent;
     width: 56px;
-    height: 56px;
+    height: 200px;
     left: 77px;
     line-height: 56px;
     text-align: center;
@@ -58,30 +58,34 @@ ul.timeline li .content {
     margin-left: 160px;
 
 }
-ul.timeline li .content pre {
+ul.timeline li .content>div {
     background-color: #3594cb;
+    /*3594cb*/
     padding: 20px;
     color: #fff;
     font-size: 16px;
     line-height: 20px;
+    border:2px solid;
+    border-radius:10px;
 }
-ul.timeline li .content_wait pre {
-    background-color: #fff;
-    padding: 20px;
-    color: #fff;
-    font-size: 13px;
-    line-height: 20px;
-    border:0;
-}
-ul.timeline li.alt_warn .content pre {
+ul.timeline li.alt_warn .content>div {
     background-color: #43B1F1;
+    border:2px solid;
+    border-radius:10px;
 }
-ul.timeline li.alt_info .content pre {
+ul.timeline li.alt_info .content>div {
     background-color: #43B1F1;
+    border:2px solid;
+    border-radius:10px;
 }
-ul.timeline li.alt_success .content pre {
+ul.timeline li.alt_success .content>div {
     background-color: #43B1F1;
+    border:2px solid;
+    border-radius:10px;
 }
-ul.timeline li.alt_approve .content pre {
+ul.timeline li.alt_approve .content>div {
     background-color: #43B1F1;
+    border:2px solid;
+    border-radius:10px;
 }
+

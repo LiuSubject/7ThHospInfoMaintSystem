@@ -1130,7 +1130,7 @@ public class NormalController {
         }
 
 
-        return "normal/showMaterialApplication";
+        return "redirect:normal/showMaterialApplication";
     }
 
 

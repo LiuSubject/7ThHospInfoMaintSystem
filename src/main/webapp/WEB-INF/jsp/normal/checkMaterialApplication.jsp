@@ -176,14 +176,20 @@
 						<h3 style="text-align: center;">处理详情</h3>
 						<hr class="hr0" />
 					</div>
-					<div id="timeLine" style="display: none">
+					<div id="timeLine">
 						<ul class="timeline col-sm-10">
 							<li class="alt_warn">
 								<div class="number">
 									提交
 								</div>
 								<div class="content">
-									<pre>${fn:trim(materialApplication.applicant)}<br>${fn:trim(materialApplication.createTime)}<br><hr class="hr0" />${fn:trim(materialApplication.name)}:<br>${fn:trim(materialApplication.reason)}<br></pre>
+									<div>
+										${fn:trim(materialApplication.applicant)}<br>
+										${fn:trim(materialApplication.createTime)}<br>
+										<hr class="hr0" />
+										${fn:trim(materialApplication.name)}:<br>
+										${fn:trim(materialApplication.reason)}<br>
+									</div>
 								</div>
 							</li>
 							<c:if test="${materialApplication.highApproved == 1}">
@@ -193,16 +199,30 @@
 										审批
 									</div>
 									<div class="content">
+										<div>
 										<c:if test="${materialApplication.approvedFlag == 0 }">
-											<pre>审批中</pre>
+											审批中
 										</c:if>
 										<c:if test="${materialApplication.approvedFlag == 1 }">
-											<pre>审批通过</pre>
+											审批通过
 										</c:if>
 										<c:if test="${materialApplication.approvedFlag == 2 }">
-											<pre>审批不通过</pre>
+											审批不通过
 										</c:if>
-
+										<hr class="hr0" />
+										<c:if test="${materialApplication.highLeaderApproved1 == 1 }">
+											分管院长审批意见:<br>
+											${fn:trim(materialApplication.highLeaderReback1)}<br><br>
+										</c:if>
+										<c:if test="${materialApplication.highLeaderApproved2 == 1 }">
+											信息主管院长审批意见:<br>
+											${fn:trim(materialApplication.highLeaderReback2)}<br><br>
+										</c:if>
+										<c:if test="${materialApplication.highLeaderApproved3 == 1 }">
+											院长审批意见:<br>
+											${fn:trim(materialApplication.highLeaderReback3)}<br><br>
+										</c:if>
+										</div>
 									</div>
 								</li>
 							</c:if>
@@ -212,7 +232,12 @@
 										处理
 									</div>
 									<div class="content">
-										<pre>${fn:trim(materialApplication.feedbackName1)}<br>${fn:trim(materialApplication.feedbackTime1)}<br><hr class="hr0" />${fn:trim(materialApplication.feedbackContent1)}<br></pre>
+										<div>
+												${fn:trim(materialApplication.feedbackName1)}<br>
+												${fn:trim(materialApplication.feedbackTime1)}<br>
+												<hr class="hr0" />
+												${fn:trim(materialApplication.feedbackContent1)}<br>
+										</div>
 									</div>
 								</li>
 							</c:if>
@@ -222,7 +247,12 @@
 										处理
 									</div>
 									<div class="content">
-										<pre>${fn:trim(materialApplication.feedbackName2)}<br>${fn:trim(materialApplication.feedbackTime2)}<br><hr class="hr0" />${fn:trim(materialApplication.feedbackContent2)}<br></pre>
+										<div>
+												${fn:trim(materialApplication.feedbackName2)}<br>
+												${fn:trim(materialApplication.feedbackTime2)}<br>
+												<hr class="hr0" />
+												${fn:trim(materialApplication.feedbackContent2)}<br>
+										</div>
 									</div>
 								</li>
 							</c:if>
@@ -232,7 +262,12 @@
 										处理
 									</div>
 									<div class="content">
-										<pre>${fn:trim(materialApplication.feedbackName3)}<br>${fn:trim(materialApplication.feedbackTime3)}<br><hr class="hr0" />${fn:trim(materialApplication.feedbackContent3)}<br></pre>
+										<div>
+												${fn:trim(materialApplication.feedbackName3)}<br>
+												${fn:trim(materialApplication.feedbackTime3)}<br>
+												<hr class="hr0" />
+												${fn:trim(materialApplication.feedbackContent3)}<br>
+										</div>
 									</div>
 								</li>
 							</c:if>
@@ -242,7 +277,12 @@
 										处理
 									</div>
 									<div class="content">
-										<pre>${fn:trim(materialApplication.feedbackName4)}<br>${fn:trim(materialApplication.feedbackTime4)}<br><hr class="hr0" />${fn:trim(materialApplication.feedbackContent4)}<br></pre>
+										<div>
+												${fn:trim(materialApplication.feedbackName4)}<br>
+												${fn:trim(materialApplication.feedbackTime4)}<br>
+												<hr class="hr0" />
+												${fn:trim(materialApplication.feedbackContent4)}<br>
+										</div>
 									</div>
 								</li>
 							</c:if>
@@ -252,7 +292,12 @@
 										处理
 									</div>
 									<div class="content">
-										<pre>${fn:trim(materialApplication.feedbackName5)}<br>${fn:trim(materialApplication.feedbackTime5)}<br><hr class="hr0" />${fn:trim(materialApplication.feedbackContent5)}<br></pre>
+										<div>
+												${fn:trim(materialApplication.feedbackName5)}<br>
+												${fn:trim(materialApplication.feedbackTime5)}<br>
+												<hr class="hr0" />
+												${fn:trim(materialApplication.feedbackContent5)}<br>
+										</div>
 									</div>
 								</li>
 							</c:if>
@@ -262,7 +307,7 @@
 									<div class="number">
 									</div>
 									<div class="content_wait">
-										<pre></pre>
+										<div></div>
 									</div>
 								</li>
 							</c:if>
@@ -272,7 +317,12 @@
 										反馈
 									</div>
 									<div class="content">
-										<pre>${fn:trim(materialApplication.leaderName)}<br>${fn:trim(materialApplication.doneTime)}<br><hr class="hr0" />${fn:trim(materialApplication.reback)}<br></pre>
+										<div>
+												${fn:trim(materialApplication.leaderName)}<br>
+												${fn:trim(materialApplication.doneTime)}<br>
+													<hr class="hr0" />
+												${fn:trim(materialApplication.reback)}<br>
+										</div>
 									</div>
 								</li>
 							</c:if>

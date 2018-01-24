@@ -23,30 +23,17 @@
         <property name="jdbcUrl" value="${jdbc.mysql.url}" />
         <property name="user" value="${jdbc.mysql.username}" />
         <property name="password" value="${jdbc.mysql.password}" />
-        <!-- 一次性获取连接数，Default:3  -->
-        <property name="acquireIncrement" value="5"/>
+        <property name="maxPoolSize" value="200" />
+        <property name="minPoolSize" value="10" />
+        <!--初始化时获取的连接数，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
+        <property name="initialPoolSize" value="10"/>
+        <property name="checkoutTimeout" value="60" />
+        <property name="unreturnedConnectionTimeout" value="25" />
+        <property name="maxIdleTimeExcessConnections" value="20" />
+        <property name="maxConnectionAge" value="20" />
+        <property name="idleConnectionTestPeriod" value="50" />
+        <property name="maxStatements" value="0" />
 
-        <!-- 初始化连接数，Default:3 -->
-        <property name="initialPoolSize" value="3"/>
-
-        <property name="minPoolSize" value="1"/>
-        <!-- 连接池中保留的最大连接数，Default:15 -->
-        <property name="maxPoolSize" value="20"/>
-
-        <!-- 获取连接失败后，重复尝试的次数，Default:30 -->
-        <property name="acquireRetryAttempts" value="30"/>
-
-        <!-- 获取连接超时时间，超时后将抛出SQLException，Default:0，单位：毫秒 -->
-        <property name="checkoutTimeout" value="18000"/>
-
-        <!-- 多长时间检查所有连接池中的空闲连接，Default:0，单位：秒 -->
-        <property name="idleConnectionTestPeriod" value="1200"/>
-
-        <!-- 最大空闲时间内连接未使用，则被丢弃，Default:0，单位：秒 -->
-        <property name="maxIdleTime" value="1800"/>
-
-        <!-- 取得连接的同时是否校验连接的有效性，Default:false -->
-        <property name="testConnectionOnCheckin" value="true"/>
     </bean>
 
     <!-- ===============第二个数据源SQLServer的配置=============== -->
@@ -57,30 +44,16 @@
         <property name="jdbcUrl" value="${jdbc.sqlserver.url}" />
         <property name="user" value="${jdbc.sqlserver.username}" />
         <property name="password" value="${jdbc.sqlserver.password}" />
-        <!-- 一次性获取连接数，Default:3  -->
-        <property name="acquireIncrement" value="5"/>
-
-        <!-- 初始化连接数，Default:3 -->
-        <property name="initialPoolSize" value="3"/>
-
-        <property name="minPoolSize" value="1"/>
-        <!-- 连接池中保留的最大连接数，Default:15 -->
-        <property name="maxPoolSize" value="20"/>
-
-        <!-- 获取连接失败后，重复尝试的次数，Default:30 -->
-        <property name="acquireRetryAttempts" value="30"/>
-
-        <!-- 获取连接超时时间，超时后将抛出SQLException，Default:0，单位：毫秒 -->
-        <property name="checkoutTimeout" value="18000"/>
-
-        <!-- 多长时间检查所有连接池中的空闲连接，Default:0，单位：秒 -->
-        <property name="idleConnectionTestPeriod" value="1200"/>
-
-        <!-- 最大空闲时间内连接未使用，则被丢弃，Default:0，单位：秒 -->
-        <property name="maxIdleTime" value="1800"/>
-
-        <!-- 取得连接的同时是否校验连接的有效性，Default:false -->
-        <property name="testConnectionOnCheckin" value="true"/>
+        <property name="maxPoolSize" value="200" />
+        <!--初始化时获取的连接数，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
+        <property name="initialPoolSize" value="10"/>
+        <property name="minPoolSize" value="10" />
+        <property name="checkoutTimeout" value="60" />
+        <property name="unreturnedConnectionTimeout" value="25" />
+        <property name="maxIdleTimeExcessConnections" value="20" />
+        <property name="maxConnectionAge" value="20" />
+        <property name="idleConnectionTestPeriod" value="50" />
+        <property name="maxStatements" value="0" />
     </bean>
 
     <!--将DynamicDataSource Bean加入到Spring的上下文xml配置文件中去，同时配置DynamicDataSource的targetDataSources(多数据源目标)属性的Map映射。-->

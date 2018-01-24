@@ -92,7 +92,8 @@
                         <div id="textareadetail" class="form-group">
                             <label class="col-sm-2 control-label">详情描述：</label>
                             <div class="col-sm-8">
-                                <textarea  type="text" class="form-control" rows="5" id="detail" name="detail" placeholder="请输入描述"></textarea>
+                                <textarea type="text" class="form-control" rows="5" id="detail" name="detail"
+                                          placeholder="请输入描述"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -130,9 +131,9 @@
     </c:if>
     //用户信息填入
     $.ajax({
-        url:"/admin/getApplicantInfo",
-        async:true,
-        success: function(data){
+        url: "/admin/getApplicantInfo",
+        async: true,
+        success: function (data) {
             document.getElementById("dept").value = data.appliDept;
             document.getElementById("name").value = data.appliName;
 
@@ -142,20 +143,20 @@
     //网页打开时故障次级列表动态填入
     var mainType = document.getElementById("type").value;
     $.ajax({
-        url:"/admin/getProblemsTypeList",
-        async:true,
+        url: "/admin/getProblemsTypeList",
+        async: true,
         data: {
-            mainType:mainType
+            mainType: mainType
         },
-        success: function(data){
+        success: function (data) {
             $("#typeSecondary").find("option").remove();
             var list = data.computerProblemsTypeList;
-            if(list){                                               //判断
-                for(var i=0; i<list.length; i++){                   //遍历，动态赋值
+            if (list) {                                               //判断
+                for (var i = 0; i < list.length; i++) {                   //遍历，动态赋值
                     var optionString = "";
-                    optionString ="<option value=\""
-                        + list[i].typeCode+"\">"
-                        + list[i].typeName+"</option>";     //动态添加数据
+                    optionString = "<option value=\""
+                        + list[i].typeCode + "\">"
+                        + list[i].typeName + "</option>";     //动态添加数据
                     $("#typeSecondary").append(optionString);       // 为当前Id为typeSecondary的select添加数据。
                 }
             }
@@ -165,25 +166,24 @@
     });
 
 
-
-    $("#type").change(function(){
+    $("#type").change(function () {
         var mainType = document.getElementById("type").value;
         //故障次级列表动态填入
         $.ajax({
-            url:"/admin/getProblemsTypeList",
-            async:true,
+            url: "/admin/getProblemsTypeList",
+            async: true,
             data: {
-                mainType:mainType
+                mainType: mainType
             },
-            success: function(data){
+            success: function (data) {
                 $("#typeSecondary").find("option").remove();
                 var list = data.computerProblemsTypeList;
-                if(list){                                               //判断
-                    for(var i=0; i<list.length; i++){                   //遍历，动态赋值
+                if (list) {                                               //判断
+                    for (var i = 0; i < list.length; i++) {                   //遍历，动态赋值
                         var optionString = "";
-                        optionString ="<option value=\""
-                            + list[i].typeCode+"\">"
-                            + list[i].typeName+"</option>";     //动态添加数据
+                        optionString = "<option value=\""
+                            + list[i].typeCode + "\">"
+                            + list[i].typeName + "</option>";     //动态添加数据
                         $("#typeSecondary").append(optionString);       // 为当前Id为typeSecondary的select添加数据。
                     }
                 }
@@ -193,7 +193,7 @@
         });
     });
 
-    $("#typeSecondary").change(function(){
+    $("#typeSecondary").change(function () {
         document.getElementById("title").value = $("#typeSecondary").find("option:selected").text();
     });
 

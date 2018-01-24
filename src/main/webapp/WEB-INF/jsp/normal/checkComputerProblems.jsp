@@ -111,14 +111,20 @@
 						<h3 style="text-align: center;">处理详情</h3>
 						<hr class="hr0" />
 					</div>
-					<div id="timeLine" style="display: none">
+					<div id="timeLine">
 						<ul class="timeline col-sm-10">
 							<li class="alt_warn">
 								<div class="number">
 									提交
 								</div>
 								<div class="content">
-									<pre>${fn:trim(computerProblems.name)}<br>${fn:trim(computerProblems.createTime)}<br><hr class="hr0" />${fn:trim(computerProblems.title)}:<br>${fn:trim(computerProblems.detail)}<br></pre>
+									<div>
+										${fn:trim(computerProblems.name)}<br>
+										${fn:trim(computerProblems.createTime)}<br>
+										<hr class="hr0" />
+										${fn:trim(computerProblems.title)}:<br>
+										${fn:trim(computerProblems.detail)}<br>
+									</div>
 								</div>
 							</li>
 							<c:if test='${computerProblems.feedbackId1 != null && computerProblems.feedbackId1 !=""}'>
@@ -127,7 +133,12 @@
 										处理
 									</div>
 									<div class="content">
-										<pre>${fn:trim(computerProblems.feedbackName1)}<br>${fn:trim(computerProblems.feedbackTime1)}<br><hr class="hr0" />${fn:trim(computerProblems.feedbackContent1)}<br></pre>
+										<div>
+												${fn:trim(computerProblems.feedbackName1)}<br>
+												${fn:trim(computerProblems.feedbackTime1)}<br>
+											<hr class="hr0" />
+												${fn:trim(computerProblems.feedbackContent1)}<br>
+										</div>
 									</div>
 								</li>
 							</c:if>
@@ -137,7 +148,12 @@
 										处理
 									</div>
 									<div class="content">
-										<pre>${fn:trim(computerProblems.feedbackName2)}<br>${fn:trim(computerProblems.feedbackTime2)}<br><hr class="hr0" />${fn:trim(computerProblems.feedbackContent2)}<br></pre>
+										<div>
+												${fn:trim(computerProblems.feedbackName2)}<br>
+												${fn:trim(computerProblems.feedbackTime2)}<br>
+											<hr class="hr0" />
+												${fn:trim(computerProblems.feedbackContent2)}<br>
+										</div>
 									</div>
 								</li>
 							</c:if>
@@ -147,7 +163,12 @@
 										处理
 									</div>
 									<div class="content">
-										<pre>${fn:trim(computerProblems.feedbackName3)}<br>${fn:trim(computerProblems.feedbackTime3)}<br><hr class="hr0" />${fn:trim(computerProblems.feedbackContent3)}<br></pre>
+										<div>
+												${fn:trim(computerProblems.feedbackName3)}<br>
+												${fn:trim(computerProblems.feedbackTime3)}<br>
+											<hr class="hr0" />
+												${fn:trim(computerProblems.feedbackContent3)}<br>
+										</div>
 									</div>
 								</li>
 							</c:if>
@@ -157,7 +178,12 @@
 										处理
 									</div>
 									<div class="content">
-										<pre>${fn:trim(computerProblems.feedbackName4)}<br>${fn:trim(computerProblems.feedbackTime4)}<br><hr class="hr0" />${fn:trim(computerProblems.feedbackContent4)}<br></pre>
+										<div>
+												${fn:trim(computerProblems.feedbackName4)}<br>
+												${fn:trim(computerProblems.feedbackTime4)}<br>
+											<hr class="hr0" />
+												${fn:trim(computerProblems.feedbackContent4)}<br>
+										</div>
 									</div>
 								</li>
 							</c:if>
@@ -167,7 +193,12 @@
 										处理
 									</div>
 									<div class="content">
-										<pre>${fn:trim(computerProblems.feedbackName5)}<br>${fn:trim(computerProblems.feedbackTime5)}<br><hr class="hr0" />${fn:trim(computerProblems.feedbackContent5)}<br></pre>
+										<div>
+												${fn:trim(computerProblems.feedbackName5)}<br>
+												${fn:trim(computerProblems.feedbackTime5)}<br>
+											<hr class="hr0" />
+												${fn:trim(computerProblems.feedbackContent5)}<br>
+										</div>
 									</div>
 								</li>
 							</c:if>
@@ -176,7 +207,7 @@
 									<div class="number">
 									</div>
 									<div class="content_wait">
-										<pre></pre>
+										<div></div>
 									</div>
 								</li>
 							</c:if>
@@ -186,7 +217,12 @@
 										解决
 									</div>
 									<div class="content">
-										<pre>${fn:trim(computerProblems.leaderName)}<br>${fn:trim(computerProblems.doneTime)}<br><hr class="hr0" />${fn:trim(computerProblems.reback)}<br></pre>
+										<div>
+												${fn:trim(computerProblems.leaderName)}<br>
+												${fn:trim(computerProblems.doneTime)}<br>
+											<hr class="hr0" />
+												${fn:trim(computerProblems.reback)}<br>
+										</div>
 									</div>
 								</li>
 							</c:if>

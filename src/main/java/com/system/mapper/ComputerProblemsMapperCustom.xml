@@ -46,21 +46,21 @@
   <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select computer_problems.*
     from computer_problems
-    ORDER by flag asc, create_time desc
+    ORDER by create_time desc, flag asc
     limit #{toPageNo}, #{pageSize}
   </select>
   <select id="deptFindByPaging" parameterType="map" resultMap="BaseResultMap">
     select computer_problems.*
     from computer_problems
     WHERE dept LIKE concat(concat('%',#{deptName}),'%')
-    ORDER by flag asc, create_time desc
+    ORDER by create_time desc, flag asc
     limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
   </select>
   <select id="findGroupByPaging" parameterType="map" resultMap="BaseResultMap">
     select computer_problems.*
     from computer_problems
     WHERE type = #{groupType}
-    ORDER by flag asc, create_time desc
+    ORDER by create_time desc, flag asc
     limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
   </select>
   <select id="paginationOfSearchResults" parameterType="map" resultMap="BaseResultMap">
@@ -76,7 +76,7 @@
       AND flag = #{flag}
     </if>
   </where>
-  ORDER by flag asc, create_time desc
+  ORDER by create_time desc, flag asc
   </select>
   <select id="paginationOfgGroupSearchResults" parameterType="map" resultMap="BaseResultMap">
     select computer_problems.* from computer_problems
@@ -94,7 +94,7 @@
           AND type = #{groupType}
         </if>
       </where>
-    ORDER by flag asc, create_time desc
+    ORDER by create_time desc, flag asc
   </select>
 
 </mapper>

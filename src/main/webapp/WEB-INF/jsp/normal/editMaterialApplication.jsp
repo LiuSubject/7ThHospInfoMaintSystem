@@ -118,11 +118,37 @@
                                        value="${materialApplication.total}">
                             </div>
                         </div>
+                        <c:if test="${materialApplication.highLeaderApproved1 == 1}">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" style="text-align: center">分管院长审查意见：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="highLeaderReback1" name="highLeaderReback1"
+                                           value="${materialApplication.highLeaderReback1}" readonly="readonly">
+                                </div>
+                            </div>
+                        </c:if>
+                        <c:if test="${materialApplication.highLeaderApproved2 == 1}">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" style="text-align: center">信息主管副院长审批：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="highLeaderReback2" name="highLeaderReback2"
+                                           value="${materialApplication.highLeaderReback2}" readonly="readonly">
+                                </div>
+                            </div>
+                        </c:if>
+                        <c:if test="${materialApplication.highLeaderApproved3 == 1}">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">院长审批：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="highLeaderReback3" name="highLeaderReback3"
+                                           value="${materialApplication.highLeaderReback3}" readonly="readonly">
+                                </div>
+                            </div>
+                        </c:if>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">回复：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="reback" name="reback"
-                                       value="${materialApplication.reback}">
+                                <textarea  type="text" class="form-control" rows="5" id="reback" name="reback" >${computerProblems.reback}</textarea>
                             </div>
                         </div>
                         <div class="form-group" style="text-align: center">
@@ -144,14 +170,20 @@
                         <h3 style="text-align: center;">处理详情</h3>
                         <hr class="hr0" />
                     </div>
-                    <div id="timeLine" style="display: none">
+                    <div id="timeLine">
                         <ul class="timeline col-sm-10">
                             <li class="alt_warn">
                                 <div class="number">
                                     提交
                                 </div>
                                 <div class="content">
-                                    <pre>${fn:trim(materialApplication.applicant)}<br>${fn:trim(materialApplication.createTime)}<br><hr class="hr0" />${fn:trim(materialApplication.name)}:<br>${fn:trim(materialApplication.reason)}<br></pre>
+                                    <div>
+                                        ${fn:trim(materialApplication.applicant)}<br>
+                                        ${fn:trim(materialApplication.createTime)}<br>
+                                        <hr class="hr0" />
+                                        ${fn:trim(materialApplication.name)}:<br>
+                                        ${fn:trim(materialApplication.reason)}<br>
+                                    </div>
                                 </div>
                             </li>
                             <c:if test="${materialApplication.highApproved == 1}">
@@ -162,15 +194,27 @@
                                     </div>
                                     <div class="content">
                                         <c:if test="${materialApplication.approvedFlag == 0 }">
-                                            <pre>审批中</pre>
+                                            审批中
                                         </c:if>
                                         <c:if test="${materialApplication.approvedFlag == 1 }">
-                                            <pre>审批通过</pre>
+                                            审批通过
                                         </c:if>
                                         <c:if test="${materialApplication.approvedFlag == 2 }">
-                                            <pre>审批不通过</pre>
+                                            审批不通过
                                         </c:if>
-
+                                        <hr class="hr0" />
+                                        <c:if test="${materialApplication.highLeaderApproved1 == 1 }">
+                                            分管院长审批意见:<br>
+                                            ${fn:trim(materialApplication.highLeaderReback1)}<br><br>
+                                        </c:if>
+                                        <c:if test="${materialApplication.highLeaderApproved2 == 1 }">
+                                            信息主管院长审批意见:<br>
+                                            ${fn:trim(materialApplication.highLeaderReback2)}<br><br>
+                                        </c:if>
+                                        <c:if test="${materialApplication.highLeaderApproved3 == 1 }">
+                                            院长审批意见:<br>
+                                            ${fn:trim(materialApplication.highLeaderReback3)}<br><br>
+                                        </c:if>
                                     </div>
                                 </li>
                             </c:if>
@@ -180,7 +224,12 @@
                                         处理
                                     </div>
                                     <div class="content">
-                                        <pre>${fn:trim(materialApplication.feedbackName1)}<br>${fn:trim(materialApplication.feedbackTime1)}<br><hr class="hr0" />${fn:trim(materialApplication.feedbackContent1)}<br></pre>
+                                        <div>
+                                                ${fn:trim(materialApplication.feedbackName1)}<br>
+                                                ${fn:trim(materialApplication.feedbackTime1)}<br>
+                                            <hr class="hr0" />
+                                                ${fn:trim(materialApplication.feedbackContent1)}<br>
+                                        </div>
                                     </div>
                                 </li>
                             </c:if>
@@ -190,7 +239,12 @@
                                         处理
                                     </div>
                                     <div class="content">
-                                        <pre>${fn:trim(materialApplication.feedbackName2)}<br>${fn:trim(materialApplication.feedbackTime2)}<br><hr class="hr0" />${fn:trim(materialApplication.feedbackContent2)}<br></pre>
+                                        <div>
+                                                ${fn:trim(materialApplication.feedbackName2)}<br>
+                                                ${fn:trim(materialApplication.feedbackTime2)}<br>
+                                            <hr class="hr0" />
+                                                ${fn:trim(materialApplication.feedbackContent2)}<br>
+                                        </div>
                                     </div>
                                 </li>
                             </c:if>
@@ -200,7 +254,12 @@
                                         处理
                                     </div>
                                     <div class="content">
-                                        <pre>${fn:trim(materialApplication.feedbackName3)}<br>${fn:trim(materialApplication.feedbackTime3)}<br><hr class="hr0" />${fn:trim(materialApplication.feedbackContent3)}<br></pre>
+                                        <div>
+                                                ${fn:trim(materialApplication.feedbackName3)}<br>
+                                                ${fn:trim(materialApplication.feedbackTime3)}<br>
+                                            <hr class="hr0" />
+                                                ${fn:trim(materialApplication.feedbackContent3)}<br>
+                                        </div>
                                     </div>
                                 </li>
                             </c:if>
@@ -210,7 +269,12 @@
                                         处理
                                     </div>
                                     <div class="content">
-                                        <pre>${fn:trim(materialApplication.feedbackName4)}<br>${fn:trim(materialApplication.feedbackTime4)}<br><hr class="hr0" />${fn:trim(materialApplication.feedbackContent4)}<br></pre>
+                                        <div>
+                                                ${fn:trim(materialApplication.feedbackName4)}<br>
+                                                ${fn:trim(materialApplication.feedbackTime4)}<br>
+                                            <hr class="hr0" />
+                                                ${fn:trim(materialApplication.feedbackContent4)}<br>
+                                        </div>
                                     </div>
                                 </li>
                             </c:if>
@@ -220,7 +284,12 @@
                                         处理
                                     </div>
                                     <div class="content">
-                                        <pre>${fn:trim(materialApplication.feedbackName5)}<br>${fn:trim(materialApplication.feedbackTime5)}<br><hr class="hr0" />${fn:trim(materialApplication.feedbackContent5)}<br></pre>
+                                        <div>
+                                                ${fn:trim(materialApplication.feedbackName5)}<br>
+                                                ${fn:trim(materialApplication.feedbackTime5)}<br>
+                                            <hr class="hr0" />
+                                                ${fn:trim(materialApplication.feedbackContent5)}<br>
+                                        </div>
                                     </div>
                                 </li>
                             </c:if>
@@ -230,7 +299,7 @@
                                     <div class="number">
                                     </div>
                                     <div class="content_wait">
-                                        <pre></pre>
+                                        <div></div>
                                     </div>
                                 </li>
                             </c:if>
@@ -240,7 +309,12 @@
                                         反馈
                                     </div>
                                     <div class="content">
-                                        <pre>${fn:trim(materialApplication.leaderName)}<br>${fn:trim(materialApplication.doneTime)}<br><hr class="hr0" />${fn:trim(materialApplication.reback)}<br></pre>
+                                        <div>
+                                                ${fn:trim(materialApplication.leaderName)}<br>
+                                                ${fn:trim(materialApplication.doneTime)}<br>
+                                            <hr class="hr0" />
+                                                ${fn:trim(materialApplication.reback)}<br>
+                                        </div>
                                     </div>
                                 </li>
                             </c:if>
