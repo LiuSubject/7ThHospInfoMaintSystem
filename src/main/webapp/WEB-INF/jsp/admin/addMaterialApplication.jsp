@@ -107,7 +107,7 @@
                             <label class="col-sm-2 control-label">使用日期：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="useDate" name="useDate"
-                                       placeholder="请输入使用日期">
+                                       placeholder="请输入使用日期" onfocus=this.blur() >
                             </div>
                         </div>
 

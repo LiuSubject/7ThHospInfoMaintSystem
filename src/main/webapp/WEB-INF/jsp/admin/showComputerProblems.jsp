@@ -22,6 +22,9 @@
 		body {
 			overflow-y: scroll;
 		}
+		.Urgent {
+			background-color: pink;
+		}
 	</style>
 
 	<%--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">--%>
@@ -85,12 +88,8 @@
 					        </thead>
 					        <tbody>
 							<c:forEach  items="${computerProblemsList}" var="item">
-								<tr>
-									<td>
-										<c:if test="${item.faultUrgent == 1}">#</c:if>
-											${item.title}
-										<c:if test="${item.faultUrgent == 1}">#</c:if>
-									</td>
+								<tr <c:if test="${item.faultUrgent == 1}">class="Urgent"</c:if>>
+									<td>${item.title}</td>
 									<td>${item.dept}</td>
 									<td>${item.name}</td>
 									<td>${item.tel}</td>

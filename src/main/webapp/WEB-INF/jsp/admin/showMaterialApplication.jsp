@@ -22,6 +22,9 @@
 		body {
 			overflow-y: scroll;
 		}
+		.groupdDeal {
+			background-color: lightskyblue;
+		}
 	</style>
 	<%--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">--%>
 
@@ -73,6 +76,7 @@
 					<thead>
 					<tr>
 						<th style="text-align: center">申请人</th>
+						<th style="text-align: center">科室</th>
 						<th style="text-align: center">名称</th>
 						<th style="text-align: center">数量</th>
 						<th style="text-align: center">品牌</th>
@@ -87,16 +91,11 @@
 					</thead>
 					<tbody>
 					<c:forEach  items="${materialApplicationList}" var="item">
-						<tr>
-							<td>
-								<c:if test="${item.groupVisible == 1
-									&& item.flag != 2
-									&& materials == true}">#</c:if>
-									${item.applicant}
-								<c:if test="${item.groupVisible == 1
-									&& item.flag != 2
-									&& materials == true}">#</c:if>
-							</td>
+						<tr <c:if test="${item.groupVisible == 1
+							&& item.flag != 2
+							&& materials == true}">class="groupdDeal"</c:if>>
+							<td>${item.applicant}</td>
+							<td>${item.dept}</td>
 							<td>${item.name}</td>
 							<td>${item.number}</td>
 							<td>${item.brand}</td>

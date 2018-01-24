@@ -52,6 +52,8 @@
 				<table class="table table-bordered">
 					<thead>
 					<tr>
+						<th style="text-align: center">申请人</th>
+						<th style="text-align: center">科室</th>
 						<th style="text-align: center">名称</th>
 						<th style="text-align: center">数量</th>
 						<th style="text-align: center">品牌</th>
@@ -59,7 +61,6 @@
 						<th style="text-align: center">估价</th>
 						<th style="text-align: center">总价</th>
 						<th style="text-align: center">使用/安装日期</th>
-						<th style="text-align: center">申请人</th>
 						<th style="text-align: center">状态</th>
 						<th style="text-align: center">需审批</th>
 						<th style="text-align: center"></th>
@@ -68,6 +69,11 @@
 					<tbody>
 					<c:forEach  items="${materialApplicationList}" var="item">
 						<tr>
+						<tr <c:if test="${item.groupVisible == 1
+							&& item.flag != 2
+							&& materials == true}">class="groupdDeal"</c:if>>
+							<td>${item.applicant}</td>
+							<td>${item.dept}</td>
 							<td>${item.name}</td>
 							<td>${item.number}</td>
 							<td>${item.brand}</td>
@@ -75,7 +81,6 @@
 							<td>${item.judge}</td>
 							<td>${item.total}</td>
 							<td>${item.useDate}</td>
-							<td>${item.applicant}</td>
 							<c:if test="${item.flag == 0}">
 								<td><button class="btn btn-warning btn-sm" type="button">提交中</button></td>
 							</c:if>
@@ -93,8 +98,7 @@
 							</c:if>
 							<td style="text-align: center">
 								<c:if test="${item.flag != 2 && item.highApproved == 1
-									&& item.approvedFlag == 0 && item.highLeaderApproved1 == 1
-									&& item.groupVisible == 0}">
+									&& item.approvedFlag == 0 && item.highLeaderApproved1 == 1}">
 								<button class="btn btn-info btn-xs" type="button" onClick="location.href='/normal/editMaterialApplication?id=${item.id}'">审批</button>
 								</c:if>
 								<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/normal/checkMaterialApplication?id=${item.id}'">查看详情</button>

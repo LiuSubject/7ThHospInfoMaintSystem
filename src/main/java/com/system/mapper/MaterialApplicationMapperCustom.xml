@@ -68,21 +68,21 @@
   <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select material_application.*
     from material_application
-    ORDER by flag asc, high_approved desc,use_date desc
+    ORDER by create_time desc, flag asc, high_approved desc
     limit #{toPageNo}, #{pageSize}
   </select>
   <select id="findByApprovedPaging" parameterType="PagingVO" resultMap="BaseResultMap">
     select material_application.*
     from material_application
     WHERE group_visible = 1
-    ORDER by flag asc, high_approved desc,use_date desc
+    ORDER by create_time desc, flag asc, high_approved desc
     limit #{toPageNo}, #{pageSize}
   </select>
   <select id="deptFindByPaging" parameterType="map" resultMap="BaseResultMap">
     select material_application.*
     from material_application
     WHERE dept LIKE concat(concat('%',#{deptName}),'%')
-    ORDER by flag asc, high_approved desc,use_date desc
+    ORDER by create_time desc, flag asc, high_approved desc
     limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
   </select>
   <select id="deptAndApproveFindByPaging" parameterType="map" resultMap="BaseResultMap">
@@ -106,7 +106,7 @@
         OR flag = #{flag}
       </if>
     </where>
-    ORDER by flag asc, high_approved desc,use_date desc
+    ORDER by create_time desc, flag asc, high_approved desc
   </select>
 
 </mapper>
