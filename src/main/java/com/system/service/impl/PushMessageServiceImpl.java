@@ -58,7 +58,12 @@ public class PushMessageServiceImpl implements PushMessageService {
     }
 
     public void save(PushMessage pushMessage) throws Exception {
-        pushMessageMapper.insert(pushMessage);
+        try {
+            pushMessageMapper.insert(pushMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public void removeById(int id) throws Exception {

@@ -1,7 +1,9 @@
 package com.system.controller;
 
 import com.system.exception.CustomException;
+import com.system.operate.ComputerProblemUrgent;
 import com.system.operate.ComputerProblemsList;
+import com.system.operate.ComputerProblemsSearch;
 import com.system.po.*;
 import com.system.util.push.CreatePushUtil;
 import com.system.service.*;
@@ -103,7 +105,7 @@ public class AdminController {
         return "admin/showComputerProblems";
     }
 
-    //获取电脑故障列表
+    // 获取电脑故障列表
     public ComputerProblemsList getComputerProblemsList(ComputerProblemsList computerProblemsList) throws Exception{
 
         //获取当前操作对象
@@ -166,13 +168,6 @@ public class AdminController {
 
         }
         return computerProblemsList;
-    }
-
-    //添加电脑故障
-    @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.GET})
-    public String addComputerProblemsUI(Model model) throws Exception {
-
-        return "admin/addComputerProblems";
     }
 
     // 添加电脑故障处理
@@ -250,7 +245,7 @@ public class AdminController {
         return "redirect:/admin/showComputerProblems";
     }
 
-    //获取当前用户
+    // 获取当前用户
     public ViewEmployeeMiPsd subjectToViewEmployeeMiPsd(Subject subject){
         ViewEmployeeMiPsd viewEmployeeMiPsd = null;
         try {
@@ -311,16 +306,31 @@ public class AdminController {
         if (id == null) {
             return "redirect:/admin/showComputerProblems";
         }
+        //获取指定电脑故障记录
         ComputerProblemsCustom computerProblemsCustom = computerProblemsService.findById(id);
+        if (computerProblemsCustom == null) {
+            throw new CustomException("抱歉，未找到该故障相关信息");
+        }
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
+        //封装
+        ComputerProblemUrgent computerProblemUrgent = new ComputerProblemUrgent();
+        computerProblemUrgent.setSubject(subject);
+        computerProblemUrgent.setComputerProblemsCustom(computerProblemsCustom);
+        //指定电脑故障记录标红
+        ComputerProblemUrgent result = this.computerProblemUrgent(computerProblemUrgent);
+        model.addAttribute("computerProblems", result.getComputerProblemsCustom());
+        return "admin/editComputerProblems";
+    }
+    // 指定电脑故障记录标红
+    public ComputerProblemUrgent computerProblemUrgent(ComputerProblemUrgent computerProblemUrgent) throws Exception{
+        //获取当前操作对象
+        Subject subject = computerProblemUrgent.getSubject();
+        //获取指定电脑故障记录
+        ComputerProblemsCustom computerProblemsCustom = computerProblemUrgent.getComputerProblemsCustom();
         //检查权限
         if(subject.hasRole("examiner")){
-
-            if (computerProblemsCustom == null) {
-                model.addAttribute("message", "没有相关记录");
-                return "error";
-            }else{
+            //审核者
                 if(computerProblemsCustom.getFaultUrgent() == null || computerProblemsCustom.getFaultUrgent() == 0){
                     computerProblemsCustom.setFaultUrgent(1);
                     computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
@@ -331,12 +341,7 @@ public class AdminController {
                     //产生推送消息
                     PushMessage preMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
                             "0","99");
-                    try {
-                        pushMessageService.save(preMessage);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return "error";
-                    }
+                    pushMessageService.save(preMessage);
                     //向指定管理组推送消息
                     switch(computerProblemsCustom.getType()){
                         case 1:
@@ -354,17 +359,13 @@ public class AdminController {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return "error";
-
+                    throw e;
                 }
-            }
+
+        }else {
 
         }
-
-        model.addAttribute("computerProblems", computerProblemsCustom);
-
-
-        return "admin/editComputerProblems";
+        return computerProblemUrgent;
     }
 
 
@@ -374,21 +375,18 @@ public class AdminController {
 
         Integer id = Integer.parseInt(request.getParameter("id"));
         String feedback = request.getParameter("feedback");
-
-
         if (id == null) {
             return "redirect:/admin/showComputerProblems";
         }
-
         //获取当前故障问题
         ComputerProblemsCustom computerProblemsCustom = computerProblemsService.findById(id);
         if (computerProblemsCustom == null) {
             throw new CustomException("抱歉，未找到该故障相关信息");
         }
-
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
         ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+        //保存反馈
         if(computerProblemsCustom.getFlag() == 0 || computerProblemsCustom.getFlag() == 1){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(1);
@@ -469,18 +467,14 @@ public class AdminController {
 
         Integer id = Integer.parseInt(request.getParameter("id"));
         String feedback = request.getParameter("feedback");
-
-
         if (id == null) {
-            return "redirect:/admin/showComputerProblems";
+            throw new CustomException("抱歉，未找到该故障相关信息");
         }
-
         //获取当前故障问题
         ComputerProblemsCustom computerProblemsCustom = computerProblemsService.findById(id);
         if (computerProblemsCustom == null) {
             throw new CustomException("抱歉，未找到该故障相关信息");
         }
-
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
         ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
@@ -539,21 +533,11 @@ public class AdminController {
         return "admin/checkComputerProblems";
     }
 
-    // 查看电脑故障详情
-    @RequestMapping(value = "/checkComputerProblems", method = {RequestMethod.POST})
-    public String checkComputerProblems(ComputerProblemsCustom computerProblemsCustom) throws Exception {
-
-        computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
-
-        //重定向
-        return "redirect:/admin/showComputerProblems";
-    }
-
-    //搜索电脑故障
+    // 搜索电脑故障（暂未使用参数page）
     @RequestMapping(value = "/searchComputerProblems")
     private String searchComputerProblems(String findByDept,String findByName,String findByFlag, Model model,Integer page) throws Exception {
 
-        List<ComputerProblemsCustom> list = null;
+        //封装搜索条件
         Map<String, Object> map =new HashMap<String, Object>();
         map.put("dept",findByDept);
         map.put("name",findByName);
@@ -564,32 +548,55 @@ public class AdminController {
             flag = 3;
         }
         map.put("flag",flag);
+        //获取当前操作用户
+        Subject subject = SecurityUtils.getSubject();
+        //封装
+        ComputerProblemsSearch computerProblemsSearch = new ComputerProblemsSearch();
+        computerProblemsSearch.setMap(map);
+        computerProblemsSearch.setSubject(subject);
+
+        ComputerProblemsSearch result = this.computerProblemsSearch(computerProblemsSearch);
+        model.addAttribute("computerProblemsList", result.getComputerProblemsList());
+
+        return "admin/showComputerProblems";
+    }
+    // 搜索电脑故障（暂未使用参数page）
+    public ComputerProblemsSearch computerProblemsSearch(ComputerProblemsSearch computerProblemsSearch) throws Exception{
+        //获取当前操作对象
+        Subject subject = computerProblemsSearch.getSubject();
+        //获取当前页码对象
+        PagingVO pagingVO = computerProblemsSearch.getPagingVO();
+        //获取搜索条件
+        Map<String, Object> map = computerProblemsSearch.getMap();
+        //初始化结果对象
+        List<ComputerProblemsCustom> list;
         try {
-            Subject subject = SecurityUtils.getSubject();
-            int groupType = 0;
             if (subject.hasRole("hardware")) {
-                groupType = 1;
+                //硬件组
+                int groupType = 1;
                 map.put("groupType",groupType);
                 list = computerProblemsService.paginationOfgGroupSearchResults(map);
+                computerProblemsSearch.setComputerProblemsList(list);
             }else if(subject.hasRole("software")){
-                groupType = 2;
+                //软件组
+                int groupType = 2;
                 map.put("groupType",groupType);
                 list = computerProblemsService.paginationOfgGroupSearchResults(map);
+                computerProblemsSearch.setComputerProblemsList(list);
             }else if(subject.hasRole("fee")){
-                groupType = 3;
+                //费用组
+                int groupType = 3;
                 map.put("groupType",groupType);
                 list = computerProblemsService.paginationOfgGroupSearchResults(map);
+                computerProblemsSearch.setComputerProblemsList(list);
             }else {
                 list = computerProblemsService.paginationOfSearchResults(map);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "error";
+            throw e;
         }
-
-        model.addAttribute("computerProblemsList", list);
-
-        return "admin/showComputerProblems";
+        return computerProblemsSearch;
     }
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
