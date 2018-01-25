@@ -28,7 +28,7 @@ public class MessageStitchUtil {
     private PushMessageTemplateService pushMessageTemplateService;
 
     //自动拼接推送消息表内标识为未推送的第一条消息
-    public PushMessage MessageStitch(PushMessage prePushMessage){
+    public PushMessage messageStitch(PushMessage prePushMessage){
 
         PushMessage pushMessage = prePushMessage;
         PushMessageTemplate pushMessageTemplate = null;

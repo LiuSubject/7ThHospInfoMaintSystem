@@ -153,7 +153,7 @@
                         </div>
                         <div class="form-group" style="text-align: center">
                             <c:if test="${materialApplication.flag != 2}">
-                                <c:if test="${dpdean == true}">
+                                <c:if test="${dpdean == true || infodean == true || alldean == true}">
                                     <%--院领导审批按钮--%>
                                     <c:if test="${materialApplication.highApproved == 1
 									    && materialApplication.approvedFlag == 0}">
@@ -193,28 +193,30 @@
                                         审批
                                     </div>
                                     <div class="content">
-                                        <c:if test="${materialApplication.approvedFlag == 0 }">
-                                            审批中
-                                        </c:if>
-                                        <c:if test="${materialApplication.approvedFlag == 1 }">
-                                            审批通过
-                                        </c:if>
-                                        <c:if test="${materialApplication.approvedFlag == 2 }">
-                                            审批不通过
-                                        </c:if>
-                                        <hr class="hr0" />
-                                        <c:if test="${materialApplication.highLeaderApproved1 == 1 }">
-                                            分管院长审批意见:<br>
-                                            ${fn:trim(materialApplication.highLeaderReback1)}<br><br>
-                                        </c:if>
-                                        <c:if test="${materialApplication.highLeaderApproved2 == 1 }">
-                                            信息主管院长审批意见:<br>
-                                            ${fn:trim(materialApplication.highLeaderReback2)}<br><br>
-                                        </c:if>
-                                        <c:if test="${materialApplication.highLeaderApproved3 == 1 }">
-                                            院长审批意见:<br>
-                                            ${fn:trim(materialApplication.highLeaderReback3)}<br><br>
-                                        </c:if>
+                                        <div>
+                                            <c:if test="${materialApplication.approvedFlag == 0 }">
+                                                审批中
+                                            </c:if>
+                                            <c:if test="${materialApplication.approvedFlag == 1 }">
+                                                审批通过
+                                            </c:if>
+                                            <c:if test="${materialApplication.approvedFlag == 2 }">
+                                                审批不通过
+                                            </c:if>
+                                            <hr class="hr0" />
+                                            <c:if test="${materialApplication.highLeaderApproved1 == 1 }">
+                                                分管院长审批意见:<br>
+                                                ${fn:trim(materialApplication.highLeaderReback1)}<br><br>
+                                            </c:if>
+                                            <c:if test="${materialApplication.highLeaderApproved2 == 1 }">
+                                                信息主管院长审批意见:<br>
+                                                ${fn:trim(materialApplication.highLeaderReback2)}<br><br>
+                                            </c:if>
+                                            <c:if test="${materialApplication.highLeaderApproved3 == 1 }">
+                                                院长审批意见:<br>
+                                                ${fn:trim(materialApplication.highLeaderReback3)}<br><br>
+                                            </c:if>
+                                        </div>
                                     </div>
                                 </li>
                             </c:if>

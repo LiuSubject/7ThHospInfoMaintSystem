@@ -93,10 +93,6 @@
                         <%--数据中转--%>
                         <input type="text" id="material_id" name="material_id" value="${material_id}" style="display:none">
                         <input type="text" id="material_feedback" name="material_feedback" value="${material_feedback}" style="display:none">
-                        <input type="text" id="material_brand" name="material_brand" value="${material_brand}" style="display:none">
-                        <input type="text" id="material_model" name="material_model" value="${material_model}" style="display:none">
-                        <input type="text" id="material_judge" name="material_judge" value="${material_judge}" style="display:none">
-                        <input type="text" id="material_total" name="material_total" value="${material_total}" style="display:none">
                         <div class="form-group" style="text-align: center">
                             <button class="btn btn-default" type="submit">推送</button>
                             <button class="btn btn-default" type="reset">返回</button>

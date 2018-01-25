@@ -44,11 +44,11 @@ public class MessagePushUtil {
     private MessageStitchUtil messageStitchUtil;
 
     //以单个推送方式为指定单个用户组循环推送简单消息
-    public boolean GroupPushSingle(PushMessage prePushMessage, String userGroup) throws Exception{
+    public boolean groupPushSingle(PushMessage prePushMessage, String userGroup) throws Exception{
         //拼接推送消息
-        PushMessage pushMessage = messageStitchUtil.MessageStitch(prePushMessage);
+        PushMessage pushMessage = messageStitchUtil.messageStitch(prePushMessage);
         List<String> clientIds = new ArrayList<String>();
-        clientIds = GetPushIds(userGroup);
+        clientIds = getPushIds(userGroup);
         if(clientIds.size()>0){
             for(int i = 0; i < clientIds.size(); i++){
                 String clientId = clientIds.get(i);
@@ -72,11 +72,11 @@ public class MessagePushUtil {
     }
 
     //以单个推送方式为指定多个用户组循环推送简单消息
-    public boolean GroupsPushSingle(PushMessage prePushMessage,String[] userGroups) throws Exception{
+    public boolean groupsPushSingle(PushMessage prePushMessage, String[] userGroups) throws Exception{
         //拼接推送消息
-        PushMessage pushMessage = messageStitchUtil.MessageStitch(prePushMessage);
+        PushMessage pushMessage = messageStitchUtil.messageStitch(prePushMessage);
         List<String> clientIds = new ArrayList<String>();
-        clientIds = GetPushIds(userGroups);
+        clientIds = getPushIds(userGroups);
         if(clientIds.size()>0){
             for(int i = 0; i < clientIds.size(); i++){
                 String clientId = clientIds.get(i);
@@ -98,8 +98,41 @@ public class MessagePushUtil {
         return true;
     }
 
+    //以单个推送方式为多个用户群（多个ID+多个组混合）循环推送简单消息
+    public boolean blendPushSingle(PushMessage prePushMessage,String[] blend) throws Exception{
+        List<String> clientIds = new ArrayList<String>();
+        for(int i = 0;i < blend.length; i++){
+            try {
+                int singleClientId = Integer.parseInt(blend[i]);
+                clientIds.add(String.valueOf(singleClientId));
+            } catch (NumberFormatException e) {
+                clientIds.addAll(getPushIds(blend[i]));
+            }
+            clientIds.addAll(getPushIds(blend[i]));
+        }
+        //拼接推送消息
+        PushMessage pushMessage = messageStitchUtil.messageStitch(prePushMessage);
+        if(clientIds.size()>0){
+            for(int i = 0; i < clientIds.size(); i++){
+                String clientId = clientIds.get(i);
+                try {
+                    PushSingleUtil.push(clientId, pushMessage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                //写操作
+                pushMessageService.updateByCreateCode(pushMessage.getCreateCode(),pushMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
+
     //获取单个用户组推送标识集合
-    public List<String> GetPushIds(String userGroup) throws Exception{
+    public List<String> getPushIds(String userGroup) throws Exception{
         List<Role> pushGroup = new ArrayList<Role>();
         List<String> clientIds = new ArrayList<>();
         try {
@@ -126,12 +159,12 @@ public class MessagePushUtil {
     }
 
     //获取多个用户组推送标识集合
-    public List<String> GetPushIds(String[] userGroups) throws Exception{
+    public List<String> getPushIds(String[] userGroups) throws Exception{
         List<Role> pushGroup = new ArrayList<Role>();
         List<String> clientIds = new ArrayList<>();
         try {
             for(int i = 0;i < userGroups.length; i++){
-                clientIds.addAll(GetPushIds(userGroups[i]));
+                clientIds.addAll(getPushIds(userGroups[i]));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,7 +174,7 @@ public class MessagePushUtil {
     }
 
     //获取用户组推送标识集合
-    public String GetPushId(String code) throws Exception{
+    public String getPushId(String code) throws Exception{
         PushId pushId = null;
         try {
             pushId = pushIdService.findByCode(code);
@@ -153,10 +186,10 @@ public class MessagePushUtil {
     }
 
     //为指定用户推送简单消息
-    public boolean SpecifiedPushSingle(PushMessage prePushMessage,String code) throws Exception{
+    public boolean specifiedPushSingle(PushMessage prePushMessage, String code) throws Exception{
         //拼接推送消息表内标识为未推送的第一条消息
-        PushMessage pushMessage = messageStitchUtil.MessageStitch(prePushMessage);
-        String clientId = GetPushId(code);
+        PushMessage pushMessage = messageStitchUtil.messageStitch(prePushMessage);
+        String clientId = getPushId(code);
         try {
             PushSingleUtil.push(clientId, pushMessage);
             //写操作

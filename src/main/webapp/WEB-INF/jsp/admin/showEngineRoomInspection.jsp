@@ -88,7 +88,7 @@
                                 <td><button class="btn btn-success btn-sm" type="button">通过</button></td>
                             </c:if>
                             <td style="text-align: center">
-                                <c:if test="${examiner == 1}">
+                                <c:if test='${roles.indexof("examiner") != -1}'>
                                     <button class="btn btn-default btn-primary btn-info" type="button"
                                             onClick="location.href='/admin/editEngineRoomInspection?id=${item.id}'">巡检审核
                                     </button>&nbsp;&nbsp;&nbsp;&nbsp;

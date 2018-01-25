@@ -22,7 +22,7 @@ public class CreatePushUtil {
 
 
     //创建初始个推消息
-    public PushMessage CreatePreMessage(String founder, String pushWay, String msgType, String msgTarget, String msgContent1){
+    public PushMessage createPreMessage(String founder, String pushWay, String msgType, String msgTarget, String msgContent1){
         //推送状态为0（未发送）
         String PUSHSTATUS = "0";
 

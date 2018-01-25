@@ -97,8 +97,12 @@
 								<td><button class="btn btn-warning btn-sm" type="button">是</button></td>
 							</c:if>
 							<td style="text-align: center">
-								<c:if test="${item.flag != 2 && item.highApproved == 1
-									&& item.approvedFlag == 0 && item.highLeaderApproved1 == 1}">
+								<c:if test='${(roles.indexOf("dpdean") != -1 && item.flag != 2 && item.highApproved == 1
+									&& item.approvedFlag == 0 && item.highLeaderApproved1 == 1)
+									||(roles.indexOf("infodean") != -1 && item.flag != 2 && item.highApproved == 1
+									&& item.approvedFlag == 0 && item.highLeaderApproved2 == 1)
+									||(roles.indexOf("alldean") != -1 && item.flag != 2 && item.highApproved == 1
+									&& item.approvedFlag == 0 && item.highLeaderApproved3 == 1)}'>
 								<button class="btn btn-info btn-xs" type="button" onClick="location.href='/normal/editMaterialApplication?id=${item.id}'">审批</button>
 								</c:if>
 								<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/normal/checkMaterialApplication?id=${item.id}'">查看详情</button>

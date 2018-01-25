@@ -17,6 +17,6 @@ import java.util.List;
  **/
 
 public interface EngineRoomInspectionMapperCustom {
-    //分页查询电脑故障
+    //分页查询机房巡检信息
     List<EngineRoomInspectionCustom> findByPaging(PagingVO pagingVO) throws Exception;
 }
