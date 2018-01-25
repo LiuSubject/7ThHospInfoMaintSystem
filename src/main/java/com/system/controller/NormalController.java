@@ -1,12 +1,14 @@
 package com.system.controller;
 
 import com.system.exception.CustomException;
+import com.system.operate.ComputerProblemsList;
 import com.system.po.*;
 import com.system.service.*;
 import com.system.util.CustomerContextHolder;
 import com.system.util.push.CreatePushUtil;
 import com.system.util.push.MessagePushUtil;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,10 @@ public class NormalController {
     private EngineRoomInspectionService engineRoomInspectionService;
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "roleServiceImpl")
+    private RoleService roleService;
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource(name = "viewEmployeeMiPsdServiceImpl")
     private ViewEmployeeMiPsdService viewEmployeeMiPsdService;
 
@@ -76,16 +82,27 @@ public class NormalController {
 
     @Autowired
     private MessagePushUtil messagePushUtil;
-    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
-    // 电脑故障显示(普通用户只能看到本科室提交的故障报告)
-    @RequestMapping("/showComputerProblems")
-    public String showComputerProblems(Model model, Integer page) throws Exception {
+    //获取角色集合
+    public String getRoles(Subject subject) throws Exception{
+        ViewEmployeeMiPsd viewEmployeeMiPsd = subjectToViewEmployeeMiPsd(subject);
+        Role role = null;
+        //获取角色对象
+        try {
+            role = roleService.findByRoleId(viewEmployeeMiPsd.getCode()).get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //获取日志记录器，这个记录器将负责控制日志信息
+            Logger logger = Logger.getLogger(AdminController.class.getName());
+            logger.error("角色获取失败：可能是本地库连接失败",e);
+        }
 
-        //获取当前操作用户对象
-        Subject subject = SecurityUtils.getSubject();
+        return role.getRolename();
+    }
+
+    // 获取当前用户
+    public ViewEmployeeMiPsd subjectToViewEmployeeMiPsd(Subject subject) throws Exception{
         ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-
         try {
             //切换数据源至SQLServer
             CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
@@ -100,27 +117,86 @@ public class NormalController {
 
             }catch (Exception eSwitch){
                 eSwitch.printStackTrace();
+                e.printStackTrace();
+                //获取日志记录器，这个记录器将负责控制日志信息
+                Logger logger = Logger.getLogger(AdminController.class.getName());
+                logger.error("用户获取失败：可能是本地库连接失败",e);
             }
             e.printStackTrace();
+            //获取日志记录器，这个记录器将负责控制日志信息
+            Logger logger = Logger.getLogger(AdminController.class.getName());
+            logger.error("用户获取失败：可能是HIS库连接失败，将切换到备用库",e);
         }
-        String currentDept = viewEmployeeMiPsd.getDeptName();
-        List<ComputerProblemsCustom> listByDept = new ArrayList<>();
-        //页码对象
+        return viewEmployeeMiPsd;
+    }
+
+
+    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    //region
+
+    // 电脑故障显示(普通用户只能看到本科室提交的故障报告)
+    @RequestMapping("/showComputerProblems")
+    public String showComputerProblems(Model model, Integer page) throws Exception {
+        //当前操作对象
+        Subject subject = SecurityUtils.getSubject();
+        //页码对象初始化
         PagingVO pagingVO = new PagingVO();
-        //设置总页数
-        pagingVO.setTotalCount(computerProblemsService.getCountDeptComputerProblems(currentDept));
         if (page == null || page == 0) {
             pagingVO.setToPageNo(1);
-            listByDept = computerProblemsService.deptFindByPaging(1,currentDept);
         } else {
             pagingVO.setToPageNo(page);
-            listByDept = computerProblemsService.deptFindByPaging(page,currentDept);
         }
-        model.addAttribute("computerProblemsList", listByDept);
-        model.addAttribute("pagingVO", pagingVO);
+        ComputerProblemsList computerProblemsList = new ComputerProblemsList();
+        computerProblemsList.setSubject(subject);
+        computerProblemsList.setPagingVO(pagingVO);
+        ComputerProblemsList result = this.getComputerProblemsList(computerProblemsList);
+        model.addAttribute("computerProblemsList", result.getComputerProblemsList());
+        model.addAttribute("pagingVO", result.getPagingVO());
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
 
         return "normal/showComputerProblems";
 
+
+    }
+
+    // 获取电脑故障列表
+    public ComputerProblemsList getComputerProblemsList(ComputerProblemsList computerProblemsList) throws Exception{
+
+        //获取当前操作对象
+        Subject subject = computerProblemsList.getSubject();
+        //获取当前页码对象
+        PagingVO pagingVO = computerProblemsList.getPagingVO();
+        //初始化结果对象
+        List<ComputerProblemsCustom> list;
+
+        if (subject.hasRole("infodean") ||subject.hasRole("alldean")) {
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
+                list = computerProblemsService.findByPaging(pagingVO.getCurentPageNo());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            computerProblemsList.setPagingVO(pagingVO);
+            computerProblemsList.setComputerProblemsList(list);
+        }else{
+            try {
+                ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+                String currentDept = viewEmployeeMiPsd.getDeptName();
+                //设置总页数
+                pagingVO.setTotalCount(computerProblemsService.getCountDeptComputerProblems(currentDept));
+                list = computerProblemsService.findByPaging(pagingVO.getCurentPageNo());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            computerProblemsList.setPagingVO(pagingVO);
+            computerProblemsList.setComputerProblemsList(list);
+
+        }
+        return computerProblemsList;
     }
 
     //添加电脑故障
@@ -447,7 +523,8 @@ public class NormalController {
         return "normal/showComputerProblems";
     }
 
-    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    //endregion
+    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
     // 物资申购显示(普通用户只能看到自己部门提交的物资申购)
     @RequestMapping("/showMaterialApplication")
     public String showMaterialApplication(Model model, Integer page) throws Exception {
@@ -471,7 +548,27 @@ public class NormalController {
             }
             e.printStackTrace();
         }
-        if(subject.hasRole("dpdean")){
+        if(subject.hasRole("infodean") || subject.hasRole("alldean")){
+            //院长及分信息主管院长能够看到所有物资申购请求
+            List<MaterialApplicationCustom> list = null;
+            PagingVO pagingVO = new PagingVO();
+            //非物资组
+            //设置总页数
+            pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
+            if (page == null || page == 0) {
+                pagingVO.setToPageNo(1);
+                list = materialApplicationService.findByPaging(1);
+            } else {
+                pagingVO.setToPageNo(page);
+                list = materialApplicationService.findByPaging(page);
+            }
+            model.addAttribute("materialApplicationList", list);
+            model.addAttribute("pagingVO", pagingVO);
+            //返回角色对象
+            model.addAttribute("roles",this.getRoles(subject));
+
+            return "normal/showMaterialApplication";
+        }else if(subject.hasRole("dpdean")){
             //分管院长能够看到与自己相关的待审批及本部门物资申购请求
             String currentDept = viewEmployeeMiPsd.getDeptName();
             List<MaterialApplicationCustom> listByDept = new ArrayList<>();
@@ -488,6 +585,8 @@ public class NormalController {
             }
             model.addAttribute("materialApplicationList", listByDept);
             model.addAttribute("pagingVO", pagingVO);
+            //返回角色对象
+            model.addAttribute("roles",this.getRoles(subject));
 
             return "normal/showMaterialApplication";
         }else{
@@ -507,6 +606,8 @@ public class NormalController {
             }
             model.addAttribute("materialApplicationList", listByDept);
             model.addAttribute("pagingVO", pagingVO);
+            //返回角色对象
+            model.addAttribute("roles",this.getRoles(subject));
 
             return "normal/showMaterialApplication";
         }
