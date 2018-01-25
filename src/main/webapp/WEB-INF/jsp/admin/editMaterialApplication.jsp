@@ -378,7 +378,8 @@
         var model = document.getElementById("model").value;
         var judge = document.getElementById("judge").value;
         var total = document.getElementById("total").value;
-        window.location.href =encodeURI( "/admin/completeMaterialApplication?id=${materialApplication.id}&feedback=" + reback
+        window.location.href =encodeURI( "/admin/completeMaterialApplication?id=${materialApplication.id}
+            +"&feedback=" + reback
             +"&brand=" + brand
             +"&model=" + model
             +"&judge=" + judge
@@ -395,9 +396,5 @@
         $("#timeLine").slideToggle();
     });
 
-//    //时间节点缩放
-//    $(".number").click(function() {
-//       $("div").slideToggle();
-//    });
 </script>
 </html>

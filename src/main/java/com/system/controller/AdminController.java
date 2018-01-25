@@ -963,7 +963,7 @@ public class AdminController {
         return result.getDenyAction();
     }
 
-    // 拒绝物资申购操作
+    // 拒绝物资申购审批操作
     public MaterialApplicationDeny materialApplicationDeny(MaterialApplicationDeny materialApplicationDeny)throws Exception{
         Integer id = materialApplicationDeny.getId();
         String feedback = materialApplicationDeny.getFeedback();
@@ -1107,7 +1107,7 @@ public class AdminController {
         return result.getPassAction();
     }
 
-    // 通过物资申购操作
+    // 通过物资申购审批操作
     public MaterialApplicationPass materialApplicationPass(MaterialApplicationPass materialApplicationPass)throws Exception{
         Integer id = materialApplicationPass.getId();
         String feedback = materialApplicationPass.getFeedback();
@@ -1603,6 +1603,7 @@ public class AdminController {
         return result.getDenyAction();
     }
 
+    // 处理物资申购操作
     public  MaterialApplicationDeal materialApplicationDeal(MaterialApplicationDeal materialApplicationDeal)throws Exception{
         Map<String, Object> thisData = materialApplicationDeal.getMap();
         Subject subject = materialApplicationDeal.getSubject();
@@ -1759,8 +1760,22 @@ public class AdminController {
     // 物资申购处理完成
     @RequestMapping(value = "/completeMaterialApplication")
     public String completeMaterialApplication(HttpServletRequest request) throws Exception {
-
-        Integer id = Integer.parseInt(request.getParameter("id"));
+        Integer id;
+        try {
+            id = Integer.parseInt(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return "redirect:/admin/showMaterialApplication";
+        }
+        //ID为空则返回
+        if (id == null) {
+            return "redirect:/admin/showMaterialApplication";
+        }
+        //获取当前物资申购问题
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
+        if (materialApplicationCustom == null) {
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
+        }
         String feedback = request.getParameter("feedback");
         String brand = request.getParameter("brand");
         String model = request.getParameter("model");
@@ -1770,25 +1785,79 @@ public class AdminController {
             judge = Integer.parseInt(request.getParameter("judge"));
             total = Integer.parseInt(request.getParameter("total"));
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            throw new CustomException("抱歉，输入价格有误");
         }
-
-
-        if (id == null) {
-            return "redirect:/admin/showMaterialApplication";
-        }
-
-        //获取当前物资申购信息
-        MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
-        if (materialApplicationCustom == null) {
-            throw new CustomException("抱歉，未找到该物资申购相关信息");
-        }
-
+        //封装数据
+        Map<String, Object> thisData =new HashMap<String, Object>();
+        thisData.put("id",id);
+        thisData.put("feedback",feedback);
+        thisData.put("brand",brand);
+        thisData.put("model",model);
+        thisData.put("judge",judge);
+        thisData.put("total",total);
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
+
+        MaterialApplicationComplete materialApplicationComplete = new MaterialApplicationComplete();
+        materialApplicationComplete.setMap(thisData);
+        materialApplicationComplete.setMaterialApplicationCustom(materialApplicationCustom);
+        materialApplicationComplete.setSubject(subject);
+
+        MaterialApplicationComplete result = this.materialApplicationComplete(materialApplicationComplete);
+        return result.getCompleteAction();
+    }
+
+    // 物资申购处理完成操作
+    public  MaterialApplicationComplete materialApplicationComplete(MaterialApplicationComplete materialApplicationComplete)throws Exception{
+        Map<String, Object> thisData = materialApplicationComplete.getMap();
+        Subject subject = materialApplicationComplete.getSubject();
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationComplete.getMaterialApplicationCustom();
         ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
-        if(subject.hasRole("examiner")
-                || (subject.hasRole("material") && materialApplicationCustom.getGroupVisible() == 1)){
+
+        Integer id = Integer.parseInt(thisData.get("id").toString());
+        String feedback = thisData.get("feedback").toString();
+        String brand = thisData.get("brand").toString();
+        String model = thisData.get("model").toString();
+        int judge = Integer.parseInt(thisData.get("judge").toString());
+        int total = Integer.parseInt(thisData.get("total").toString());
+
+        if(subject.hasRole("material")){
+            if(materialApplicationCustom.getGroupVisible() == 1){
+                //更新该物资申购问题数据
+                materialApplicationCustom.setFlag(2);
+                materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
+                materialApplicationCustom.setLeaderName(viewEmployeeMiPsd.getName());
+                materialApplicationCustom.setReback(feedback);
+                materialApplicationCustom.setBrand(brand);
+                materialApplicationCustom.setModel(model);
+                materialApplicationCustom.setJudge(judge);
+                materialApplicationCustom.setTotal(total);
+                //设置完成时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                materialApplicationCustom.setDoneTime(dateString);
+                materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                //保存该记录相关数据以便产生推送
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "2","23");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向申报人推送消息
+                    messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                materialApplicationComplete.setCompleteAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+            }else{
+                materialApplicationComplete.setCompleteAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+            }
+        }else if(subject.hasRole("examiner")){
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(2);
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
@@ -1813,17 +1882,20 @@ public class AdminController {
                     pushMessageService.save(pushMessage);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return "error";
                 }
                 //向申报人推送消息
                 messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            materialApplicationComplete.setCompleteAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+        }else{
+            materialApplicationComplete.setCompleteAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
         }
 
-        return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+        return materialApplicationComplete;
     }
+
 
     // 查看物资申购详情
     @RequestMapping(value = "/checkMaterialApplication", method = {RequestMethod.GET})
@@ -1836,28 +1908,16 @@ public class AdminController {
             throw new CustomException("抱歉，未找到该物资申购相关信息");
         }
 
-        //管理员权限下返回物资处理权限组识别
-        Subject subject = SecurityUtils.getSubject();
-        if(subject.hasRole("material") || subject.hasRole("examiner")
-                || subject.hasRole("infodean") || subject.hasRole("alldean")){
-            model.addAttribute("materials", true);
-        }else{
-            model.addAttribute("materials", false);
-        }
-
         model.addAttribute("materialApplication", materialApplication);
         //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
         model.addAttribute("roles",this.getRoles(subject));
-
-
         return "admin/checkMaterialApplication";
     }
 
     // 查看物资申购详情
     @RequestMapping(value = "/checkMaterialApplication", method = {RequestMethod.POST})
     public String checkMaterialApplication(MaterialApplicationCustom materialApplicationCustom) throws Exception {
-
-        materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
 
         //重定向
         return "redirect:/admin/showMaterialApplication";
@@ -1921,7 +1981,8 @@ public class AdminController {
         return "admin/printMaterialApplication";
     }
     //endregion
-    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<机房巡检>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<机房巡检操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    //region
     // 机房巡检显示
     @RequestMapping("/showEngineRoomInspection")
     public String showEngineRoomInspection(Model model, Integer page) throws Exception {
@@ -1939,18 +2000,10 @@ public class AdminController {
             list = engineRoomInspectionService.findByPaging(page);
         }
 
-        //巡检审核者标识
-        //获取当前操作用户对象
-        Subject subject = SecurityUtils.getSubject();
-        if(subject.hasRole("examiner")){
-            model.addAttribute("examiner", 1);
-        }else {
-            model.addAttribute("examiner", 0);
-        }
-
         model.addAttribute("engineRoomInspectionList", list);
         model.addAttribute("pagingVO", pagingVO);
         //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
         model.addAttribute("roles",this.getRoles(subject));
 
 
@@ -2202,6 +2255,7 @@ public class AdminController {
         //重定向
         return "admin/printEngineRoomInspection";
     }
+    //endregion
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<JSON数据获取>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
     //返回操作人相关基本信息JSON

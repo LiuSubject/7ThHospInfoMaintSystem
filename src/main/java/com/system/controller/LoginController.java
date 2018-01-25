@@ -37,8 +37,7 @@ public class LoginController {
 
         Subject subject = SecurityUtils.getSubject();
         //如果获取不到用户名就是登录失败，但登录失败的话，会直接抛出异常
-        try
-        {
+        try{
             subject.login(token);
         }catch (Exception e){
             e.printStackTrace();
