@@ -91,9 +91,10 @@
 					</thead>
 					<tbody>
 					<c:forEach  items="${materialApplicationList}" var="item">
-						<tr <c:if test="${item.groupVisible == 1
+						<tr <c:if test='${item.groupVisible == 1
 							&& item.flag != 2
-							&& materials == true}">class="groupdDeal"</c:if>>
+							&& (roles.indexOf("material") != -1
+								|| roles.indexOf("examiner") != -1)}'>class="groupdDeal"</c:if>>
 							<td>${item.applicant}</td>
 							<td>${item.dept}</td>
 							<td>${item.name}</td>
@@ -119,7 +120,7 @@
 								<td><button class="btn btn-warning btn-sm" type="button">是</button></td>
 							</c:if>
 							<td>
-								<c:if test="${materials == true}">
+								<c:if test='${(roles.indexOf("material") != -1 || roles.indexOf("examiner") != -1)}'>
 									<button class="btn btn-default btn-xs btn-info" type="button" onClick="location.href='/admin/editMaterialApplication?id=${item.id}'">处理申购</button>
 								</c:if>
 								<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/admin/checkMaterialApplication?id=${item.id}'">查看详情</button>

@@ -1,6 +1,5 @@
 package com.system.controller.mobile;
 
-import com.system.exception.CustomException;
 import com.system.po.*;
 import com.system.util.push.CreatePushUtil;
 import com.system.service.*;
@@ -219,7 +218,7 @@ public class MobileAdminController {
         computerProblemsCustom.setUserid(viewEmployeeMiPsd.getCode());
 
         try {
-            PushMessage preMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
+            PushMessage preMessage = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
                     "0","11");
             Boolean result = computerProblemsService.saveAndPre(computerProblemsCustom, preMessage);
 
@@ -230,7 +229,7 @@ public class MobileAdminController {
             }
 
             //向管理组推送消息
-           messagePushUtil.GroupPushSingle(preMessage,"admin");
+           messagePushUtil.groupPushSingle(preMessage,"admin");
         } catch (Exception e) {
             e.printStackTrace();
             map.put("success", "false");
@@ -294,7 +293,7 @@ public class MobileAdminController {
             //保存该记录相关数据以便产生推送
             try {
                 //创建推送消息
-                PushMessage pushMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
+                PushMessage pushMessage = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
                         "2","12");
                 try {
                     pushMessageService.save(pushMessage);
@@ -305,7 +304,7 @@ public class MobileAdminController {
                     return map;
                 }
                 //向申报人推送消息
-                messagePushUtil.SpecifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
+                messagePushUtil.specifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -379,7 +378,7 @@ public class MobileAdminController {
             //保存该记录相关数据以便产生推送
             try {
                 //创建推送消息
-                PushMessage pushMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
+                PushMessage pushMessage = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
                         "2","13");
                 try {
                     pushMessageService.save(pushMessage);
@@ -390,7 +389,7 @@ public class MobileAdminController {
                     return map;
                 }
                 //向申报人推送消息
-                messagePushUtil.SpecifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
+                messagePushUtil.specifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -653,7 +652,7 @@ public class MobileAdminController {
 
         //保存该记录相关数据以便产生推送
         try {
-            PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+            PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                     "0","21");
 
             Boolean result = materialApplicationService.saveAndPre(materialApplicationCustom, pushMessage);
@@ -665,7 +664,7 @@ public class MobileAdminController {
             }
 
             //向管理组推送消息
-           messagePushUtil.GroupPushSingle(pushMessage,"admin");
+           messagePushUtil.groupPushSingle(pushMessage,"admin");
         } catch (Exception e) {
             e.printStackTrace();
             map.put("success", "false");
@@ -748,7 +747,7 @@ public class MobileAdminController {
             //保存该记录相关数据以便产生推送
             try {
                 //创建推送消息
-                PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                         "2","22");
                 try {
                     pushMessageService.save(pushMessage);
@@ -759,7 +758,7 @@ public class MobileAdminController {
                     return map;
                 }
                 //向申报人推送消息
-                messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -847,7 +846,7 @@ public class MobileAdminController {
             //保存该记录相关数据以便产生推送
             try {
                 //创建推送消息
-                PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                         "2","23");
                 try {
                     pushMessageService.save(pushMessage);
@@ -858,7 +857,7 @@ public class MobileAdminController {
                     return map;
                 }
                 //向申报人推送消息
-                messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1041,7 +1040,7 @@ public class MobileAdminController {
 
         //保存该记录相关数据以便产生推送
         try {
-            PushMessage pushMessage = createPushUtil.CreatePreMessage(engineRoomInspectionCustom.getUserid(),"0","2",
+            PushMessage pushMessage = createPushUtil.createPreMessage(engineRoomInspectionCustom.getUserid(),"0","2",
                     "0","31");
 
             Boolean result = engineRoomInspectionService.saveAndPre(engineRoomInspectionCustom, pushMessage);
@@ -1053,7 +1052,7 @@ public class MobileAdminController {
             }
 
             //向管理组推送消息
-           messagePushUtil.GroupPushSingle(pushMessage,"admin");
+           messagePushUtil.groupPushSingle(pushMessage,"admin");
         } catch (Exception e) {
             e.printStackTrace();
             map.put("success", "false");

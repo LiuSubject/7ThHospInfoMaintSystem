@@ -1,9 +1,7 @@
 package com.system.controller;
 
 import com.system.exception.CustomException;
-import com.system.operate.ComputerProblemUrgent;
-import com.system.operate.ComputerProblemsList;
-import com.system.operate.ComputerProblemsSearch;
+import com.system.operate.*;
 import com.system.po.*;
 import com.system.util.push.CreatePushUtil;
 import com.system.service.*;
@@ -264,7 +262,7 @@ public class AdminController {
         //保存该记录相关数据以便产生推送
         try {
             //创建消息
-            PushMessage preMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
+            PushMessage preMessage = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
                     "3","11");
             Boolean result = computerProblemsService.saveAndPre(computerProblemsCustom, preMessage);
             if (!result) {
@@ -275,15 +273,15 @@ public class AdminController {
             switch(computerProblemsCustom.getType()){
                 case 1:
                     String[] userGroups1 = new String[]{"hardware","examiner"};
-                    messagePushUtil.GroupsPushSingle(preMessage,userGroups1);
+                    messagePushUtil.groupsPushSingle(preMessage,userGroups1);
                     break;
                 case 2:
                     String[] userGroups2 = new String[]{"software","examiner"};
-                    messagePushUtil.GroupsPushSingle(preMessage,userGroups2);
+                    messagePushUtil.groupsPushSingle(preMessage,userGroups2);
                     break;
                 case 3:
                     String[] userGroups3 = new String[]{"fee","examiner"};
-                    messagePushUtil.GroupsPushSingle(preMessage,userGroups3);
+                    messagePushUtil.groupsPushSingle(preMessage,userGroups3);
                     break;
                 default:
                     break;
@@ -304,7 +302,6 @@ public class AdminController {
         model.addAttribute("roles",this.getRoles(subject));
         return "admin/addComputerProblems";
     }
-
 
     // 修改电脑故障页面显示
     @RequestMapping(value = "/editComputerProblems", method = {RequestMethod.GET})
@@ -330,7 +327,6 @@ public class AdminController {
 
         return "admin/editComputerProblems";
     }
-
 
     // 标红指定电脑故障
     @RequestMapping(value = "/urgentComputerProblems", method = {RequestMethod.GET})
@@ -373,19 +369,19 @@ public class AdminController {
                 try {
 
                     //产生推送消息
-                    PushMessage preMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
+                    PushMessage preMessage = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
                             "0","99");
                     pushMessageService.save(preMessage);
                     //向指定管理组推送消息
                     switch(computerProblemsCustom.getType()){
                         case 1:
-                            messagePushUtil.GroupPushSingle(preMessage,"hardware");
+                            messagePushUtil.groupPushSingle(preMessage,"hardware");
                             break;
                         case 2:
-                            messagePushUtil.GroupPushSingle(preMessage,"software");
+                            messagePushUtil.groupPushSingle(preMessage,"software");
                             break;
                         case 3:
-                            messagePushUtil.GroupPushSingle(preMessage,"fee");
+                            messagePushUtil.groupPushSingle(preMessage,"fee");
                             break;
                         default:
                             break;
@@ -401,7 +397,6 @@ public class AdminController {
         }
         return computerProblemUrgent;
     }
-
 
     // 开始处理电脑故障
     @RequestMapping(value = "/dealComputerProblems")
@@ -476,7 +471,7 @@ public class AdminController {
             //保存该记录相关数据以便产生推送
             try {
                 //创建推送消息
-                PushMessage pushMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
+                PushMessage pushMessage = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
                         "2","12");
                 try {
                     pushMessageService.save(pushMessage);
@@ -485,7 +480,7 @@ public class AdminController {
                     return "error";
                 }
                 //向申报人推送消息
-                messagePushUtil.SpecifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
+                messagePushUtil.specifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -531,7 +526,7 @@ public class AdminController {
             //保存该记录相关数据以便产生推送
             try {
                 //创建推送消息
-                PushMessage pushMessage = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
+                PushMessage pushMessage = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
                         "2","13");
                 try {
                     pushMessageService.save(pushMessage);
@@ -540,12 +535,12 @@ public class AdminController {
                     return "error";
                 }
                 //向申报人推送消息
-                messagePushUtil.SpecifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
+                messagePushUtil.specifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
 
                 //如果该故障记录标识为重要，则向 examiner 推送消息
                 if(computerProblemsCustom.getFaultUrgent() == 1){
                     //创建推送消息
-                    PushMessage pushMessageUrgent = createPushUtil.CreatePreMessage(computerProblemsCustom.getUserid(),"0","0",
+                    PushMessage pushMessageUrgent = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
                             "2","13");
                     try {
                         pushMessageService.save(pushMessageUrgent);
@@ -554,7 +549,7 @@ public class AdminController {
                         return "error";
                     }
                     //向 examiner 推送消息
-                    messagePushUtil.GroupPushSingle(pushMessageUrgent,"examiner");
+                    messagePushUtil.groupPushSingle(pushMessageUrgent,"examiner");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -654,6 +649,7 @@ public class AdminController {
 
     //endregion
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    //region
     // 物资申购显示
     @RequestMapping("/showMaterialApplication")
     public String showMaterialApplication(Model model, Integer page) throws Exception {
@@ -667,29 +663,18 @@ public class AdminController {
         if (page == null || page == 0) {
             pagingVO.setToPageNo(1);
             list = materialApplicationService.findByPaging(1);
-        } else {
+        }else {
             pagingVO.setToPageNo(page);
             list = materialApplicationService.findByPaging(page);
         }
-        //管理员权限下返回物资处理权限组识别
-        if(subject.hasRole("material") || subject.hasRole("examiner")
-                || subject.hasRole("infodean") || subject.hasRole("alldean")){
-            model.addAttribute("materials", true);
-        }else{
-            model.addAttribute("materials", false);
-        }
-
         model.addAttribute("materialApplicationList", list);
         model.addAttribute("pagingVO", pagingVO);
         //返回角色对象
         model.addAttribute("roles",this.getRoles(subject));
-
-
         return "admin/showMaterialApplication";
-
     }
 
-    //添加物资申购
+    // 添加物资申购（页面跳转）
     @RequestMapping(value = "/addMaterialApplication", method = {RequestMethod.GET})
     public String addMaterialApplicationUI(Model model) throws Exception {
         //返回角色对象
@@ -741,7 +726,7 @@ public class AdminController {
 
         //保存该记录相关数据以便产生推送
         try {
-            PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+            PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                     "0","21");
 
             Boolean result = materialApplicationService.saveAndPre(materialApplicationCustom, pushMessage);
@@ -751,7 +736,7 @@ public class AdminController {
                 return "error";
             }
             //向指定组推送消息
-           messagePushUtil.GroupPushSingle(pushMessage,"material");
+           messagePushUtil.groupPushSingle(pushMessage,"material");
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
@@ -769,49 +754,13 @@ public class AdminController {
         }
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        //返回审核组标识
-        if(subject.hasRole("examiner")){
-            model.addAttribute("examiner", true);
-        }else{
-            model.addAttribute("examiner", false);
-        }
-        //返回分管院长标识
-        if(subject.hasRole("dpdean")){
-            model.addAttribute("dpdean", true);
-        }else{
-            model.addAttribute("dpdean", false);
-        }
-        //返回信息主管副院长标识
-        if(subject.hasRole("infodean")){
-            model.addAttribute("infodean", true);
-        }else{
-            model.addAttribute("infodean", false);
-        }
-        //返回院长标识
-        if(subject.hasRole("alldean")){
-            model.addAttribute("alldean", true);
-        }else{
-            model.addAttribute("alldean", false);
-        }
         MaterialApplication materialApplication = materialApplicationService.findById(id);
         if (materialApplication == null) {
             throw new CustomException("抱歉，未找到该物资申购相关信息");
         }
-
-        //管理员权限下返回物资处理权限组识别
-        if(subject.hasRole("material") || subject.hasRole("examiner")
-                || subject.hasRole("infodean") || subject.hasRole("alldean")){
-            model.addAttribute("materials", true);
-        }else{
-            model.addAttribute("materials", false);
-        }
-
         model.addAttribute("materialApplication", materialApplication);
         //返回角色对象
         model.addAttribute("roles",this.getRoles(subject));
-
-
-
         return "admin/editMaterialApplication";
     }
 
@@ -819,21 +768,17 @@ public class AdminController {
     @RequestMapping(value = "/prePushMaterialApplication", method = {RequestMethod.GET})
     public String prePushMaterialApplication(HttpServletRequest request, Model modelV) throws Exception {
 
-        Integer material_id = Integer.parseInt(request.getParameter("id"));
-        String material_feedback = request.getParameter("feedback");
-        String material_brand = request.getParameter("brand");
-        String material_model = request.getParameter("model");
-        int material_judge = 0;
-        int material_total = 0;
+        Integer material_id;
         try {
-            material_judge = Integer.parseInt(request.getParameter("judge"));
-            material_total = Integer.parseInt(request.getParameter("total"));
+            material_id = Integer.parseInt(request.getParameter("id"));
         } catch (NumberFormatException e) {
             e.printStackTrace();
+            modelV.addAttribute("message", "物资申购记录获取失败");
+            return "error";
         }
+        String material_feedback = request.getParameter("feedback");
         //获取院领导列表
         List<Role> deans = new ArrayList<>();
-
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
         //非审查组不允许推送
@@ -850,14 +795,9 @@ public class AdminController {
         //不更新,发送到 push 进行处理
         modelV.addAttribute("material_id",material_id);
         modelV.addAttribute("material_feedback",material_feedback);
-        modelV.addAttribute("material_brand",material_brand);
-        modelV.addAttribute("material_model",material_model);
-        modelV.addAttribute("material_judge",material_judge);
-        modelV.addAttribute("material_total",material_total);
         modelV.addAttribute("deans", deans);
         //返回角色对象
         modelV.addAttribute("roles",this.getRoles(subject));
-
         return "admin/prePushMaterialApplication";
     }
 
@@ -865,40 +805,32 @@ public class AdminController {
     @RequestMapping(value = "/pushMaterialApplication")
     public String pushMaterialApplication(HttpServletRequest request,Model modelV) throws Exception {
 
-        Integer id = Integer.parseInt(request.getParameter("material_id"));
-        String feedback = request.getParameter("material_feedback");
-        String brand = request.getParameter("material_brand");
-        String model = request.getParameter("material_model");
-        int judge = 0;
-        int total = 0;
+        Integer id;
         try {
-            judge = Integer.parseInt(request.getParameter("material_judge"));
-            total = Integer.parseInt(request.getParameter("material_total"));
+            id = Integer.parseInt(request.getParameter("material_id"));
         } catch (NumberFormatException e) {
             e.printStackTrace();
+            modelV.addAttribute("message", "物资申购记录获取失败");
+            return "error";
         }
+        String feedback = request.getParameter("material_feedback");
+        //获取院领导工号
         String viceDean = request.getParameter("viceDean");
         String infoVice = request.getParameter("infoVice");
         String dean = request.getParameter("dean");
-
-
         if (id == null) {
             return "redirect:/admin/showMaterialApplication";
         }
-
         //获取当前物资申购问题
         MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
         if (materialApplicationCustom == null) {
             throw new CustomException("抱歉，未找到该物资申购相关信息");
         }
-
         //申购处理完毕不能再推送
         if(materialApplicationCustom.getFlag() == 2){
             modelV.addAttribute("message", "该申购处理完毕，不能再推送");
             return "error";
         }
-
-
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
         //非审查组不允许推送
@@ -906,18 +838,13 @@ public class AdminController {
             return "redirect:/admin/showMaterialApplication";
         }
         ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
-
-
-
         //更新该物资申购问题数据
         materialApplicationCustom.setXxkyj(feedback);
         materialApplicationCustom.setFlag(1);
-
-
         //保存该记录相关数据以便产生推送
         try {
             //创建推送消息
-            PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+            PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                     "2","24");
             try {
                 pushMessageService.save(pushMessage);
@@ -926,7 +853,7 @@ public class AdminController {
                 return "error";
             }
             //向申报人推送消息
-            messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+            messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -940,7 +867,7 @@ public class AdminController {
             //保存该记录相关数据以便产生推送
             try {
                 //创建推送消息
-                PushMessage pushMessage = createPushUtil.CreatePreMessage(viewEmployeeMiPsd.getCode(),"0","1",
+                PushMessage pushMessage = createPushUtil.createPreMessage(viewEmployeeMiPsd.getCode(),"0","1",
                         "2","25");
                 try {
                     pushMessageService.save(pushMessage);
@@ -949,7 +876,7 @@ public class AdminController {
                     return "error";
                 }
                 //向分管院长推送消息
-                messagePushUtil.SpecifiedPushSingle(pushMessage,viceDean);
+                messagePushUtil.specifiedPushSingle(pushMessage,viceDean);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -965,7 +892,7 @@ public class AdminController {
             //保存该记录相关数据以便产生推送
             try {
                 //创建推送消息
-                PushMessage pushMessage = createPushUtil.CreatePreMessage(viewEmployeeMiPsd.getCode(),"0","1",
+                PushMessage pushMessage = createPushUtil.createPreMessage(viewEmployeeMiPsd.getCode(),"0","1",
                         "2","25");
                 try {
                     pushMessageService.save(pushMessage);
@@ -974,7 +901,7 @@ public class AdminController {
                     return "error";
                 }
                 //向信息主管副院长推送消息
-                messagePushUtil.SpecifiedPushSingle(pushMessage,infoVice);
+                messagePushUtil.specifiedPushSingle(pushMessage,infoVice);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -990,7 +917,7 @@ public class AdminController {
             //保存该记录相关数据以便产生推送
             try {
                 //创建推送消息
-                PushMessage pushMessage = createPushUtil.CreatePreMessage(viewEmployeeMiPsd.getCode(),"0","1",
+                PushMessage pushMessage = createPushUtil.createPreMessage(viewEmployeeMiPsd.getCode(),"0","1",
                         "2","25");
                 try {
                     pushMessageService.save(pushMessage);
@@ -999,7 +926,7 @@ public class AdminController {
                     return "error";
                 }
                 //向院长推送消息
-                messagePushUtil.SpecifiedPushSingle(pushMessage,dean);
+                messagePushUtil.specifiedPushSingle(pushMessage,dean);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1010,12 +937,12 @@ public class AdminController {
         return "redirect:/admin/showMaterialApplication";
     }
 
-
     // 物资申购审批拒绝
     @RequestMapping(value = "/denyMaterialApplication", method = {RequestMethod.GET})
     public String denyMaterialApplication(HttpServletRequest request) throws Exception {
-        Integer id = Integer.parseInt(request.getParameter("id"));
+
         String feedback = request.getParameter("feedback");
+        Integer id = Integer.parseInt(request.getParameter("id"));
         if (id == null) {
             return "redirect:/admin/showMaterialApplication";
         }
@@ -1025,68 +952,134 @@ public class AdminController {
         }
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        //不是院领导则返回
-        if(!subject.hasRole("dpdean") && !subject.hasRole("infodean") && !subject.hasRole("alldean")){
-            return "redirect:/admin/showMaterialApplication";
-        }
+        //新建物资申购拒绝操作对象
+        MaterialApplicationDeny materialApplicationDeny = new MaterialApplicationDeny();
+        materialApplicationDeny.setId(id);
+        materialApplicationDeny.setFeedback(feedback);
+        materialApplicationDeny.setMaterialApplicationCustom(materialApplicationCustom);
+        materialApplicationDeny.setSubject(subject);
+
+        MaterialApplicationDeny result = this.materialApplicationDeny(materialApplicationDeny);
+        return result.getDenyAction();
+    }
+
+    // 拒绝物资申购操作
+    public MaterialApplicationDeny materialApplicationDeny(MaterialApplicationDeny materialApplicationDeny)throws Exception{
+        Integer id = materialApplicationDeny.getId();
+        String feedback = materialApplicationDeny.getFeedback();
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationDeny.getMaterialApplicationCustom();
+        Subject subject = materialApplicationDeny.getSubject();
         ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
 
-        //保存意见至对应位，保存姓名，单个审批结果标识置2-拒绝，最终审批结果标识置2-拒绝
-        //处理状态置2-已完成，
+        //获取操作时间
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+
         if(subject.hasRole("dpdean") && materialApplicationCustom.getHighLeaderApproved1() == 1){
+            //分管院长审批
             materialApplicationCustom.setApprovedFlag(2);
             materialApplicationCustom.setHighLeaderReback1(feedback);
             materialApplicationCustom.setHighLeaderName1(viewEmployeeMiPsd.getName());
             materialApplicationCustom.setHighLeaderFlag1(2);
             materialApplicationCustom.setFlag(2);
             //设置完成时间
-            Date currentTime = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String dateString = formatter.format(currentTime);
             materialApplicationCustom.setDoneTime(dateString);
+
+
+            //更新物资申购记录
+            materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+
+            //保存该记录相关数据以便产生推送
+            try {
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        "2","27");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+                //向申报人推送消息
+                messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            materialApplicationDeny.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
         }else if(subject.hasRole("infodean") && materialApplicationCustom.getHighLeaderApproved2() == 1){
+            //信息主管院长
             materialApplicationCustom.setApprovedFlag(2);
             materialApplicationCustom.setHighLeaderReback2(feedback);
             materialApplicationCustom.setHighLeaderName2(viewEmployeeMiPsd.getName());
             materialApplicationCustom.setHighLeaderFlag2(2);
             materialApplicationCustom.setFlag(2);
             //设置完成时间
-            Date currentTime = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String dateString = formatter.format(currentTime);
             materialApplicationCustom.setDoneTime(dateString);
+
+
+            //更新物资申购记录
+            materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+
+            //保存该记录相关数据以便产生推送
+            try {
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        "2","27");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+                //向申报人推送消息
+                messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            materialApplicationDeny.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
         }else if(subject.hasRole("alldean") && materialApplicationCustom.getHighLeaderApproved3() == 1){
+            //院长
             materialApplicationCustom.setApprovedFlag(2);
             materialApplicationCustom.setHighLeaderReback3(feedback);
             materialApplicationCustom.setHighLeaderName3(viewEmployeeMiPsd.getName());
             materialApplicationCustom.setHighLeaderFlag3(2);
             materialApplicationCustom.setFlag(2);
             //设置完成时间
-            Date currentTime = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String dateString = formatter.format(currentTime);
             materialApplicationCustom.setDoneTime(dateString);
-        }else{
-            return "admin/showMaterialApplication";
-        }
-        materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
-        //保存该记录相关数据以便产生推送
-        try {
-            //创建推送消息
-            PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                    "2","27");
+
+
+            //更新物资申购记录
+            materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+
+            //保存该记录相关数据以便产生推送
             try {
-                pushMessageService.save(pushMessage);
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        "2","27");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+                //向申报人推送消息
+                messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
-                return "error";
+                throw e;
             }
-            //向申报人推送消息
-            messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            materialApplicationDeny.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+        }else{
+            materialApplicationDeny.setDenyAction("redirect:/admin/showMaterialApplication");
         }
-        return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+
+        return materialApplicationDeny;
     }
 
     // 物资申购审批通过
@@ -1103,13 +1096,28 @@ public class AdminController {
         }
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        //权限不正确则返回
-        if(!subject.hasRole("dpdean") && !subject.hasRole("infodean") && !subject.hasRole("alldean")){
-            return "redirect:/admin/showMaterialApplication";
-        }
+        //新建物资申购拒绝操作对象
+        MaterialApplicationPass materialApplicationPass = new MaterialApplicationPass();
+        materialApplicationPass.setId(id);
+        materialApplicationPass.setFeedback(feedback);
+        materialApplicationPass.setMaterialApplicationCustom(materialApplicationCustom);
+        materialApplicationPass.setSubject(subject);
+
+        MaterialApplicationPass result = this.materialApplicationPass(materialApplicationPass);
+        return result.getPassAction();
+    }
+
+    // 通过物资申购操作
+    public MaterialApplicationPass materialApplicationPass(MaterialApplicationPass materialApplicationPass)throws Exception{
+        Integer id = materialApplicationPass.getId();
+        String feedback = materialApplicationPass.getFeedback();
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationPass.getMaterialApplicationCustom();
+        Subject subject = materialApplicationPass.getSubject();
         ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
 
         //保存意见至对应位，保存姓名，单个审批结果标识置1-通过
+        //此段代码又臭又长，但是这是本人认为能最大限度能将不同权限组的操作进行解耦以便修改，水平不足，
+        //倘若阁下能进行良好的优化，务必发我邮箱让我学习一下。
         if(subject.hasRole("dpdean")){
             materialApplicationCustom.setHighLeaderReback1(feedback);
             materialApplicationCustom.setHighLeaderName1(viewEmployeeMiPsd.getName());
@@ -1117,14 +1125,15 @@ public class AdminController {
             //判断审核者数量以作不同处理
             //如果审核者只有dpdean
             if(0 == materialApplicationCustom.getHighLeaderApproved2()
-                && 0 == materialApplicationCustom.getHighLeaderApproved3()){
-                //最终审批结果标识置1-通过，使物资处理组可见标识置1-可见
+                    && 0 == materialApplicationCustom.getHighLeaderApproved3()){
+                //最终审批结果标识置1-通过，使物资处理组可处理标识置1-可见
                 materialApplicationCustom.setApprovedFlag(1);
                 materialApplicationCustom.setGroupVisible(1);
+                materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
                 //保存该记录相关数据以便产生推送
                 try {
                     //创建推送消息
-                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                             "0","26");
                     try {
                         pushMessageService.save(pushMessage);
@@ -1132,26 +1141,25 @@ public class AdminController {
                         e.printStackTrace();
                     }
                     //向申报人推送消息
-                    messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 try {
                     //创建推送消息
-                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                             "0","29");
                     try {
                         pushMessageService.save(pushMessage);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return "error";
                     }
                     //向处理组推送消息
-                    messagePushUtil.GroupPushSingle(pushMessage,"material");
+                    messagePushUtil.groupPushSingle(pushMessage,"material");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+                materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
 
             }else if(1 == (materialApplicationCustom.getHighLeaderApproved2()
                     + materialApplicationCustom.getHighLeaderApproved3())){
@@ -1167,7 +1175,7 @@ public class AdminController {
                     //只更新相关数据
                     materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
                 }else{
-                    //说明需审核者已审核且结果皆为通过，使物资处理组可见标识置1-可见,
+                    //说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,
                     // 最终审批结果标识置1-通过，更新数据并向处理组及用户推送消息
                     materialApplicationCustom.setApprovedFlag(1);
                     materialApplicationCustom.setGroupVisible(1);
@@ -1175,7 +1183,7 @@ public class AdminController {
                     //保存该记录相关数据以便产生推送
                     try {
                         //创建推送消息
-                        PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                                 "0","26");
                         try {
                             pushMessageService.save(pushMessage);
@@ -1183,26 +1191,25 @@ public class AdminController {
                             e.printStackTrace();
                         }
                         //向申报人推送消息
-                        messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     try {
                         //创建推送消息
-                        PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                                 "0","29");
                         try {
                             pushMessageService.save(pushMessage);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return "error";
                         }
                         //向处理组推送消息
-                        messagePushUtil.GroupPushSingle(pushMessage,"material");
+                        messagePushUtil.groupPushSingle(pushMessage,"material");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
                 }
             }else if(2 == (materialApplicationCustom.getHighLeaderApproved2()
                     + materialApplicationCustom.getHighLeaderApproved3())){
@@ -1210,7 +1217,7 @@ public class AdminController {
                 //如果审核者审批皆通过
                 if(2 == (materialApplicationCustom.getHighLeaderFlag2()
                         +  materialApplicationCustom.getHighLeaderFlag3())){
-                    //说明需审核者已审核且结果皆为通过，使物资处理组可见标识置1-可见,更新数据并向处理组推送消息//说明需审核者已审核且结果皆为通过，使物资处理组可见标识置1-可见,
+                    //说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,更新数据并向处理组推送消息//说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,
                     // 最终审批结果标识置1-通过，更新数据并向处理组及用户推送消息
                     materialApplicationCustom.setApprovedFlag(1);
                     materialApplicationCustom.setGroupVisible(1);
@@ -1218,7 +1225,7 @@ public class AdminController {
                     //保存该记录相关数据以便产生推送
                     try {
                         //创建推送消息
-                        PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                                 "0","26");
                         try {
                             pushMessageService.save(pushMessage);
@@ -1226,33 +1233,32 @@ public class AdminController {
                             e.printStackTrace();
                         }
                         //向申报人推送消息
-                        messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     try {
                         //创建推送消息
-                        PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                                 "0","29");
                         try {
                             pushMessageService.save(pushMessage);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return "error";
                         }
                         //向处理组推送消息
-                        messagePushUtil.GroupPushSingle(pushMessage,"material");
+                        messagePushUtil.groupPushSingle(pushMessage,"material");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
                 }else {
                     //只更新相关数据
                     materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
-                    return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
                 }
             }else{
-                return "error";
+                materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
             }
         }else if(subject.hasRole("infodean")){
             //保存意见至对应位，保存姓名，单个审批结果标识置1-通过
@@ -1263,13 +1269,14 @@ public class AdminController {
             //如果审核者只有infodean
             if(0 == materialApplicationCustom.getHighLeaderApproved1()
                     && 0 == materialApplicationCustom.getHighLeaderApproved3()){
-                //最终审批结果标识置1-通过，使物资处理组可见标识置1-可见
+                //最终审批结果标识置1-通过，使物资处理组可处理标识置1-可见
                 materialApplicationCustom.setApprovedFlag(1);
                 materialApplicationCustom.setGroupVisible(1);
+                materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
                 //保存该记录相关数据以便产生推送
                 try {
                     //创建推送消息
-                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                             "0","26");
                     try {
                         pushMessageService.save(pushMessage);
@@ -1277,26 +1284,25 @@ public class AdminController {
                         e.printStackTrace();
                     }
                     //向申报人推送消息
-                    messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 try {
                     //创建推送消息
-                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                             "0","29");
                     try {
                         pushMessageService.save(pushMessage);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return "error";
                     }
                     //向处理组推送消息
-                    messagePushUtil.GroupPushSingle(pushMessage,"material");
+                    messagePushUtil.groupPushSingle(pushMessage,"material");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+                materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
 
             }else if(1 == (materialApplicationCustom.getHighLeaderApproved1()
                     + materialApplicationCustom.getHighLeaderApproved3())){
@@ -1312,7 +1318,7 @@ public class AdminController {
                     //只更新相关数据
                     materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
                 }else{
-                    //说明需审核者已审核且结果皆为通过，使物资处理组可见标识置1-可见,
+                    //说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,
                     // 最终审批结果标识置1-通过，更新数据并向处理组及用户推送消息
                     materialApplicationCustom.setApprovedFlag(1);
                     materialApplicationCustom.setGroupVisible(1);
@@ -1320,7 +1326,7 @@ public class AdminController {
                     //保存该记录相关数据以便产生推送
                     try {
                         //创建推送消息
-                        PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                                 "0","26");
                         try {
                             pushMessageService.save(pushMessage);
@@ -1328,26 +1334,24 @@ public class AdminController {
                             e.printStackTrace();
                         }
                         //向申报人推送消息
-                        messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     try {
                         //创建推送消息
-                        PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                                 "0","29");
                         try {
                             pushMessageService.save(pushMessage);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return "error";
                         }
                         //向处理组推送消息
-                        messagePushUtil.GroupPushSingle(pushMessage,"material");
+                        messagePushUtil.groupPushSingle(pushMessage,"material");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
                 }
             }else if(2 == (materialApplicationCustom.getHighLeaderApproved1()
                     + materialApplicationCustom.getHighLeaderApproved3())){
@@ -1355,7 +1359,7 @@ public class AdminController {
                 //如果审核者审批皆通过
                 if(2 == (materialApplicationCustom.getHighLeaderFlag1()
                         +  materialApplicationCustom.getHighLeaderFlag3())){
-                    //说明需审核者已审核且结果皆为通过，使物资处理组可见标识置1-可见,更新数据并向处理组推送消息//说明需审核者已审核且结果皆为通过，使物资处理组可见标识置1-可见,
+                    //说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,更新数据并向处理组推送消息//说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,
                     // 最终审批结果标识置1-通过，更新数据并向处理组及用户推送消息
                     materialApplicationCustom.setApprovedFlag(1);
                     materialApplicationCustom.setGroupVisible(1);
@@ -1363,7 +1367,7 @@ public class AdminController {
                     //保存该记录相关数据以便产生推送
                     try {
                         //创建推送消息
-                        PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                                 "0","26");
                         try {
                             pushMessageService.save(pushMessage);
@@ -1371,33 +1375,31 @@ public class AdminController {
                             e.printStackTrace();
                         }
                         //向申报人推送消息
-                        messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     try {
                         //创建推送消息
-                        PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                                 "0","29");
                         try {
                             pushMessageService.save(pushMessage);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return "error";
                         }
                         //向处理组推送消息
-                        messagePushUtil.GroupPushSingle(pushMessage,"material");
+                        messagePushUtil.groupPushSingle(pushMessage,"material");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
                 }else {
                     //只更新相关数据
                     materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
-                    return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
-                }
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());                }
             }else{
-                return "error";
+                materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
             }
 
 
@@ -1409,13 +1411,14 @@ public class AdminController {
             //如果审核者只有alldean
             if(0 == materialApplicationCustom.getHighLeaderApproved1()
                     && 0 == materialApplicationCustom.getHighLeaderApproved2()){
-                //最终审批结果标识置1-通过，使物资处理组可见标识置1-可见
+                //最终审批结果标识置1-通过，使物资处理组可处理标识置1-可见
                 materialApplicationCustom.setApprovedFlag(1);
                 materialApplicationCustom.setGroupVisible(1);
+                materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
                 //保存该记录相关数据以便产生推送
                 try {
                     //创建推送消息
-                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                             "0","26");
                     try {
                         pushMessageService.save(pushMessage);
@@ -1423,27 +1426,25 @@ public class AdminController {
                         e.printStackTrace();
                     }
                     //向申报人推送消息
-                    messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 try {
                     //创建推送消息
-                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                             "0","29");
                     try {
                         pushMessageService.save(pushMessage);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return "error";
                     }
                     //向处理组推送消息
-                    messagePushUtil.GroupPushSingle(pushMessage,"material");
+                    messagePushUtil.groupPushSingle(pushMessage,"material");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
-
+                materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
             }else if(1 == (materialApplicationCustom.getHighLeaderApproved1()
                     + materialApplicationCustom.getHighLeaderApproved2())){
                 //如果审核者除alldean外还有一位
@@ -1458,7 +1459,7 @@ public class AdminController {
                     //只更新相关数据
                     materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
                 }else{
-                    //说明需审核者已审核且结果皆为通过，使物资处理组可见标识置1-可见,
+                    //说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,
                     // 最终审批结果标识置1-通过，更新数据并向处理组及用户推送消息
                     materialApplicationCustom.setApprovedFlag(1);
                     materialApplicationCustom.setGroupVisible(1);
@@ -1466,7 +1467,7 @@ public class AdminController {
                     //保存该记录相关数据以便产生推送
                     try {
                         //创建推送消息
-                        PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                                 "0","26");
                         try {
                             pushMessageService.save(pushMessage);
@@ -1474,26 +1475,25 @@ public class AdminController {
                             e.printStackTrace();
                         }
                         //向申报人推送消息
-                        messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     try {
                         //创建推送消息
-                        PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                                 "0","29");
                         try {
                             pushMessageService.save(pushMessage);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return "error";
                         }
                         //向处理组推送消息
-                        messagePushUtil.GroupPushSingle(pushMessage,"material");
+                        messagePushUtil.groupPushSingle(pushMessage,"material");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
                 }
             }else if(2 == (materialApplicationCustom.getHighLeaderApproved1()
                     + materialApplicationCustom.getHighLeaderApproved2())){
@@ -1501,7 +1501,7 @@ public class AdminController {
                 //如果审核者审批皆通过
                 if(2 == (materialApplicationCustom.getHighLeaderFlag1()
                         +  materialApplicationCustom.getHighLeaderFlag2())){
-                    //说明需审核者已审核且结果皆为通过，使物资处理组可见标识置1-可见,更新数据并向处理组推送消息//说明需审核者已审核且结果皆为通过，使物资处理组可见标识置1-可见,
+                    //说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,更新数据并向处理组推送消息//说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,
                     // 最终审批结果标识置1-通过，更新数据并向处理组及用户推送消息
                     materialApplicationCustom.setApprovedFlag(1);
                     materialApplicationCustom.setGroupVisible(1);
@@ -1509,7 +1509,7 @@ public class AdminController {
                     //保存该记录相关数据以便产生推送
                     try {
                         //创建推送消息
-                        PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                                 "0","26");
                         try {
                             pushMessageService.save(pushMessage);
@@ -1517,49 +1517,61 @@ public class AdminController {
                             e.printStackTrace();
                         }
                         //向申报人推送消息
-                        messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     try {
                         //创建推送消息
-                        PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                                 "0","29");
                         try {
                             pushMessageService.save(pushMessage);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            return "error";
                         }
                         //向处理组推送消息
-                        messagePushUtil.GroupPushSingle(pushMessage,"material");
+                        messagePushUtil.groupPushSingle(pushMessage,"material");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
                 }else {
                     //只更新相关数据
                     materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
-                    return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
                 }
             }else{
-                return "error";
+                materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
             }
 
         }else{
-            return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+            materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
         }
 
-
-        return "redirect: admin/showMaterialApplication";
+        return materialApplicationPass;
     }
-
 
     // 处理物资申购
     @RequestMapping(value = "/dealMaterialApplication")
     public String dealMaterialApplication(HttpServletRequest request) throws Exception {
 
-        Integer id = Integer.parseInt(request.getParameter("id"));
+        Integer id;
+        try {
+            id = Integer.parseInt(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return "redirect:/admin/showMaterialApplication";
+        }
+        //ID为空则返回
+        if (id == null) {
+            return "redirect:/admin/showMaterialApplication";
+        }
+        //获取当前物资申购问题
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
+        if (materialApplicationCustom == null) {
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
+        }
         String feedback = request.getParameter("feedback");
         String brand = request.getParameter("brand");
         String model = request.getParameter("model");
@@ -1569,74 +1581,139 @@ public class AdminController {
             judge = Integer.parseInt(request.getParameter("judge"));
             total = Integer.parseInt(request.getParameter("total"));
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            throw new CustomException("抱歉，输入价格有误");
         }
-
-
-        if (id == null) {
-            return "redirect:/admin/showMaterialApplication";
-        }
-
-        //获取当前物资申购问题
-        MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
-        if (materialApplicationCustom == null) {
-            throw new CustomException("抱歉，未找到该物资申购相关信息");
-        }
-
+        //封装数据
+        Map<String, Object> thisData =new HashMap<String, Object>();
+        thisData.put("id",id);
+        thisData.put("feedback",feedback);
+        thisData.put("brand",brand);
+        thisData.put("model",model);
+        thisData.put("judge",judge);
+        thisData.put("total",total);
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
+
+        MaterialApplicationDeal materialApplicationDeal = new MaterialApplicationDeal();
+        materialApplicationDeal.setMap(thisData);
+        materialApplicationDeal.setMaterialApplicationCustom(materialApplicationCustom);
+        materialApplicationDeal.setSubject(subject);
+
+        MaterialApplicationDeal result = this.materialApplicationDeal(materialApplicationDeal);
+        return result.getDenyAction();
+    }
+
+    public  MaterialApplicationDeal materialApplicationDeal(MaterialApplicationDeal materialApplicationDeal)throws Exception{
+        Map<String, Object> thisData = materialApplicationDeal.getMap();
+        Subject subject = materialApplicationDeal.getSubject();
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationDeal.getMaterialApplicationCustom();
         ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
-        if(materialApplicationCustom.getFlag() == 0 || materialApplicationCustom.getFlag() == 1){
-            //更新该物资申购问题数据
-            materialApplicationCustom.setBrand(brand);
-            materialApplicationCustom.setModel(model);
-            materialApplicationCustom.setJudge(judge);
-            materialApplicationCustom.setTotal(total);
-            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
-            materialApplicationCustom.setLeaderName(viewEmployeeMiPsd.getName());
 
-            //处理组预处理
-            if(subject.hasRole("material") && materialApplicationCustom.getFlag() == 0){
-                materialApplicationCustom.setFlag(1);
-                materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
-                //保存该记录相关数据以便产生推送
-                try {
-                    //创建推送消息
-                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                            "0","21");
+        Integer id = Integer.parseInt(thisData.get("id").toString());
+        String feedback = thisData.get("feedback").toString();
+        String brand = thisData.get("brand").toString();
+        String model = thisData.get("model").toString();
+        int judge = Integer.parseInt(thisData.get("judge").toString());
+        int total = Integer.parseInt(thisData.get("total").toString());
+
+        if(subject.hasRole("material")){
+            if(materialApplicationCustom.getFlag() == 0 || materialApplicationCustom.getFlag() == 1){
+                //更新该物资申购问题数据
+                materialApplicationCustom.setBrand(brand);
+                materialApplicationCustom.setModel(model);
+                materialApplicationCustom.setJudge(judge);
+                materialApplicationCustom.setTotal(total);
+                materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
+                materialApplicationCustom.setLeaderName(viewEmployeeMiPsd.getName());
+                if(materialApplicationCustom.getGroupVisible() == 0){
+                    //审查组未处理时预处理
+                    materialApplicationCustom.setFlag(1);
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    //保存该记录相关数据以便产生推送
                     try {
-                        pushMessageService.save(pushMessage);
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","21");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向下一流程组推送消息
+                        messagePushUtil.groupPushSingle(pushMessage,"examiner");
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return "error";
                     }
-                    //向下一流程组推送消息
-                    messagePushUtil.GroupPushSingle(pushMessage,"examiner");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    //创建推送消息
-                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                            "2","28");
                     try {
-                        pushMessageService.save(pushMessage);
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "2","28");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向申报人推送消息
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return "error";
                     }
-                    //向申报人推送消息
-                    messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    materialApplicationDeal.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+                }else{
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    //将反馈插入空白反馈字段
+                    if(materialApplicationCustom.getFeedbackId1() == null){
+                        materialApplicationCustom.setFeedbackContent1(feedback);
+                        materialApplicationCustom.setFeedbackId1(viewEmployeeMiPsd.getCode());
+                        materialApplicationCustom.setFeedbackName1(viewEmployeeMiPsd.getName());
+                        materialApplicationCustom.setFeedbackTime1(dateString);
+                    }else if(materialApplicationCustom.getFeedbackId2() == null){
+                        materialApplicationCustom.setFeedbackContent2(feedback);
+                        materialApplicationCustom.setFeedbackId2(viewEmployeeMiPsd.getCode());
+                        materialApplicationCustom.setFeedbackName2(viewEmployeeMiPsd.getName());
+                        materialApplicationCustom.setFeedbackTime2(dateString);
+                    }else if(materialApplicationCustom.getFeedbackId3() == null){
+                        materialApplicationCustom.setFeedbackContent3(feedback);
+                        materialApplicationCustom.setFeedbackId3(viewEmployeeMiPsd.getCode());
+                        materialApplicationCustom.setFeedbackName3(viewEmployeeMiPsd.getName());
+                        materialApplicationCustom.setFeedbackTime3(dateString);
+                    }else if(materialApplicationCustom.getFeedbackId4() == null){
+                        materialApplicationCustom.setFeedbackContent4(feedback);
+                        materialApplicationCustom.setFeedbackId4(viewEmployeeMiPsd.getCode());
+                        materialApplicationCustom.setFeedbackName4(viewEmployeeMiPsd.getName());
+                        materialApplicationCustom.setFeedbackTime4(dateString);
+                    }else if(materialApplicationCustom.getFeedbackId5() == null){
+                        materialApplicationCustom.setFeedbackContent5(feedback);
+                        materialApplicationCustom.setFeedbackId5(viewEmployeeMiPsd.getCode());
+                        materialApplicationCustom.setFeedbackName5(viewEmployeeMiPsd.getName());
+                        materialApplicationCustom.setFeedbackTime5(dateString);
+                    }
+
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    //保存该记录相关数据以便产生推送
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "2","28");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向申报人推送消息
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    materialApplicationDeal.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
                 }
-                return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
-            }else{
-                materialApplicationCustom.setFlag(1);
+
             }
-
-            //审查组审查后使处理组可见,并保留审查组意见,并向处理组及用户推送消息
-            if(subject.hasRole("examiner") && materialApplicationCustom.getFlag() == 1){
+        }else if(subject.hasRole("examiner")){
+            if(materialApplicationCustom.getFlag() == 0 || materialApplicationCustom.getFlag() == 1){
                 materialApplicationCustom.setFlag(1);
                 materialApplicationCustom.setGroupVisible(1);
                 materialApplicationCustom.setXxkyj(feedback);
@@ -1644,111 +1721,39 @@ public class AdminController {
                 //保存该记录相关数据以便产生推送
                 try {
                     //创建推送消息
-                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                             "0","29");
                     try {
                         pushMessageService.save(pushMessage);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return "error";
                     }
                     //向处理组推送消息
-                    messagePushUtil.GroupPushSingle(pushMessage,"material");
+                    messagePushUtil.groupPushSingle(pushMessage,"material");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 try {
                     //创建推送消息
-                    PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                             "2","28");
                     try {
                         pushMessageService.save(pushMessage);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return "error";
                     }
                     //向申报人推送消息
-                    messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
-            }else{
-                materialApplicationCustom.setFlag(1);
+                materialApplicationDeal.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
             }
-
-            if(materialApplicationCustom.getGroupVisible() == 1){
-                //将反馈插入空白反馈字段
-                if(materialApplicationCustom.getFeedbackId1() == null){
-                    materialApplicationCustom.setFeedbackContent1(feedback);
-                    materialApplicationCustom.setFeedbackId1(viewEmployeeMiPsd.getCode());
-                    materialApplicationCustom.setFeedbackName1(viewEmployeeMiPsd.getName());
-                    //设置反馈时间
-                    Date currentTime = new Date();
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String dateString = formatter.format(currentTime);
-                    materialApplicationCustom.setFeedbackTime1(dateString);
-                }else if(materialApplicationCustom.getFeedbackId2() == null){
-                    materialApplicationCustom.setFeedbackContent2(feedback);
-                    materialApplicationCustom.setFeedbackId2(viewEmployeeMiPsd.getCode());
-                    materialApplicationCustom.setFeedbackName2(viewEmployeeMiPsd.getName());
-                    //设置反馈时间
-                    Date currentTime = new Date();
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String dateString = formatter.format(currentTime);
-                    materialApplicationCustom.setFeedbackTime2(dateString);
-                }else if(materialApplicationCustom.getFeedbackId3() == null){
-                    materialApplicationCustom.setFeedbackContent3(feedback);
-                    materialApplicationCustom.setFeedbackId3(viewEmployeeMiPsd.getCode());
-                    materialApplicationCustom.setFeedbackName3(viewEmployeeMiPsd.getName());
-                    //设置反馈时间
-                    Date currentTime = new Date();
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String dateString = formatter.format(currentTime);
-                    materialApplicationCustom.setFeedbackTime3(dateString);
-                }else if(materialApplicationCustom.getFeedbackId4() == null){
-                    materialApplicationCustom.setFeedbackContent4(feedback);
-                    materialApplicationCustom.setFeedbackId4(viewEmployeeMiPsd.getCode());
-                    materialApplicationCustom.setFeedbackName4(viewEmployeeMiPsd.getName());
-                    //设置反馈时间
-                    Date currentTime = new Date();
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String dateString = formatter.format(currentTime);
-                    materialApplicationCustom.setFeedbackTime4(dateString);
-                }else if(materialApplicationCustom.getFeedbackId5() == null){
-                    materialApplicationCustom.setFeedbackContent5(feedback);
-                    materialApplicationCustom.setFeedbackId5(viewEmployeeMiPsd.getCode());
-                    materialApplicationCustom.setFeedbackName5(viewEmployeeMiPsd.getName());
-                    //设置反馈时间
-                    Date currentTime = new Date();
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String dateString = formatter.format(currentTime);
-                    materialApplicationCustom.setFeedbackTime5(dateString);
-                }
-            }
-
-
-
-            materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
-            //保存该记录相关数据以便产生推送
-            try {
-                //创建推送消息
-                PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
-                        "2","28");
-                try {
-                    pushMessageService.save(pushMessage);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return "error";
-                }
-                //向申报人推送消息
-                messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        }else{
+            materialApplicationDeal.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
         }
 
-        return "redirect:editMaterialApplication?id=" + materialApplicationCustom.getId();
+        return materialApplicationDeal;
     }
 
     // 物资申购处理完成
@@ -1802,7 +1807,7 @@ public class AdminController {
             //保存该记录相关数据以便产生推送
             try {
                 //创建推送消息
-                PushMessage pushMessage = createPushUtil.CreatePreMessage(materialApplicationCustom.getUserid(),"0","1",
+                PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
                         "2","23");
                 try {
                     pushMessageService.save(pushMessage);
@@ -1811,7 +1816,7 @@ public class AdminController {
                     return "error";
                 }
                 //向申报人推送消息
-                messagePushUtil.SpecifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1915,7 +1920,7 @@ public class AdminController {
         //重定向
         return "admin/printMaterialApplication";
     }
-
+    //endregion
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<机房巡检>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
     // 机房巡检显示
     @RequestMapping("/showEngineRoomInspection")
@@ -1988,7 +1993,7 @@ public class AdminController {
 
         //保存该记录相关数据以便产生推送
         try {
-            PushMessage pushMessage = createPushUtil.CreatePreMessage(engineRoomInspectionCustom.getUserid(),"0","2",
+            PushMessage pushMessage = createPushUtil.createPreMessage(engineRoomInspectionCustom.getUserid(),"0","2",
                     "0","31");
             Boolean result = engineRoomInspectionService.saveAndPre(engineRoomInspectionCustom, pushMessage);
 
@@ -1997,7 +2002,7 @@ public class AdminController {
                 return "error";
             }
             //向管理组推送消息
-           messagePushUtil.GroupPushSingle(pushMessage,"examiner");
+           messagePushUtil.groupPushSingle(pushMessage,"examiner");
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
