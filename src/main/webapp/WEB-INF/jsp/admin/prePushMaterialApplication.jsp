@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" action="/admin/pushMaterialApplication" method="post">
+                    <form class="form-horizontal" role="form" action="/admin/pushMaterialApplication" method="post" id="editfrom">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">分管院长：</label>
                             <div class="col-sm-8">
@@ -94,7 +94,7 @@
                         <input type="text" id="material_id" name="material_id" value="${material_id}" style="display:none">
                         <input type="text" id="material_feedback" name="material_feedback" value="${material_feedback}" style="display:none">
                         <div class="form-group" style="text-align: center">
-                            <button class="btn btn-default" type="submit">推送</button>
+                            <button class="btn btn-default" type="button" id="formSubmit">推送</button>
                             <button class="btn btn-default" type="reset">返回</button>
                         </div>
                     </form>
@@ -115,5 +115,9 @@
     <%--设置菜单中--%>
     $("#nav li:nth-child(4)").addClass("active");
 
+    //防止数据重复提交
+    $("#formSubmit").one("click",function(){
+        $("#editfrom").submit();
+    });
 </script>
 </html>

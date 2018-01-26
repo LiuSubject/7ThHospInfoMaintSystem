@@ -244,7 +244,7 @@
                             </div>
                         </div>
                         <div class="form-group" style="text-align: center">
-                            <button class="btn btn-default" type="submit">提交</button>
+                            <button class="btn btn-default" type="button" id="formSubmit">提交</button>
                             <button class="btn btn-default" type="reset">重置</button>
                         </div>
                     </form>
@@ -303,5 +303,9 @@
         $('input,textarea').placeholder();
     });
 
+    //防止数据重复提交
+    $("#formSubmit").one("click",function(){
+        $("#editfrom").submit();
+    });
 </script>
 </html>

@@ -151,6 +151,9 @@ public class NormalController {
     @RequestMapping(value = "/addComputerProblems", method = {RequestMethod.GET})
     public String addComputerProblemsUI(Model model) throws Exception {
 
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
         return "normal/addComputerProblems";
     }
 
@@ -1179,6 +1182,9 @@ public class NormalController {
     @RequestMapping(value = "/addMaterialApplication", method = {RequestMethod.GET})
     public String addMaterialApplicationUI(Model model) throws Exception {
 
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
         return "normal/addMaterialApplication";
     }
 
@@ -1313,12 +1319,12 @@ public class NormalController {
         return "normal/printMaterialApplication";
     }
     //endregion
-
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<机房巡检>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
     //region
     // 机房巡检显示
     @RequestMapping("/showEngineRoomInspection")
     public String showEngineRoomInspection(Model model, Integer page) throws Exception {
+
         List<EngineRoomInspectionCustom> list = null;
         //页码对象
         PagingVO pagingVO = new PagingVO();
@@ -1337,6 +1343,8 @@ public class NormalController {
         //返回角色对象
         Subject subject = SecurityUtils.getSubject();
         model.addAttribute("roles",this.getRoles(subject));
+
+
         return "normal/showEngineRoomInspection";
 
     }
@@ -1473,14 +1481,14 @@ public class NormalController {
         //返回角色对象
         Subject subject = SecurityUtils.getSubject();
         model.addAttribute("roles",this.getRoles(subject));
+
+
         return "normal/checkEngineRoomInspection";
     }
 
     // 查看机房巡检详情
     @RequestMapping(value = "/checkEngineRoomInspection", method = {RequestMethod.POST})
     public String checkEngineRoomInspection(EngineRoomInspectionCustom engineRoomInspectionCustom) throws Exception {
-
-        engineRoomInspectionService.updataById(engineRoomInspectionCustom.getId(), engineRoomInspectionCustom);
 
         //重定向
         return "redirect:/normal/showEngineRoomInspection";

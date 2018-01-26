@@ -362,7 +362,7 @@
 
 
     //处理按钮点击
-    $('#dealBtn').on('click', function () {
+    $('#dealBtn').one('click', function () {
         var reback = document.getElementById("reback").value;
         var brand = document.getElementById("brand").value;
         var model = document.getElementById("model").value;
@@ -378,7 +378,7 @@
 
 
     //完成按钮点击
-    $('#completeBtn').on('click', function () {
+    $('#completeBtn').one('click', function () {
         var reback = document.getElementById("reback").value;
         var brand = document.getElementById("brand").value;
         var model = document.getElementById("model").value;

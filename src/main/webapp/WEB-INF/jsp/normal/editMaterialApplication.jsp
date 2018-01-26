@@ -349,7 +349,7 @@
 
 
     //拒绝按钮点击
-    $('#denyBtn').on('click', function () {
+    $('#denyBtn').one('click', function () {
         var reback = document.getElementById("reback").value;
         window.location.href =encodeURI( "/normal/denyMaterialApplication?id=${materialApplication.id}&feedback="
             + reback);
@@ -357,7 +357,7 @@
 
 
     //通过按钮点击
-    $('#passBtn').on('click', function () {
+    $('#passBtn').one('click', function () {
         var reback = document.getElementById("reback").value;
         window.location.href =encodeURI( "/normal/passMaterialApplication?id=${materialApplication.id}&feedback="
             + reback);
