@@ -92,6 +92,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">申请科室意见：</label>
+                            <div class="col-sm-8">
+                                <textarea  type="text" class="form-control" rows="5" id="bmyj" name="bmyj" readonly="readonly">${materialApplication.bmyj}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">品牌：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="brand" name="brand"
@@ -378,7 +384,7 @@
         var model = document.getElementById("model").value;
         var judge = document.getElementById("judge").value;
         var total = document.getElementById("total").value;
-        window.location.href =encodeURI( "/admin/completeMaterialApplication?id=${materialApplication.id}
+        window.location.href =encodeURI( "/admin/completeMaterialApplication?id=${materialApplication.id}"
             +"&feedback=" + reback
             +"&brand=" + brand
             +"&model=" + model

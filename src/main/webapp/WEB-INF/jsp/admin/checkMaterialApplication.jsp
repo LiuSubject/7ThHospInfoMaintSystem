@@ -89,7 +89,14 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">请购理由：</label>
                             <div class="col-sm-8">
-                                </div>
+                                <textarea  type="text" class="form-control" rows="5" id="reason" name="reason" readonly="readonly">${materialApplication.reason}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">申请科室意见：</label>
+                            <div class="col-sm-8">
+                                <textarea  type="text" class="form-control" rows="5" id="bmyj" name="bmyj" readonly="readonly">${materialApplication.bmyj}</textarea>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">品牌：</label>

@@ -90,7 +90,7 @@
     </tr>
     <tr style="height:105px">
         <td class="title">申请科室意见</td>
-        <td colspan="2" style="text-align: left; border-right-style:none">${materialApplication.bmyj}</td>
+        <td colspan="2" class="text" style="border-right-style:none">${materialApplication.bmyj}</td>
         <td colspan="1" style="text-align: right;vertical-align: bottom;padding-right:10px; border-left-style:none">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
     </tr>
     <tr style="height:105px">

@@ -50,7 +50,7 @@
         @page {
             margin: 0;
         }
-body{            overflow-y:scroll;        }    </style>
+    </style>
 </head>
 <body>
 <h3 class="text-center" style="margin-bottom:30px;">绍兴市第七人民医院信息物资请购表</h3>
@@ -85,29 +85,39 @@ body{            overflow-y:scroll;        }    </style>
     </tr>
     <tr style="height:120px">
         <td class="title">请购理由</td>
-        <td colspan="3" style="text-align: left;">${materialApplication.reason}</td>
+        <td colspan="2" class="text" style="border-right-style:none">${materialApplication.reason}</td>
+        <td colspan="1" style="text-align: right;vertical-align: bottom;padding-right:10px; border-left-style:none"></td>
     </tr>
     <tr style="height:105px">
         <td class="title">申请科室意见</td>
-        <td colspan="3" style="text-align: right;vertical-align: bottom;padding-right:10px;">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
-    </tr>
-    <tr style="height:105px">
-        <td class="title">分管院长意见</td>
-        <td colspan="3" style="text-align: right;vertical-align: bottom;padding-right:10px;">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+        <td colspan="2" class="text" style="border-right-style:none">${materialApplication.bmyj}</td>
+        <td colspan="1" style="text-align: right;vertical-align: bottom;padding-right:10px; border-left-style:none">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
     </tr>
     <tr style="height:105px">
         <td class="title">信息科意见</td>
-        <td colspan="3" style="text-align: right;vertical-align: bottom;padding-right:10px;">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+        <td colspan="2" class="text" style="border-right-style:none">${materialApplication.xxkyj}</td>
+        <td colspan="1" style="text-align: right;vertical-align: bottom;padding-right:10px; border-left-style:none">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
     </tr>
     <tr style="height:105px">
-        <td class="title">主管院长审批<br/>(金额>500元)</td>
-        <td colspan="3" style="text-align: right;vertical-align: bottom;padding-right:10px;">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+        <td class="title">分管院长意见</td>
+        <td colspan="2" class="text" style="border-right-style:none">${materialApplication.highLeaderReback1}</td>
+        <td colspan="1" style="text-align: right;vertical-align: bottom;padding-right:10px; border-left-style:none">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+    </tr>
+    <tr style="height:105px">
+        <td class="title">信息主管副院长审批</td>
+        <td colspan="2" class="text" style="border-right-style:none">${materialApplication.highLeaderReback2}</td>
+        <td colspan="1" style="text-align: right;vertical-align: bottom;padding-right:10px; border-left-style:none">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+    </tr>
+    </tr>
+    <tr style="height:105px">
+        <td class="title">院长审批</td>
+        <td colspan="2" class="text" style="border-right-style:none">${materialApplication.highLeaderReback3}</td>
+        <td colspan="1" style="text-align: right;vertical-align: bottom;padding-right:10px; border-left-style:none">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
     </tr>
     </tbody>
 </table>
 <div class="text-center">
     <button class="btn btn-primary" type="button" id="btnSave">打印</button>
-    <button class="btn btn-primary" type="button" id="returnListBtn">返回</button>
 </div>
 </body>
 <script type="text/javascript">
@@ -121,10 +131,6 @@ body{            overflow-y:scroll;        }    </style>
             else{
 
             }
-        });
-        //返回按钮点击
-        $('#returnListBtn').on('click', function () {
-            window.location.href = "/normal/checkMaterialApplication?id="+${materialApplication.id};
         });
     });
 </script>
