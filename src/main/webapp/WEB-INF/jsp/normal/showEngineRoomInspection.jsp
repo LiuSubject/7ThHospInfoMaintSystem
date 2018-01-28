@@ -51,7 +51,7 @@
                     <h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">巡检信息</h2>
                     <div class="row" style="text-align: right">
                         <form class="form-horizontal form-inline" role="form" style="margin: 20px 0 10px 0;"
-                              action="/admin/searchEngineRoomInspection" id="searchFunction" method="post">
+                              action="/normal/searchEngineRoomInspection" id="searchFunction" method="post">
                             <div class="form-group col-sm-12">
                                 <input type="text" class="form-control" placeholder="请输入巡检人" id="findByExaminer"
                                        name="findByExaminer" style="margin-left: 10px">
@@ -90,11 +90,11 @@
                             <td style="text-align: center">
                                 <c:if test='${roles.indexOf("examiner") != -1}'>
                                     <button class="btn btn-default btn-primary btn-info" type="button"
-                                            onClick="location.href='/admin/editEngineRoomInspection?id=${item.id}'">巡检审核
+                                            onClick="location.href='/normal/editEngineRoomInspection?id=${item.id}'">巡检审核
                                     </button>&nbsp;&nbsp;&nbsp;&nbsp;
                                 </c:if>
                                 <button class="btn btn-default btn-primary btn-danger" type="button"
-                                        onClick="location.href='/admin/checkEngineRoomInspection?id=${item.id}'">查看详情
+                                        onClick="location.href='/normal/checkEngineRoomInspection?id=${item.id}'">查看详情
                                 </button>
                                 <!--弹出框-->
                             </td>
@@ -106,31 +106,31 @@
                     <c:if test="${pagingVO != null}">
                         <nav style="text-align: center">
                             <ul class="pagination">
-                                <li><a href="/admin/showEngineRoomInspection?page=${pagingVO.upPageNo}">&laquo;上一页</a>
+                                <li><a href="/normal/showEngineRoomInspection?page=${pagingVO.upPageNo}">&laquo;上一页</a>
                                 </li>
                                 <li class="active"><a href="javascript:location.reload();">${pagingVO.curentPageNo}</a></li>
                                 <c:if test="${pagingVO.curentPageNo+1 <= pagingVO.totalCount}">
                                     <li>
-                                        <a href="/admin/showEngineRoomInspection?page=${pagingVO.curentPageNo+1}">${pagingVO.curentPageNo+1}</a>
+                                        <a href="/normal/showEngineRoomInspection?page=${pagingVO.curentPageNo+1}">${pagingVO.curentPageNo+1}</a>
                                     </li>
                                 </c:if>
                                 <c:if test="${pagingVO.curentPageNo+2 <= pagingVO.totalCount}">
                                     <li>
-                                        <a href="/admin/showEngineRoomInspection?page=${pagingVO.curentPageNo+2}">${pagingVO.curentPageNo+2}</a>
+                                        <a href="/normal/showEngineRoomInspection?page=${pagingVO.curentPageNo+2}">${pagingVO.curentPageNo+2}</a>
                                     </li>
                                 </c:if>
                                 <c:if test="${pagingVO.curentPageNo+3 <= pagingVO.totalCount}">
                                     <li>
-                                        <a href="/admin/showEngineRoomInspection?page=${pagingVO.curentPageNo+3}">${pagingVO.curentPageNo+3}</a>
+                                        <a href="/normal/showEngineRoomInspection?page=${pagingVO.curentPageNo+3}">${pagingVO.curentPageNo+3}</a>
                                     </li>
                                 </c:if>
                                 <c:if test="${pagingVO.curentPageNo+4 <= pagingVO.totalCount}">
                                     <li>
-                                        <a href="/admin/showEngineRoomInspection?page=${pagingVO.curentPageNo+4}">${pagingVO.curentPageNo+4}</a>
+                                        <a href="/normal/showEngineRoomInspection?page=${pagingVO.curentPageNo+4}">${pagingVO.curentPageNo+4}</a>
                                     </li>
                                 </c:if>
                                 <li>
-                                    <a href="/admin/showEngineRoomInspection?page=${pagingVO.totalCount}">最后一页&raquo;</a>
+                                    <a href="/normal/showEngineRoomInspection?page=${pagingVO.totalCount}">最后一页&raquo;</a>
                                 </li>
                             </ul>
                         </nav>

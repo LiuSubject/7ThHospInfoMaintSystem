@@ -269,18 +269,18 @@
 
 
     //标红处理按钮点击
-    $('#urgentBtn').on('click', function () {
+    $('#urgentBtn').one('click', function () {
         window.location.href = encodeURI("/admin/urgentComputerProblems?id=${computerProblems.id}");
     });
 
     //处理按钮点击
-    $('#dealBtn').on('click', function () {
+    $('#dealBtn').one('click', function () {
         var feedback = document.getElementById("feedback").value;
         window.location.href = encodeURI("/admin/dealComputerProblems?id=${computerProblems.id}&feedback=" + feedback);
     });
 
     //完成按钮点击
-    $('#completeBtn').on('click', function () {
+    $('#completeBtn').one('click', function () {
         var feedback = document.getElementById("feedback").value;
         window.location.href = encodeURI("/admin/completeComputerProblems?id=${computerProblems.id}&feedback=" + feedback);
     });

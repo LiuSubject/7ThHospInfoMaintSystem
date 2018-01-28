@@ -49,7 +49,7 @@
 					</div>
 				</div>
 				<div class="panel-body">
-					<form class="form-horizontal" role="form" action="/normal/addMaterialApplication"  method="post">
+					<form class="form-horizontal" role="form" action="/normal/addMaterialApplication"  method="post" id="editfrom">
 						<div class="form-group">
 							<label class="col-sm-2 control-label">申请人：</label>
 							<div class="col-sm-8">
@@ -117,8 +117,14 @@
 								<textarea  type="text" class="form-control" rows="5" id="reason" name="reason" placeholder="请输入请购理由"></textarea>
 							</div>
 						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">申请科室意见：</label>
+							<div class="col-sm-8">
+								<textarea  type="text" class="form-control" rows="5" id="bmyj" name="bmyj" placeholder="请输入申请科室意见"></textarea>
+							</div>
+						</div>
 						<div class="form-group" style="text-align: center">
-							<button class="btn btn-default" type="submit">提交</button>
+							<button class="btn btn-default" type="button" id="formSubmit">提交</button>
 							<button class="btn btn-default" type="reset">重置</button>
 						</div>
 					</form>
@@ -198,6 +204,11 @@
         todayBtn:  1,
         autoclose: 1
 
+    });
+
+    //防止数据重复提交
+    $("#formSubmit").one("click",function(){
+        $("#editfrom").submit();
     });
 </script>
 </html>

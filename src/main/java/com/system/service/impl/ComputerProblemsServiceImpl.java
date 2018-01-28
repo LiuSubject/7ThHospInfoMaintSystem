@@ -83,6 +83,13 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         return list;
     }
 
+    public List<ComputerProblemsCustom> findComplexGroupByPaging(Map<String, Object> condition) throws Exception {
+
+        List<ComputerProblemsCustom> list = computerProblemsMapperCustom.findComplexGroupByPaging(condition);
+
+        return list;
+    }
+
 
 
     public List<ComputerProblemsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception {
@@ -95,6 +102,13 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
     public List<ComputerProblemsCustom> paginationOfgGroupSearchResults(Map<String, Object> condition) throws Exception {
 
         List<ComputerProblemsCustom> list = computerProblemsMapperCustom.paginationOfgGroupSearchResults(condition);
+
+        return list;
+    }
+
+    public List<ComputerProblemsCustom> paginationOfComplexgGroupSearchResults(Map<String, Object> condition) throws Exception {
+
+        List<ComputerProblemsCustom> list = computerProblemsMapperCustom.paginationOfComplexgGroupSearchResults(condition);
 
         return list;
     }
@@ -142,6 +156,12 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         criteria.andUseridIsNotNull().andTypeEqualTo(groupType);
 
         return computerProblemsMapper.countByExample(ComputerProblemsExample);
+    }
+
+    //返回负责组(复合权限)电脑故障总数
+    public int getCountComplexGroupComputerProblems(Map<String, Object> condition) throws Exception{
+        int counts = computerProblemsMapperCustom.getCountComplexGroupComputerProblems(condition);
+        return counts;
     }
 
     //返回部门总数
@@ -312,4 +332,6 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
 
         return ComputerProblemsCustomList;
     }
+
+
 }

@@ -91,6 +91,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">申请科室意见：</label>
+                            <div class="col-sm-8">
+                                <textarea  type="text" class="form-control" rows="5" id="bmyj" name="bmyj" readonly="readonly">${materialApplication.bmyj}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">品牌：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="brand" name="brand"
@@ -153,7 +159,9 @@
                         </div>
                         <div class="form-group" style="text-align: center">
                             <c:if test="${materialApplication.flag != 2}">
-                                <c:if test="${dpdean == true || infodean == true || alldean == true}">
+                                <c:if test='${roles.indexOf("dpdean") != -1
+                                    || roles.indexOf("infodean") != -1
+                                    || roles.indexOf("alldean") != -1}'>
                                     <%--院领导审批按钮--%>
                                     <c:if test="${materialApplication.highApproved == 1
 									    && materialApplication.approvedFlag == 0}">
@@ -341,7 +349,7 @@
 
 
     //拒绝按钮点击
-    $('#denyBtn').on('click', function () {
+    $('#denyBtn').one('click', function () {
         var reback = document.getElementById("reback").value;
         window.location.href =encodeURI( "/normal/denyMaterialApplication?id=${materialApplication.id}&feedback="
             + reback);
@@ -349,7 +357,7 @@
 
 
     //通过按钮点击
-    $('#passBtn').on('click', function () {
+    $('#passBtn').one('click', function () {
         var reback = document.getElementById("reback").value;
         window.location.href =encodeURI( "/normal/passMaterialApplication?id=${materialApplication.id}&feedback="
             + reback);
