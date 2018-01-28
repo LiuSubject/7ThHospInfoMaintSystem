@@ -63,6 +63,36 @@
     ORDER by create_time desc, flag asc
     limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
   </select>
+  <select id="findComplexGroupByPaging" parameterType="map" resultMap="BaseResultMap">
+    select computer_problems.* from computer_problems
+    <where>
+      <if test="hardware != null and hardware == 1">
+        AND type = 1
+      </if>
+      <if test="software != null and software == 1">
+        OR type = 2
+      </if>
+      <if test="fee != null and fee == 1">
+        OR type = 3
+      </if>
+    </where>
+    ORDER by create_time desc, flag asc
+    limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
+  </select>
+  <select id="getCountComplexGroupComputerProblems" parameterType="map" resultType="java.lang.Integer">
+    select COUNT(computer_problems.id) from computer_problems
+    <where>
+      <if test="hardware != null and hardware == 1">
+        AND type = 1
+      </if>
+      <if test="software != null and software == 1">
+        OR type = 2
+      </if>
+      <if test="fee != null and fee == 1">
+        OR type = 3
+      </if>
+    </where>
+  </select>
   <select id="paginationOfSearchResults" parameterType="map" resultMap="BaseResultMap">
   select computer_problems.* from computer_problems
     <where>
@@ -94,6 +124,31 @@
           AND type = #{groupType}
         </if>
       </where>
+    ORDER by create_time desc, flag asc
+  </select>
+
+  <select id="paginationOfComplexgGroupSearchResults" parameterType="map" resultMap="BaseResultMap">
+    select computer_problems.* from computer_problems
+    <where>
+      <if test="flag == 0 or flag == 1 or flag == 2">
+        AND flag = #{flag}
+      </if>
+      <if test="dept != null and dept != ''">
+        AND dept LIKE concat(concat('%',#{dept}),'%')
+      </if>
+      <if test="name != null and name != ''">
+        AND name LIKE concat(concat('%',#{name}),'%')
+      </if>
+      <if test="hardware != null and hardware == 0">
+        AND type != 1
+      </if>
+      <if test="software != null and software == 0">
+        AND type != 2
+      </if>
+      <if test="fee != null and fee == 0">
+        AND type != 3
+      </if>
+    </where>
     ORDER by create_time desc, flag asc
   </select>
 

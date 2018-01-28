@@ -120,11 +120,22 @@ public class AdminController {
 
         if (subject.hasRole("hardware")) {
             //硬件组
+            //封装搜索条件
+            Map<String, Object> map =new HashMap<String, Object>();
+            map.put("pagingVO",pagingVO);
+            map.put("hardware",1);
+            //复合权限判断
+            if(subject.hasRole("software")){
+                map.put("software",1);
+            }
+            if(subject.hasRole("fee")){
+                map.put("fee",1);
+            }
             try {
                 //设置总页数
-                pagingVO.setTotalCount(computerProblemsService.getCountGroupComputerProblems(1));
+                pagingVO.setTotalCount(computerProblemsService.getCountComplexGroupComputerProblems(map));
                 //获取结果
-                list = computerProblemsService.findGroupByPaging(pagingVO.getCurentPageNo(),1);
+                list = computerProblemsService.findComplexGroupByPaging(map);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;
@@ -133,11 +144,22 @@ public class AdminController {
             computerProblemsList.setComputerProblemsList(list);
         }else if(subject.hasRole("software")){
             //软件组
+            //封装搜索条件
+            Map<String, Object> map =new HashMap<String, Object>();
+            map.put("pagingVO",pagingVO);
+            map.put("software",1);
+            //复合权限判断
+            if(subject.hasRole("hardware")){
+                map.put("hardware",1);
+            }
+            if(subject.hasRole("fee")){
+                map.put("fee",1);
+            }
             try {
                 //设置总页数
-                pagingVO.setTotalCount(computerProblemsService.getCountGroupComputerProblems(2));
+                pagingVO.setTotalCount(computerProblemsService.getCountComplexGroupComputerProblems(map));
                 //获取结果
-                list = computerProblemsService.findGroupByPaging(pagingVO.getCurentPageNo(),2);
+                list = computerProblemsService.findComplexGroupByPaging(map);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;
@@ -146,22 +168,22 @@ public class AdminController {
             computerProblemsList.setComputerProblemsList(list);
         }else if(subject.hasRole("fee")){
             //物资组
-            try {
-                //设置总页数
-                pagingVO.setTotalCount(computerProblemsService.getCountGroupComputerProblems(3));
-                //获取结果
-                list = computerProblemsService.findGroupByPaging(pagingVO.getCurentPageNo(),3);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw e;
+            //封装搜索条件
+            Map<String, Object> map =new HashMap<String, Object>();
+            map.put("pagingVO",pagingVO);
+            map.put("fee",1);
+            //复合权限判断
+            if(subject.hasRole("software")){
+                map.put("software",1);
             }
-            computerProblemsList.setPagingVO(pagingVO);
-            computerProblemsList.setComputerProblemsList(list);
-        }else{
+            if(subject.hasRole("hardware")){
+                map.put("hardware",1);
+            }
             try {
                 //设置总页数
-                pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
-                list = computerProblemsService.findByPaging(pagingVO.getCurentPageNo());
+                pagingVO.setTotalCount(computerProblemsService.getCountComplexGroupComputerProblems(map));
+                //获取结果
+                list = computerProblemsService.findComplexGroupByPaging(map);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;
@@ -575,21 +597,42 @@ public class AdminController {
         try {
             if (subject.hasRole("hardware")) {
                 //硬件组
-                int groupType = 1;
-                map.put("groupType",groupType);
-                list = computerProblemsService.paginationOfgGroupSearchResults(map);
+                //封装搜索条件
+                map.put("hardware",1);
+                //复合权限判断
+                if(!subject.hasRole("software")){
+                    map.put("software",0);
+                }
+                if(!subject.hasRole("fee")){
+                    map.put("fee",0);
+                }
+                list = computerProblemsService.paginationOfComplexgGroupSearchResults(map);
                 computerProblemsSearch.setComputerProblemsList(list);
             }else if(subject.hasRole("software")){
                 //软件组
-                int groupType = 2;
-                map.put("groupType",groupType);
-                list = computerProblemsService.paginationOfgGroupSearchResults(map);
+                //封装搜索条件
+                map.put("software",1);
+                //复合权限判断
+                if(!subject.hasRole("hardware")){
+                    map.put("hardware",0);
+                }
+                if(!subject.hasRole("fee")){
+                    map.put("fee",0);
+                }
+                list = computerProblemsService.paginationOfComplexgGroupSearchResults(map);
                 computerProblemsSearch.setComputerProblemsList(list);
             }else if(subject.hasRole("fee")){
                 //费用组
-                int groupType = 3;
-                map.put("groupType",groupType);
-                list = computerProblemsService.paginationOfgGroupSearchResults(map);
+                //封装搜索条件
+                map.put("fee",1);
+                //复合权限判断
+                if(!subject.hasRole("hardware")){
+                    map.put("hardware",0);
+                }
+                if(!subject.hasRole("software")){
+                    map.put("software",0);
+                }
+                list = computerProblemsService.paginationOfComplexgGroupSearchResults(map);
                 computerProblemsSearch.setComputerProblemsList(list);
             }else {
                 list = computerProblemsService.paginationOfSearchResults(map);

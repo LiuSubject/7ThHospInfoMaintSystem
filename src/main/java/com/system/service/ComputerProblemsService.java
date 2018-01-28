@@ -30,6 +30,9 @@ public interface ComputerProblemsService {
     //获取分页查询负责组电脑故障信息
     List<ComputerProblemsCustom> findGroupByPaging(Integer toPageNo,int groupType) throws Exception;
 
+    //获取分页查询负责组(复合权限)电脑故障信息
+    List<ComputerProblemsCustom> findComplexGroupByPaging(Map<String, Object> condition) throws Exception;
+
     //获取分页查询部门电脑故障信息
     List<ComputerProblemsCustom> deptFindByPaging(Integer toPageNo,String deptName) throws Exception;
 
@@ -38,6 +41,9 @@ public interface ComputerProblemsService {
 
     //电脑故障信息分组搜索结果(分页有缺陷，未分页)
     List<ComputerProblemsCustom> paginationOfgGroupSearchResults(Map<String, Object> condition) throws Exception;
+
+    //电脑故障信息分组(复合权限)搜索结果(分页有缺陷，未分页)
+    List<ComputerProblemsCustom> paginationOfComplexgGroupSearchResults(Map<String, Object> condition) throws Exception;
 
     //保存电脑故障信息
     Boolean save(ComputerProblemsCustom computerProblemsCustom) throws Exception;
@@ -50,6 +56,9 @@ public interface ComputerProblemsService {
 
     //获取负责组电脑故障总数
     int getCountGroupComputerProblems(int groupType) throws Exception;
+
+    //返回负责组(复合权限)电脑故障总数
+    int getCountComplexGroupComputerProblems(Map<String, Object> condition) throws Exception;
 
     //获取部门电脑故障总数
     int getCountDeptComputerProblems(String currentDept) throws Exception;
