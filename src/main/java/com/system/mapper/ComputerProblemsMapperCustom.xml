@@ -52,7 +52,7 @@
   <select id="deptFindByPaging" parameterType="map" resultMap="BaseResultMap">
     select computer_problems.*
     from computer_problems
-    WHERE dept LIKE concat(concat('%',#{deptName}),'%')
+    WHERE departcode LIKE concat(concat('%',#{deptName}),'%')
     ORDER by create_time desc, flag asc
     limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
   </select>

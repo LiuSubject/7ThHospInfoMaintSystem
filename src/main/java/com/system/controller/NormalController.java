@@ -119,6 +119,7 @@ public class NormalController {
         List<ComputerProblemsCustom> list;
 
         if (subject.hasRole("infodean") ||subject.hasRole("alldean")) {
+            //信息主管院长与院长能查看所有记录
             try {
                 //设置总页数
                 pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
@@ -132,10 +133,10 @@ public class NormalController {
         }else{
             try {
                 ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
-                String currentDept = viewEmployeeMiPsd.getDeptName();
+                String currentDept = viewEmployeeMiPsd.getDeptCode();
                 //设置总页数
                 pagingVO.setTotalCount(computerProblemsService.getCountDeptComputerProblems(currentDept));
-                list = computerProblemsService.findByPaging(pagingVO.getCurentPageNo());
+                list = computerProblemsService.deptFindByPaging(pagingVO.getCurentPageNo(),currentDept);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;
@@ -331,7 +332,7 @@ public class NormalController {
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
         }
 
-       return "redirect:editComputerProblems?id=" + computerProblemsCustom.getId();
+        return "redirect:editComputerProblems?id=" + computerProblemsCustom.getId();
     }
 
     // 电脑故障处理完成
@@ -521,7 +522,7 @@ public class NormalController {
         }else if(subject.hasRole("dpdean")){
             //分管院长能够看到与自己相关的待审批及本部门物资申购请求
             //当前部门
-            String currentDept = viewEmployeeMiPsd.getDeptName();
+            String currentDept = viewEmployeeMiPsd.getDeptCode();
             try {
                 //设置总页数
                 pagingVO.setTotalCount(materialApplicationService.getDeptAndApproveMaterialApplication(currentDept,viewEmployeeMiPsd.getCode()));
@@ -536,7 +537,7 @@ public class NormalController {
         }else{
             //普通用户只能看到自己部门提交的物资申购请求
             //当前部门
-            String currentDept = viewEmployeeMiPsd.getDeptName();
+            String currentDept = viewEmployeeMiPsd.getDeptCode();
             try {
                 //设置总页数
                 pagingVO.setTotalCount(materialApplicationService.getCountDeptMaterialApplication(currentDept));
@@ -1240,7 +1241,7 @@ public class NormalController {
                 return "error";
             }
             //向指定组推送消息
-           messagePushUtil.groupPushSingle(pushMessage,"examiner");
+            messagePushUtil.groupPushSingle(pushMessage,"examiner");
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
@@ -1595,6 +1596,7 @@ public class NormalController {
             //获取日志记录器，这个记录器将负责控制日志信息
             Logger logger = Logger.getLogger(AdminController.class.getName());
             logger.error("角色获取失败：可能是本地库连接失败",e);
+            return "normal";
         }
 
         return role.getRolename();
