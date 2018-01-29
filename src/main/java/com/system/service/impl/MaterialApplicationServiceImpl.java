@@ -151,7 +151,7 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
         MaterialApplicationExample MaterialApplicationExample = new MaterialApplicationExample();
         //通过criteria构造查询条件
         MaterialApplicationExample.Criteria criteria = MaterialApplicationExample.createCriteria();
-        criteria.andUseridIsNotNull().andDeptLike(currentDept);
+        criteria.andUseridIsNotNull().andDepartcodeLike(currentDept);
 
         return materialApplicationMapper.countByExample(MaterialApplicationExample);
     }
@@ -162,7 +162,7 @@ public class MaterialApplicationServiceImpl implements MaterialApplicationServic
         MaterialApplicationExample MaterialApplicationExample = new MaterialApplicationExample();
         //通过criteria构造查询条件
         MaterialApplicationExample.Criteria criteria = MaterialApplicationExample.createCriteria();
-        criteria.andUseridIsNotNull().andDeptLike(currentDept);
+        criteria.andUseridIsNotNull().andDepartcodeLike(currentDept);
 
         MaterialApplicationExample.Criteria criteria2 = MaterialApplicationExample.createCriteria();
         criteria2.andUseridIsNotNull().andHighLeaderApproved1EqualTo(1).andHighLeaderId1EqualTo(dpCode);

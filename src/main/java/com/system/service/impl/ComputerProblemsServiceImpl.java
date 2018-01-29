@@ -170,7 +170,7 @@ public class ComputerProblemsServiceImpl implements ComputerProblemsService {
         ComputerProblemsExample ComputerProblemsExample = new ComputerProblemsExample();
         //通过criteria构造查询条件
         ComputerProblemsExample.Criteria criteria = ComputerProblemsExample.createCriteria();
-        criteria.andUseridIsNotNull().andDeptLike(currentDept);
+        criteria.andUseridIsNotNull().andDepartcodeLike(currentDept);
 
         return computerProblemsMapper.countByExample(ComputerProblemsExample);
     }

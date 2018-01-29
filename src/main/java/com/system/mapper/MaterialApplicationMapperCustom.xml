@@ -81,14 +81,14 @@
   <select id="deptFindByPaging" parameterType="map" resultMap="BaseResultMap">
     select material_application.*
     from material_application
-    WHERE dept LIKE concat(concat('%',#{deptName}),'%')
+    WHERE departCode LIKE concat(concat('%',#{deptName}),'%')
     ORDER by create_time desc, flag asc, high_approved desc
     limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
   </select>
   <select id="deptAndApproveFindByPaging" parameterType="map" resultMap="BaseResultMap">
     select material_application.*
     from material_application
-    WHERE dept LIKE concat(concat('%',#{deptName}),'%')
+    WHERE departCode LIKE concat(concat('%',#{deptName}),'%')
     OR high_leader_id_1 LIKE concat(concat('%',#{dpCode}),'%')
     ORDER by flag asc,high_approved desc, use_date desc
     limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
