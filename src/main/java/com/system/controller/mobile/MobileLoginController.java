@@ -87,8 +87,6 @@ public class MobileLoginController {
             e.printStackTrace();
         }
 
-
-
         if (subject.hasRole("admin")) {
             if (subject.hasRole("examiner")) {
                 map.put("success", "true");

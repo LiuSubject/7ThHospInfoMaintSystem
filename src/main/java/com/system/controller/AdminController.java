@@ -191,6 +191,18 @@ public class AdminController {
             computerProblemsList.setPagingVO(pagingVO);
             computerProblemsList.setComputerProblemsList(list);
 
+        }else{
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
+                list = computerProblemsService.findByPaging(pagingVO.getCurentPageNo());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            computerProblemsList.setPagingVO(pagingVO);
+            computerProblemsList.setComputerProblemsList(list);
+
         }
         return computerProblemsList;
     }
@@ -1893,7 +1905,6 @@ public class AdminController {
         return materialApplicationComplete;
     }
 
-
     // 查看物资申购详情
     @RequestMapping(value = "/checkMaterialApplication", method = {RequestMethod.GET})
     public String checkMaterialApplication(Integer id, Model model) throws Exception {
@@ -1920,7 +1931,7 @@ public class AdminController {
         return "redirect:/admin/showMaterialApplication";
     }
 
-    //搜索物资申购
+    // 搜索物资申购
     @RequestMapping(value = "/searchMaterialApplication")
     private String searchMaterialApplication(String findByDept,String findByName,String findByFlag, Model model) throws Exception {
 
@@ -2318,6 +2329,7 @@ public class AdminController {
             //获取日志记录器，这个记录器将负责控制日志信息
             Logger logger = Logger.getLogger(AdminController.class.getName());
             logger.error("角色获取失败：可能是本地库连接失败",e);
+            return "normal";
         }
 
         return role.getRolename();

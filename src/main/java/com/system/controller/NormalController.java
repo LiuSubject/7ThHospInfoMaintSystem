@@ -1595,6 +1595,7 @@ public class NormalController {
             //获取日志记录器，这个记录器将负责控制日志信息
             Logger logger = Logger.getLogger(AdminController.class.getName());
             logger.error("角色获取失败：可能是本地库连接失败",e);
+            return "normal";
         }
 
         return role.getRolename();
