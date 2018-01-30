@@ -8,6 +8,8 @@
 	<title>申购列表</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<%--一分钟刷新一次页面--%>
+	<meta http-equiv="refresh" content="60">
 	<!-- 引入bootstrap -->
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	<!-- 引入JQuery  bootstrap.js-->

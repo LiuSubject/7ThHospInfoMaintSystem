@@ -119,7 +119,7 @@ public class MobileLoginController {
         } catch (Exception e) {
             e.printStackTrace();
             //获取日志记录器，这个记录器将负责控制日志信息
-            Logger logger = Logger.getLogger(AdminController.class.getName());
+            Logger logger = Logger.getLogger(MobileLoginController.class.getName());
             logger.error("角色获取失败：可能是本地库连接失败",e);
             return "normal";
         }
@@ -146,12 +146,12 @@ public class MobileLoginController {
                 eSwitch.printStackTrace();
                 e.printStackTrace();
                 //获取日志记录器，这个记录器将负责控制日志信息
-                Logger logger = Logger.getLogger(AdminController.class.getName());
+                Logger logger = Logger.getLogger(MobileLoginController.class.getName());
                 logger.error("用户获取失败：可能是本地库连接失败",e);
             }
             e.printStackTrace();
             //获取日志记录器，这个记录器将负责控制日志信息
-            Logger logger = Logger.getLogger(AdminController.class.getName());
+            Logger logger = Logger.getLogger(MobileLoginController.class.getName());
             logger.error("用户获取失败：可能是HIS库连接失败，将切换到备用库",e);
         }
         return viewEmployeeMiPsd;
