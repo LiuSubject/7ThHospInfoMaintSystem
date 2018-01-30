@@ -193,9 +193,11 @@ public class AdminController {
 
         }else{
             try {
+                ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+                String currentDept = viewEmployeeMiPsd.getDeptCode();
                 //设置总页数
-                pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
-                list = computerProblemsService.findByPaging(pagingVO.getCurentPageNo());
+                pagingVO.setTotalCount(computerProblemsService.getCountDeptComputerProblems(currentDept));
+                list = computerProblemsService.deptFindByPaging(pagingVO.getCurentPageNo(),currentDept);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;

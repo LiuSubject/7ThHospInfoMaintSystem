@@ -14,25 +14,25 @@
 	http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!--加载数据库配置文件-->
-    <context:property-placeholder location="classpath:jdbc.properties" />
+    <context:property-placeholder location="classpath:jdbc.properties"/>
 
     <!-- ===============第一个数据源MySQL的配置=============== -->
     <!--配置数据源 c3p0 连接池-->
     <bean id="dataSource2MySQL" class="com.mchange.v2.c3p0.ComboPooledDataSource" >
-        <property name="driverClass" value="${jdbc.mysql.driver}" />
-        <property name="jdbcUrl" value="${jdbc.mysql.url}" />
-        <property name="user" value="${jdbc.mysql.username}" />
-        <property name="password" value="${jdbc.mysql.password}" />
-        <property name="maxPoolSize" value="200" />
-        <property name="minPoolSize" value="10" />
+        <property name="driverClass" value="${jdbc.mysql.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.mysql.url}"/>
+        <property name="user" value="${jdbc.mysql.username}"/>
+        <property name="password" value="${jdbc.mysql.password}"/>
+        <property name="maxPoolSize" value="200"/>
+        <property name="minPoolSize" value="10"/>
         <!--初始化时获取的连接数，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
         <property name="initialPoolSize" value="10"/>
-        <property name="checkoutTimeout" value="60" />
-        <property name="unreturnedConnectionTimeout" value="25" />
-        <property name="maxIdleTimeExcessConnections" value="20" />
-        <property name="maxConnectionAge" value="20" />
-        <property name="idleConnectionTestPeriod" value="50" />
-        <property name="maxStatements" value="0" />
+        <property name="checkoutTimeout" value="60"/>
+        <property name="unreturnedConnectionTimeout" value="25"/>
+        <property name="maxIdleTimeExcessConnections" value="20"/>
+        <property name="maxConnectionAge" value="20"/>
+        <property name="idleConnectionTestPeriod" value="50"/>
+        <property name="maxStatements" value="0"/>
 
     </bean>
 
@@ -40,20 +40,20 @@
 
     <!--配置数据源 c3p0 连接池-->
     <bean id="dataSource2SQLServer" class="com.mchange.v2.c3p0.ComboPooledDataSource" >
-        <property name="driverClass" value="${jdbc.sqlserver.driver}" />
-        <property name="jdbcUrl" value="${jdbc.sqlserver.url}" />
-        <property name="user" value="${jdbc.sqlserver.username}" />
-        <property name="password" value="${jdbc.sqlserver.password}" />
-        <property name="maxPoolSize" value="200" />
+        <property name="driverClass" value="${jdbc.sqlserver.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.sqlserver.url}"/>
+        <property name="user" value="${jdbc.sqlserver.username}"/>
+        <property name="password" value="${jdbc.sqlserver.password}"/>
+        <property name="maxPoolSize" value="200"/>
         <!--初始化时获取的连接数，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
         <property name="initialPoolSize" value="10"/>
-        <property name="minPoolSize" value="10" />
-        <property name="checkoutTimeout" value="60" />
-        <property name="unreturnedConnectionTimeout" value="25" />
-        <property name="maxIdleTimeExcessConnections" value="20" />
-        <property name="maxConnectionAge" value="20" />
-        <property name="idleConnectionTestPeriod" value="50" />
-        <property name="maxStatements" value="0" />
+        <property name="minPoolSize" value="10"/>
+        <property name="checkoutTimeout" value="60"/>
+        <property name="unreturnedConnectionTimeout" value="25"/>
+        <property name="maxIdleTimeExcessConnections" value="20"/>
+        <property name="maxConnectionAge" value="20"/>
+        <property name="idleConnectionTestPeriod" value="50"/>
+        <property name="maxStatements" value="0"/>
     </bean>
 
     <!--将DynamicDataSource Bean加入到Spring的上下文xml配置文件中去，同时配置DynamicDataSource的targetDataSources(多数据源目标)属性的Map映射。-->
@@ -61,8 +61,8 @@
     <bean id="dataSource" class="com.system.util.DynamicDataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
-                <entry key="dataSource2MySQL" value-ref="dataSource2MySQL" />
-                <entry key="dataSource2SQLServer"  value-ref="dataSource2SQLServer"  />
+                <entry key="dataSource2MySQL" value-ref="dataSource2MySQL"/>
+                <entry key="dataSource2SQLServer"  value-ref="dataSource2SQLServer" />
             </map>
         </property>
         <property name="defaultTargetDataSource" ref="dataSource2MySQL"/>
@@ -83,8 +83,8 @@
     -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <!--如果需要扫描多个报下的mapper,每个包中间使用半角逗号分开-->
-        <property name="basePackage" value="com.system.mapper" />
-        <property name="sqlSessionFactoryBeanName" value="sessionFactory" />
+        <property name="basePackage" value="com.system.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sessionFactory"/>
     </bean>
 
 

@@ -7,9 +7,11 @@
         <li><a href="/admin/addComputerProblems">故障申报</a></li>
         <li><a href="/admin/showMaterialApplication">申购列表</a></li>
         <li><a href="/admin/addMaterialApplication">物资申购</a></li>
+        <c:if test= '${roles != null}'>
         <c:if test= '${roles.indexOf("hardware") != -1 || roles.indexOf("examiner") != -1}'>
         <li><a href="/admin/showEngineRoomInspection">巡检信息</a></li>
         <li><a href="/admin/addEngineRoomInspection">机房巡检</a></li>
+        </c:if>
         </c:if>
         <li><a href="/logout">退出系统<sapn class="glyphicon glyphicon-log-out pull-right" /></a></li>
     </ul>
