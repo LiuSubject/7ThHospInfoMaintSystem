@@ -27,6 +27,12 @@ public class LoginController {
         return "../../login";
     }
 
+    //登录跳转
+    @RequestMapping(value = "/sxqy", method = {RequestMethod.GET})
+    public String loginUI2() throws Exception {
+        return "../../login";
+    }
+
     //登录表单处理
     @RequestMapping(value = "/login", method = {RequestMethod.POST})
     public String login(ViewEmployeeMiPsd viewEmployeeMiPsd) throws Exception {
