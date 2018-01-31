@@ -278,7 +278,6 @@ public class AdminController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "error";
         }
         //重定向
         return "redirect:/admin/showComputerProblems";
@@ -467,7 +466,6 @@ public class AdminController {
                     pushMessageService.save(pushMessage);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return "error";
                 }
                 //向申报人推送消息
                 messagePushUtil.specifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
@@ -522,7 +520,6 @@ public class AdminController {
                     pushMessageService.save(pushMessage);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return "error";
                 }
                 //向申报人推送消息
                 messagePushUtil.specifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
@@ -536,7 +533,6 @@ public class AdminController {
                         pushMessageService.save(pushMessageUrgent);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return "error";
                     }
                     //向 examiner 推送消息
                     messagePushUtil.groupPushSingle(pushMessageUrgent,"examiner");
@@ -750,7 +746,6 @@ public class AdminController {
            messagePushUtil.groupPushSingle(pushMessage,"material");
         } catch (Exception e) {
             e.printStackTrace();
-            return "error";
         }
 
         //重定向
@@ -861,7 +856,6 @@ public class AdminController {
                 pushMessageService.save(pushMessage);
             } catch (Exception e) {
                 e.printStackTrace();
-                return "error";
             }
             //向申报人推送消息
             messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
@@ -884,7 +878,6 @@ public class AdminController {
                     pushMessageService.save(pushMessage);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return "error";
                 }
                 //向分管院长推送消息
                 messagePushUtil.specifiedPushSingle(pushMessage,viceDean);
@@ -909,7 +902,6 @@ public class AdminController {
                     pushMessageService.save(pushMessage);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return "error";
                 }
                 //向信息主管副院长推送消息
                 messagePushUtil.specifiedPushSingle(pushMessage,infoVice);
@@ -934,7 +926,6 @@ public class AdminController {
                     pushMessageService.save(pushMessage);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return "error";
                 }
                 //向院长推送消息
                 messagePushUtil.specifiedPushSingle(pushMessage,dean);
@@ -1952,7 +1943,6 @@ public class AdminController {
             list = materialApplicationService.paginationOfSearchResults(map);
         } catch (Exception e) {
             e.printStackTrace();
-            return "error";
         }
 
         model.addAttribute("materialApplicationList", list);
@@ -2068,7 +2058,6 @@ public class AdminController {
            messagePushUtil.groupPushSingle(pushMessage,"examiner");
         } catch (Exception e) {
             e.printStackTrace();
-            return "error";
         }
 
 
