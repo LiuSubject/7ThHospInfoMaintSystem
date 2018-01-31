@@ -247,7 +247,6 @@ public class NormalController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "error";
 
         }
         //重定向
@@ -1246,7 +1245,6 @@ public class NormalController {
             messagePushUtil.groupPushSingle(pushMessage,"examiner");
         } catch (Exception e) {
             e.printStackTrace();
-            return "error";
         }
         //重定向
         return "redirect:/normal/showMaterialApplication";
