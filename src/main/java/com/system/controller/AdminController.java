@@ -191,19 +191,20 @@ public class AdminController {
             computerProblemsList.setPagingVO(pagingVO);
             computerProblemsList.setComputerProblemsList(list);
 
-        }else{
+        }else if(subject.hasRole("examiner")){
+            //监督者
             try {
-                ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
-                String currentDept = viewEmployeeMiPsd.getDeptCode();
                 //设置总页数
-                pagingVO.setTotalCount(computerProblemsService.getCountDeptComputerProblems(currentDept));
-                list = computerProblemsService.deptFindByPaging(pagingVO.getCurentPageNo(),currentDept);
+                pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
+                list = computerProblemsService.findByPaging(pagingVO.getCurentPageNo());
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;
             }
             computerProblemsList.setPagingVO(pagingVO);
             computerProblemsList.setComputerProblemsList(list);
+        }else{
+            //未分组者不显示任何东西
 
         }
         return computerProblemsList;
