@@ -245,6 +245,8 @@ public class AdminController {
         computerProblemsCustom.setFlag(0);
         //设置问题所属部门编码
         computerProblemsCustom.setDepartcode(viewEmployeeMiPsd.getDeptCode());
+        //设置问题所属部门
+        computerProblemsCustom.setDept(viewEmployeeMiPsd.getDeptName());
         //设置问题所属人员ID
         computerProblemsCustom.setUserid(viewEmployeeMiPsd.getCode());
         //设置标红标识
@@ -728,6 +730,9 @@ public class AdminController {
 
         //设置申购所属部门编码
         materialApplicationCustom.setDepartcode(viewEmployeeMiPsd.getDeptCode());
+
+        //设置申购所属部门编码
+        materialApplicationCustom.setDept(viewEmployeeMiPsd.getDeptName());
 
         //设置申购所属人员ID
         materialApplicationCustom.setUserid(viewEmployeeMiPsd.getCode());

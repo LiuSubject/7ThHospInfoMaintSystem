@@ -199,20 +199,32 @@ public class MobileAdminController {
             }
             computerProblemsList.setPagingVO(pagingVO);
             computerProblemsList.setComputerProblemsList(list);
-        }else{
+        }else if (subject.hasRole("examiner")) {
             try {
-                ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
-                String currentDept = viewEmployeeMiPsd.getDeptCode();
-                //设置总页数
-                pagingVO.setTotalCount(computerProblemsService.getCountDeptComputerProblems(currentDept));
-                list = computerProblemsService.deptFindByPaging(pagingVO.getCurentPageNo(),currentDept);
+                pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
+                list = computerProblemsService.findByPaging(pagingVO.getCurentPageNo());
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;
             }
             computerProblemsList.setPagingVO(pagingVO);
             computerProblemsList.setComputerProblemsList(list);
+        }else {
+            if (subject.hasRole("admin")) {
 
+            }else{
+                try {
+                    ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+                    String currentDept = viewEmployeeMiPsd.getDeptCode();
+                    pagingVO.setTotalCount(computerProblemsService.getCountDeptComputerProblems(currentDept));
+                    list = computerProblemsService.deptFindByPaging(pagingVO.getCurentPageNo(), currentDept);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+                computerProblemsList.setPagingVO(pagingVO);
+                computerProblemsList.setComputerProblemsList(list);
+            }
         }
         return computerProblemsList;
     }
@@ -237,26 +249,7 @@ public class MobileAdminController {
         Map<String, Object> map =new HashMap<String, Object>();
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
-
-
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
 
         //设置问题初始化时间
         Date currentTime = new Date();
@@ -293,24 +286,39 @@ public class MobileAdminController {
         //设置问题所属人员ID
         computerProblemsCustom.setUserid(viewEmployeeMiPsd.getCode());
 
-        try {
-            PushMessage preMessage = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
-                    "0","11");
-            Boolean result = computerProblemsService.saveAndPre(computerProblemsCustom, preMessage);
+        //设置标红标识
+        computerProblemsCustom.setFaultUrgent(0);
 
+        //保存该记录相关数据以便产生推送
+        try {
+            //创建消息
+            PushMessage preMessage = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
+                    "3","11");
+            Boolean result = computerProblemsService.saveAndPre(computerProblemsCustom, preMessage);
             if (!result) {
                 map.put("success", "false");
                 map.put("msg", "抱歉，故障信息保存失败");
                 return map;
             }
-
-            //向管理组推送消息
-           messagePushUtil.groupPushSingle(preMessage,"admin");
+            //向指定管理组群推送消息
+            switch(computerProblemsCustom.getType()){
+                case 1:
+                    String[] userGroups1 = new String[]{"hardware","examiner"};
+                    messagePushUtil.groupsPushSingle(preMessage,userGroups1);
+                    break;
+                case 2:
+                    String[] userGroups2 = new String[]{"software","examiner"};
+                    messagePushUtil.groupsPushSingle(preMessage,userGroups2);
+                    break;
+                case 3:
+                    String[] userGroups3 = new String[]{"fee","examiner"};
+                    messagePushUtil.groupsPushSingle(preMessage,userGroups3);
+                    break;
+                default:
+                    break;
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            map.put("success", "false");
-            map.put("msg", "抱歉，故障信息保存失败");
-            return map;
         }
         map.put("success", "true");
         map.put("msg", "提交成功");
