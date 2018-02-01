@@ -199,20 +199,34 @@ public class MobileAdminController {
             }
             computerProblemsList.setPagingVO(pagingVO);
             computerProblemsList.setComputerProblemsList(list);
-        }else{
+        }else if (subject.hasRole("examiner")) {
+
             try {
-                ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
-                String currentDept = viewEmployeeMiPsd.getDeptCode();
-                //设置总页数
-                pagingVO.setTotalCount(computerProblemsService.getCountDeptComputerProblems(currentDept));
-                list = computerProblemsService.deptFindByPaging(pagingVO.getCurentPageNo(),currentDept);
+
+                pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
+                list = computerProblemsService.findByPaging(pagingVO.getCurentPageNo());
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;
             }
             computerProblemsList.setPagingVO(pagingVO);
             computerProblemsList.setComputerProblemsList(list);
+        }else {
+            if (subject.hasRole("admin")) {
 
+            }else{
+                try {
+                    ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+                    String currentDept = viewEmployeeMiPsd.getDeptCode();
+                    pagingVO.setTotalCount(computerProblemsService.getCountDeptComputerProblems(currentDept));
+                    list = computerProblemsService.deptFindByPaging(pagingVO.getCurentPageNo(), currentDept);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+                computerProblemsList.setPagingVO(pagingVO);
+                computerProblemsList.setComputerProblemsList(list);
+            }
         }
         return computerProblemsList;
     }
