@@ -200,9 +200,7 @@ public class MobileAdminController {
             computerProblemsList.setPagingVO(pagingVO);
             computerProblemsList.setComputerProblemsList(list);
         }else if (subject.hasRole("examiner")) {
-
             try {
-
                 pagingVO.setTotalCount(computerProblemsService.getCountComputerProblems());
                 list = computerProblemsService.findByPaging(pagingVO.getCurentPageNo());
             } catch (Exception e) {
