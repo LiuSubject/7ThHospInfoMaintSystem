@@ -731,7 +731,7 @@ public class AdminController {
         //设置申购所属部门编码
         materialApplicationCustom.setDepartcode(viewEmployeeMiPsd.getDeptCode());
 
-        //设置申购所属部门编码
+        //设置申购所属部门
         materialApplicationCustom.setDept(viewEmployeeMiPsd.getDeptName());
 
         //设置申购所属人员ID
@@ -2021,6 +2021,9 @@ public class AdminController {
     @RequestMapping(value = "/addEngineRoomInspection", method = {RequestMethod.GET})
     public String addEngineRoomInspectionUI(Model model) throws Exception {
 
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
         return "admin/addEngineRoomInspection";
     }
 
