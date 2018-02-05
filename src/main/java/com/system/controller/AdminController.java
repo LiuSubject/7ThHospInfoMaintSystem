@@ -354,8 +354,10 @@ public class AdminController {
         if(subject.hasRole("examiner")){
             //审核者
                 if(computerProblemsCustom.getFaultUrgent() == null || computerProblemsCustom.getFaultUrgent() == 0){
-                    computerProblemsCustom.setFaultUrgent(1);
-                    computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+                    if(computerProblemsCustom.getFlag() != 2){
+                        computerProblemsCustom.setFaultUrgent(1);
+                        computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+                    }
                 }
                 //保存该记录相关数据以便产生推送
                 try {
@@ -649,6 +651,7 @@ public class AdminController {
                 computerProblemsSearch.setComputerProblemsList(list);
             }else {
                 list = computerProblemsService.paginationOfSearchResults(map);
+                computerProblemsSearch.setComputerProblemsList(list);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -731,7 +734,7 @@ public class AdminController {
         //设置申购所属部门编码
         materialApplicationCustom.setDepartcode(viewEmployeeMiPsd.getDeptCode());
 
-        //设置申购所属部门编码
+        //设置申购所属部门
         materialApplicationCustom.setDept(viewEmployeeMiPsd.getDeptName());
 
         //设置申购所属人员ID
@@ -2021,6 +2024,9 @@ public class AdminController {
     @RequestMapping(value = "/addEngineRoomInspection", method = {RequestMethod.GET})
     public String addEngineRoomInspectionUI(Model model) throws Exception {
 
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
         return "admin/addEngineRoomInspection";
     }
 

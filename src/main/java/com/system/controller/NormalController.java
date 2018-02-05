@@ -1336,6 +1336,9 @@ public class NormalController {
     @RequestMapping(value = "/addEngineRoomInspection", method = {RequestMethod.GET})
     public String addEngineRoomInspectionUI(Model model) throws Exception {
 
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
         return "normal/addEngineRoomInspection";
     }
 
