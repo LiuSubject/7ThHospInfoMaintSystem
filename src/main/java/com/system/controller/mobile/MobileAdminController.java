@@ -1,6 +1,8 @@
 package com.system.controller.mobile;
 
 import com.system.controller.AdminController;
+import com.system.exception.CustomException;
+import com.system.operate.ComputerProblemUrgent;
 import com.system.operate.ComputerProblemsList;
 import com.system.operate.ComputerProblemsSearch;
 import com.system.po.*;
@@ -333,6 +335,90 @@ public class MobileAdminController {
         map.put("success", "true");
         map.put("msg", "提交成功");
         return map;
+    }
+
+    // 标红指定电脑故障
+    @RequestMapping(value = "/urgentComputerProblems", method = {RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Object> urgentComputerProblems(Integer id) throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
+        if (id == null) {
+            map.put("success", "false");
+            map.put("msg", "未找到该故障相关信息");
+            return map;
+        }
+        //获取指定电脑故障记录
+        ComputerProblemsCustom computerProblemsCustom = computerProblemsService.findById(id);
+        if (computerProblemsCustom == null) {
+            map.put("success", "false");
+            map.put("msg", "未找到该故障相关信息");
+            return map;
+        }
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        //封装
+        ComputerProblemUrgent computerProblemUrgent = new ComputerProblemUrgent();
+        computerProblemUrgent.setSubject(subject);
+        computerProblemUrgent.setComputerProblemsCustom(computerProblemsCustom);
+        //指定电脑故障记录标红
+        try {
+            ComputerProblemUrgent result = this.computerProblemUrgent(computerProblemUrgent);
+        } catch (Exception e) {
+            map.put("success", "false");
+            map.put("msg", "操作失败");
+            return map;
+        }
+        map.put("success", "true");
+        map.put("msg", "处理成功");
+        return map;
+    }
+
+    // 指定电脑故障记录标红
+    public ComputerProblemUrgent computerProblemUrgent(ComputerProblemUrgent computerProblemUrgent) throws Exception{
+        //获取当前操作对象
+        Subject subject = computerProblemUrgent.getSubject();
+        //获取指定电脑故障记录
+        ComputerProblemsCustom computerProblemsCustom = computerProblemUrgent.getComputerProblemsCustom();
+        //检查权限
+        if(subject.hasRole("examiner")){
+            //审核者
+            if(computerProblemsCustom.getFaultUrgent() == null || computerProblemsCustom.getFaultUrgent() == 0){
+                if(computerProblemsCustom.getFlag() != 2){
+                    computerProblemsCustom.setFaultUrgent(1);
+                    computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+                }
+            }
+            //保存该记录相关数据以便产生推送
+            try {
+
+                //产生推送消息
+                PushMessage preMessage = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
+                        "0","99");
+                pushMessageService.save(preMessage);
+                //向指定管理组推送消息
+                switch(computerProblemsCustom.getType()){
+                    case 1:
+                        messagePushUtil.groupPushSingle(preMessage,"hardware");
+                        break;
+                    case 2:
+                        messagePushUtil.groupPushSingle(preMessage,"software");
+                        break;
+                    case 3:
+                        messagePushUtil.groupPushSingle(preMessage,"fee");
+                        break;
+                    default:
+                        break;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+        }else {
+
+        }
+        return computerProblemUrgent;
     }
 
     // 开始处理电脑故障

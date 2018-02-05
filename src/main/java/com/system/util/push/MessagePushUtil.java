@@ -1,11 +1,13 @@
 package com.system.util.push;
 
+import com.system.controller.mobile.MobileAdminController;
 import com.system.po.PushId;
 import com.system.po.PushMessage;
 import com.system.po.Role;
 import com.system.service.PushIdService;
 import com.system.service.PushMessageService;
 import com.system.service.RoleService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
@@ -143,6 +145,9 @@ public class MessagePushUtil {
                         clientIds.add(pushId.getClientId().toString());
                     } catch (Exception e) {
                         System.out.println("This user never use mobile :" + pushGroup.get(i).getRoleid());
+                        //获取日志记录器，这个记录器将负责控制日志信息
+                        Logger logger = Logger.getLogger(MessagePushUtil.class.getName());
+                        logger.error("This user never use mobile :" + pushGroup.get(i).getRoleid(),e);
                     }
                 }
                 return clientIds;

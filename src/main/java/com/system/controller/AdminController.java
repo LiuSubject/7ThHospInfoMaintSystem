@@ -354,8 +354,10 @@ public class AdminController {
         if(subject.hasRole("examiner")){
             //审核者
                 if(computerProblemsCustom.getFaultUrgent() == null || computerProblemsCustom.getFaultUrgent() == 0){
-                    computerProblemsCustom.setFaultUrgent(1);
-                    computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+                    if(computerProblemsCustom.getFlag() != 2){
+                        computerProblemsCustom.setFaultUrgent(1);
+                        computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+                    }
                 }
                 //保存该记录相关数据以便产生推送
                 try {
