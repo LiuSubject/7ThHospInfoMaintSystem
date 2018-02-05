@@ -1503,11 +1503,11 @@ public class MobileAdminController {
     //返回电脑故障类型列表JSON
     @RequestMapping(value = "/getProblemsTypeList")
     @ResponseBody
-    private Map<String, Object> getProblemsTypeList() throws Exception {
+    private Map<String, Object> getProblemsTypeList(String mainType) throws Exception {
         Map<String, Object> map =new HashMap<String, Object>();
         List<ComputerProblemsType> computerProblemsTypeList = new ArrayList<>();
         try {
-            computerProblemsTypeList = computerProblemsTypeService.getAll();
+            computerProblemsTypeList = computerProblemsTypeService.getSecondaryList(mainType);
         } catch (Exception e) {
             e.printStackTrace();
         }
