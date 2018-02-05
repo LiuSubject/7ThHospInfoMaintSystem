@@ -649,6 +649,7 @@ public class AdminController {
                 computerProblemsSearch.setComputerProblemsList(list);
             }else {
                 list = computerProblemsService.paginationOfSearchResults(map);
+                computerProblemsSearch.setComputerProblemsList(list);
             }
         } catch (Exception e) {
             e.printStackTrace();

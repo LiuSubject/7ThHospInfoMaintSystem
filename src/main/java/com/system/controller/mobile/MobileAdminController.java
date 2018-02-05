@@ -2,6 +2,7 @@ package com.system.controller.mobile;
 
 import com.system.controller.AdminController;
 import com.system.operate.ComputerProblemsList;
+import com.system.operate.ComputerProblemsSearch;
 import com.system.po.*;
 import com.system.util.push.CreatePushUtil;
 import com.system.service.*;
@@ -85,7 +86,7 @@ public class MobileAdminController {
     @RequestMapping("/showComputerProblems")
     @ResponseBody
     public Map<String, Object> showComputerProblems(Model model, Integer page) throws Exception {
-
+        Map<String, Object> map =new HashMap<String, Object>();
         //当前操作对象
         Subject subject = SecurityUtils.getSubject();
         //页码对象初始化
@@ -98,10 +99,19 @@ public class MobileAdminController {
         ComputerProblemsList computerProblemsList = new ComputerProblemsList();
         computerProblemsList.setSubject(subject);
         computerProblemsList.setPagingVO(pagingVO);
-        ComputerProblemsList result = this.getComputerProblemsList(computerProblemsList);
-        Map<String, Object> map =new HashMap<String, Object>();
+        ComputerProblemsList result = null;
+        try {
+            result = this.getComputerProblemsList(computerProblemsList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", "false");
+            map.put("msg", "数据获取失败");
+            return map;
+        }
+
         map.put("computerProblemsList", result.getComputerProblemsList());
         map.put("pagingVO", result.getPagingVO());
+        map.put("success", "true");
         return map;
     }
 
@@ -330,85 +340,106 @@ public class MobileAdminController {
     @ResponseBody
     public Map<String, Object>  dealComputerProblems(HttpServletRequest request) throws Exception {
 
-        Integer id = Integer.parseInt(request.getParameter("id"));
-        String feedback = request.getParameter("feedback");
-        Map<String, Object> map =new HashMap<String, Object>();
+            Integer id = Integer.parseInt(request.getParameter("id"));
+            String feedback = request.getParameter("feedback");
+            Map<String, Object> map =new HashMap<String, Object>();
 
-        if (id == null) {
-            map.put("success", "false");
-            map.put("msg", "未找到该故障相关信息");
-            return map;
-        }
-
-        //获取当前故障问题
-        ComputerProblemsCustom computerProblemsCustom = computerProblemsService.findById(id);
-        if (computerProblemsCustom == null) {
-            map.put("success", "false");
-            map.put("msg", "未找到该故障相关信息");
-            return map;
-        }
-
-        //获取当前操作用户对象
-        Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
+            if (id == null) {
+                map.put("success", "false");
+                map.put("msg", "未找到该故障相关信息");
+                return map;
             }
-            e.printStackTrace();
-        }
-        if(computerProblemsCustom.getFlag() == 0){
-            //更新该故障问题数据
-            computerProblemsCustom.setFlag(1);
-            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
-            computerProblemsCustom.setReback(feedback);
-            computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
-            //保存该记录相关数据以便产生推送
-            try {
-                //创建推送消息
-                PushMessage pushMessage = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
-                        "2","12");
+
+            //获取当前故障问题
+            ComputerProblemsCustom computerProblemsCustom = computerProblemsService.findById(id);
+            if (computerProblemsCustom == null) {
+                map.put("success", "false");
+                map.put("msg", "未找到该故障相关信息");
+                return map;
+            }
+            //获取当前操作用户对象
+            Subject subject = SecurityUtils.getSubject();
+            ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+            if(computerProblemsCustom.getFlag() == 0 || computerProblemsCustom.getFlag() == 1){
+                //更新该故障问题数据
+                computerProblemsCustom.setFlag(1);
+                //将反馈插入空白反馈字段
+                if(computerProblemsCustom.getFeedbackId1() == null){
+                    computerProblemsCustom.setFeedbackContent1(feedback);
+                    computerProblemsCustom.setFeedbackId1(viewEmployeeMiPsd.getCode());
+                    computerProblemsCustom.setFeedbackName1(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    computerProblemsCustom.setFeedbackTime1(dateString);
+                }else if(computerProblemsCustom.getFeedbackId2() == null){
+                    computerProblemsCustom.setFeedbackContent2(feedback);
+                    computerProblemsCustom.setFeedbackId2(viewEmployeeMiPsd.getCode());
+                    computerProblemsCustom.setFeedbackName2(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    computerProblemsCustom.setFeedbackTime2(dateString);
+                }else if(computerProblemsCustom.getFeedbackId3() == null){
+                    computerProblemsCustom.setFeedbackContent3(feedback);
+                    computerProblemsCustom.setFeedbackId3(viewEmployeeMiPsd.getCode());
+                    computerProblemsCustom.setFeedbackName3(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    computerProblemsCustom.setFeedbackTime3(dateString);
+                }else if(computerProblemsCustom.getFeedbackId4() == null){
+                    computerProblemsCustom.setFeedbackContent4(feedback);
+                    computerProblemsCustom.setFeedbackId4(viewEmployeeMiPsd.getCode());
+                    computerProblemsCustom.setFeedbackName4(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    computerProblemsCustom.setFeedbackTime4(dateString);
+                }else if(computerProblemsCustom.getFeedbackId5() == null){
+                    computerProblemsCustom.setFeedbackContent5(feedback);
+                    computerProblemsCustom.setFeedbackId5(viewEmployeeMiPsd.getCode());
+                    computerProblemsCustom.setFeedbackName5(viewEmployeeMiPsd.getName());
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    computerProblemsCustom.setFeedbackTime5(dateString);
+                }
+                //更新故障对象
+                computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
+                //保存该记录相关数据以便产生推送
                 try {
-                    pushMessageService.save(pushMessage);
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
+                            "2","12");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向申报人推送消息
+                    messagePushUtil.specifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    map.put("success", "false");
-                    map.put("msg", "操作异常");
-                    return map;
                 }
-                //向申报人推送消息
-                messagePushUtil.specifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
-            } catch (Exception e) {
-                e.printStackTrace();
+                map.put("success", "true");
+                map.put("msg", "处理成功");
+                return map;
+            }else if(computerProblemsCustom.getFlag() == 2){
+                map.put("success", "false");
+                map.put("msg", "已解决，操作失败");
+                return map;
+            }else{
+                map.put("success", "false");
+                map.put("msg", "操作异常");
+                return map;
             }
-            map.put("success", "true");
-            map.put("msg", "操作成功，处理中");
-            return map;
-        }else if(computerProblemsCustom.getFlag() == 1){
-            map.put("success", "false");
-            map.put("msg", "请勿重复处理");
-            return map;
-        }else if(computerProblemsCustom.getFlag() == 2){
-            map.put("success", "false");
-            map.put("msg", "已解决，操作失败");
-            return map;
         }
-
-        map.put("success", "false");
-        map.put("msg", "操作异常");
-        return map;
-    }
 
     // 电脑故障处理完成
     @RequestMapping(value = "/completeComputerProblems")
@@ -435,28 +466,20 @@ public class MobileAdminController {
 
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
         if(computerProblemsCustom.getFlag() == 1){
             //更新该故障问题数据
             computerProblemsCustom.setFlag(2);
-            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
+            //设置完成时间
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = formatter.format(currentTime);
+            computerProblemsCustom.setDoneTime(dateString);
+
+
+            computerProblemsCustom.setFaultUrgent(0);
+            computerProblemsCustom.setLeader(viewEmployeeMiPsd. getCode());
+            computerProblemsCustom.setLeaderName(viewEmployeeMiPsd.getName());
             computerProblemsCustom.setReback(feedback);
             computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
             //保存该记录相关数据以便产生推送
@@ -468,36 +491,38 @@ public class MobileAdminController {
                     pushMessageService.save(pushMessage);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    map.put("success", "false");
-                    map.put("msg", "操作异常");
-                    return map;
                 }
                 //向申报人推送消息
                 messagePushUtil.specifiedPushSingle(pushMessage,computerProblemsCustom.getUserid());
+
+                //如果该故障记录标识为重要，则向 examiner 推送消息
+                if(computerProblemsCustom.getFaultUrgent() == 1){
+                    //创建推送消息
+                    PushMessage pushMessageUrgent = createPushUtil.createPreMessage(computerProblemsCustom.getUserid(),"0","0",
+                            "2","13");
+                    try {
+                        pushMessageService.save(pushMessageUrgent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向 examiner 推送消息
+                    messagePushUtil.groupPushSingle(pushMessageUrgent,"examiner");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             map.put("success", "true");
-            map.put("msg", "操作成功，故障处理完成");
+            map.put("msg", "故障处理完成");
             return map;
         }else if(computerProblemsCustom.getFlag() == 2){
             map.put("success", "false");
-            map.put("msg", "请勿重复处理");
+            map.put("msg", "故障已处理完成，请勿重复处理");
             return map;
-        }else if(computerProblemsCustom.getFlag() == 0){
-            //更新该故障问题数据
-            computerProblemsCustom.setFlag(2);
-            computerProblemsCustom.setLeader(viewEmployeeMiPsd.getCode());
-            computerProblemsCustom.setReback(feedback);
-            computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
-            map.put("success", "true");
-            map.put("msg", "操作成功，故障处理完成");
+        }else{
+            map.put("success", "false");
+            map.put("msg", "操作异常");
             return map;
         }
-
-        map.put("success", "false");
-        map.put("msg", "操作异常");
-        return map;
     }
 
     // 查看电脑故障详情
@@ -525,23 +550,14 @@ public class MobileAdminController {
         return map;
     }
 
-    // 查看电脑故障详情
-    @RequestMapping(value = "/checkComputerProblems", method = {RequestMethod.POST})
-    public String checkComputerProblems(ComputerProblemsCustom computerProblemsCustom) throws Exception {
-
-        computerProblemsService.updataById(computerProblemsCustom.getId(), computerProblemsCustom);
-
-        //重定向
-        return "redirect:/admin/showComputerProblems";
-    }
-
-    //搜索电脑故障
+    // 搜索电脑故障
     @RequestMapping(value = "/searchComputerProblems")
     @ResponseBody
     public Map<String, Object> searchComputerProblems(String findByDept,String findByName,String findByFlag) throws Exception {
 
         Map<String, Object> map =new HashMap<String, Object>();
         List<ComputerProblemsCustom> list = null;
+        //封装搜索条件
         Map<String, Object> condition =new HashMap<String, Object>();
         condition.put("dept",findByDept);
         condition.put("name",findByName);
@@ -552,56 +568,92 @@ public class MobileAdminController {
             flag = 3;
         }
         condition.put("flag",flag);
+        //获取当前操作用户
+        Subject subject = SecurityUtils.getSubject();
+        //封装
+        ComputerProblemsSearch computerProblemsSearch = new ComputerProblemsSearch();
+        computerProblemsSearch.setMap(condition);
+        computerProblemsSearch.setSubject(subject);
 
+        ComputerProblemsSearch result = null;
         try {
-            list = computerProblemsService.paginationOfSearchResults(condition);
+            result = this.computerProblemsSearch(computerProblemsSearch);
         } catch (Exception e) {
             e.printStackTrace();
             map.put("success", "false");
-            map.put("msg", "搜索出错，请重试");
-            return map;
+            map.put("msg", "搜索异常，重新尝试");
         }
 
-        if(list.size() <= 200){
+        if(result.getComputerProblemsList().size() <= 500){
             map.put("success", "true");
-            map.put("computerProblemsList", list);
+            map.put("computerProblemsList", computerProblemsSearch.getComputerProblemsList());
         }else{
             map.put("success", "false");
-            map.put("msg", "结果大于200条，请精确查找条件");
+            map.put("msg", "结果大于500条，请精确查找条件");
         }
 
         return map;
     }
 
-    //搜索当前用户相关电脑故障
-    @RequestMapping(value = "/searchMyComputerProblems")
-    @ResponseBody
-    public Map<String, Object> searchMyComputerProblems() throws Exception {
-
-        Subject subject = SecurityUtils.getSubject();
-        String code = (String) subject.getPrincipal();
-
-        Map<String, Object> map =new HashMap<String, Object>();
-        List<ComputerProblemsCustom> listByUserID = new ArrayList<ComputerProblemsCustom>();
-        List<ComputerProblemsCustom> listByLeader = new ArrayList<ComputerProblemsCustom>();
-        List<ComputerProblemsCustom> listResult = new ArrayList<ComputerProblemsCustom>();
-
-        if(!code.equals(""))
-        {
-            listByUserID = computerProblemsService.findByUserID(code);
-            listByLeader = computerProblemsService.findByLeader(code);
+    // 搜索电脑故障（暂未使用参数page）
+    public ComputerProblemsSearch computerProblemsSearch(ComputerProblemsSearch computerProblemsSearch) throws Exception{
+        //获取当前操作对象
+        Subject subject = computerProblemsSearch.getSubject();
+        //获取当前页码对象
+        PagingVO pagingVO = computerProblemsSearch.getPagingVO();
+        //获取搜索条件
+        Map<String, Object> map = computerProblemsSearch.getMap();
+        //初始化结果对象
+        List<ComputerProblemsCustom> list;
+        try {
+            if (subject.hasRole("hardware")) {
+                //硬件组
+                //封装搜索条件
+                map.put("hardware",1);
+                //复合权限判断
+                if(!subject.hasRole("software")){
+                    map.put("software",0);
+                }
+                if(!subject.hasRole("fee")){
+                    map.put("fee",0);
+                }
+                list = computerProblemsService.paginationOfComplexgGroupSearchResults(map);
+                computerProblemsSearch.setComputerProblemsList(list);
+            }else if(subject.hasRole("software")){
+                //软件组
+                //封装搜索条件
+                map.put("software",1);
+                //复合权限判断
+                if(!subject.hasRole("hardware")){
+                    map.put("hardware",0);
+                }
+                if(!subject.hasRole("fee")){
+                    map.put("fee",0);
+                }
+                list = computerProblemsService.paginationOfComplexgGroupSearchResults(map);
+                computerProblemsSearch.setComputerProblemsList(list);
+            }else if(subject.hasRole("fee")){
+                //费用组
+                //封装搜索条件
+                map.put("fee",1);
+                //复合权限判断
+                if(!subject.hasRole("hardware")){
+                    map.put("hardware",0);
+                }
+                if(!subject.hasRole("software")){
+                    map.put("software",0);
+                }
+                list = computerProblemsService.paginationOfComplexgGroupSearchResults(map);
+                computerProblemsSearch.setComputerProblemsList(list);
+            }else {
+                list = computerProblemsService.paginationOfSearchResults(map);
+                computerProblemsSearch.setComputerProblemsList(list);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-
-
-
-        //合并去重
-        listResult.addAll(listByUserID);
-        listResult.removeAll(listByLeader);
-        listResult.addAll(listByLeader);
-
-        map.put("success", "true");
-        map.put("computerProblemsList", listResult);
-        return map;
+        return computerProblemsSearch;
     }
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
