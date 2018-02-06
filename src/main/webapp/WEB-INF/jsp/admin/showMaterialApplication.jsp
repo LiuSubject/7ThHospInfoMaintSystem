@@ -24,7 +24,7 @@
 		body {
 			overflow-y: scroll;
 		}
-		.groupdDeal {
+		.groupDeal {
 			background-color: lightskyblue;
 		}
 	</style>
@@ -96,7 +96,7 @@
 						<tr <c:if test='${item.groupVisible == 1
 							&& item.flag != 2
 							&& (roles.indexOf("material") != -1
-								|| roles.indexOf("examiner") != -1)}'>class="groupdDeal"</c:if>>
+								|| roles.indexOf("examiner") != -1)}'>class="groupDeal"</c:if>>
 							<td>${item.applicant}</td>
 							<td>${item.dept}</td>
 							<td>${item.name}</td>

@@ -209,7 +209,7 @@
                                             审批通过
                                         </c:if>
                                         <c:if test="${materialApplication.approvedFlag == 2 }">
-                                            审批不通过
+                                            审批未通过
                                         </c:if>
                                         <hr class="hr0" />
                                         <c:if test="${materialApplication.highLeaderApproved1 == 1 }">
