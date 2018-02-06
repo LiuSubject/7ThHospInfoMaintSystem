@@ -704,8 +704,6 @@ public class AdminController {
         Subject subject = SecurityUtils.getSubject();
         ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
 
-
-
         //设置申购初始化时间
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

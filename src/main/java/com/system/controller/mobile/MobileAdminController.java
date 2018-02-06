@@ -5,6 +5,7 @@ import com.system.exception.CustomException;
 import com.system.operate.ComputerProblemUrgent;
 import com.system.operate.ComputerProblemsList;
 import com.system.operate.ComputerProblemsSearch;
+import com.system.operate.MaterialApplicationList;
 import com.system.po.*;
 import com.system.util.push.CreatePushUtil;
 import com.system.service.*;
@@ -83,7 +84,7 @@ public class MobileAdminController {
 
 
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<电脑故障操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-
+    //region
     // 电脑故障显示(普通用户只能看到本科室提交的故障报告)
     @RequestMapping("/showComputerProblems")
     @ResponseBody
@@ -742,70 +743,120 @@ public class MobileAdminController {
         return computerProblemsSearch;
     }
 
-    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    //endregion
+    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<物资申购操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
     // 物资申购显示
     @RequestMapping("/showMaterialApplication")
     @ResponseBody
     public Map<String, Object>  showMaterialApplication(Model model, Integer page) throws Exception {
-        Subject subject = SecurityUtils.getSubject();
         Map<String, Object> map =new HashMap<String, Object>();
-        if (subject.hasRole("admin")) {
-            List<MaterialApplicationCustom> list = null;
-            //页码对象
-            PagingVO pagingVO = new PagingVO();
-            //设置总页数
-            pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
-            if (page == null || page == 0) {
-                pagingVO.setToPageNo(1);
-                list = materialApplicationService.findByPaging(1);
-            } else {
-                pagingVO.setToPageNo(page);
-                list = materialApplicationService.findByPaging(page);
-            }
-
-            map.put("materialApplicationList", list);
-            map.put("pagingVO", pagingVO);
-
-            return map;
-        }else{
-            //获取当前操作用户对象
-            //(普通用户只能看到本科室提交的故障报告)
-            ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-            try {
-                //切换数据源至SQLServer
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-                //切换数据源至MySQL
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-            } catch (Exception e) {
-                //切换数据源至MySQL(启用备用库)
-                try{
-                    CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                    viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-                }catch (Exception eSwitch){
-                    eSwitch.printStackTrace();
-                }
-                e.printStackTrace();
-            }
-            String currentDept = viewEmployeeMiPsd.getDeptCode();
-            List<MaterialApplicationCustom> listByDept = new ArrayList<>();
-            //页码对象
-            PagingVO pagingVO = new PagingVO();
-            //设置总页数
-            pagingVO.setTotalCount(materialApplicationService.getCountDeptMaterialApplication(currentDept));
-            if (page == null || page == 0) {
-                pagingVO.setToPageNo(1);
-                listByDept = materialApplicationService.deptFindByPaging(1,currentDept);
-            } else {
-                pagingVO.setToPageNo(page);
-                listByDept = materialApplicationService.deptFindByPaging(page,currentDept);
-            }
-            map.put("materialApplicationList", listByDept);
-            model.addAttribute("pagingVO", pagingVO);
+        //当前操作对象
+        Subject subject = SecurityUtils.getSubject();
+        //页码对象初始化
+        PagingVO pagingVO = new PagingVO();
+        if (page == null || page == 0) {
+            pagingVO.setToPageNo(1);
+        } else {
+            pagingVO.setToPageNo(page);
+        }
+        MaterialApplicationList materialApplicationList = new MaterialApplicationList();
+        materialApplicationList.setSubject(subject);
+        materialApplicationList.setPagingVO(pagingVO);
+        MaterialApplicationList result = null;
+        try {
+            result = this.getMaterialApplicationList(materialApplicationList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", "false");
+            map.put("msg", "数据获取失败");
             return map;
         }
 
+        map.put("materialApplicationList", result.getMaterialApplicationsList());
+        map.put("pagingVO", result.getPagingVO());
+        map.put("success", "true");
+        return map;
+    }
+
+    // 获取物资申购列表
+    public MaterialApplicationList getMaterialApplicationList(MaterialApplicationList materialApplicationList)throws Exception{
+        //获取当前操作对象
+        Subject subject = materialApplicationList.getSubject();
+        //获取当前页码对象
+        PagingVO pagingVO = materialApplicationList.getPagingVO();
+        //初始化结果对象
+        List<MaterialApplicationCustom> list;
+
+        if (subject.hasRole("infodean")) {
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
+                list = materialApplicationService.findByPaging(pagingVO.getCurentPageNo());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            materialApplicationList.setPagingVO(pagingVO);
+            materialApplicationList.setMaterialApplicationsList(list);
+            return materialApplicationList;
+        }else if (subject.hasRole("alldean")) {
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
+                list = materialApplicationService.findByPaging(pagingVO.getCurentPageNo());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            materialApplicationList.setPagingVO(pagingVO);
+            materialApplicationList.setMaterialApplicationsList(list);
+            return materialApplicationList;
+        }else if (subject.hasRole("examiner")) {
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
+                list = materialApplicationService.findByPaging(pagingVO.getCurentPageNo());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            materialApplicationList.setPagingVO(pagingVO);
+            materialApplicationList.setMaterialApplicationsList(list);
+            return materialApplicationList;
+        }else if (subject.hasRole("material")) {
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(materialApplicationService.getCountMaterialApplication());
+                list = materialApplicationService.findByPaging(pagingVO.getCurentPageNo());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            materialApplicationList.setPagingVO(pagingVO);
+            materialApplicationList.setMaterialApplicationsList(list);
+            return materialApplicationList;
+        }else{
+            //获取当前操作用户对象
+            //获取当前用户
+            ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+            String currentDept = viewEmployeeMiPsd.getDeptCode();
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(materialApplicationService.getCountDeptMaterialApplication(currentDept));
+                list = materialApplicationService.deptFindByPaging(pagingVO.getCurentPageNo(),currentDept);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            materialApplicationList.setPagingVO(pagingVO);
+            materialApplicationList.setMaterialApplicationsList(list);
+            return materialApplicationList;
+        }
     }
 
     //添加物资申购
@@ -826,26 +877,7 @@ public class MobileAdminController {
         Map<String, Object> map =new HashMap<String, Object>();
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
-            }
-            e.printStackTrace();
-        }
-
-
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
 
         //设置申购初始化时间
         Date currentTime = new Date();
@@ -860,12 +892,23 @@ public class MobileAdminController {
 
         //设置申购初始化状态
         materialApplicationCustom.setFlag(0);
+        materialApplicationCustom.setFaultUrgent(0);
+        materialApplicationCustom.setGroupVisible(0);
+        materialApplicationCustom.setHighApproved(0);
+        materialApplicationCustom.setApprovedFlag(0);
+        materialApplicationCustom.setHighLeaderFlag1(0);
+        materialApplicationCustom.setHighLeaderFlag2(0);
+        materialApplicationCustom.setHighLeaderFlag3(0);
+        materialApplicationCustom.setHighLeaderApproved1(0);
+        materialApplicationCustom.setHighLeaderApproved2(0);
+        materialApplicationCustom.setHighLeaderApproved3(0);
 
-        //设置申购所属部门
-        materialApplicationCustom.setDept(viewEmployeeMiPsd.getDeptName());
 
         //设置申购所属部门编码
         materialApplicationCustom.setDepartcode(viewEmployeeMiPsd.getDeptCode());
+
+        //设置申购所属部门
+        materialApplicationCustom.setDept(viewEmployeeMiPsd.getDeptName());
 
         //设置申购所属人员ID
         materialApplicationCustom.setUserid(viewEmployeeMiPsd.getCode());
@@ -886,7 +929,7 @@ public class MobileAdminController {
             }
 
             //向管理组推送消息
-           messagePushUtil.groupPushSingle(pushMessage,"admin");
+           messagePushUtil.groupPushSingle(pushMessage,"material");
         } catch (Exception e) {
             e.printStackTrace();
             map.put("success", "false");
