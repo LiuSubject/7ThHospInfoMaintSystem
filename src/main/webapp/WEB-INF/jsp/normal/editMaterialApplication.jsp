@@ -135,7 +135,7 @@
                         </c:if>
                         <c:if test="${materialApplication.highLeaderApproved2 == 1}">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label" style="text-align: center">信息主管副院长审批：</label>
+                                <label class="col-sm-2 control-label" style="text-align: center">信息主管副院长意见：</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="highLeaderReback2" name="highLeaderReback2"
                                            value="${materialApplication.highLeaderReback2}" readonly="readonly">
@@ -144,7 +144,7 @@
                         </c:if>
                         <c:if test="${materialApplication.highLeaderApproved3 == 1}">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">院长审批：</label>
+                                <label class="col-sm-2 control-label">院长意见：</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="highLeaderReback3" name="highLeaderReback3"
                                            value="${materialApplication.highLeaderReback3}" readonly="readonly">
@@ -209,7 +209,7 @@
                                                 审批通过
                                             </c:if>
                                             <c:if test="${materialApplication.approvedFlag == 2 }">
-                                                审批不通过
+                                                审批未通过
                                             </c:if>
                                             <hr class="hr0" />
                                             <c:if test="${materialApplication.highLeaderApproved1 == 1 }">

@@ -49,18 +49,6 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">巡检信息</h2>
-                    <div class="row" style="text-align: right">
-                        <form class="form-horizontal form-inline" role="form" style="margin: 20px 0 10px 0;"
-                              action="/normal/searchEngineRoomInspection" id="searchFunction" method="post">
-                            <div class="form-group col-sm-12">
-                                <input type="text" class="form-control" placeholder="请输入巡检人" id="findByExaminer"
-                                       name="findByExaminer" style="margin-left: 10px">
-                                <input type="button" class="btn btn-primary" id="searchBtn" value="搜索"
-                                       style="margin-left: 10px;margin-right:20px">
-                            </div>
-                        </form>
-
-                    </div>
                 </div>
                 <table class="table table-bordered">
                     <thead>

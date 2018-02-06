@@ -2,10 +2,7 @@ package com.system.controller.mobile;
 
 import com.system.controller.AdminController;
 import com.system.exception.CustomException;
-import com.system.operate.ComputerProblemUrgent;
-import com.system.operate.ComputerProblemsList;
-import com.system.operate.ComputerProblemsSearch;
-import com.system.operate.MaterialApplicationList;
+import com.system.operate.*;
 import com.system.po.*;
 import com.system.util.push.CreatePushUtil;
 import com.system.service.*;
@@ -943,114 +940,844 @@ public class MobileAdminController {
         return map;
     }
 
-
-
-
-    // 开始处理物资申购
-    @RequestMapping(value = "/dealMaterialApplication")
+    // 预推送物资申购页面显示
+    @RequestMapping(value = "/prePushMaterialApplication", method = {RequestMethod.GET})
     @ResponseBody
-    public Map<String, Object> dealMaterialApplication(HttpServletRequest request) throws Exception {
-
-        Integer id = Integer.parseInt(request.getParameter("id"));
-        String feedback = request.getParameter("feedback");
-        String brand = request.getParameter("brand");
-        String model = request.getParameter("model");
-        int judge = 0;
-        int total = 0;
+    public Map<String, Object> prePushMaterialApplication(HttpServletRequest request, Model modelV) throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
+        Integer material_id;
         try {
-            judge = Integer.parseInt(request.getParameter("judge"));
-            total = Integer.parseInt(request.getParameter("total"));
+            material_id = Integer.parseInt(request.getParameter("id"));
         } catch (NumberFormatException e) {
             e.printStackTrace();
-        }
-        Map<String, Object> map =new HashMap<String, Object>();
-
-        if (id == null) {
             map.put("success", "false");
-            map.put("msg", "未找到该申购相关信息");
+            map.put("msg", "物资申购记录获取失败");
             return map;
         }
+        String material_feedback = request.getParameter("feedback");
+        //获取院领导列表
+        List<Role> deans = new ArrayList<>();
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        //非审查组不允许推送
+        if(!subject.hasRole("examiner")){
+            map.put("success", "false");
+            map.put("msg", "抱歉，没有该权限");
+            return map;
+        }
+        try {
+            deans = roleService.findByDean();
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", "false");
+            map.put("msg", "院领导列表获取失败");
+            return map;
+        }
+        //不更新,发送到 push 进行处理
+        map.put("material_id",material_id);
+        map.put("material_feedback",material_feedback);
+        map.put("deans", deans);
+        map.put("success", "true");
+        return map;
+    }
 
+    // 推送物资申购处理
+    @RequestMapping(value = "/pushMaterialApplication")
+    @ResponseBody
+    public Map<String, Object> pushMaterialApplication(HttpServletRequest request,Model modelV) throws Exception {
+        Map<String, Object> map =new HashMap<String, Object>();
+        Integer id;
+        try {
+            id = Integer.parseInt(request.getParameter("material_id"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            map.put("success", "false");
+            map.put("msg", "抱歉，未找到该物资申购相关信息");
+            return map;
+        }
+        String feedback = request.getParameter("material_feedback");
+        //获取院领导工号
+        String viceDean = request.getParameter("viceDean");
+        String infoVice = request.getParameter("infoVice");
+        String dean = request.getParameter("dean");
+        if (id == null) {
+            map.put("success", "false");
+            map.put("msg", "抱歉，未找到该物资申购相关信息");
+            return map;
+        }
         //获取当前物资申购问题
         MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
         if (materialApplicationCustom == null) {
             map.put("success", "false");
-            map.put("msg", "未找到该申购相关信息");
+            map.put("msg", "抱歉，未找到该物资申购相关信息");
             return map;
         }
-
+        //申购处理完毕不能再推送
+        if(materialApplicationCustom.getFlag() == 2){
+            map.put("success", "false");
+            map.put("msg", "该申购处理完毕，不能再推送");
+            return map;
+        }
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
+        //非审查组不允许推送
+        if(!subject.hasRole("examiner")){
+            map.put("success", "false");
+            map.put("msg", "你没有此权限");
+            return map;
+        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+        //更新该物资申购问题数据
+        materialApplicationCustom.setXxkyj(feedback);
+        materialApplicationCustom.setFlag(1);
+        //保存该记录相关数据以便产生推送
         try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
+            //创建推送消息
+            PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                    "2","24");
+            try {
+                pushMessageService.save(pushMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            //向申报人推送消息
+            messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if(materialApplicationCustom.getFlag() == 0){
-            //更新该物资申购问题数据
-            materialApplicationCustom.setFlag(1);
-            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
-            materialApplicationCustom.setReback(feedback);
-            materialApplicationCustom.setBrand(brand);
-            materialApplicationCustom.setModel(model);
-            materialApplicationCustom.setJudge(judge);
-            materialApplicationCustom.setTotal(total);
-            materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+
+        if(!viceDean.equals("-1")){
+            //如果指定分管院长，设置院领导审核标识、分管院长审核标识、分管院长ID
+            materialApplicationCustom.setHighApproved(1);
+            materialApplicationCustom.setHighLeaderId1(viceDean);
+            materialApplicationCustom.setHighLeaderApproved1(1);
+
             //保存该记录相关数据以便产生推送
             try {
                 //创建推送消息
-                PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
-                        "2","22");
+                PushMessage pushMessage = createPushUtil.createPreMessage(viewEmployeeMiPsd.getCode(),"0","1",
+                        "2","25");
                 try {
                     pushMessageService.save(pushMessage);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    map.put("success", "false");
-                    map.put("msg", "操作异常");
-                    return map;
+                }
+                //向分管院长推送消息
+                messagePushUtil.specifiedPushSingle(pushMessage,viceDean);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        if(!infoVice.equals("-1")){
+            //如果指定信息主管副院长，设置院领导审核标识、信息主管副院长审核标识、副院长ID
+            materialApplicationCustom.setHighApproved(1);
+            materialApplicationCustom.setHighLeaderId2(infoVice);
+            materialApplicationCustom.setHighLeaderApproved2(1);
+
+            //保存该记录相关数据以便产生推送
+            try {
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.createPreMessage(viewEmployeeMiPsd.getCode(),"0","1",
+                        "2","25");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                //向信息主管副院长推送消息
+                messagePushUtil.specifiedPushSingle(pushMessage,infoVice);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        if(!dean.equals("-1")){
+            //如果指定院长，设置院领导审核标识、院长审核标识、副院长ID
+            materialApplicationCustom.setHighApproved(1);
+            materialApplicationCustom.setHighLeaderId3(dean);
+            materialApplicationCustom.setHighLeaderApproved3(1);
+
+            //保存该记录相关数据以便产生推送
+            try {
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.createPreMessage(viewEmployeeMiPsd.getCode(),"0","1",
+                        "2","25");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                //向院长推送消息
+                messagePushUtil.specifiedPushSingle(pushMessage,dean);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+        //重定向
+        map.put("success", "true");
+        map.put("msg", "发送成功");
+        return map;
+    }
+
+    // 物资申购审批拒绝
+    @RequestMapping(value = "/denyMaterialApplication", method = {RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Object>  denyMaterialApplication(HttpServletRequest request) throws Exception {
+        Map<String, Object> map =new HashMap<>();
+        String feedback = request.getParameter("feedback");
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        if (id == null) {
+            map.put("success", "false");
+            map.put("msg", "抱歉，未找到该物资申购相关信息");
+            return map;
+        }
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
+        if (materialApplicationCustom == null) {
+            map.put("success", "false");
+            map.put("msg", "抱歉，未找到该物资申购相关信息");
+            return map;
+        }
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        //新建物资申购拒绝操作对象
+        MaterialApplicationDeny materialApplicationDeny = new MaterialApplicationDeny();
+        materialApplicationDeny.setId(id);
+        materialApplicationDeny.setFeedback(feedback);
+        materialApplicationDeny.setMaterialApplicationCustom(materialApplicationCustom);
+        materialApplicationDeny.setSubject(subject);
+
+        MaterialApplicationDeny result = this.materialApplicationDeny(materialApplicationDeny);
+        map.put("success", "true");
+        map.put("msg", "已拒绝该申购");
+        return map;
+    }
+
+    // 拒绝物资申购审批操作
+    public MaterialApplicationDeny materialApplicationDeny(MaterialApplicationDeny materialApplicationDeny)throws Exception{
+        Integer id = materialApplicationDeny.getId();
+        String feedback = materialApplicationDeny.getFeedback();
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationDeny.getMaterialApplicationCustom();
+        Subject subject = materialApplicationDeny.getSubject();
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+
+        //获取操作时间
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+
+        if(subject.hasRole("dpdean") && materialApplicationCustom.getHighLeaderApproved1() == 1){
+            //分管院长审批
+            materialApplicationCustom.setApprovedFlag(2);
+            materialApplicationCustom.setHighLeaderReback1(feedback);
+            materialApplicationCustom.setHighLeaderName1(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setHighLeaderFlag1(2);
+            materialApplicationCustom.setFlag(2);
+            //设置完成时间
+            materialApplicationCustom.setDoneTime(dateString);
+
+
+            //更新物资申购记录
+            materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+
+            //保存该记录相关数据以便产生推送
+            try {
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        "2","27");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 //向申报人推送消息
                 messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            map.put("success", "true");
-            map.put("msg", "操作成功，处理中");
-            return map;
-        }else if(materialApplicationCustom.getFlag() == 1){
-            map.put("success", "false");
-            map.put("msg", "请勿重复处理");
-            return map;
-        }else if(materialApplicationCustom.getFlag() == 2){
-            map.put("success", "false");
-            map.put("msg", "已解决，操作失败");
-            return map;
+
+            materialApplicationDeny.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+        }else if(subject.hasRole("infodean") && materialApplicationCustom.getHighLeaderApproved2() == 1){
+            //信息主管院长
+            materialApplicationCustom.setApprovedFlag(2);
+            materialApplicationCustom.setHighLeaderReback2(feedback);
+            materialApplicationCustom.setHighLeaderName2(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setHighLeaderFlag2(2);
+            materialApplicationCustom.setFlag(2);
+            //设置完成时间
+            materialApplicationCustom.setDoneTime(dateString);
+
+
+            //更新物资申购记录
+            materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+
+            //保存该记录相关数据以便产生推送
+            try {
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        "2","27");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+                //向申报人推送消息
+                messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            materialApplicationDeny.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+        }else if(subject.hasRole("alldean") && materialApplicationCustom.getHighLeaderApproved3() == 1){
+            //院长
+            materialApplicationCustom.setApprovedFlag(2);
+            materialApplicationCustom.setHighLeaderReback3(feedback);
+            materialApplicationCustom.setHighLeaderName3(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setHighLeaderFlag3(2);
+            materialApplicationCustom.setFlag(2);
+            //设置完成时间
+            materialApplicationCustom.setDoneTime(dateString);
+
+
+            //更新物资申购记录
+            materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+
+            //保存该记录相关数据以便产生推送
+            try {
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                        "2","27");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+                //向申报人推送消息
+                messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            materialApplicationDeny.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+        }else{
+            materialApplicationDeny.setDenyAction("redirect:/admin/showMaterialApplication");
         }
 
-        map.put("success", "false");
-        map.put("msg", "操作异常");
+        return materialApplicationDeny;
+    }
+
+    // 物资申购审批通过
+    @RequestMapping(value = "/passMaterialApplication")
+    @ResponseBody
+    public Map<String, Object> passMaterialApplication(HttpServletRequest request) throws Exception {
+        Map<String, Object> map =new HashMap<>();
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        String feedback = request.getParameter("feedback");
+        if (id == null) {
+            map.put("success", "false");
+            map.put("msg", "抱歉，未找到该物资申购相关信息");
+            return map;
+        }
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
+        if (materialApplicationCustom == null) {
+            map.put("success", "false");
+            map.put("msg", "抱歉，未找到该物资申购相关信息");
+            return map;
+        }
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        //新建物资申购拒绝操作对象
+        MaterialApplicationPass materialApplicationPass = new MaterialApplicationPass();
+        materialApplicationPass.setId(id);
+        materialApplicationPass.setFeedback(feedback);
+        materialApplicationPass.setMaterialApplicationCustom(materialApplicationCustom);
+        materialApplicationPass.setSubject(subject);
+
+        MaterialApplicationPass result = this.materialApplicationPass(materialApplicationPass);
+        map.put("success", "true");
+        map.put("msg", "同意该次申购");
         return map;
     }
 
-    // 物资申购处理完成
-    @RequestMapping(value = "/completeMaterialApplication")
-    @ResponseBody
-    public Map<String, Object> completeMaterialApplication(HttpServletRequest request) throws Exception {
+    // 通过物资申购审批操作
+    public MaterialApplicationPass materialApplicationPass(MaterialApplicationPass materialApplicationPass)throws Exception{
+        Integer id = materialApplicationPass.getId();
+        String feedback = materialApplicationPass.getFeedback();
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationPass.getMaterialApplicationCustom();
+        Subject subject = materialApplicationPass.getSubject();
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
 
-        Integer id = Integer.parseInt(request.getParameter("id"));
+        //保存意见至对应位，保存姓名，单个审批结果标识置1-通过
+        //此段代码又臭又长，但是这是本人认为能最大限度能将不同权限组的操作进行解耦以便修改，水平不足，
+        //倘若阁下能进行良好的优化，务必发我邮箱让我学习一下。
+        if(subject.hasRole("dpdean")){
+            materialApplicationCustom.setHighLeaderReback1(feedback);
+            materialApplicationCustom.setHighLeaderName1(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setHighLeaderFlag1(1);
+            //判断审核者数量以作不同处理
+            //如果审核者只有dpdean
+            if(0 == materialApplicationCustom.getHighLeaderApproved2()
+                    && 0 == materialApplicationCustom.getHighLeaderApproved3()){
+                //最终审批结果标识置1-通过，使物资处理组可处理标识置1-可见
+                materialApplicationCustom.setApprovedFlag(1);
+                materialApplicationCustom.setGroupVisible(1);
+                materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                //保存该记录相关数据以便产生推送
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "0","26");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向申报人推送消息
+                    messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "0","29");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向处理组推送消息
+                    messagePushUtil.groupPushSingle(pushMessage,"material");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+
+            }else if(1 == (materialApplicationCustom.getHighLeaderApproved2()
+                    + materialApplicationCustom.getHighLeaderApproved3())){
+                //如果审核者除dpdean外还有一位
+                //信息主管院长需审批但未审批
+                if(1 == materialApplicationCustom.getHighLeaderApproved2()
+                        && 0 == materialApplicationCustom.getHighLeaderFlag2()){
+                    //只更新相关数据
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                }else if(1 == materialApplicationCustom.getHighLeaderApproved3()
+                        && 0 == materialApplicationCustom.getHighLeaderFlag3()){
+                    //院长需审批但未审批
+                    //只更新相关数据
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                }else{
+                    //说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,
+                    // 最终审批结果标识置1-通过，更新数据并向处理组及用户推送消息
+                    materialApplicationCustom.setApprovedFlag(1);
+                    materialApplicationCustom.setGroupVisible(1);
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    //保存该记录相关数据以便产生推送
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","26");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向申报人推送消息
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","29");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向处理组推送消息
+                        messagePushUtil.groupPushSingle(pushMessage,"material");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+                }
+            }else if(2 == (materialApplicationCustom.getHighLeaderApproved2()
+                    + materialApplicationCustom.getHighLeaderApproved3())){
+                //如果审核者除dpdean外还有两位
+                //如果审核者审批皆通过
+                if(2 == (materialApplicationCustom.getHighLeaderFlag2()
+                        +  materialApplicationCustom.getHighLeaderFlag3())){
+                    //说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,更新数据并向处理组推送消息//说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,
+                    // 最终审批结果标识置1-通过，更新数据并向处理组及用户推送消息
+                    materialApplicationCustom.setApprovedFlag(1);
+                    materialApplicationCustom.setGroupVisible(1);
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    //保存该记录相关数据以便产生推送
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","26");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向申报人推送消息
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","29");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向处理组推送消息
+                        messagePushUtil.groupPushSingle(pushMessage,"material");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+                }else {
+                    //只更新相关数据
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+                }
+            }else{
+                materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+            }
+        }else if(subject.hasRole("infodean")){
+            //保存意见至对应位，保存姓名，单个审批结果标识置1-通过
+            materialApplicationCustom.setHighLeaderReback2(feedback);
+            materialApplicationCustom.setHighLeaderName2(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setHighLeaderFlag2(1);
+            //判断审核者数量以作不同处理
+            //如果审核者只有infodean
+            if(0 == materialApplicationCustom.getHighLeaderApproved1()
+                    && 0 == materialApplicationCustom.getHighLeaderApproved3()){
+                //最终审批结果标识置1-通过，使物资处理组可处理标识置1-可见
+                materialApplicationCustom.setApprovedFlag(1);
+                materialApplicationCustom.setGroupVisible(1);
+                materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                //保存该记录相关数据以便产生推送
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "0","26");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向申报人推送消息
+                    messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "0","29");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向处理组推送消息
+                    messagePushUtil.groupPushSingle(pushMessage,"material");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+
+            }else if(1 == (materialApplicationCustom.getHighLeaderApproved1()
+                    + materialApplicationCustom.getHighLeaderApproved3())){
+                //如果审核者除infodean外还有一位
+                //分管院长需审批但未审批
+                if(1 == materialApplicationCustom.getHighLeaderApproved1()
+                        && 0 == materialApplicationCustom.getHighLeaderFlag1()){
+                    //只更新相关数据
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                }else if(1 == materialApplicationCustom.getHighLeaderApproved3()
+                        && 0 == materialApplicationCustom.getHighLeaderFlag3()){
+                    //院长需审批但未审批
+                    //只更新相关数据
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                }else{
+                    //说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,
+                    // 最终审批结果标识置1-通过，更新数据并向处理组及用户推送消息
+                    materialApplicationCustom.setApprovedFlag(1);
+                    materialApplicationCustom.setGroupVisible(1);
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    //保存该记录相关数据以便产生推送
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","26");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向申报人推送消息
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","29");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向处理组推送消息
+                        messagePushUtil.groupPushSingle(pushMessage,"material");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }else if(2 == (materialApplicationCustom.getHighLeaderApproved1()
+                    + materialApplicationCustom.getHighLeaderApproved3())){
+                //如果审核者除infodean外还有两位
+                //如果审核者审批皆通过
+                if(2 == (materialApplicationCustom.getHighLeaderFlag1()
+                        +  materialApplicationCustom.getHighLeaderFlag3())){
+                    //说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,更新数据并向处理组推送消息//说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,
+                    // 最终审批结果标识置1-通过，更新数据并向处理组及用户推送消息
+                    materialApplicationCustom.setApprovedFlag(1);
+                    materialApplicationCustom.setGroupVisible(1);
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    //保存该记录相关数据以便产生推送
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","26");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向申报人推送消息
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","29");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向处理组推送消息
+                        messagePushUtil.groupPushSingle(pushMessage,"material");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+                }else {
+                    //只更新相关数据
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());                }
+            }else{
+                materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+            }
+
+
+        }else if(subject.hasRole("alldean")){
+            materialApplicationCustom.setHighLeaderReback3(feedback);
+            materialApplicationCustom.setHighLeaderName3(viewEmployeeMiPsd.getName());
+            materialApplicationCustom.setHighLeaderFlag3(1);
+            //判断审核者数量以作不同处理
+            //如果审核者只有alldean
+            if(0 == materialApplicationCustom.getHighLeaderApproved1()
+                    && 0 == materialApplicationCustom.getHighLeaderApproved2()){
+                //最终审批结果标识置1-通过，使物资处理组可处理标识置1-可见
+                materialApplicationCustom.setApprovedFlag(1);
+                materialApplicationCustom.setGroupVisible(1);
+                materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                //保存该记录相关数据以便产生推送
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "0","26");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向申报人推送消息
+                    messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "0","29");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向处理组推送消息
+                    messagePushUtil.groupPushSingle(pushMessage,"material");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+            }else if(1 == (materialApplicationCustom.getHighLeaderApproved1()
+                    + materialApplicationCustom.getHighLeaderApproved2())){
+                //如果审核者除alldean外还有一位
+                //分管院长需审批但未审批
+                if(1 == materialApplicationCustom.getHighLeaderApproved1()
+                        && 0 == materialApplicationCustom.getHighLeaderFlag1()){
+                    //只更新相关数据
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                }else if(1 == materialApplicationCustom.getHighLeaderApproved2()
+                        && 0 == materialApplicationCustom.getHighLeaderFlag2()){
+                    //信息主管副院长需审批但未审批
+                    //只更新相关数据
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                }else{
+                    //说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,
+                    // 最终审批结果标识置1-通过，更新数据并向处理组及用户推送消息
+                    materialApplicationCustom.setApprovedFlag(1);
+                    materialApplicationCustom.setGroupVisible(1);
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    //保存该记录相关数据以便产生推送
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","26");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向申报人推送消息
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","29");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向处理组推送消息
+                        messagePushUtil.groupPushSingle(pushMessage,"material");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+                }
+            }else if(2 == (materialApplicationCustom.getHighLeaderApproved1()
+                    + materialApplicationCustom.getHighLeaderApproved2())){
+                //如果审核者除alldean外还有两位
+                //如果审核者审批皆通过
+                if(2 == (materialApplicationCustom.getHighLeaderFlag1()
+                        +  materialApplicationCustom.getHighLeaderFlag2())){
+                    //说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,更新数据并向处理组推送消息//说明需审核者已审核且结果皆为通过，使物资处理组可处理标识置1-可见,
+                    // 最终审批结果标识置1-通过，更新数据并向处理组及用户推送消息
+                    materialApplicationCustom.setApprovedFlag(1);
+                    materialApplicationCustom.setGroupVisible(1);
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    //保存该记录相关数据以便产生推送
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","26");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向申报人推送消息
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","29");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向处理组推送消息
+                        messagePushUtil.groupPushSingle(pushMessage,"material");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+                }else {
+                    //只更新相关数据
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+                }
+            }else{
+                materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+            }
+
+        }else{
+            materialApplicationPass.setPassAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+        }
+
+        return materialApplicationPass;
+    }
+
+
+    // 处理物资申购
+    @RequestMapping(value = "/dealMaterialApplication")
+    @ResponseBody
+    public Map<String, Object> dealMaterialApplication(HttpServletRequest request) throws Exception {
+        Map<String, Object> map =new HashMap<>();
+        Integer id;
+        try {
+            id = Integer.parseInt(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            map.put("success", "false");
+            map.put("msg", "抱歉，未找到该物资申购相关信息");
+            return map;
+        }
+        //ID为空则返回
+        if (id == null) {
+            map.put("success", "false");
+            map.put("msg", "抱歉，未找到该物资申购相关信息");
+            return map;
+        }
+        //获取当前物资申购问题
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
+        if (materialApplicationCustom == null) {
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
+        }
         String feedback = request.getParameter("feedback");
         String brand = request.getParameter("brand");
         String model = request.getParameter("model");
@@ -1060,53 +1787,307 @@ public class MobileAdminController {
             judge = Integer.parseInt(request.getParameter("judge"));
             total = Integer.parseInt(request.getParameter("total"));
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            throw new CustomException("抱歉，输入价格有误");
         }
-        Map<String, Object> map =new HashMap<String, Object>();
-
-        if (id == null) {
-            map.put("success", "false");
-            map.put("msg", "未找到该申购相关信息");
-            return map;
-        }
-
-        //获取当前物资申购信息
-        MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
-        if (materialApplicationCustom == null) {
-            map.put("success", "false");
-            map.put("msg", "未找到该申购相关信息");
-            return map;
-        }
-
+        //封装数据
+        Map<String, Object> thisData =new HashMap<String, Object>();
+        thisData.put("id",id);
+        thisData.put("feedback",feedback);
+        thisData.put("brand",brand);
+        thisData.put("model",model);
+        thisData.put("judge",judge);
+        thisData.put("total",total);
         //获取当前操作用户对象
         Subject subject = SecurityUtils.getSubject();
-        ViewEmployeeMiPsd viewEmployeeMiPsd = null;
-        try {
-            //切换数据源至SQLServer
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MSSQL);
-            viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
-            //切换数据源至MySQL
-            CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-        } catch (Exception e) {
-            //切换数据源至MySQL(启用备用库)
-            try{
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_MYSQL);
-                viewEmployeeMiPsd = viewEmployeeMiPsdService.findByCode((String) subject.getPrincipal());
 
-            }catch (Exception eSwitch){
-                eSwitch.printStackTrace();
+        MaterialApplicationDeal materialApplicationDeal = new MaterialApplicationDeal();
+        materialApplicationDeal.setMap(thisData);
+        materialApplicationDeal.setMaterialApplicationCustom(materialApplicationCustom);
+        materialApplicationDeal.setSubject(subject);
+
+        MaterialApplicationDeal result = this.materialApplicationDeal(materialApplicationDeal);
+        map.put("success", "true");
+        map.put("msg", "操作成功");
+        return map;
+    }
+
+    // 处理物资申购操作
+    public  MaterialApplicationDeal materialApplicationDeal(MaterialApplicationDeal materialApplicationDeal)throws Exception{
+        Map<String, Object> thisData = materialApplicationDeal.getMap();
+        Subject subject = materialApplicationDeal.getSubject();
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationDeal.getMaterialApplicationCustom();
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+
+        Integer id = Integer.parseInt(thisData.get("id").toString());
+        String feedback = thisData.get("feedback").toString();
+        String brand = thisData.get("brand").toString();
+        String model = thisData.get("model").toString();
+        int judge = Integer.parseInt(thisData.get("judge").toString());
+        int total = Integer.parseInt(thisData.get("total").toString());
+
+        if(subject.hasRole("material")){
+            if(materialApplicationCustom.getFlag() == 0 || materialApplicationCustom.getFlag() == 1){
+                //更新该物资申购问题数据
+                materialApplicationCustom.setBrand(brand);
+                materialApplicationCustom.setModel(model);
+                materialApplicationCustom.setJudge(judge);
+                materialApplicationCustom.setTotal(total);
+                materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
+                materialApplicationCustom.setLeaderName(viewEmployeeMiPsd.getName());
+                if(materialApplicationCustom.getGroupVisible() == 0){
+                    //审查组未处理时预处理
+                    materialApplicationCustom.setFlag(1);
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    //保存该记录相关数据以便产生推送
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "0","21");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向下一流程组推送消息
+                        messagePushUtil.groupPushSingle(pushMessage,"examiner");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "2","28");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向申报人推送消息
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    materialApplicationDeal.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+                }else{
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    //将反馈插入空白反馈字段
+                    if(materialApplicationCustom.getFeedbackId1() == null){
+                        materialApplicationCustom.setFeedbackContent1(feedback);
+                        materialApplicationCustom.setFeedbackId1(viewEmployeeMiPsd.getCode());
+                        materialApplicationCustom.setFeedbackName1(viewEmployeeMiPsd.getName());
+                        materialApplicationCustom.setFeedbackTime1(dateString);
+                    }else if(materialApplicationCustom.getFeedbackId2() == null){
+                        materialApplicationCustom.setFeedbackContent2(feedback);
+                        materialApplicationCustom.setFeedbackId2(viewEmployeeMiPsd.getCode());
+                        materialApplicationCustom.setFeedbackName2(viewEmployeeMiPsd.getName());
+                        materialApplicationCustom.setFeedbackTime2(dateString);
+                    }else if(materialApplicationCustom.getFeedbackId3() == null){
+                        materialApplicationCustom.setFeedbackContent3(feedback);
+                        materialApplicationCustom.setFeedbackId3(viewEmployeeMiPsd.getCode());
+                        materialApplicationCustom.setFeedbackName3(viewEmployeeMiPsd.getName());
+                        materialApplicationCustom.setFeedbackTime3(dateString);
+                    }else if(materialApplicationCustom.getFeedbackId4() == null){
+                        materialApplicationCustom.setFeedbackContent4(feedback);
+                        materialApplicationCustom.setFeedbackId4(viewEmployeeMiPsd.getCode());
+                        materialApplicationCustom.setFeedbackName4(viewEmployeeMiPsd.getName());
+                        materialApplicationCustom.setFeedbackTime4(dateString);
+                    }else if(materialApplicationCustom.getFeedbackId5() == null){
+                        materialApplicationCustom.setFeedbackContent5(feedback);
+                        materialApplicationCustom.setFeedbackId5(viewEmployeeMiPsd.getCode());
+                        materialApplicationCustom.setFeedbackName5(viewEmployeeMiPsd.getName());
+                        materialApplicationCustom.setFeedbackTime5(dateString);
+                    }
+
+                    materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                    //保存该记录相关数据以便产生推送
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                                "2","28");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向申报人推送消息
+                        messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    materialApplicationDeal.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+                }
+
             }
-            e.printStackTrace();
+        }else if(subject.hasRole("examiner")){
+            if(materialApplicationCustom.getFlag() == 0 || materialApplicationCustom.getFlag() == 1){
+                materialApplicationCustom.setFlag(1);
+                materialApplicationCustom.setGroupVisible(1);
+                materialApplicationCustom.setXxkyj(feedback);
+                materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                //保存该记录相关数据以便产生推送
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "0","29");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向处理组推送消息
+                    messagePushUtil.groupPushSingle(pushMessage,"material");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "2","28");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向申报人推送消息
+                    messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                materialApplicationDeal.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+            }
+        }else{
+            materialApplicationDeal.setDenyAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
         }
-        if(materialApplicationCustom.getFlag() == 1){
+
+        return materialApplicationDeal;
+    }
+
+    // 物资申购处理完成
+    @RequestMapping(value = "/completeMaterialApplication")
+    @ResponseBody
+    public Map<String, Object> completeMaterialApplication(HttpServletRequest request) throws Exception {
+        Map<String, Object> map =new HashMap<>();
+        Integer id;
+        try {
+            id = Integer.parseInt(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            map.put("success", "false");
+            map.put("msg", "抱歉，未找到该物资申购相关信息");
+            return map;
+        }
+        //ID为空则返回
+        if (id == null) {
+            map.put("success", "false");
+            map.put("msg", "抱歉，未找到该物资申购相关信息");
+            return map;
+        }
+        //获取当前物资申购问题
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationService.findById(id);
+        if (materialApplicationCustom == null) {
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
+        }
+        String feedback = request.getParameter("feedback");
+        String brand = request.getParameter("brand");
+        String model = request.getParameter("model");
+        int judge = 0;
+        int total = 0;
+        try {
+            judge = Integer.parseInt(request.getParameter("judge"));
+            total = Integer.parseInt(request.getParameter("total"));
+        } catch (NumberFormatException e) {
+            throw new CustomException("抱歉，输入价格有误");
+        }
+        //封装数据
+        Map<String, Object> thisData =new HashMap<String, Object>();
+        thisData.put("id",id);
+        thisData.put("feedback",feedback);
+        thisData.put("brand",brand);
+        thisData.put("model",model);
+        thisData.put("judge",judge);
+        thisData.put("total",total);
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+
+        MaterialApplicationComplete materialApplicationComplete = new MaterialApplicationComplete();
+        materialApplicationComplete.setMap(thisData);
+        materialApplicationComplete.setMaterialApplicationCustom(materialApplicationCustom);
+        materialApplicationComplete.setSubject(subject);
+
+        MaterialApplicationComplete result = this.materialApplicationComplete(materialApplicationComplete);
+        map.put("success", "true");
+        map.put("msg", "操作成功");
+        return map;
+    }
+
+    // 物资申购处理完成操作
+    public  MaterialApplicationComplete materialApplicationComplete(MaterialApplicationComplete materialApplicationComplete)throws Exception{
+        Map<String, Object> thisData = materialApplicationComplete.getMap();
+        Subject subject = materialApplicationComplete.getSubject();
+        MaterialApplicationCustom materialApplicationCustom = materialApplicationComplete.getMaterialApplicationCustom();
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+
+        Integer id = Integer.parseInt(thisData.get("id").toString());
+        String feedback = thisData.get("feedback").toString();
+        String brand = thisData.get("brand").toString();
+        String model = thisData.get("model").toString();
+        int judge = Integer.parseInt(thisData.get("judge").toString());
+        int total = Integer.parseInt(thisData.get("total").toString());
+
+        if(subject.hasRole("material")){
+            if(materialApplicationCustom.getGroupVisible() == 1){
+                //更新该物资申购问题数据
+                materialApplicationCustom.setFlag(2);
+                materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
+                materialApplicationCustom.setLeaderName(viewEmployeeMiPsd.getName());
+                materialApplicationCustom.setReback(feedback);
+                materialApplicationCustom.setBrand(brand);
+                materialApplicationCustom.setModel(model);
+                materialApplicationCustom.setJudge(judge);
+                materialApplicationCustom.setTotal(total);
+                //设置完成时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                materialApplicationCustom.setDoneTime(dateString);
+                materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
+                //保存该记录相关数据以便产生推送
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(materialApplicationCustom.getUserid(),"0","1",
+                            "2","23");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向申报人推送消息
+                    messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                materialApplicationComplete.setCompleteAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+            }else{
+                materialApplicationComplete.setCompleteAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+            }
+        }else if(subject.hasRole("examiner")){
             //更新该物资申购问题数据
             materialApplicationCustom.setFlag(2);
             materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
+            materialApplicationCustom.setLeaderName(viewEmployeeMiPsd.getName());
             materialApplicationCustom.setReback(feedback);
             materialApplicationCustom.setBrand(brand);
             materialApplicationCustom.setModel(model);
             materialApplicationCustom.setJudge(judge);
             materialApplicationCustom.setTotal(total);
+            //设置完成时间
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = formatter.format(currentTime);
+            materialApplicationCustom.setDoneTime(dateString);
             materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
             //保存该记录相关数据以便产生推送
             try {
@@ -1117,36 +2098,18 @@ public class MobileAdminController {
                     pushMessageService.save(pushMessage);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    map.put("success", "false");
-                    map.put("msg", "操作异常");
-                    return map;
                 }
                 //向申报人推送消息
                 messagePushUtil.specifiedPushSingle(pushMessage,materialApplicationCustom.getUserid());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            map.put("success", "true");
-            map.put("msg", "操作成功，申购处理完成");
-            return map;
-        }else if(materialApplicationCustom.getFlag() == 2){
-            map.put("success", "false");
-            map.put("msg", "请勿重复处理");
-            return map;
-        }else if(materialApplicationCustom.getFlag() == 0){
-            //更新该故障问题数据
-            materialApplicationCustom.setFlag(2);
-            materialApplicationCustom.setLeader(viewEmployeeMiPsd.getCode());
-            materialApplicationCustom.setReback(feedback);
-            materialApplicationService.updataById(materialApplicationCustom.getId(), materialApplicationCustom);
-            map.put("success", "true");
-            map.put("msg", "操作成功，申购处理完成");
-            return map;
+            materialApplicationComplete.setCompleteAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
+        }else{
+            materialApplicationComplete.setCompleteAction("redirect:editMaterialApplication?id=" + materialApplicationCustom.getId());
         }
 
-        map.put("success", "false");
-        map.put("msg", "操作异常");
-        return map;
+        return materialApplicationComplete;
     }
 
     // 查看物资申购详情
