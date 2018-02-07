@@ -20,7 +20,7 @@
 
         <!-- 数据库连接 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/examination_system"
+                        connectionURL="jdbc:mysql://localhost:3306/sxqy_info_maint_test"
                         userId="root"
                         password="admin">
         </jdbcConnection>
@@ -58,7 +58,7 @@
             去除自动生成的例子
         -->
 
-        <table schema="" tableName="material_application">
+        <table schema="" tableName="software_requirements">
         </table>
 
 

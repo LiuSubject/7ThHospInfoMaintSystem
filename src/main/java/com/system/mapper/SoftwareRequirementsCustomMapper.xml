@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.SoftwareRequirementsCustomMapper" >
+    <resultMap id="BaseResultMap" type="com.system.po.SoftwareRequirements" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="flag" property="flag" jdbcType="INTEGER" />
+        <result column="require_no" property="requireNo" jdbcType="CHAR" />
+        <result column="dept_code" property="deptCode" jdbcType="VARCHAR" />
+        <result column="dept" property="dept" jdbcType="VARCHAR" />
+        <result column="applicant_name" property="applicantName" jdbcType="VARCHAR" />
+        <result column="applicant_id" property="applicantId" jdbcType="VARCHAR" />
+        <result column="applicant_time" property="applicantTime" jdbcType="VARCHAR" />
+        <result column="applicant_module" property="applicantModule" jdbcType="VARCHAR" />
+        <result column="require_type" property="requireType" jdbcType="INTEGER" />
+        <result column="details" property="details" jdbcType="VARCHAR" />
+        <result column="dept_comments" property="deptComments" jdbcType="VARCHAR" />
+        <result column="time_required" property="timeRequired" jdbcType="INTEGER" />
+        <result column="handling_comments" property="handlingComments" jdbcType="VARCHAR" />
+        <result column="info_comments" property="infoComments" jdbcType="VARCHAR" />
+        <result column="acceptance_type" property="acceptanceType" jdbcType="INTEGER" />
+        <result column="acceptance_description" property="acceptanceDescription" jdbcType="VARCHAR" />
+        <result column="other_1" property="other1" jdbcType="VARCHAR" />
+        <result column="other_2" property="other2" jdbcType="VARCHAR" />
+        <result column="other_3" property="other3" jdbcType="VARCHAR" />
+        <result column="feedback_content_1" property="feedbackContent1" jdbcType="VARCHAR" />
+        <result column="feedback_id_1" property="feedbackId1" jdbcType="CHAR" />
+        <result column="feedback_name_1" property="feedbackName1" jdbcType="VARCHAR" />
+        <result column="feedback_content_2" property="feedbackContent2" jdbcType="VARCHAR" />
+        <result column="feedback_id_2" property="feedbackId2" jdbcType="CHAR" />
+        <result column="feedback_name_2" property="feedbackName2" jdbcType="VARCHAR" />
+        <result column="feedback_content_3" property="feedbackContent3" jdbcType="VARCHAR" />
+        <result column="feedback_id_3" property="feedbackId3" jdbcType="CHAR" />
+        <result column="feedback_name_3" property="feedbackName3" jdbcType="VARCHAR" />
+        <result column="feedback_content_4" property="feedbackContent4" jdbcType="VARCHAR" />
+        <result column="feedback_id_4" property="feedbackId4" jdbcType="CHAR" />
+        <result column="feedback_name_4" property="feedbackName4" jdbcType="VARCHAR" />
+        <result column="feedback_content_5" property="feedbackContent5" jdbcType="VARCHAR" />
+        <result column="feedback_id_5" property="feedbackId5" jdbcType="CHAR" />
+        <result column="feedback_name_5" property="feedbackName5" jdbcType="VARCHAR" />
+        <result column="fault_urgent" property="faultUrgent" jdbcType="INTEGER" />
+        <result column="group_visible" property="groupVisible" jdbcType="INTEGER" />
+        <result column="high_approved" property="highApproved" jdbcType="INTEGER" />
+        <result column="approved_flag" property="approvedFlag" jdbcType="INTEGER" />
+        <result column="high_leader_approved_1" property="highLeaderApproved1" jdbcType="INTEGER" />
+        <result column="high_leader_reback_1" property="highLeaderReback1" jdbcType="VARCHAR" />
+        <result column="high_leader_id_1" property="highLeaderId1" jdbcType="CHAR" />
+        <result column="high_leader_name_1" property="highLeaderName1" jdbcType="VARCHAR" />
+        <result column="high_leader_flag_1" property="highLeaderFlag1" jdbcType="INTEGER" />
+    </resultMap>
+    <select id="findByPaging" parameterType="PagingVO" resultMap="BaseResultMap">
+        select software_requirements.*
+        from software_requirements
+        ORDER by applicant_time desc, flag asc
+        limit #{toPageNo}, #{pageSize}
+    </select>
+</mapper>

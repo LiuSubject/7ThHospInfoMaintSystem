@@ -73,6 +73,10 @@ public class AdminController {
     @Resource(name = "pushMessageServiceImpl")
     private PushMessageService pushMessageService;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "softwareRequirementsServiceImpl")
+    private SoftwareRequirementsService softwareRequirementsService;
+
     @Autowired
     private CreatePushUtil createPushUtil;
 
@@ -2265,6 +2269,47 @@ public class AdminController {
         return "admin/printEngineRoomInspection";
     }
     //endregion
+    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<软件需求操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    //region
+    // 软件需求显示
+    @RequestMapping("/showSoftwareRequirements")
+    public String showSoftwareRequirements(Model model, Integer page) throws Exception {
+        //当前操作对象
+        Subject subject = SecurityUtils.getSubject();
+        //页码对象初始化
+        PagingVO pagingVO = new PagingVO();
+        if (page == null || page == 0) {
+            pagingVO.setToPageNo(1);
+        } else {
+            pagingVO.setToPageNo(page);
+        }
+        SoftwareRequirementsList softwareRequirementsList = new SoftwareRequirementsList();
+        softwareRequirementsList.setSubject(subject);
+        softwareRequirementsList.setPagingVO(pagingVO);
+        SoftwareRequirementsList result = this.getSoftwareRequirementsList(softwareRequirementsList);
+        model.addAttribute("softwareRequirementsList", result.getSoftwareRequirementsList());
+        model.addAttribute("pagingVO", result.getPagingVO());
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
+
+        return "admin/showSoftwareRequirements";
+    }
+
+    // 获取软件需求列表
+    public SoftwareRequirementsList getSoftwareRequirementsList(SoftwareRequirementsList softwareRequirementsList) throws Exception{
+
+        //获取当前操作对象
+        Subject subject = softwareRequirementsList.getSubject();
+        //获取当前页码对象
+        PagingVO pagingVO = softwareRequirementsList.getPagingVO();
+        //初始化结果对象
+        List<SoftwareRequirementsCustom> list;
+
+        return softwareRequirementsList;
+    }
+
+    //endregion
+
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<JSON数据获取>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
     //region
     //返回操作人相关基本信息JSON
