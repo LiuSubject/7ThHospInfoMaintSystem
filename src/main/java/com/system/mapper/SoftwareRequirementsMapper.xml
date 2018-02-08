@@ -46,6 +46,12 @@
     <result column="high_leader_id_1" property="highLeaderId1" jdbcType="CHAR" />
     <result column="high_leader_name_1" property="highLeaderName1" jdbcType="VARCHAR" />
     <result column="high_leader_flag_1" property="highLeaderFlag1" jdbcType="INTEGER" />
+    <result column="feedback_time_1" property="feedbackTime1" jdbcType="VARCHAR" />
+    <result column="feedback_time_2" property="feedbackTime2" jdbcType="VARCHAR" />
+    <result column="feedback_time_3" property="feedbackTime3" jdbcType="VARCHAR" />
+    <result column="feedback_time_4" property="feedbackTime4" jdbcType="VARCHAR" />
+    <result column="feedback_time_5" property="feedbackTime5" jdbcType="VARCHAR" />
+    <result column="done_time" property="doneTime" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -113,7 +119,8 @@
     feedback_name_2, feedback_content_3, feedback_id_3, feedback_name_3, feedback_content_4, 
     feedback_id_4, feedback_name_4, feedback_content_5, feedback_id_5, feedback_name_5, 
     fault_urgent, group_visible, high_approved, approved_flag, high_leader_approved_1, 
-    high_leader_reback_1, high_leader_id_1, high_leader_name_1, high_leader_flag_1
+    high_leader_reback_1, high_leader_id_1, high_leader_name_1, high_leader_flag_1, feedback_time_1, 
+    feedback_time_2, feedback_time_3, feedback_time_4, feedback_time_5, done_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.system.po.SoftwareRequirementsExample" >
     select
@@ -160,7 +167,9 @@
       feedback_content_5, feedback_id_5, feedback_name_5, 
       fault_urgent, group_visible, high_approved, 
       approved_flag, high_leader_approved_1, high_leader_reback_1, 
-      high_leader_id_1, high_leader_name_1, high_leader_flag_1
+      high_leader_id_1, high_leader_name_1, high_leader_flag_1, 
+      feedback_time_1, feedback_time_2, feedback_time_3, 
+      feedback_time_4, feedback_time_5, done_time
       )
     values (#{id,jdbcType=INTEGER}, #{flag,jdbcType=INTEGER}, #{requireNo,jdbcType=CHAR}, 
       #{deptCode,jdbcType=VARCHAR}, #{dept,jdbcType=VARCHAR}, #{applicantName,jdbcType=VARCHAR}, 
@@ -176,7 +185,9 @@
       #{feedbackContent5,jdbcType=VARCHAR}, #{feedbackId5,jdbcType=CHAR}, #{feedbackName5,jdbcType=VARCHAR}, 
       #{faultUrgent,jdbcType=INTEGER}, #{groupVisible,jdbcType=INTEGER}, #{highApproved,jdbcType=INTEGER}, 
       #{approvedFlag,jdbcType=INTEGER}, #{highLeaderApproved1,jdbcType=INTEGER}, #{highLeaderReback1,jdbcType=VARCHAR}, 
-      #{highLeaderId1,jdbcType=CHAR}, #{highLeaderName1,jdbcType=VARCHAR}, #{highLeaderFlag1,jdbcType=INTEGER}
+      #{highLeaderId1,jdbcType=CHAR}, #{highLeaderName1,jdbcType=VARCHAR}, #{highLeaderFlag1,jdbcType=INTEGER}, 
+      #{feedbackTime1,jdbcType=VARCHAR}, #{feedbackTime2,jdbcType=VARCHAR}, #{feedbackTime3,jdbcType=VARCHAR}, 
+      #{feedbackTime4,jdbcType=VARCHAR}, #{feedbackTime5,jdbcType=VARCHAR}, #{doneTime,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.system.po.SoftwareRequirements" >
@@ -314,6 +325,24 @@
       <if test="highLeaderFlag1 != null" >
         high_leader_flag_1,
       </if>
+      <if test="feedbackTime1 != null" >
+        feedback_time_1,
+      </if>
+      <if test="feedbackTime2 != null" >
+        feedback_time_2,
+      </if>
+      <if test="feedbackTime3 != null" >
+        feedback_time_3,
+      </if>
+      <if test="feedbackTime4 != null" >
+        feedback_time_4,
+      </if>
+      <if test="feedbackTime5 != null" >
+        feedback_time_5,
+      </if>
+      <if test="doneTime != null" >
+        done_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -447,6 +476,24 @@
       </if>
       <if test="highLeaderFlag1 != null" >
         #{highLeaderFlag1,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackTime1 != null" >
+        #{feedbackTime1,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackTime2 != null" >
+        #{feedbackTime2,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackTime3 != null" >
+        #{feedbackTime3,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackTime4 != null" >
+        #{feedbackTime4,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackTime5 != null" >
+        #{feedbackTime5,jdbcType=VARCHAR},
+      </if>
+      <if test="doneTime != null" >
+        #{doneTime,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -591,6 +638,24 @@
       <if test="record.highLeaderFlag1 != null" >
         high_leader_flag_1 = #{record.highLeaderFlag1,jdbcType=INTEGER},
       </if>
+      <if test="record.feedbackTime1 != null" >
+        feedback_time_1 = #{record.feedbackTime1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackTime2 != null" >
+        feedback_time_2 = #{record.feedbackTime2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackTime3 != null" >
+        feedback_time_3 = #{record.feedbackTime3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackTime4 != null" >
+        feedback_time_4 = #{record.feedbackTime4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackTime5 != null" >
+        feedback_time_5 = #{record.feedbackTime5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doneTime != null" >
+        done_time = #{record.doneTime,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -641,7 +706,13 @@
       high_leader_reback_1 = #{record.highLeaderReback1,jdbcType=VARCHAR},
       high_leader_id_1 = #{record.highLeaderId1,jdbcType=CHAR},
       high_leader_name_1 = #{record.highLeaderName1,jdbcType=VARCHAR},
-      high_leader_flag_1 = #{record.highLeaderFlag1,jdbcType=INTEGER}
+      high_leader_flag_1 = #{record.highLeaderFlag1,jdbcType=INTEGER},
+      feedback_time_1 = #{record.feedbackTime1,jdbcType=VARCHAR},
+      feedback_time_2 = #{record.feedbackTime2,jdbcType=VARCHAR},
+      feedback_time_3 = #{record.feedbackTime3,jdbcType=VARCHAR},
+      feedback_time_4 = #{record.feedbackTime4,jdbcType=VARCHAR},
+      feedback_time_5 = #{record.feedbackTime5,jdbcType=VARCHAR},
+      done_time = #{record.doneTime,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -778,6 +849,24 @@
       <if test="highLeaderFlag1 != null" >
         high_leader_flag_1 = #{highLeaderFlag1,jdbcType=INTEGER},
       </if>
+      <if test="feedbackTime1 != null" >
+        feedback_time_1 = #{feedbackTime1,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackTime2 != null" >
+        feedback_time_2 = #{feedbackTime2,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackTime3 != null" >
+        feedback_time_3 = #{feedbackTime3,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackTime4 != null" >
+        feedback_time_4 = #{feedbackTime4,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackTime5 != null" >
+        feedback_time_5 = #{feedbackTime5,jdbcType=VARCHAR},
+      </if>
+      <if test="doneTime != null" >
+        done_time = #{doneTime,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -825,7 +914,13 @@
       high_leader_reback_1 = #{highLeaderReback1,jdbcType=VARCHAR},
       high_leader_id_1 = #{highLeaderId1,jdbcType=CHAR},
       high_leader_name_1 = #{highLeaderName1,jdbcType=VARCHAR},
-      high_leader_flag_1 = #{highLeaderFlag1,jdbcType=INTEGER}
+      high_leader_flag_1 = #{highLeaderFlag1,jdbcType=INTEGER},
+      feedback_time_1 = #{feedbackTime1,jdbcType=VARCHAR},
+      feedback_time_2 = #{feedbackTime2,jdbcType=VARCHAR},
+      feedback_time_3 = #{feedbackTime3,jdbcType=VARCHAR},
+      feedback_time_4 = #{feedbackTime4,jdbcType=VARCHAR},
+      feedback_time_5 = #{feedbackTime5,jdbcType=VARCHAR},
+      done_time = #{doneTime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

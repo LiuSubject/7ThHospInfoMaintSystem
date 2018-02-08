@@ -4,6 +4,7 @@ import com.system.po.PushMessage;
 import com.system.po.SoftwareRequirementsCustom;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
@@ -25,6 +26,12 @@ public interface SoftwareRequirementsService {
     //获取分页查询软件需求信息
     List<SoftwareRequirementsCustom> findByPaging(Integer toPageNo) throws Exception;
 
+    //获取分页查询主管院长软件需求信息
+    List<SoftwareRequirementsCustom> findByDpdeanPaging(Map<String, Object> map) throws Exception;
+
+    //获取分页查询部门软件需求信息
+    List<SoftwareRequirementsCustom> findByPagingOfDepart(Map<String, Object> map) throws Exception;
+
     //保存软件需求信息
     Boolean save(SoftwareRequirementsCustom softwareRequirementsCustom) throws Exception;
 
@@ -33,6 +40,12 @@ public interface SoftwareRequirementsService {
 
     //获取软件需求总数
     int getCountSoftwareRequirements() throws Exception;
+
+    //主管院长获取软件需求总数
+    int getCountSoftwareRequirementsOfdpdean(String dept, String code) throws Exception;
+
+    //获取部门软件需求总数
+    int getCountSoftwareRequirementsOfDepart(String dept) throws Exception;
 
     //根据id获取软件需求信息
     SoftwareRequirementsCustom findById(Integer id) throws Exception;

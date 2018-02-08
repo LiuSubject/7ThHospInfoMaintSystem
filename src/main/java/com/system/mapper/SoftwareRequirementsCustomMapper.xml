@@ -53,4 +53,19 @@
         ORDER by applicant_time desc, flag asc
         limit #{toPageNo}, #{pageSize}
     </select>
+    <select id="findByDpdeanPaging" parameterType="map" resultMap="BaseResultMap">
+        select software_requirements.*
+        from software_requirements
+        WHERE dept_code LIKE concat(concat('%',#{dept}),'%')
+        OR high_leader_id_1 LIKE concat(concat('%',#{code}),'%')
+        ORDER by applicant_time desc, flag asc
+        limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
+    </select>
+    <select id="findByPagingOfDepart" parameterType="map" resultMap="BaseResultMap">
+        select software_requirements.*
+        from software_requirements
+        WHERE dept_code LIKE concat(concat('%',#{dept}),'%')
+        ORDER by applicant_time desc, flag asc
+        limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
+    </select>
 </mapper>
