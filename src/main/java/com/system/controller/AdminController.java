@@ -2449,7 +2449,7 @@ public class AdminController {
         softwareRequirementsCustom.setFlag(0);
         //设置需求反馈时间
         softwareRequirementsCustom.setApplicantTime(dateString);
-        //设置需求编号
+        //设置需求编号(随机生成)
         softwareRequirementsCustom.setRequireNo( String.valueOf((int)((Math.random()*9+1)*100000)));
         //设置申请部门编码
         softwareRequirementsCustom.setDeptCode(viewEmployeeMiPsd.getDeptCode());
@@ -2487,6 +2487,15 @@ public class AdminController {
         return "redirect:/admin/showSoftwareRequirements";
     }
 
+    // 添加软件需求（页面跳转）
+    @RequestMapping(value = "/addSoftwareRequirements", method = {RequestMethod.GET})
+    public String addSoftwareRequirementsCustomUI(Model model) throws Exception {
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
+        return "admin/addSoftwareRequirements";
+    }
+
     // 修改软件需求页面显示
     @RequestMapping(value = "/editSoftwareRequirements", method = {RequestMethod.GET})
     public String editSoftwareRequirements(Integer id, Model model) throws Exception {
@@ -2505,6 +2514,26 @@ public class AdminController {
         model.addAttribute("roles",this.getRoles(subject));
 
         return "admin/editSoftwareRequirements";
+    }
+
+    // 查看软件需求页面显示
+    @RequestMapping(value = "/checkSoftwareRequirements", method = {RequestMethod.GET})
+    public String checkSoftwareRequirements(Integer id, Model model) throws Exception {
+        if (id == null) {
+            return "redirect:/admin/showSoftwareRequirements";
+        }
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        SoftwareRequirementsCustom softwareRequirementsCustom = softwareRequirementsService.findById(id);
+        if (softwareRequirementsCustom == null) {
+            throw new CustomException("抱歉，未找到该软件需求相关信息");
+        }
+
+        model.addAttribute("softwareRequirements", softwareRequirementsCustom);
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
+
+        return "admin/checkSoftwareRequirements";
     }
 
     // 处理软件需求
