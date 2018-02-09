@@ -154,7 +154,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">回复：</label>
                             <div class="col-sm-8">
-                                <textarea  type="text" class="form-control" rows="5" id="reback" name="reback" >${computerProblems.reback}</textarea>
+                                <textarea  type="text" class="form-control" rows="5" id="reback" name="reback" >${materialApplication.reback}</textarea>
                             </div>
                         </div>
                         <div class="form-group" style="text-align: center">

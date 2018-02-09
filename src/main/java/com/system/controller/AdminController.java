@@ -2352,7 +2352,7 @@ public class AdminController {
             }
             softwareRequirementsList.setPagingVO(pagingVO);
             softwareRequirementsList.setSoftwareRequirementsList(list);
-        }else if (subject.hasRole("deptdean")) {
+        }else if (subject.hasRole("dpdean")) {
             //主管院长组
             //封装搜索条件
             Map<String, Object> map =new HashMap<String, Object>();
@@ -2509,7 +2509,7 @@ public class AdminController {
             throw new CustomException("抱歉，未找到该软件需求相关信息");
         }
 
-        model.addAttribute("SoftwareRequirements", softwareRequirementsCustom);
+        model.addAttribute("softwareRequirements", softwareRequirementsCustom);
         //返回角色对象
         model.addAttribute("roles",this.getRoles(subject));
 
@@ -2566,7 +2566,7 @@ public class AdminController {
             time_required = Integer.parseInt(request.getParameter("time_required"));
             acceptance_type = Integer.parseInt(request.getParameter("acceptance_type"));
         } catch (NumberFormatException e) {
-            throw new CustomException("抱歉，输入数据有误");
+            e.printStackTrace();
         }
         //封装数据
         Map<String, Object> thisData =new HashMap<String, Object>();
@@ -2745,7 +2745,7 @@ public class AdminController {
             time_required = Integer.parseInt(request.getParameter("time_required"));
             acceptance_type = Integer.parseInt(request.getParameter("acceptance_type"));
         } catch (NumberFormatException e) {
-            throw new CustomException("抱歉，输入数据有误");
+            e.printStackTrace();
         }
 
         //封装数据
@@ -2868,15 +2868,15 @@ public class AdminController {
     @RequestMapping(value = "/prePushSoftwareRequirements", method = {RequestMethod.GET})
     public String prePushSoftwareRequirements(HttpServletRequest request, Model modelV) throws Exception {
 
-        Integer material_id;
+        Integer requirements_id;
         try {
-            material_id = Integer.parseInt(request.getParameter("id"));
+            requirements_id = Integer.parseInt(request.getParameter("id"));
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            modelV.addAttribute("message", "物资申购记录获取失败");
+            modelV.addAttribute("message", "软件需求记录获取失败");
             return "error";
         }
-        String material_feedback = request.getParameter("feedback");
+        String requirements_feedback = request.getParameter("infoComments");
         //获取院领导列表
         List<Role> deans = new ArrayList<>();
         //获取当前操作用户对象
@@ -2893,8 +2893,8 @@ public class AdminController {
             return "error";
         }
         //不更新,发送到 push 进行处理
-        modelV.addAttribute("requirements_id",material_id);
-        modelV.addAttribute("requirements_feedback",material_feedback);
+        modelV.addAttribute("requirements_id",requirements_id);
+        modelV.addAttribute("requirements_feedback",requirements_feedback);
         modelV.addAttribute("deans", deans);
         //返回角色对象
         modelV.addAttribute("roles",this.getRoles(subject));
@@ -2910,7 +2910,7 @@ public class AdminController {
             id = Integer.parseInt(request.getParameter("requirements_id"));
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            modelV.addAttribute("message", "物资申购记录获取失败");
+            modelV.addAttribute("message", "软件需求记录获取失败");
             return "error";
         }
         if (id == null) {
@@ -2920,14 +2920,14 @@ public class AdminController {
         //获取院领导工号
         String viceDean = request.getParameter("dpDean");
 
-        //获取当前物资申购问题
+        //获取当前软件需求问题
         SoftwareRequirementsCustom softwareRequirementsCustom = softwareRequirementsService.findById(id);
         if (softwareRequirementsCustom == null) {
-            throw new CustomException("抱歉，未找到该物资申购相关信息");
+            throw new CustomException("抱歉，未找到该软件需求相关信息");
         }
-        //申购处理完毕不能再推送
+        //软件需求处理完毕不能再推送
         if(softwareRequirementsCustom.getFlag() == 2){
-            modelV.addAttribute("message", "该申购处理完毕，不能再推送");
+            modelV.addAttribute("message", "该需求处理完毕，不能再推送");
             return "error";
         }
         //获取当前操作用户对象
@@ -3127,6 +3127,36 @@ public class AdminController {
 
 
         return "admin/printSoftwareRequirements";
+    }
+
+
+    // 搜索软件需求
+    @RequestMapping(value = "/searchSoftwareRequirements")
+    private String searchSoftwareRequirements(String findByDept,String findByName,String findByFlag, Model model) throws Exception {
+
+        List<SoftwareRequirementsCustom> list = null;
+        Map<String, Object> map =new HashMap<String, Object>();
+        map.put("dept",findByDept);
+        map.put("applicant",findByName);
+        int flag = 0;
+        try {
+            flag = Integer.parseInt(findByFlag);
+        } catch (NumberFormatException e) {
+            flag = 3;
+        }
+        map.put("flag",flag);
+        try {
+            list = softwareRequirementsService.paginationOfSearchResults(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        model.addAttribute("softwareRequirementsList", list);
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
+
+        return "admin/showSoftwareRequirements";
     }
 
     //endregion

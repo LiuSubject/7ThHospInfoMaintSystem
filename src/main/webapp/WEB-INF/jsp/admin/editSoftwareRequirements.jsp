@@ -109,27 +109,25 @@
                             <label class="col-sm-2 control-label">软件公司处理<br>所需天数：</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="timeRequired" name="timeRequired"
-                                       value="<c:if test="${softwareRequirements.timeRequired != 0}">${softwareRequirements.timeRequired}</c:if>" readonly="readonly">
+                                       value="<c:if test="${softwareRequirements.timeRequired != 0}">${softwareRequirements.timeRequired}</c:if>">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">软件公司处理<br>意见：</label>
                             <div class="col-sm-8">
-                                <textarea  type="text" class="form-control" rows="5" id="handlingComments" name="handlingComments" readonly="readonly">${softwareRequirements.handlingComments}</textarea>
+                                <textarea  type="text" class="form-control" rows="5" id="handlingComments" name="handlingComments">${softwareRequirements.handlingComments}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">信息组意见：</label>
                             <div class="col-sm-8">
-                                <textarea  type="text" class="form-control" rows="5" id="infoComments" name="infoComments" readonly="readonly">${softwareRequirements.infoComments}</textarea>
+                                <textarea  type="text" class="form-control" rows="5" id="infoComments" name="infoComments">${softwareRequirements.infoComments}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">验收结果：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="acceptanceType" id="acceptanceType"
-                                        onfocus="this.defaultIndex=this.selectedIndex;"
-                                        onchange="this.selectedIndex=this.defaultIndex;">
+                                <select class="form-control" name="acceptanceType" id="acceptanceType">
                                     <option value="0"></option>
                                     <option value="1">修改已按上述反馈完成，验收合格</option>
                                     <option value="2">不需要做了</option>
@@ -140,7 +138,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">验收说明：</label>
                             <div class="col-sm-8">
-                                <textarea  type="text" class="form-control" rows="5" id="acceptanceDescription" name="acceptanceDescription" readonly="readonly">${softwareRequirements.acceptanceDescription}</textarea>
+                                <textarea  type="text" class="form-control" rows="5" id="acceptanceDescription" name="acceptanceDescription">${softwareRequirements.acceptanceDescription}</textarea>
                             </div>
                         </div>
                         <c:if test="${softwareRequirements.highLeaderApproved1 == 1}">
@@ -148,7 +146,7 @@
                                 <label class="col-sm-2 control-label" style="text-align: center">主管院长审查意见：</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="highLeaderReback1" name="highLeaderReback1"
-                                           value="${softwareRequirements.highLeaderReback1}" readonly="readonly">
+                                           value="${softwareRequirements.highLeaderReback1}">
                                 </div>
                             </div>
                         </c:if>
@@ -168,9 +166,24 @@
                                 </div>
                             </div>
                         </c:if>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">回复：</label>
+                            <div class="col-sm-8">
+                                <textarea  type="text" class="form-control" rows="5" id="feedback" name="feedback"></textarea>
+                            </div>
+                        </div>
                         <div class="form-group" style="text-align: center">
-                            <button class="btn btn-default" id="printBtn" type="button">打印预览</button>
-                            <button class="btn btn-default" id="returnListBtn" type="button">返回</button>
+                            <c:if test="${softwareRequirements.flag != 2}">
+                                <c:if test='${roles.indexOf("examiner") != -1 && softwareRequirements.highApproved == 0}'>
+                                    <%--信息科长推送上级按钮--%>
+                                    <button class="btn btn-danger" type="button" id="pushBtn">推送</button>
+                                </c:if>
+                                <c:if test='${(roles.indexOf("material") != -1 || roles.indexOf("examiner") != -1)}'>
+                                    <%--非院领导处理申购按钮--%>
+                                    <button class="btn btn-default" type="button" id="dealBtn">处理</button>
+                                    <button class="btn btn-default" type="button" id="completeBtn">完成</button>
+                                </c:if>
+                            </c:if>
                         </div>
                     </form>
                     <div id="slideToggle">
@@ -357,6 +370,47 @@
         $("#timeLine").slideToggle();
     });
 
+    //推送处理按钮点击
+    $('#pushBtn').on('click', function () {
+        var infoComments = document.getElementById("infoComments").value;
+        window.location.href =encodeURI( "/admin/prePushSoftwareRequirements?id=${softwareRequirements.id}&feedback="
+            + infoComments);
+    });
+
+
+    //处理按钮点击
+    $('#dealBtn').one('click', function () {
+        var feedback = document.getElementById("feedback").value;
+        var timeRequired = document.getElementById("timeRequired").value;
+        var handlingComments = document.getElementById("handlingComments").value;
+        var infoComments = document.getElementById("infoComments").value;
+        var acceptanceType = document.getElementById("acceptanceType").value;
+        var acceptanceDescription = document.getElementById("acceptanceDescription").value;
+        window.location.href =encodeURI( "/admin/dealSoftwareRequirements?id=${softwareRequirements.id}&feedback=" + feedback
+            +"&time_required=" + timeRequired
+            +"&handling_comments=" + handlingComments
+            +"&info_comments=" + infoComments
+            +"&acceptance_description=" + acceptanceDescription
+            +"&acceptance_type=" + acceptanceType);
+    });
+
+
+
+    //完成按钮点击
+    $('#completeBtn').one('click', function () {
+        var feedback = document.getElementById("feedback").value;
+        var timeRequired = document.getElementById("timeRequired").value;
+        var handlingComments = document.getElementById("handlingComments").value;
+        var infoComments = document.getElementById("infoComments").value;
+        var acceptanceType = document.getElementById("acceptanceType").value;
+        var acceptanceDescription = document.getElementById("acceptanceDescription").value;
+        window.location.href =encodeURI( "/admin/completeSoftwareRequirements?id=${softwareRequirements.id}&feedback=" + feedback
+            +"&time_required=" + timeRequired
+            +"&handling_comments=" + handlingComments
+            +"&info_comments=" + infoComments
+            +"&acceptance_description=" + acceptanceDescription
+            +"&acceptance_type=" + acceptanceType);
+    });
 
 </script>
 </html>

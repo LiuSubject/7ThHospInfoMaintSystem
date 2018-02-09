@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" action="/admin/addSoftwareRequirements" id="editfrom"
+                    <form class="form-horizontal" role="form" action="/normal/addSoftwareRequirements" id="editfrom"
                           method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">需求类别：</label>
@@ -133,7 +133,7 @@
     </c:if>
     //用户信息填入
     $.ajax({
-        url: "/admin/getApplicantInfo",
+        url: "/normal/getApplicantInfo",
         async: true,
         success: function (data) {
             document.getElementById("dept").value = data.appliDept;

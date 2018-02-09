@@ -140,5 +140,12 @@ public class SoftwareRequirementsServiceImpl implements SoftwareRequirementsServ
         return SoftwareRequirementsCustom;
     }
 
+    public List<SoftwareRequirementsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception {
+
+        List<SoftwareRequirementsCustom> list = softwareRequirementsCustomMapper.paginationOfSearchResults(condition);
+
+        return list;
+    }
+
 
 }

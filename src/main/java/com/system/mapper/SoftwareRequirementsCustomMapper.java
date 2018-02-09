@@ -25,4 +25,7 @@ public interface SoftwareRequirementsCustomMapper {
 
     //分页查询主管院长软件需求信息
     List<SoftwareRequirementsCustom> findByDpdeanPaging(Map<String, Object> map) throws Exception;
+
+    //软件需求信息搜索结果分页
+    List<SoftwareRequirementsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception;
 }

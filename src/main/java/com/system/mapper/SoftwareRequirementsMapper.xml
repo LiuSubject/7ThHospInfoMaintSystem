@@ -11,7 +11,7 @@
     <result column="applicant_id" property="applicantId" jdbcType="VARCHAR" />
     <result column="applicant_time" property="applicantTime" jdbcType="VARCHAR" />
     <result column="applicant_module" property="applicantModule" jdbcType="VARCHAR" />
-    <result column="require_type" property="requireType" jdbcType="INTEGER" />
+    <result column="require_type" property="requireType" jdbcType="VARCHAR" />
     <result column="details" property="details" jdbcType="VARCHAR" />
     <result column="dept_comments" property="deptComments" jdbcType="VARCHAR" />
     <result column="time_required" property="timeRequired" jdbcType="INTEGER" />
@@ -174,7 +174,7 @@
     values (#{id,jdbcType=INTEGER}, #{flag,jdbcType=INTEGER}, #{requireNo,jdbcType=CHAR}, 
       #{deptCode,jdbcType=VARCHAR}, #{dept,jdbcType=VARCHAR}, #{applicantName,jdbcType=VARCHAR}, 
       #{applicantId,jdbcType=VARCHAR}, #{applicantTime,jdbcType=VARCHAR}, #{applicantModule,jdbcType=VARCHAR}, 
-      #{requireType,jdbcType=INTEGER}, #{details,jdbcType=VARCHAR}, #{deptComments,jdbcType=VARCHAR}, 
+      #{requireType,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR}, #{deptComments,jdbcType=VARCHAR}, 
       #{timeRequired,jdbcType=INTEGER}, #{handlingComments,jdbcType=VARCHAR}, #{infoComments,jdbcType=VARCHAR}, 
       #{acceptanceType,jdbcType=INTEGER}, #{acceptanceDescription,jdbcType=VARCHAR}, 
       #{other1,jdbcType=VARCHAR}, #{other2,jdbcType=VARCHAR}, #{other3,jdbcType=VARCHAR}, 
@@ -373,7 +373,7 @@
         #{applicantModule,jdbcType=VARCHAR},
       </if>
       <if test="requireType != null" >
-        #{requireType,jdbcType=INTEGER},
+        #{requireType,jdbcType=VARCHAR},
       </if>
       <if test="details != null" >
         #{details,jdbcType=VARCHAR},
@@ -534,7 +534,7 @@
         applicant_module = #{record.applicantModule,jdbcType=VARCHAR},
       </if>
       <if test="record.requireType != null" >
-        require_type = #{record.requireType,jdbcType=INTEGER},
+        require_type = #{record.requireType,jdbcType=VARCHAR},
       </if>
       <if test="record.details != null" >
         details = #{record.details,jdbcType=VARCHAR},
@@ -672,7 +672,7 @@
       applicant_id = #{record.applicantId,jdbcType=VARCHAR},
       applicant_time = #{record.applicantTime,jdbcType=VARCHAR},
       applicant_module = #{record.applicantModule,jdbcType=VARCHAR},
-      require_type = #{record.requireType,jdbcType=INTEGER},
+      require_type = #{record.requireType,jdbcType=VARCHAR},
       details = #{record.details,jdbcType=VARCHAR},
       dept_comments = #{record.deptComments,jdbcType=VARCHAR},
       time_required = #{record.timeRequired,jdbcType=INTEGER},
@@ -745,7 +745,7 @@
         applicant_module = #{applicantModule,jdbcType=VARCHAR},
       </if>
       <if test="requireType != null" >
-        require_type = #{requireType,jdbcType=INTEGER},
+        require_type = #{requireType,jdbcType=VARCHAR},
       </if>
       <if test="details != null" >
         details = #{details,jdbcType=VARCHAR},
@@ -880,7 +880,7 @@
       applicant_id = #{applicantId,jdbcType=VARCHAR},
       applicant_time = #{applicantTime,jdbcType=VARCHAR},
       applicant_module = #{applicantModule,jdbcType=VARCHAR},
-      require_type = #{requireType,jdbcType=INTEGER},
+      require_type = #{requireType,jdbcType=VARCHAR},
       details = #{details,jdbcType=VARCHAR},
       dept_comments = #{deptComments,jdbcType=VARCHAR},
       time_required = #{timeRequired,jdbcType=INTEGER},

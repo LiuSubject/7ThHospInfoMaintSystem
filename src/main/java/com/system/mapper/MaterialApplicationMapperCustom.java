@@ -32,6 +32,6 @@ public interface MaterialApplicationMapperCustom {
     List<MaterialApplicationCustom> deptAndApproveFindByPaging(Map<String, Object> condition) throws Exception;
 
 
-    //电脑故障信息搜索结果分页
+    //物资申购信息搜索结果分页
     List<MaterialApplicationCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception;
 }

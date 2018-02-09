@@ -19,7 +19,7 @@ public class SoftwareRequirements {
 
     private String applicantModule;
 
-    private Integer requireType;
+    private String requireType;
 
     private String details;
 
@@ -173,12 +173,12 @@ public class SoftwareRequirements {
         this.applicantModule = applicantModule == null ? null : applicantModule.trim();
     }
 
-    public Integer getRequireType() {
+    public String getRequireType() {
         return requireType;
     }
 
-    public void setRequireType(Integer requireType) {
-        this.requireType = requireType;
+    public void setRequireType(String requireType) {
+        this.requireType = requireType == null ? null : requireType.trim();
     }
 
     public String getDetails() {

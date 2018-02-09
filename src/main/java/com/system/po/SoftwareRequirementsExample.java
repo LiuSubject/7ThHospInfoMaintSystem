@@ -724,52 +724,62 @@ public class SoftwareRequirementsExample {
             return (Criteria) this;
         }
 
-        public Criteria andRequireTypeEqualTo(Integer value) {
+        public Criteria andRequireTypeEqualTo(String value) {
             addCriterion("require_type =", value, "requireType");
             return (Criteria) this;
         }
 
-        public Criteria andRequireTypeNotEqualTo(Integer value) {
+        public Criteria andRequireTypeNotEqualTo(String value) {
             addCriterion("require_type <>", value, "requireType");
             return (Criteria) this;
         }
 
-        public Criteria andRequireTypeGreaterThan(Integer value) {
+        public Criteria andRequireTypeGreaterThan(String value) {
             addCriterion("require_type >", value, "requireType");
             return (Criteria) this;
         }
 
-        public Criteria andRequireTypeGreaterThanOrEqualTo(Integer value) {
+        public Criteria andRequireTypeGreaterThanOrEqualTo(String value) {
             addCriterion("require_type >=", value, "requireType");
             return (Criteria) this;
         }
 
-        public Criteria andRequireTypeLessThan(Integer value) {
+        public Criteria andRequireTypeLessThan(String value) {
             addCriterion("require_type <", value, "requireType");
             return (Criteria) this;
         }
 
-        public Criteria andRequireTypeLessThanOrEqualTo(Integer value) {
+        public Criteria andRequireTypeLessThanOrEqualTo(String value) {
             addCriterion("require_type <=", value, "requireType");
             return (Criteria) this;
         }
 
-        public Criteria andRequireTypeIn(List<Integer> values) {
+        public Criteria andRequireTypeLike(String value) {
+            addCriterion("require_type like", value, "requireType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequireTypeNotLike(String value) {
+            addCriterion("require_type not like", value, "requireType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequireTypeIn(List<String> values) {
             addCriterion("require_type in", values, "requireType");
             return (Criteria) this;
         }
 
-        public Criteria andRequireTypeNotIn(List<Integer> values) {
+        public Criteria andRequireTypeNotIn(List<String> values) {
             addCriterion("require_type not in", values, "requireType");
             return (Criteria) this;
         }
 
-        public Criteria andRequireTypeBetween(Integer value1, Integer value2) {
+        public Criteria andRequireTypeBetween(String value1, String value2) {
             addCriterion("require_type between", value1, value2, "requireType");
             return (Criteria) this;
         }
 
-        public Criteria andRequireTypeNotBetween(Integer value1, Integer value2) {
+        public Criteria andRequireTypeNotBetween(String value1, String value2) {
             addCriterion("require_type not between", value1, value2, "requireType");
             return (Criteria) this;
         }

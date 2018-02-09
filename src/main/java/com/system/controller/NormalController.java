@@ -75,6 +75,10 @@ public class NormalController {
     @Resource(name = "pushMessageServiceImpl")
     private PushMessageService pushMessageService;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Resource(name = "softwareRequirementsServiceImpl")
+    private SoftwareRequirementsService softwareRequirementsService;
+
     @Autowired
     private CreatePushUtil createPushUtil;
 
@@ -1530,6 +1534,835 @@ public class NormalController {
         map.put("appliDeptCode",viewEmployeeMiPsd.getDeptCode());
         return map;
 
+    }
+
+    //endregion
+    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<软件需求操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    //region
+    // 软件需求显示
+    @RequestMapping("/showSoftwareRequirements")
+    public String showSoftwareRequirements(Model model, Integer page) throws Exception {
+        //当前操作对象
+        Subject subject = SecurityUtils.getSubject();
+        //页码对象初始化
+        PagingVO pagingVO = new PagingVO();
+        if (page == null || page == 0) {
+            pagingVO.setToPageNo(1);
+        } else {
+            pagingVO.setToPageNo(page);
+        }
+        SoftwareRequirementsList softwareRequirementsList = new SoftwareRequirementsList();
+        softwareRequirementsList.setSubject(subject);
+        softwareRequirementsList.setPagingVO(pagingVO);
+        SoftwareRequirementsList result = this.getSoftwareRequirementsList(softwareRequirementsList);
+        model.addAttribute("softwareRequirementsList", result.getSoftwareRequirementsList());
+        model.addAttribute("pagingVO", result.getPagingVO());
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
+
+        return "normal/showSoftwareRequirements";
+    }
+
+    // 获取软件需求列表
+    public SoftwareRequirementsList getSoftwareRequirementsList(SoftwareRequirementsList softwareRequirementsList) throws Exception{
+
+        //获取当前操作对象
+        Subject subject = softwareRequirementsList.getSubject();
+        //获取当前页码对象
+        PagingVO pagingVO = softwareRequirementsList.getPagingVO();
+        //初始化结果对象
+        List<SoftwareRequirementsCustom> list;
+
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+
+        if (subject.hasRole("examiner")) {
+            //监督组
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(softwareRequirementsService.getCountSoftwareRequirements());
+                //获取结果
+                list = softwareRequirementsService.findByPaging(pagingVO.getCurentPageNo());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            softwareRequirementsList.setPagingVO(pagingVO);
+            softwareRequirementsList.setSoftwareRequirementsList(list);
+        }else if (subject.hasRole("dpdean")) {
+            //主管院长组
+            //封装搜索条件
+            Map<String, Object> map =new HashMap<String, Object>();
+            map.put("pagingVO",pagingVO);
+            map.put("dept",viewEmployeeMiPsd.getDeptCode());
+            map.put("code",viewEmployeeMiPsd.getCode());
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(
+                        softwareRequirementsService.getCountSoftwareRequirementsOfdpdean(
+                                viewEmployeeMiPsd.getDeptCode(),viewEmployeeMiPsd.getCode()));
+                //获取结果
+                list = softwareRequirementsService.findByDpdeanPaging(map);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            softwareRequirementsList.setPagingVO(pagingVO);
+            softwareRequirementsList.setSoftwareRequirementsList(list);
+        }else if (subject.hasRole("software")) {
+            //软件组
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(softwareRequirementsService.getCountSoftwareRequirements());
+                //获取结果
+                list = softwareRequirementsService.findByPaging(pagingVO.getCurentPageNo());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            softwareRequirementsList.setPagingVO(pagingVO);
+            softwareRequirementsList.setSoftwareRequirementsList(list);
+        }else if (subject.hasRole("alldean")) {
+            //院长
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(softwareRequirementsService.getCountSoftwareRequirements());
+                //获取结果
+                list = softwareRequirementsService.findByPaging(pagingVO.getCurentPageNo());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            softwareRequirementsList.setPagingVO(pagingVO);
+            softwareRequirementsList.setSoftwareRequirementsList(list);
+        }else if (subject.hasRole("infodean")) {
+            //信息主管院长
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(softwareRequirementsService.getCountSoftwareRequirements());
+                //获取结果
+                list = softwareRequirementsService.findByPaging(pagingVO.getCurentPageNo());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            softwareRequirementsList.setPagingVO(pagingVO);
+            softwareRequirementsList.setSoftwareRequirementsList(list);
+        }else{
+            //普通用户
+            //封装搜索条件
+            Map<String, Object> map =new HashMap<String, Object>();
+            map.put("pagingVO",pagingVO);
+            map.put("dept",viewEmployeeMiPsd.getDeptCode());
+            try {
+                //设置总页数
+                pagingVO.setTotalCount(
+                        softwareRequirementsService.getCountSoftwareRequirementsOfDepart(
+                                viewEmployeeMiPsd.getDeptCode()));
+                //获取结果
+                list = softwareRequirementsService.findByPagingOfDepart(map);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            softwareRequirementsList.setPagingVO(pagingVO);
+            softwareRequirementsList.setSoftwareRequirementsList(list);
+        }
+        return softwareRequirementsList;
+    }
+
+    // 添加软件需求
+    @RequestMapping(value = "/addSoftwareRequirements", method = {RequestMethod.POST})
+    public String addSoftwareRequirementsCustom(SoftwareRequirementsCustom softwareRequirementsCustom,Model model,HttpServletRequest request) throws Exception{
+        //获取当前用户
+        Subject subject = SecurityUtils.getSubject();
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+
+        //设置问题初始化时间
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+        //设置初始状态
+        softwareRequirementsCustom.setFlag(0);
+        //设置需求反馈时间
+        softwareRequirementsCustom.setApplicantTime(dateString);
+        //设置需求编号(随机生成)
+        softwareRequirementsCustom.setRequireNo( String.valueOf((int)((Math.random()*9+1)*100000)));
+        //设置申请部门编码
+        softwareRequirementsCustom.setDeptCode(viewEmployeeMiPsd.getDeptCode());
+        //设置反馈人工号
+        softwareRequirementsCustom.setApplicantId(viewEmployeeMiPsd.getCode());
+        //设置紧急标识位
+        softwareRequirementsCustom.setFaultUrgent(0);
+        //设置软件组可处理标识
+        softwareRequirementsCustom.setGroupVisible(0);
+        //设置院领导审核标识
+        softwareRequirementsCustom.setHighApproved(0);
+        //设置最终审批结果
+        softwareRequirementsCustom.setApprovedFlag(0);
+        //设置主管院长审核标识
+        softwareRequirementsCustom.setHighLeaderApproved1(0);
+        //设置主管院长审批结果
+        softwareRequirementsCustom.setHighLeaderFlag1(0);
+
+        //保存该记录相关数据以便产生推送
+        try {
+            //创建消息
+            PushMessage preMessage = createPushUtil.createPreMessage(softwareRequirementsCustom.getApplicantId(),"0","4",
+                    "3","41");
+            Boolean result = softwareRequirementsService.saveAndPre(softwareRequirementsCustom, preMessage);
+            if (!result) {
+                model.addAttribute("message", "抱歉，软件需求保存失败");
+                return "error";
+            }
+            //向指定组推送消息
+            messagePushUtil.groupPushSingle(preMessage,"examiner");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //重定向
+        return "redirect:/normal/showSoftwareRequirements";
+    }
+
+    // 添加软件需求（页面跳转）
+    @RequestMapping(value = "/addSoftwareRequirements", method = {RequestMethod.GET})
+    public String addSoftwareRequirementsCustomUI(Model model) throws Exception {
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
+        return "normal/addSoftwareRequirements";
+    }
+
+    // 修改软件需求页面显示
+    @RequestMapping(value = "/editSoftwareRequirements", method = {RequestMethod.GET})
+    public String editSoftwareRequirements(Integer id, Model model) throws Exception {
+        if (id == null) {
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        SoftwareRequirementsCustom softwareRequirementsCustom = softwareRequirementsService.findById(id);
+        if (softwareRequirementsCustom == null) {
+            throw new CustomException("抱歉，未找到该软件需求相关信息");
+        }
+
+        model.addAttribute("softwareRequirements", softwareRequirementsCustom);
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
+
+        return "normal/editSoftwareRequirements";
+    }
+
+    // 查看软件需求页面显示
+    @RequestMapping(value = "/checkSoftwareRequirements", method = {RequestMethod.GET})
+    public String checkSoftwareRequirements(Integer id, Model model) throws Exception {
+        if (id == null) {
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        SoftwareRequirementsCustom softwareRequirementsCustom = softwareRequirementsService.findById(id);
+        if (softwareRequirementsCustom == null) {
+            throw new CustomException("抱歉，未找到该软件需求相关信息");
+        }
+
+        model.addAttribute("softwareRequirements", softwareRequirementsCustom);
+        //返回角色对象
+        model.addAttribute("roles",this.getRoles(subject));
+
+        return "normal/checkSoftwareRequirements";
+    }
+
+    // 处理软件需求
+    @RequestMapping(value = "/dealSoftwareRequirements")
+    public String dealSoftwareRequirements (HttpServletRequest request) throws Exception{
+        Integer id;
+        try {
+            id = Integer.parseInt(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        //ID为空则返回
+        if (id == null) {
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        //获取当前物资申购问题
+        SoftwareRequirementsCustom softwareRequirementsCustom = softwareRequirementsService.findById(id);
+        if (softwareRequirementsCustom == null) {
+            throw new CustomException("抱歉，未找到该软件需求相关信息");
+        }
+        //相关数据转换
+        String handling_comments = request.getParameter("handling_comments");
+        String info_comments = request.getParameter("info_comments");
+        String acceptance_description = request.getParameter("acceptance_description");
+        String feedback = request.getParameter("feedback");
+        int time_required = 0;
+        int acceptance_type = 0;
+        try {
+            time_required = Integer.parseInt(request.getParameter("time_required"));
+            acceptance_type = Integer.parseInt(request.getParameter("acceptance_type"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        //封装数据
+        Map<String, Object> thisData =new HashMap<String, Object>();
+        thisData.put("handling_comments",handling_comments);
+        thisData.put("info_comments",info_comments);
+        thisData.put("acceptance_description",acceptance_description);
+        thisData.put("feedback",feedback);
+        thisData.put("time_required",time_required);
+        thisData.put("acceptance_type",acceptance_type);
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        SoftwareRequirementsDeal softwareRequirementsDeal = new SoftwareRequirementsDeal();
+        softwareRequirementsDeal.setMap(thisData);
+        softwareRequirementsDeal.setSoftwareRequirementsCustom(softwareRequirementsCustom);
+        softwareRequirementsDeal.setSubject(subject);
+
+        SoftwareRequirementsDeal result = this.softwareRequirementsDeal(softwareRequirementsDeal);
+        return result.getReturnAction();
+    }
+
+    // 处理软件需求操作
+    public  SoftwareRequirementsDeal softwareRequirementsDeal(SoftwareRequirementsDeal softwareRequirementsDeal)throws Exception{
+        Map<String, Object> thisData = softwareRequirementsDeal.getMap();
+        Subject subject = softwareRequirementsDeal.getSubject();
+        SoftwareRequirementsCustom softwareRequirementsCustom = softwareRequirementsDeal.getSoftwareRequirementsCustom();
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+
+        String handling_comments = thisData.get("handling_comments").toString();
+        String info_comments = thisData.get("info_comments").toString();
+        String acceptance_description = thisData.get("acceptance_description").toString();
+        String feedback = thisData.get("feedback").toString();
+        int time_required = Integer.parseInt(thisData.get("time_required").toString());
+        int acceptance_type = Integer.parseInt(thisData.get("acceptance_type").toString());
+
+        if(subject.hasRole("software")){
+            if(softwareRequirementsCustom.getFlag() == 0 || softwareRequirementsCustom.getFlag() == 1){
+                //软件组可处理标识位为1时才允许软件组处理
+                if(softwareRequirementsCustom.getGroupVisible() == 1){
+                    softwareRequirementsCustom.setFlag(1);
+                    //更新该软件需求问题数据
+                    softwareRequirementsCustom.setHandlingComments(handling_comments);
+                    softwareRequirementsCustom.setInfoComments(info_comments);
+                    softwareRequirementsCustom.setTimeRequired(time_required);
+
+                    //设置反馈时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    //将反馈插入空白反馈字段
+                    if(softwareRequirementsCustom.getFeedbackId1() == null){
+                        softwareRequirementsCustom.setFeedbackContent1(feedback);
+                        softwareRequirementsCustom.setFeedbackId1(viewEmployeeMiPsd.getCode());
+                        softwareRequirementsCustom.setFeedbackName1(viewEmployeeMiPsd.getName());
+                        softwareRequirementsCustom.setFeedbackTime1(dateString);
+                    }else if(softwareRequirementsCustom.getFeedbackId2() == null){
+                        softwareRequirementsCustom.setFeedbackContent2(feedback);
+                        softwareRequirementsCustom.setFeedbackId2(viewEmployeeMiPsd.getCode());
+                        softwareRequirementsCustom.setFeedbackName2(viewEmployeeMiPsd.getName());
+                        softwareRequirementsCustom.setFeedbackTime2(dateString);
+                    }else if(softwareRequirementsCustom.getFeedbackId3() == null){
+                        softwareRequirementsCustom.setFeedbackContent3(feedback);
+                        softwareRequirementsCustom.setFeedbackId3(viewEmployeeMiPsd.getCode());
+                        softwareRequirementsCustom.setFeedbackName3(viewEmployeeMiPsd.getName());
+                        softwareRequirementsCustom.setFeedbackTime3(dateString);
+                    }else if(softwareRequirementsCustom.getFeedbackId4() == null){
+                        softwareRequirementsCustom.setFeedbackContent4(feedback);
+                        softwareRequirementsCustom.setFeedbackId4(viewEmployeeMiPsd.getCode());
+                        softwareRequirementsCustom.setFeedbackName4(viewEmployeeMiPsd.getName());
+                        softwareRequirementsCustom.setFeedbackTime4(dateString);
+                    }else if(softwareRequirementsCustom.getFeedbackId5() == null){
+                        softwareRequirementsCustom.setFeedbackContent5(feedback);
+                        softwareRequirementsCustom.setFeedbackId5(viewEmployeeMiPsd.getCode());
+                        softwareRequirementsCustom.setFeedbackName5(viewEmployeeMiPsd.getName());
+                        softwareRequirementsCustom.setFeedbackTime5(dateString);
+                    }
+                    softwareRequirementsService.updataById(softwareRequirementsCustom.getId(), softwareRequirementsCustom);
+                    //保存该记录相关数据以便产生推送
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(softwareRequirementsCustom.getApplicantId(),"0","4",
+                                "2","46");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向申报人推送消息
+                        messagePushUtil.specifiedPushSingle(pushMessage,softwareRequirementsCustom.getApplicantId());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    softwareRequirementsDeal.setReturnAction("redirect:editSoftwareRequirements?id=" + softwareRequirementsCustom.getId());
+                }else{
+                    softwareRequirementsDeal.setReturnAction("redirect:editSoftwareRequirements?id=" + softwareRequirementsCustom.getId());
+                }
+
+            }else{
+                softwareRequirementsDeal.setReturnAction("redirect:editSoftwareRequirements?id=" + softwareRequirementsCustom.getId());
+            }
+        }else if(subject.hasRole("examiner")) {
+            if (softwareRequirementsCustom.getFlag() == 0 || softwareRequirementsCustom.getFlag() == 1) {
+                softwareRequirementsCustom.setFlag(1);
+                softwareRequirementsCustom.setGroupVisible(1);
+                //更新该软件需求问题数据
+                softwareRequirementsCustom.setHandlingComments(handling_comments);
+                softwareRequirementsCustom.setInfoComments(info_comments);
+                softwareRequirementsCustom.setTimeRequired(time_required);
+
+                softwareRequirementsService.updataById(softwareRequirementsCustom.getId(), softwareRequirementsCustom);
+                //保存该记录相关数据以便产生推送
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(softwareRequirementsCustom.getApplicantId(), "0", "4",
+                            "2", "42");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向申报人推送消息
+                    messagePushUtil.specifiedPushSingle(pushMessage, softwareRequirementsCustom.getApplicantId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //保存该记录相关数据以便产生推送
+                try {
+                    //创建消息
+                    PushMessage preMessage = createPushUtil.createPreMessage(softwareRequirementsCustom.getApplicantId(),"0","4",
+                            "3","49");
+                    try {
+                        pushMessageService.save(preMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向处理组推送消息
+                    messagePushUtil.groupPushSingle(preMessage,"software");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                softwareRequirementsDeal.setReturnAction("redirect:editSoftwareRequirements?id=" + softwareRequirementsCustom.getId());
+            } else {
+                softwareRequirementsDeal.setReturnAction("redirect:editSoftwareRequirements?id=" + softwareRequirementsCustom.getId());
+            }
+        }
+        return softwareRequirementsDeal;
+    }
+
+    // 软件需求处理完成
+    @RequestMapping(value = "/completeSoftwareRequirements")
+    public String completeSoftwareRequirements (HttpServletRequest request) throws Exception{
+        Integer id;
+        try {
+            id = Integer.parseInt(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        //ID为空则返回
+        if (id == null) {
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        //获取当前物资申购问题
+        SoftwareRequirementsCustom softwareRequirementsCustom = softwareRequirementsService.findById(id);
+        if (softwareRequirementsCustom == null) {
+            throw new CustomException("抱歉，未找到该软件需求相关信息");
+        }
+        //相关数据转换
+        String handling_comments = request.getParameter("handling_comments");
+        String info_comments = request.getParameter("info_comments");
+        String acceptance_description = request.getParameter("acceptance_description");
+        String feedback = request.getParameter("feedback");
+        int time_required = 0;
+        int acceptance_type = 0;
+        try {
+            time_required = Integer.parseInt(request.getParameter("time_required"));
+            acceptance_type = Integer.parseInt(request.getParameter("acceptance_type"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        //封装数据
+        Map<String, Object> thisData =new HashMap<String, Object>();
+        thisData.put("handling_comments",handling_comments);
+        thisData.put("info_comments",info_comments);
+        thisData.put("acceptance_description",acceptance_description);
+        thisData.put("feedback",feedback);
+        thisData.put("time_required",time_required);
+        thisData.put("acceptance_type",acceptance_type);
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        SoftwareRequirementsComplete softwareRequirementsComplete = new SoftwareRequirementsComplete();
+        softwareRequirementsComplete.setMap(thisData);
+        softwareRequirementsComplete.setSoftwareRequirementsCustom(softwareRequirementsCustom);
+        softwareRequirementsComplete.setSubject(subject);
+
+        SoftwareRequirementsComplete result = this.softwareRequirementsComplete(softwareRequirementsComplete);
+
+
+        return result.getReturnAction();
+    }
+
+    // 软件需求处理完成操作
+    public  SoftwareRequirementsComplete softwareRequirementsComplete(SoftwareRequirementsComplete softwareRequirementsComplete)throws Exception{
+        Map<String, Object> thisData = softwareRequirementsComplete.getMap();
+        Subject subject = softwareRequirementsComplete.getSubject();
+        SoftwareRequirementsCustom softwareRequirementsCustom = softwareRequirementsComplete.getSoftwareRequirementsCustom();
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+
+        String handling_comments = thisData.get("handling_comments").toString();
+        String info_comments = thisData.get("info_comments").toString();
+        String acceptance_description = thisData.get("acceptance_description").toString();
+        String feedback = thisData.get("feedback").toString();
+        int time_required = Integer.parseInt(thisData.get("time_required").toString());
+        int acceptance_type = Integer.parseInt(thisData.get("acceptance_type").toString());
+
+        if(subject.hasRole("software")){
+            //软件需求为处理状态时才允许软件组完成
+            if(softwareRequirementsCustom.getFlag() == 1){
+                //软件组可处理标识位为1时才允许软件组处理
+                if(softwareRequirementsCustom.getGroupVisible() == 1){
+                    softwareRequirementsCustom.setFlag(2);
+                    //更新该软件需求问题数据
+                    softwareRequirementsCustom.setHandlingComments(handling_comments);
+                    softwareRequirementsCustom.setInfoComments(info_comments);
+                    softwareRequirementsCustom.setTimeRequired(time_required);
+                    softwareRequirementsCustom.setAcceptanceType(acceptance_type);
+                    softwareRequirementsCustom.setAcceptanceDescription(acceptance_description);
+                    //设置完成时间
+                    Date currentTime = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = formatter.format(currentTime);
+                    softwareRequirementsCustom.setDoneTime(dateString);
+
+                    softwareRequirementsService.updataById(softwareRequirementsCustom.getId(), softwareRequirementsCustom);
+                    //保存该记录相关数据以便产生推送
+                    try {
+                        //创建推送消息
+                        PushMessage pushMessage = createPushUtil.createPreMessage(softwareRequirementsCustom.getApplicantId(),"0","4",
+                                "2","47");
+                        try {
+                            pushMessageService.save(pushMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //向申报人推送消息
+                        messagePushUtil.specifiedPushSingle(pushMessage,softwareRequirementsCustom.getApplicantId());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    softwareRequirementsComplete.setReturnAction("redirect:editSoftwareRequirements?id=" + softwareRequirementsCustom.getId());
+                }else{
+                    softwareRequirementsComplete.setReturnAction("redirect:editSoftwareRequirements?id=" + softwareRequirementsCustom.getId());
+                }
+
+            }else{
+                softwareRequirementsComplete.setReturnAction("redirect:editSoftwareRequirements?id=" + softwareRequirementsCustom.getId());
+            }
+        }else if(subject.hasRole("examiner")) {
+            if (softwareRequirementsCustom.getFlag() != 2 ) {
+                softwareRequirementsCustom.setFlag(2);
+                //更新该软件需求问题数据
+                softwareRequirementsCustom.setHandlingComments(handling_comments);
+                softwareRequirementsCustom.setInfoComments(info_comments);
+                softwareRequirementsCustom.setTimeRequired(time_required);
+                softwareRequirementsCustom.setAcceptanceType(acceptance_type);
+                softwareRequirementsCustom.setAcceptanceDescription(acceptance_description);
+                //设置完成时间
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                softwareRequirementsCustom.setDoneTime(dateString);
+
+                softwareRequirementsService.updataById(softwareRequirementsCustom.getId(), softwareRequirementsCustom);
+                //保存该记录相关数据以便产生推送
+                try {
+                    //创建推送消息
+                    PushMessage pushMessage = createPushUtil.createPreMessage(softwareRequirementsCustom.getApplicantId(),"0","4",
+                            "2","47");
+                    try {
+                        pushMessageService.save(pushMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //向申报人推送消息
+                    messagePushUtil.specifiedPushSingle(pushMessage,softwareRequirementsCustom.getApplicantId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                softwareRequirementsComplete.setReturnAction("redirect:editSoftwareRequirements?id=" + softwareRequirementsCustom.getId());
+            } else {
+                softwareRequirementsComplete.setReturnAction("redirect:editSoftwareRequirements?id=" + softwareRequirementsCustom.getId());
+            }
+        }
+        return softwareRequirementsComplete;
+    }
+
+    // 预推送软件需求页面显示
+    @RequestMapping(value = "/prePushSoftwareRequirements", method = {RequestMethod.GET})
+    public String prePushSoftwareRequirements(HttpServletRequest request, Model modelV) throws Exception {
+
+        Integer requirements_id;
+        try {
+            requirements_id = Integer.parseInt(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            modelV.addAttribute("message", "软件需求记录获取失败");
+            return "error";
+        }
+        String requirements_feedback = request.getParameter("infoComments");
+        //获取院领导列表
+        List<Role> deans = new ArrayList<>();
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        //非审查组不允许推送
+        if(!subject.hasRole("examiner")){
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        try {
+            deans = roleService.findByDean();
+        } catch (Exception e) {
+            e.printStackTrace();
+            modelV.addAttribute("message", "院领导列表获取失败");
+            return "error";
+        }
+        //不更新,发送到 push 进行处理
+        modelV.addAttribute("requirements_id",requirements_id);
+        modelV.addAttribute("requirements_feedback",requirements_feedback);
+        modelV.addAttribute("deans", deans);
+        //返回角色对象
+        modelV.addAttribute("roles",this.getRoles(subject));
+        return "normal/prePushSoftwareRequirements";
+    }
+
+    // 推送软件需求审批
+    @RequestMapping(value = "/pushSoftwareRequirements")
+    public String pushSoftwareRequirements(HttpServletRequest request,Model modelV) throws Exception {
+
+        Integer id;
+        try {
+            id = Integer.parseInt(request.getParameter("requirements_id"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            modelV.addAttribute("message", "物资申购记录获取失败");
+            return "error";
+        }
+        if (id == null) {
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        String feedback = request.getParameter("requirements_feedback");
+        //获取院领导工号
+        String viceDean = request.getParameter("dpDean");
+
+        //获取当前物资申购问题
+        SoftwareRequirementsCustom softwareRequirementsCustom = softwareRequirementsService.findById(id);
+        if (softwareRequirementsCustom == null) {
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
+        }
+        //申购处理完毕不能再推送
+        if(softwareRequirementsCustom.getFlag() == 2){
+            modelV.addAttribute("message", "该申购处理完毕，不能再推送");
+            return "error";
+        }
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        //非审查组不允许推送
+        if(!subject.hasRole("examiner")){
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+        //更新该物资申购问题数据
+        softwareRequirementsCustom.setInfoComments(feedback);
+        softwareRequirementsCustom.setFlag(1);
+        //保存该记录相关数据以便产生推送
+        try {
+            //创建推送消息
+            PushMessage pushMessage = createPushUtil.createPreMessage(softwareRequirementsCustom.getApplicantId(),"0","1",
+                    "2","24");
+            try {
+                pushMessageService.save(pushMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //向申报人推送消息
+            messagePushUtil.specifiedPushSingle(pushMessage,softwareRequirementsCustom.getApplicantId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(!viceDean.equals("-1")){
+            //设置院领导审核标识、分管院长审核标识、分管院长ID
+            softwareRequirementsCustom.setHighApproved(1);
+            softwareRequirementsCustom.setHighLeaderId1(viceDean);
+            softwareRequirementsCustom.setHighLeaderApproved1(1);
+
+            //保存该记录相关数据以便产生推送
+            try {
+                //创建推送消息
+                PushMessage pushMessage = createPushUtil.createPreMessage(viewEmployeeMiPsd.getCode(),"0","1",
+                        "2","48");
+                try {
+                    pushMessageService.save(pushMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                //向分管院长推送消息
+                messagePushUtil.specifiedPushSingle(pushMessage,viceDean);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        softwareRequirementsService.updataById(softwareRequirementsCustom.getId(), softwareRequirementsCustom);
+        //重定向
+        return "redirect:/normal/showSoftwareRequirements";
+    }
+
+    // 软件需求审批拒绝
+    @RequestMapping(value = "/denySoftwareRequirements", method = {RequestMethod.GET})
+    public String denySoftwareRequirements(HttpServletRequest request) throws Exception {
+
+        String feedback = request.getParameter("feedback");
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        if (id == null) {
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        SoftwareRequirementsCustom softwareRequirementsCustom = softwareRequirementsService.findById(id);
+        if (softwareRequirementsCustom == null) {
+            throw new CustomException("抱歉，未找到该软件需求相关信息");
+        }
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        //权限不对则返回
+        if(!subject.hasRole("dpdean")){
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+
+        //分管院长审批
+        softwareRequirementsCustom.setApprovedFlag(2);
+        softwareRequirementsCustom.setHighLeaderReback1(feedback);
+        softwareRequirementsCustom.setHighLeaderName1(viewEmployeeMiPsd.getName());
+        softwareRequirementsCustom.setHighLeaderFlag1(2);
+        softwareRequirementsCustom.setFlag(2);
+        //设置完成时间
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+        softwareRequirementsCustom.setDoneTime(dateString);
+        softwareRequirementsService.updataById(softwareRequirementsCustom.getId(), softwareRequirementsCustom);
+
+        //保存该记录相关数据以便产生推送
+        try {
+            //创建推送消息
+            PushMessage pushMessage = createPushUtil.createPreMessage(softwareRequirementsCustom.getApplicantId(),"0","1",
+                    "4","44");
+            try {
+                pushMessageService.save(pushMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            //向申报人推送消息
+            messagePushUtil.specifiedPushSingle(pushMessage,softwareRequirementsCustom.getApplicantId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return "redirect:editSoftwareRequirements?id=" + softwareRequirementsCustom.getId();
+    }
+
+    // 软件需求审批通过
+    @RequestMapping(value = "/passSoftwareRequirements", method = {RequestMethod.GET})
+    public String passSoftwareRequirements(HttpServletRequest request) throws Exception {
+
+        String feedback = request.getParameter("feedback");
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        if (id == null) {
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        SoftwareRequirementsCustom softwareRequirementsCustom = softwareRequirementsService.findById(id);
+        if (softwareRequirementsCustom == null) {
+            throw new CustomException("抱歉，未找到该软件需求相关信息");
+        }
+        //获取当前操作用户对象
+        Subject subject = SecurityUtils.getSubject();
+        //权限不对则返回
+        if(!subject.hasRole("dpdean")){
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        ViewEmployeeMiPsd viewEmployeeMiPsd = this.subjectToViewEmployeeMiPsd(subject);
+
+        //分管院长审批
+        softwareRequirementsCustom.setApprovedFlag(1);
+        softwareRequirementsCustom.setHighLeaderReback1(feedback);
+        softwareRequirementsCustom.setHighLeaderName1(viewEmployeeMiPsd.getName());
+        softwareRequirementsCustom.setHighLeaderFlag1(1);
+        softwareRequirementsCustom.setFlag(1);
+        //软件组可处理标识位 置1
+        softwareRequirementsCustom.setGroupVisible(1);
+
+        //设置完成时间
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+        softwareRequirementsCustom.setDoneTime(dateString);
+        softwareRequirementsService.updataById(softwareRequirementsCustom.getId(), softwareRequirementsCustom);
+
+        //保存该记录相关数据以便产生推送
+        try {
+            //创建推送消息
+            PushMessage pushMessage = createPushUtil.createPreMessage(softwareRequirementsCustom.getApplicantId(),"0","1",
+                    "4","45");
+            try {
+                pushMessageService.save(pushMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+            //向申报人推送消息
+            messagePushUtil.specifiedPushSingle(pushMessage,softwareRequirementsCustom.getApplicantId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        try {
+            //创建推送消息
+            PushMessage pushMessage = createPushUtil.createPreMessage(softwareRequirementsCustom.getApplicantId(),"0","1",
+                    "0","49");
+            try {
+                pushMessageService.save(pushMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //向处理组推送消息
+            messagePushUtil.groupPushSingle(pushMessage,"software");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:editSoftwareRequirements?id=" + softwareRequirementsCustom.getId();
+    }
+
+    // 打印软件需求表单
+    @RequestMapping(value = "/printSoftwareRequirements", method = {RequestMethod.GET})
+    public String printSoftwareRequirements(Integer id, Model model) throws Exception {
+        if (id == null) {
+            return "redirect:/normal/showSoftwareRequirements";
+        }
+        SoftwareRequirements softwareRequirements = softwareRequirementsService.findById(id);
+        if (softwareRequirements == null) {
+            throw new CustomException("抱歉，未找到该物资申购相关信息");
+        }
+
+        model.addAttribute("softwareRequirements", softwareRequirements);
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
+
+
+        return "normal/printSoftwareRequirements";
     }
 
     //endregion

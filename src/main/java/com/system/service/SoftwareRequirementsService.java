@@ -1,5 +1,6 @@
 package com.system.service;
 
+import com.system.po.MaterialApplicationCustom;
 import com.system.po.PushMessage;
 import com.system.po.SoftwareRequirementsCustom;
 
@@ -49,4 +50,8 @@ public interface SoftwareRequirementsService {
 
     //根据id获取软件需求信息
     SoftwareRequirementsCustom findById(Integer id) throws Exception;
+
+    //软件需求信息搜索结果(分页有缺陷，未分页)
+    List<SoftwareRequirementsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception;
+
 }

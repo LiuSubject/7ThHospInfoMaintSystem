@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" action="/admin/editSoftwareRequirements" id="editfrom"
+                    <form class="form-horizontal" role="form" action="/normal/editSoftwareRequirements" id="editfrom"
                           method="post">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">科室：</label>
@@ -336,19 +336,14 @@
 
     $("#acceptanceType option")[${softwareRequirements.acceptanceType}].selected = true;
 
-    //可处理标识
-    if (${softwareRequirements.groupVisible == 1 && softwareRequirements.flag != 2}) {
-        $("#softwareRequirementsName").addClass("Urgent");
-    }
-
     //返回按钮点击
     $('#returnListBtn').on('click', function () {
-        window.location.href = "/admin/showSoftwareRequirements";
+        window.location.href = "/normal/showSoftwareRequirements";
     });
 
     //打印按钮点击
     $('#printBtn').on('click', function () {
-        var herf = "/admin/printSoftwareRequirements?id="+${softwareRequirements.id};
+        var herf = "/normal/printSoftwareRequirements?id="+${softwareRequirements.id};
         window.location.href = herf;
     });
 

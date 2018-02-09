@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" action="/admin/editSoftwareRequirements" id="editfrom"
+                    <form class="form-horizontal" role="form" action="/normal/editSoftwareRequirements" id="editfrom"
                           method="post">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">科室：</label>
@@ -168,9 +168,24 @@
                                 </div>
                             </div>
                         </c:if>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">回复：</label>
+                            <div class="col-sm-8">
+                                <textarea  type="text" class="form-control" rows="5" id="feedback" name="feedback"></textarea>
+                            </div>
+                        </div>
                         <div class="form-group" style="text-align: center">
-                            <button class="btn btn-default" id="printBtn" type="button">打印预览</button>
-                            <button class="btn btn-default" id="returnListBtn" type="button">返回</button>
+                            <c:if test="${softwareRequirements.flag != 2}">
+                                <c:if test='${roles.indexOf("dpdean") != -1}'>
+                                    <%--院领导审批按钮--%>
+                                    <c:if test="${softwareRequirements.highApproved == 1
+									    && softwareRequirements.approvedFlag == 0}">
+                                        <button class="btn btn-danger" type="button" id="denyBtn">拒绝</button>
+                                        <button class="btn btn-success" type="button" id="passBtn">通过</button>
+                                    </c:if>
+                                </c:if>
+                            </c:if>
+                            <button class="btn btn-default" type="button" id="returnListBtn">返回</button>
                         </div>
                     </form>
                     <div id="slideToggle">
@@ -336,27 +351,38 @@
 
     $("#acceptanceType option")[${softwareRequirements.acceptanceType}].selected = true;
 
-    //可处理标识
-    if (${softwareRequirements.groupVisible == 1 && softwareRequirements.flag != 2}) {
-        $("#softwareRequirementsName").addClass("Urgent");
-    }
-
     //返回按钮点击
     $('#returnListBtn').on('click', function () {
-        window.location.href = "/admin/showSoftwareRequirements";
+        window.location.href = "/normal/showSoftwareRequirements";
     });
 
-    //打印按钮点击
-    $('#printBtn').on('click', function () {
-        var herf = "/admin/printSoftwareRequirements?id="+${softwareRequirements.id};
-        window.location.href = herf;
-    });
 
     //时间轴缩放
     $("#slideToggle").click(function() {
         $("#timeLine").slideToggle();
     });
 
+
+    //拒绝按钮点击
+    $('#denyBtn').one('click', function () {
+        var reback = document.getElementById("feedback").value;
+        window.location.href =encodeURI( "/normal/denySoftwareRequirements?id=${softwareRequirements.id}&feedback="
+            + reback);
+    });
+
+
+    //通过按钮点击
+    $('#passBtn').one('click', function () {
+        var reback = document.getElementById("feedback").value;
+        window.location.href =encodeURI( "/normal/passSoftwareRequirements?id=${softwareRequirements.id}&feedback="
+            + reback);
+    });
+
+
+    //返回按钮点击
+    $('#returnListBtn').on('click', function () {
+        window.location.href = "/normal/showSoftwareRequirements";
+    });
 
 </script>
 </html>
