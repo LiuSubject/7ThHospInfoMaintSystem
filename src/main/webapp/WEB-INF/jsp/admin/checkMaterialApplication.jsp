@@ -348,7 +348,7 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(4)").addClass("active");
+
 
     //可处理标识
     if (${materialApplication.groupVisible == 1}) {

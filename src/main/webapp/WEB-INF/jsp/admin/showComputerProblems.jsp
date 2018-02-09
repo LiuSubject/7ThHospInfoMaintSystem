@@ -148,8 +148,8 @@
 	</div>
 </body>
 	<script type="text/javascript">
-		<%--设置菜单中--%>
-		$("#nav li:nth-child(1)").addClass("active");
+
+
         <c:if test="${pagingVO != null}">
         if (${pagingVO.curentPageNo} == ${pagingVO.totalCount}) {
             $(".pagination li:last-child").addClass("disabled")

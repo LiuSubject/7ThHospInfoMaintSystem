@@ -243,7 +243,7 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(2)").addClass("active");
+
 
     //标红处理
     if (${computerProblems.faultUrgent == 1}) {

@@ -112,8 +112,8 @@
 </div>
 </body>
 <script type="text/javascript">
-    <%--设置菜单中--%>
-    $("#nav li:nth-child(4)").addClass("active");
+
+
 
     //防止数据重复提交
     $("#formSubmit").one("click",function(){

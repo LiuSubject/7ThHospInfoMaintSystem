@@ -345,7 +345,7 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(8)").addClass("active");
+
 
     $("#acceptanceType option")[${softwareRequirements.acceptanceType}].selected = true;
 

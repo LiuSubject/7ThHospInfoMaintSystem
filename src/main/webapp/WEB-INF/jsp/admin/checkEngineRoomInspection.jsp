@@ -305,7 +305,7 @@
 </body>
 <script type="text/javascript">
     //改变菜单状态
-    $("#nav li:nth-child(6)").addClass("active");
+
 
     //选项调整
     /*	等同于：
