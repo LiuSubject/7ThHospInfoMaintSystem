@@ -53,4 +53,34 @@
         ORDER by applicant_time desc, flag asc
         limit #{toPageNo}, #{pageSize}
     </select>
+    <select id="findByDpdeanPaging" parameterType="map" resultMap="BaseResultMap">
+        select software_requirements.*
+        from software_requirements
+        WHERE dept_code LIKE concat(concat('%',#{dept}),'%')
+        OR high_leader_id_1 LIKE concat(concat('%',#{code}),'%')
+        ORDER by applicant_time desc, flag asc
+        limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
+    </select>
+    <select id="findByPagingOfDepart" parameterType="map" resultMap="BaseResultMap">
+        select software_requirements.*
+        from software_requirements
+        WHERE dept_code LIKE concat(concat('%',#{dept}),'%')
+        ORDER by applicant_time desc, flag asc
+        limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
+    </select>
+    <select id="paginationOfSearchResults" parameterType="map" resultMap="BaseResultMap">
+        select software_requirements.* from software_requirements
+        <where>
+            <if test="dept != null and dept != ''">
+                AND dept LIKE concat(concat('%',#{dept}),'%')
+            </if>
+            <if test="applicant != null and applicant != ''">
+                OR applicant_name LIKE concat(concat('%',#{applicant}),'%')
+            </if>
+            <if test="flag == 0 or flag == 1 or flag == 2" >
+                OR flag = #{flag}
+            </if>
+        </where>
+        ORDER by applicant_time desc, flag asc
+    </select>
 </mapper>

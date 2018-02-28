@@ -46,15 +46,15 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">申购推送</h2>
+                        <h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">需求推送</h2>
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" action="/admin/pushMaterialApplication" method="post" id="editfrom">
+                    <form class="form-horizontal" role="form" action="/normal/pushSoftwareRequirements" method="post" id="editfrom">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">分管院长：</label>
+                            <label class="col-sm-2 control-label">主管院长：</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="viceDean" id="viceDean">
+                                <select class="form-control" name="dpDean" id="dpDean">
                                     <option value="-1">不推送</option>
                                     <c:forEach  items="${deans}" var="item">
                                         <c:if test='${item.rolename.indexOf("dpdean") != -1}'>
@@ -64,35 +64,9 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">信息主管副院长：</label>
-                            <div class="col-sm-8">
-                                <select class="form-control" name="infoVice" id="infoVice">
-                                    <option value="-1">不推送</option>
-                                    <c:forEach  items="${deans}" var="item">
-                                        <c:if test='${item.rolename.indexOf("infodean") != -1}'>
-                                            <option value="${item.roleid}">${item.realName}</option>
-                                        </c:if>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">院长：</label>
-                            <div class="col-sm-8">
-                                <select class="form-control" name="dean" id="dean">
-                                    <option value="-1">不推送</option>
-                                    <c:forEach  items="${deans}" var="item">
-                                        <c:if test='${item.rolename.indexOf("alldean") != -1}'>
-                                            <option value="${item.roleid}">${item.realName}</option>
-                                        </c:if>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </div>
                         <%--数据中转--%>
-                        <input type="text" id="material_id" name="material_id" value="${material_id}" style="display:none">
-                        <input type="text" id="material_feedback" name="material_feedback" value="${material_feedback}" style="display:none">
+                        <input type="text" id="material_id" name="requirements_id" value="${requirements_id}" style="display:none">
+                        <input type="text" id="material_feedback" name="requirements_feedback" value="${requirements_feedback}" style="display:none">
                         <div class="form-group" style="text-align: center">
                             <button class="btn btn-default" type="button" id="formSubmit">推送</button>
                             <button class="btn btn-default" type="reset">返回</button>

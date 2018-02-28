@@ -16,6 +16,11 @@
         <li><a href="/admin/showEngineRoomInspection">巡检信息</a></li>
         <li><a href="/admin/addEngineRoomInspection">机房巡检</a></li>
         </c:if>
+        <c:if test= '${roles.indexOf("software") != -1 || roles.indexOf("examiner") != -1}'>
+        <%--非软件组及审查组不可见--%>
+        <li><a href="/admin/showSoftwareRequirements">需求列表</a></li>
+        <li><a href="/admin/addSoftwareRequirements">软件需求</a></li>
+        </c:if>
         </c:if>
         <li><a href="/logout">退出系统<sapn class="glyphicon glyphicon-log-out pull-right" /></a></li>
     </ul>

@@ -90,7 +90,7 @@
     from material_application
     WHERE departCode LIKE concat(concat('%',#{deptName}),'%')
     OR high_leader_id_1 LIKE concat(concat('%',#{dpCode}),'%')
-    ORDER by flag asc,high_approved desc, use_date desc
+    ORDER by create_time desc, flag asc, high_approved desc
     limit #{pagingVO.toPageNo}, #{pagingVO.pageSize}
   </select>
   <select id="paginationOfSearchResults" parameterType="map" resultMap="BaseResultMap">

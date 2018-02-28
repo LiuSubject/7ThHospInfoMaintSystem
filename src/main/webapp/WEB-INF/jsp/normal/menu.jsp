@@ -7,6 +7,8 @@
         <li><a href="/normal/addComputerProblems">故障申报</a></li>
         <li><a href="/normal/showMaterialApplication">申购列表</a></li>
         <li><a href="/normal/addMaterialApplication">物资申购</a></li>
+        <li><a href="/normal/showSoftwareRequirements">需求列表</a></li>
+        <li><a href="/normal/addSoftwareRequirements">软件需求</a></li>
         <c:if test= '${roles != null}'>
         <c:if test= '${roles.indexOf("infodean") != -1 || roles.indexOf("alldean") != -1}'>
             <li><a href="/normal/showEngineRoomInspection">巡检信息</a></li>

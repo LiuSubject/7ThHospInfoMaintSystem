@@ -292,7 +292,7 @@
 </body>
 <script type="text/javascript">
     //改变菜单状态
-    $("#nav li:nth-child(6)").addClass("active");
+
 
     //选项调整
     /*	等同于：
@@ -302,6 +302,23 @@
              }
          }*/
 
+    $("#emr option")[${engineRoomInspection.emr}].selected = true;
+    $("#his option")[${engineRoomInspection.his}].selected = true;
+    $("#lis option")[${engineRoomInspection.lis}].selected = true;
+    $("#pacs option")[${engineRoomInspection.pacs}].selected = true;
+    $("#xny option")[${engineRoomInspection.xny}].selected = true;
+    $("#oa option")[${engineRoomInspection.oa}].selected = true;
+    $("#yb option")[${engineRoomInspection.yb}].selected = true;
+    $("#qyw option")[${engineRoomInspection.qyw}].selected = true;
+    $("#yy option")[${engineRoomInspection.yy}].selected = true;
+    $("#jk option")[${engineRoomInspection.jk}].selected = true;
+    $("#hiscc option")[${engineRoomInspection.hiscc}].selected = true;
+    $("#hx option")[${engineRoomInspection.hx}].selected = true;
+    $("#hj option")[${engineRoomInspection.hj}].selected = true;
+    $("#aqsb option")[${engineRoomInspection.aqsb}].selected = true;
+    $("#ups option")[${engineRoomInspection.ups}].selected = true;
+    $("#qtmh option")[${engineRoomInspection.qtmh}].selected = true;
+    $("#kt option")[${engineRoomInspection.kt}].selected = true;
 
     //返回按钮点击
     $('#returnListBtn').on('click', function () {

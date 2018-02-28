@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>故障列表</title>
+	<title>需求列表</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<%--一分钟刷新一次页面--%>
@@ -24,8 +24,8 @@
 		body {
 			overflow-y: scroll;
 		}
-		.Urgent {
-			background-color: pink;
+		.groupDeal {
+			background-color: lightskyblue;
 		}
 	</style>
 
@@ -54,24 +54,10 @@
 			<div class="col-md-10">
 				<div class="panel panel-default">
 				    <div class="panel-heading">
-						<h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">故障列表</h2>
+						<h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">需求列表</h2>
 						<div class="row" style="text-align: right">
 							<form class="form-horizontal form-inline" role="form" style="margin: 20px 0 10px 0;"
-								  action="/admin/searchComputerProblems" id="searchFunction" method="post">
-								<div class="form-group col-sm-12">
-										<input type="text" class="form-control" placeholder="请输入科室" id="findByDept"
-											   name="findByDept" style="margin-left: 5px">
-										<input type="text" class="form-control" placeholder="请输入申报人" id="findByName"
-											   name="findByName" style="margin-left: 10px">
-										<select class="form-control" name="findByFlag" id="findByFlag" style="margin-left: 10px">
-											<option value="-1">状态：</option>
-											<option value="0">提交中</option>
-											<option value="1">处理中</option>
-											<option value="2">已解决</option>
-										</select>
-										<input type="button" class="btn btn-primary" id="searchBtn" value="搜索"
-												style="margin-left: 10px;margin-right:0px">
-								</div>
+								  action="/normal/searchComputerProblems" id="searchFunction" method="post">
 							</form>
 
 						</div>
@@ -79,22 +65,24 @@
 				    <table class="table table-bordered">
 					        <thead>
 					            <tr>
-									<th style="text-align: center">故障类型</th>
+									<th style="text-align: center">需求类别</th>
 									<th style="text-align: center">科室</th>
-									<th style="text-align: center">申报人</th>
-									<th style="text-align: center">联系方式</th>
+									<th style="text-align: center">反馈人</th>
 									<th style="text-align: center">状态</th>
-									<th style="text-align: center">创建时间</th>
+									<th style="text-align: center">审批</th>
+									<th style="text-align: center">反馈时间</th>
 									<th style="text-align: center">操作</th>
 					            </tr>
 					        </thead>
 					        <tbody>
-							<c:forEach  items="${computerProblemsList}" var="item">
-								<tr <c:if test="${item.faultUrgent == 1}">class="Urgent"</c:if>>
-									<td>${item.title}</td>
+							<c:forEach  items="${softwareRequirementsList}" var="item">
+								<tr <c:if test='${item.groupVisible == 1
+									&& item.flag != 2
+									&& (roles.indexOf("material") != -1
+										|| roles.indexOf("examiner") != -1)}'>class="groupDeal"</c:if>>
+									<td>${item.requireType}</td>
 									<td>${item.dept}</td>
-									<td>${item.name}</td>
-									<td>${item.tel}</td>
+									<td>${item.applicantName}</td>
 									<c:if test="${item.flag == 0}">
 										<td><button class="btn btn-warning btn-sm" type="button">提交中</button></td>
 									</c:if>
@@ -104,10 +92,19 @@
 									<c:if test="${item.flag == 2}">
 										<td><button class="btn btn-success btn-sm" type="button">已解决</button></td>
 									</c:if>
-									<td>${item.createTime}</td>
+									<c:if test="${item.highApproved == 0}">
+										<td><button class="btn btn-info btn-sm" type="button">否</button></td>
+									</c:if>
+									<c:if test="${item.highApproved == 1}">
+										<td><button class="btn btn-warning btn-sm" type="button">是</button></td>
+									</c:if>
+									<td>${item.applicantTime}</td>
 									<td>
-										<button class="btn btn-default btn-xs btn-info" type="button" onClick="location.href='/admin/editComputerProblems?id=${item.id}'">处理问题</button>
-										<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/admin/checkComputerProblems?id=${item.id}'">查看详情</button>
+										<c:if test='${(roles.indexOf("dpdean") != -1 && item.flag != 2 && item.highApproved == 1
+												&& item.approvedFlag == 0 && item.highLeaderApproved1 == 1)}'>
+											<button class="btn btn-info btn-xs" type="button" onClick="location.href='/normal/editSoftwareRequirements?id=${item.id}'">审批</button>
+										</c:if>
+										<button class="btn btn-default btn-xs btn-danger btn-primary" type="button" onClick="location.href='/normal/checkSoftwareRequirements?id=${item.id}'">查看详情</button>
 									</td>
 								</tr>
 							</c:forEach>
@@ -117,21 +114,21 @@
 						<c:if test="${pagingVO != null}">
 							<nav style="text-align: center">
 								<ul class="pagination">
-									<li><a href="/admin/showComputerProblems?page=${pagingVO.upPageNo}">&laquo;上一页</a></li>
+									<li><a href="/normal/showSoftwareRequirements?page=${pagingVO.upPageNo}">&laquo;上一页</a></li>
 									<li class="active"><a href="javascript:location.reload();">${pagingVO.curentPageNo}</a></li>
 									<c:if test="${pagingVO.curentPageNo+1 <= pagingVO.totalCount}">
-										<li><a href="/admin/showComputerProblems?page=${pagingVO.curentPageNo+1}">${pagingVO.curentPageNo+1}</a></li>
+										<li><a href="/normal/showSoftwareRequirements?page=${pagingVO.curentPageNo+1}">${pagingVO.curentPageNo+1}</a></li>
 									</c:if>
 									<c:if test="${pagingVO.curentPageNo+2 <= pagingVO.totalCount}">
-										<li><a href="/admin/showComputerProblems?page=${pagingVO.curentPageNo+2}">${pagingVO.curentPageNo+2}</a></li>
+										<li><a href="/normal/showSoftwareRequirements?page=${pagingVO.curentPageNo+2}">${pagingVO.curentPageNo+2}</a></li>
 									</c:if>
 									<c:if test="${pagingVO.curentPageNo+3 <= pagingVO.totalCount}">
-										<li><a href="/admin/showComputerProblems?page=${pagingVO.curentPageNo+3}">${pagingVO.curentPageNo+3}</a></li>
+										<li><a href="/normal/showSoftwareRequirements?page=${pagingVO.curentPageNo+3}">${pagingVO.curentPageNo+3}</a></li>
 									</c:if>
 									<c:if test="${pagingVO.curentPageNo+4 <= pagingVO.totalCount}">
-										<li><a href="/admin/showComputerProblems?page=${pagingVO.curentPageNo+4}">${pagingVO.curentPageNo+4}</a></li>
+										<li><a href="/normal/showSoftwareRequirements?page=${pagingVO.curentPageNo+4}">${pagingVO.curentPageNo+4}</a></li>
 									</c:if>
-									<li><a href="/admin/showComputerProblems?page=${pagingVO.totalCount}">最后一页&raquo;</a></li>
+									<li><a href="/normal/showSoftwareRequirements?page=${pagingVO.totalCount}">最后一页&raquo;</a></li>
 								</ul>
 							</nav>
 						</c:if>

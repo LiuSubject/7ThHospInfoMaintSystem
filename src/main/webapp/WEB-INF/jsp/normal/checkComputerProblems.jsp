@@ -242,7 +242,7 @@
 </div>
 </body>
 <script type="text/javascript">
-    $("#nav li:nth-child(2)").addClass("active");
+
 
     //返回按钮点击
     $('#returnListBtn').on('click', function() {

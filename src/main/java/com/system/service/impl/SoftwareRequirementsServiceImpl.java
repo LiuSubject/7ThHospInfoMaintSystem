@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目名称：7ThHospInfoMaintSystem
@@ -51,6 +52,20 @@ public class SoftwareRequirementsServiceImpl implements SoftwareRequirementsServ
         return list;
     }
 
+    public List<SoftwareRequirementsCustom> findByDpdeanPaging(Map<String, Object> map) throws Exception {
+
+        List<SoftwareRequirementsCustom> list = softwareRequirementsCustomMapper.findByDpdeanPaging(map);
+
+        return list;
+    }
+
+    public List<SoftwareRequirementsCustom> findByPagingOfDepart(Map<String, Object> map) throws Exception {
+
+        List<SoftwareRequirementsCustom> list = softwareRequirementsCustomMapper.findByPagingOfDepart(map);
+
+        return list;
+    }
+
     public Boolean save(SoftwareRequirementsCustom SoftwareRequirementsCustoms) throws Exception {
         SoftwareRequirements stu = softwareRequirementsMapper.selectByPrimaryKey(SoftwareRequirementsCustoms.getId());
         if (stu == null) {
@@ -73,6 +88,7 @@ public class SoftwareRequirementsServiceImpl implements SoftwareRequirementsServ
 
         return false;
     }
+
     //返回软件需求总数
     public int getCountSoftwareRequirements() throws Exception {
         //自定义查询对象
@@ -81,6 +97,33 @@ public class SoftwareRequirementsServiceImpl implements SoftwareRequirementsServ
         SoftwareRequirementsExample.Criteria criteria = SoftwareRequirementsExample.createCriteria();
         criteria.andApplicantIdIsNull();
 
+        return softwareRequirementsMapper.countByExample(SoftwareRequirementsExample);
+    }
+
+    //返回部门物资申购总数
+    public int getCountSoftwareRequirementsOfDepart(String dept) throws Exception {
+        //自定义查询对象
+        SoftwareRequirementsExample SoftwareRequirementsExample = new SoftwareRequirementsExample();
+        //通过criteria构造查询条件
+        SoftwareRequirementsExample.Criteria criteria = SoftwareRequirementsExample.createCriteria();
+        criteria.andApplicantIdIsNull().andDeptCodeEqualTo(dept);
+
+        return softwareRequirementsMapper.countByExample(SoftwareRequirementsExample);
+    }
+
+    //返回主管院长相关软件需求总数
+    public int getCountSoftwareRequirementsOfdpdean(String dept, String code) throws Exception {
+        //自定义查询对象
+        SoftwareRequirementsExample SoftwareRequirementsExample = new SoftwareRequirementsExample();
+        //通过criteria构造查询条件
+        SoftwareRequirementsExample.Criteria criteria1 = SoftwareRequirementsExample.createCriteria();
+        criteria1.andApplicantIdIsNull().andHighApprovedEqualTo(1).andHighLeaderApproved1EqualTo(1)
+            .andHighLeaderId1EqualTo(code);
+
+        SoftwareRequirementsExample.Criteria criteria2 = SoftwareRequirementsExample.createCriteria();
+        criteria2.andApplicantIdIsNull().andDeptCodeEqualTo(dept);
+
+        SoftwareRequirementsExample.or(criteria2);
         return softwareRequirementsMapper.countByExample(SoftwareRequirementsExample);
     }
 
@@ -95,6 +138,13 @@ public class SoftwareRequirementsServiceImpl implements SoftwareRequirementsServ
         }
 
         return SoftwareRequirementsCustom;
+    }
+
+    public List<SoftwareRequirementsCustom> paginationOfSearchResults(Map<String, Object> condition) throws Exception {
+
+        List<SoftwareRequirementsCustom> list = softwareRequirementsCustomMapper.paginationOfSearchResults(condition);
+
+        return list;
     }
 
 
