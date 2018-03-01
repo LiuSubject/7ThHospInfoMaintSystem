@@ -22,6 +22,7 @@
         <li><a href="/admin/addSoftwareRequirements">软件需求</a></li>
         </c:if>
         </c:if>
+        <li><a href="/admin/showHelpDocument">获取帮助</a></li>
         <li><a href="/logout">退出系统<sapn class="glyphicon glyphicon-log-out pull-right" /></a></li>
     </ul>
 </div>

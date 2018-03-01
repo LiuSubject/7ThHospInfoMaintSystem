@@ -3160,6 +3160,19 @@ public class AdminController {
     }
 
     //endregion
+    /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<帮助文档获取>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    //region
+    // 打印物资申购表单
+    @RequestMapping(value = "/showHelpDocument")
+    public String showHelpDocument(Model model) throws Exception {
+
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
+        //重定向
+        return "admin/showHelpDocument";
+    }
+    //endregion
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<JSON数据获取>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
     //region
     //返回操作人相关基本信息JSON
