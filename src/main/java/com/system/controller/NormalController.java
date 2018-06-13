@@ -2366,6 +2366,19 @@ public class NormalController {
     }
 
     //endregion
+     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<帮助文档获取>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    //region
+    // 打印物资申购表单
+    @RequestMapping(value = "/showHelpDocument")
+    public String showHelpDocument(Model model) throws Exception {
+
+        //返回角色对象
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("roles",this.getRoles(subject));
+        //重定向
+        return "normal/showHelpDocument";
+    }
+    //endregion
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<JSON数据获取>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
     //region
     //返回电脑故障类型列表JSON

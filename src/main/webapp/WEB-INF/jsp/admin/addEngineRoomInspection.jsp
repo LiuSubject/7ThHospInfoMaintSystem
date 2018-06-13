@@ -47,7 +47,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">机房巡检</h2>
+                        <h2 style="text-align: center;margin-bottom: 20px ">机房巡检</h2>
                     </div>
                 </div>
                 <div class="panel-body">

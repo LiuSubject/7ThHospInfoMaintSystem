@@ -54,7 +54,7 @@
 			<div class="col-md-10">
 				<div class="panel panel-default">
 				    <div class="panel-heading">
-						<h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">故障列表</h2>
+						<h2 style="text-align: center;margin-bottom: 20px ">故障列表</h2>
 						<div class="row" style="text-align: right">
 							<form class="form-horizontal form-inline" role="form" style="margin: 20px 0 10px 0;"
 								  action="/admin/searchComputerProblems" id="searchFunction" method="post">

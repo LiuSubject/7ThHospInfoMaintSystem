@@ -41,7 +41,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <h2 style="text-align: center;margin-bottom: 20px " class="col-md-10">故障申报</h2>
+                        <h2 style="text-align: center;margin-bottom: 20px ">故障申报</h2>
                     </div>
                 </div>
                 <div class="panel-body">
