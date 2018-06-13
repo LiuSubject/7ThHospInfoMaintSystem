@@ -18,15 +18,15 @@
 
     <!--PushUtil-->
         <!--创建个推消息工具类（保存记录相关数据以便产生推送)-->
-        <bean id="createPushMessage" class="com.system.util.push.CreatePushUtil" scope="singleton"/>
+        <bean id="createPushMessage" class="com.system.util.push.CreatePushUtil" scope="prototype"/>
 
         <!--消息推送工具类(发布推送消息)-->
-        <bean id="messagePushUtil" class="com.system.util.push.MessagePushUtil" scope="singleton"/>
+        <bean id="messagePushUtil" class="com.system.util.push.MessagePushUtil" scope="prototype"/>
 
         <!--消息拼接生成工具类(生成推送消息)-->
-        <bean id="pushSingleUtil" class="com.system.util.push.PushSingleUtil" scope="singleton"/>
+        <bean id="pushSingleUtil" class="com.system.util.push.PushSingleUtil" scope="prototype"/>
 
         <!--消息拼接生成工具类(生成推送消息)-->
-        <bean id="messageStitchUtil" class="com.system.util.push.MessageStitchUtil" scope="singleton"/>
+        <bean id="messageStitchUtil" class="com.system.util.push.MessageStitchUtil" scope="prototype"/>
 
 </beans>
